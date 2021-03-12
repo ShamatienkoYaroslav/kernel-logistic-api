@@ -1,0 +1,1408 @@
+openapi: 3.0.1
+
+info:
+  title: External API
+  description: Колекція вузлів API для зовнішньої інтеграції з логістикою
+  version: 1.0.5.2
+
+servers:
+  - description: Development Server
+    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/s/v1
+
+tags:
+  - name: Електронна черга
+    description: Програмний інтерфейс для роботи з електронними чергами
+  - name: Наряди
+    description: Програмний інтерфейс для роботи з нарядами ТЗ розділу "Авто"
+  - name: Рейс водія
+    description: Програмний інтерфейс для роботи з рейсами водія
+
+paths:
+  /driver/races/status:
+    get:
+      tags:
+        - Рейс водія
+      summary: Актуальний рейс водія
+      description: |
+        Пошук актуального рейсу для водія
+      operationId: driverRacesStatus
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - name: driver_phone
+          in: query
+          description: Телефон водія
+          schema:
+            type: string
+        - name: vehicle_number
+          in: query
+          description: Номер транспортного засобу
+          schema:
+            type: string
+      responses:
+        200:
+          description: Дані актуального рейсу
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  race_status:
+                    type: string
+                    description:
+                      'Статус рейсу. Варіанти: REGISTERED, IN_PROGRESS,
+                      DONE, CANCELED, PAUSE. Таблиця: Рейси (races)'
+                    example: IN_PROGRESS
+                  guid:
+                    type: string
+                    description: 'Гуід рейсу. Таблиця: Рейси (races)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  number:
+                    type: string
+                    description: 'Номер рейсу. Таблиця: Рейси (races)'
+                    example: 200827-0192
+                  date:
+                    type: string
+                    description: 'Дата рейсу. Таблиця: Рейси (races)'
+                    example: 27.08.2020 22:24:19
+                  source:
+                    type: string
+                    description: 'Джерело рейсу. Таблиця: Рейси (races)'
+                    example: track_check
+                  queue_from_registration_source:
+                    type: string
+                    description:
+                      'Джерело реєстрації в черзі на завантаження. Таблиця:
+                      Статистика рейсу (race_statistics)'
+                    example: track_check
+                  queue_to_registration_source:
+                    type: string
+                    description:
+                      'Джерело реєстрації в черзі на розвантаження. Таблиця:
+                      Статистика рейсу (race_statistics)'
+                    example: track_check
+                  entry_guid_track:
+                    type: string
+                    description: 'Entry Guid Track. Таблиця: Рейси (races)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  barcode:
+                    type: string
+                    description:
+                      'Штрихкод. Генерується на основі Entry Guid Track.
+                      Таблиця: Рейси (races)'
+                    example: '335060005532965762747441881103117533991'
+                  queue_from_registered_date:
+                    type: string
+                    description:
+                      'Дата реєстрації в черзі на завантаження. Таблиця:
+                      Статистика рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  queue_to_registered_date:
+                    type: string
+                    description:
+                      'Дата реєстрації в черзі на розвантаження. Таблиця:
+                      Статистика рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  queue_from_timing_out_1:
+                    type: string
+                    description:
+                      'Таймінг вибуття 1 на завантаження. Таблиця: Статистика
+                      рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  queue_from_timing_out_2:
+                    type: string
+                    description:
+                      'Таймінг вибуття 2 на завантаження. Таблиця: Статистика
+                      рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  queue_to_timing_out_1:
+                    type: string
+                    description:
+                      'Таймінг вибуття 1 на розвантаження. Таблиця: Статистика
+                      рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  queue_to_timing_out_2:
+                    type: string
+                    description:
+                      'Таймінг вибуття 2 на розвантаження. Таблиця: Статистика
+                      рейсу (race_statistics)'
+                    example: 27.08.2020 22:24:19
+                  vehicle_register_guid:
+                    type: string
+                    description: 'Гуід наряду. Таблиця: Наряди (request_vehicle_register)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  request_guid:
+                    type: string
+                    description: 'Гуід заявки. Таблиця: Заявка (requests)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  request_client_number:
+                    type: string
+                    description: 'Клієнтський номер заявки. Таблиця: Заявка (requests)'
+                    example: Z_058436
+                  manager_name:
+                    type: string
+                    description: 'Назва менеджера. Таблиця: Заявка (requests)'
+                    example: Сергій Юрійович Курбатов
+                  manager_phone:
+                    type: string
+                    description: 'Телефон менеджера. Таблиця: Заявка (requests)'
+                    example: '380999999999'
+                  manager_email:
+                    type: string
+                    description: 'Електронна пошта менеджера. Таблиця: Заявка (requests)'
+                    example: manager@kernel.ua
+                  additional_info:
+                    type: string
+                    description: 'Коментар до заявки. Таблиця: Заявка (requests)'
+                    example: Будь-який текст
+                  additional_info_2:
+                    type: string
+                    description: 'Додатковий коментар до заявки. Таблиця: Заявка (requests)'
+                    example: Додатковий текст
+                  vehicle_number:
+                    type: string
+                    description:
+                      'Реєстраційний номер транспортного засобу. Таблиця:
+                      Рейси (races)'
+                    example: ВА8783СС
+                  trailer_number:
+                    type: string
+                    description:
+                      'Реєстраційний номер причіпу. Якщо рейс без причіпу,
+                      то значення - no_trailer. Таблиця: Рейси (races)'
+                    example: ВА3272ХО
+                  no_trailer:
+                    type: number
+                    description:
+                      'Признак відсутності причіпу. 1 - відсутній. Якщо
+                      причіп вказано в рейсів, то даний ключ не передається. Таблиця:
+                      Рейси (races)'
+                    example: 1.0
+                  consignor_name:
+                    type: string
+                    description: 'Назва вантажовідправника. Таблиця: Рейси (races)'
+                    example: ПРАТ Кропивницький ОЕЗ
+                  consignor_code:
+                    type: string
+                    description: 'Код ЄДРПОУ вантажовідправника. Таблиця: Рейси (races)'
+                    example: '999999999'
+                  consignee_name:
+                    type: string
+                    description: 'Назва вантажоотримувача. Таблиця: Рейси (races)'
+                    example: ПРАТ Кропивницький ОЕЗ
+                  consignee_code:
+                    type: string
+                    description: 'Код ЄДРПОУ вантажоотримувача. Таблиця: Рейси (races)'
+                    example: '999999999'
+                  driver_guid:
+                    type: string
+                    description: 'Гуід водія. Таблиця: Водії ТХ (th_drivers)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  driver_fullname:
+                    type: string
+                    description: 'Повна назва водія. Таблиця: Водії ТХ (th_drivers)'
+                    example: Шевченко Тарас Григорович
+                  driver_phone:
+                    type: string
+                    description: 'Номер телефону водія. Таблиця: Рейси (races)'
+                    example: '380999999999'
+                  driver_phone_additional:
+                    type: string
+                    description:
+                      'Додатковий номер телефону водія. Таблиця: Рейси
+                      (races)'
+                    example: '380999999999'
+                  driver_cert:
+                    type: string
+                    description: 'Сертифікат водія. Таблиця: Рейси (races)'
+                    example: КВІ111111
+                  driver_id_card:
+                    type: string
+                    description:
+                      'ID-карта водія. Таблиця: Водії ТХ по наряду рейсу
+                      (th_drivers)'
+                    example: КВІ111111
+                  driver_id_card_date:
+                    type: string
+                    description:
+                      'Дата ID-карти водія. Таблиця: Водії ТХ по наряду
+                      рейсу (th_drivers)'
+                    example: 27.08.2020
+                  driver_id_card_issued:
+                    type: string
+                    description:
+                      'Місце видачі ID-карти водія. Таблиця: Водії ТХ по
+                      наряду рейсу (th_drivers)'
+                    example: 27.08.2020
+                  person_docs_type:
+                    type: string
+                    description:
+                      'Тип документу водія. Варіанти: passport, id_card.
+                      Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                    example: passport
+                  pass_serial:
+                    type: string
+                    description:
+                      'Серія паспорту водія. Таблиця: Водії ТХ по наряду
+                      рейсу (th_drivers)'
+                    example: СМ
+                  pass_number:
+                    type: string
+                    description:
+                      'Номер паспорту водія. Таблиця: Водії ТХ по наряду
+                      рейсу (th_drivers)'
+                    example: '3456'
+                  pass_date:
+                    type: string
+                    description:
+                      'Дата видачі паспорту водія. Таблиця: Водії ТХ по
+                      наряду рейсу (th_drivers)'
+                    example: 27.08.2020
+                  pass_issued:
+                    type: string
+                    description:
+                      'Місце видачі паспорту водія. Таблиця: Водії ТХ по
+                      наряду рейсу (th_drivers)'
+                    example: Місцевим РВ МВС
+                  distance:
+                    type: number
+                    description: 'Відстань по заявці. Таблиця: Таблиця: Заявка (requests)'
+                    example: 20.0
+                  route:
+                    type: string
+                    description:
+                      'Посилання ан маршрут. Таблиця: Таблиця: Заявка (requests)
+                      або Рейси (races). Якщо маршрут в заявці не вказано, то береться
+                      значення із таблиці рейсів'
+                    example: https:\/\/www.google.com\/maps\/dir\/?api=1&origin=49.0750249,29.6002885&destination=48.512828,32.246397&waypoints=49.0748577,29.5991683|49.11226629999999,29.6139251|49.11226629999999,29.6139251|49.11254350000001,29.6142191|49.11254350000001,29.6142191|49.01441639999999,29.7081856|49.01441639999999,29.7081856|49.0077767,29.7027976|49.0077767,29.7027976|49.0057127,29.7606889|49.0057127,29.7606889|48.9955309,29.8072143|48.9955309,29.8072143|48.99371,29.8076215|48.99371,29.8076215|48.9938381,29.8079734|48.9938381,29.8079734|48.9851149,29.8138711|48.9851149,29.8138711|48.77297129999999,29.9880175|48.77297129999999,29.9880175|48.7196704,30.2719297|48.7196704,30.2719297|48.51343689999999,32.1601865|48.51343689999999,32.1601865|48.5078287,32.1956255|48.5078287,32.1956255|48.50386959999999,32.2222363|48.50386959999999,32.2222363|48.5016343,32.2372127|48.5016343,32.2372127|48.5129272,32.2485576|48.5129272,32.2485576|48.5143443,32.2491464|48.5143443,32.2491464|48.5135798,32.2482478|48.5135798,32.2482478|48.5131942,32.2485712|48.5131942,32.2485712|48.512809,32.2464139&key=AIzaSyAeJ9YCwS1u5xRGjVe-6xSG0CCA4tOqJUA
+                  point_from_koatuu:
+                    type: string
+                    description:
+                      'Код КОАТУУ населеного пункту завантаження. Таблиця:
+                      Населені пункти (locality)'
+                    example: 5.23184101E8
+                  point_from_name_ua:
+                    type: string
+                    description:
+                      'Назва населеного пункту завантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Підвисоке
+                  point_from_name_ru:
+                    type: string
+                    description:
+                      'Назва населеного пункту завантаження (рос.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Подвысокое
+                  point_from_region_name_ua:
+                    type: string
+                    description:
+                      'Область населеного пункту завантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Вінницька
+                  point_from_region_name_ru:
+                    type: string
+                    description:
+                      'Область населеного пункту завантаження (рос.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Винницкая
+                  point_from_description:
+                    type: string
+                    description:
+                      'Адреса населеного пункту завантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Україна, Вінницька обл., Оратівський район, с. Підвисоке
+                  point_from_description_ua:
+                    type: string
+                    description:
+                      'Адреса населеного пункту завантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Україна, Вінницька обл., Оратівський район, с. Підвисоке
+                  point_from_description_ru:
+                    type: string
+                    description:
+                      'Адреса населеного пункту завантаження (рос.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Украина, Винницкая обл., Оратовский район, с. Подвысокое
+                  point_to_koatuu:
+                    type: string
+                    description:
+                      'Код КОАТУУ населеного пункту розвантаження. Таблиця:
+                      Населені пункти (locality)'
+                    example: 5.23184101E8
+                  point_to_name_ua:
+                    type: string
+                    description:
+                      'Назва населеного пункту розвантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Підвисоке
+                  point_to_name_ru:
+                    type: string
+                    description:
+                      'Назва населеного пункту розвантаження (рос.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Подвысокое
+                  point_to_region_name_ua:
+                    type: string
+                    description:
+                      'Область населеного пункту розвантаження (укр.).
+                      Таблиця: Населені пункти (locality)'
+                    example: Вінницька
+                  point_to_region_name_ru:
+                    type: string
+                    description:
+                      'Область населеного пункту розвантаження (рос.).
+                      Таблиця: Населені пункти (locality)'
+                    example: Винницкая
+                  point_to_description:
+                    type: string
+                    description:
+                      'Адреса населеного пункту розвантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Україна, Вінницька обл., Оратівський район, с. Підвисоке
+                  point_to_description_ua:
+                    type: string
+                    description:
+                      'Адреса населеного пункту розвантаження (укр.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Україна, Вінницька обл., Оратівський район, с. Підвисоке
+                  point_to_description_ru:
+                    type: string
+                    description:
+                      'Адреса населеного пункту розвантаження (рос.). Таблиця:
+                      Населені пункти (locality)'
+                    example: Украина, Винницкая обл., Оратовский район, с. Подвысокое
+                  carrier_name:
+                    type: string
+                    description: 'Назва перевізника. Таблиця: Рейси (races)'
+                    example: ФОП Перевізник П. П.
+                  carrier_guid:
+                    type: string
+                    description: 'Гуід перевізника. Таблиця: Рейси (races)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  carrier_code:
+                    type: string
+                    description: 'Код ЄДРПОУ перевізника. Таблиця: Рейси (races)'
+                    example: '999999999'
+                  client_name:
+                    type: string
+                    description: 'Назва клієнта. Таблиця: Заявки (requests)'
+                    example: ФОП Клієнт
+                  goods_guid:
+                    type: string
+                    description: 'Гуід вантажу. Таблиця: Вантаж (goods)'
+                    example: СОНЯШНИК
+                  goods_name:
+                    type: string
+                    description: 'Назва вантажу. Таблиця: Вантаж (goods)'
+                    example: Соняшник
+                  goods_desc:
+                    type: string
+                    description: 'Опис вантажу. Таблиця: Вантаж (goods)'
+                    example: Соняшник
+                  goods_name_ua:
+                    type: string
+                    description: 'Назва вантажу (укр.). Таблиця: Вантаж (goods)'
+                    example: Соняшник
+                  goods_name_ru:
+                    type: string
+                    description: 'Назва вантажу (рос.). Таблиця: Вантаж (goods)'
+                    example: Подсолнечник
+                  quantity:
+                    type: number
+                    description: 'Кількість вантажу в тонах. Таблиця: Рейси (races)'
+                    example: 10.0
+                  customer_kt:
+                    type: number
+                    description:
+                      'Признак того, що замовник є КернелТрейд. Таблиця:
+                      Рейси (races)'
+                    example: 1.0
+                  customer_kt_ua:
+                    type: string
+                    description:
+                      'Признак того, що замовник є КернелТрейд (укр.).
+                      Варіанти: Так, Ні. Таблиця: Рейси (races)'
+                    example: Так
+                  customer_kt_ru:
+                    type: string
+                    description:
+                      'Признак того, що замовник є КернелТрейд (рос.).
+                      Варіанти: Да, Нет. Таблиця: Рейси (races)'
+                    example: Так
+                  th_carrier_org_name:
+                    type: string
+                    description: 'Назва перевізника. Таблиця: Рейси (races)'
+                    example: ФОП Перевізник П. П.
+                  waybill_number:
+                    type: string
+                    description: 'Номер ТТН. Таблиця: Рейси (races)'
+                    example: ТН345
+                  waybill_date:
+                    type: string
+                    description: 'Дата ТТН. Таблиця: Рейси (races)'
+                    example: 27.08.2020
+                  waybill_netto_in:
+                    type: number
+                    description:
+                      'Вага нетто ТТН вантажовідрпавника. Таблиця: Рейси
+                      (races)'
+                    example: 20000.0
+                  waybill_netto_out:
+                    type: number
+                    description:
+                      'Вага нетто ТТН вантажоотримувача. Таблиця: Рейси
+                      (races)'
+                    example: 20000.0
+                  waybill_gross:
+                    type: number
+                    description:
+                      'Вага брутто ТТН вантажовідрпавника. Таблиця: Рейси
+                      (races)'
+                    example: 24000.0
+                  waybill_tara:
+                    type: number
+                    description:
+                      'Вага тара ТТН вантажовідрпавника. Таблиця: Рейси
+                      (races)'
+                    example: 4000.0
+                  no_waybill_weight:
+                    type: number
+                    description:
+                      'ТТН без ваги. Варіанти: 1, 0. Якщо значення null,
+                      то ключ не передається. Таблиця: Рейси (races)'
+                    example: 0.0
+                  waybill_registration_date:
+                    type: string
+                    description: 'Дата реєстрації ТТН. Таблиця: Рейси (races)'
+                    example: 27.08.2020 22:24:19
+                  waybill_consignee_gross:
+                    type: number
+                    description:
+                      'Вага брутто ТТН вантажоотримувача. Таблиця: Рейси
+                      (races)'
+                    example: 24000.0
+                  waybill_consignee_tare:
+                    type: number
+                    description:
+                      'Вага тара ТТН вантажоотримувача. Таблиця: Рейси
+                      (races)'
+                    example: 4000.0
+                  warehouse_from_guid:
+                    type: string
+                    description: 'Гуід складу завантаження. Таблиця: Склади (warehouse)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  warehouse_from_code:
+                    type: string
+                    description: 'Код складу завантаження. Таблиця: Склади (warehouse)'
+                    example: '3510100000004'
+                  warehouse_from_name:
+                    type: string
+                    description: 'Назва складу завантаження. Таблиця: Склади (warehouse)'
+                    example: Кропивницький ОЕЗ, ПРАТ
+                  warehouse_from_address:
+                    type: string
+                    description: 'Адреса складу завантаження. Таблиця: Склади (warehouse)'
+                    example:
+                      Україна, Кіровоградська обл., м. Кропивницький, вулиця
+                      Урожайна 30
+                  warehouse_from_short_address:
+                    type: string
+                    description:
+                      'Коротка адреса складу завантаження. Таблиця: Склади
+                      (warehouse)'
+                    example: вулиця Урожайна 30
+                  warehouse_from_lat:
+                    type: string
+                    description: 'Довгота складу завантаження. Таблиця: Склади (warehouse)'
+                    example: '48.512828'
+                  warehouse_from_lng:
+                    type: string
+                    description: 'Широта складу завантаження. Таблиця: Склади (warehouse)'
+                    example: '32.246397'
+                  warehouse_from_max_height:
+                    type: number
+                    description:
+                      'Максимальна висота складу завантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 3.2
+                  warehouse_from_max_weight:
+                    type: number
+                    description:
+                      'Максимальна ширина складу завантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 6.4
+                  warehouse_from_max_length:
+                    type: number
+                    description:
+                      'Максимальна довжина складу завантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 8.4
+                  warehouse_from_weight_type:
+                    type: string
+                    description:
+                      'Тип ваг складу завантаження. Варіанти: Механические,
+                      Электронные. Якщо значення null, то ключ не передається. Таблиця:
+                      Заявки (requests)'
+                    example: Механические
+                  warehouse_from_bd_on:
+                    type: string
+                    description:
+                      'BD On для складу завантаження. Варіанти: 1, 0. Таблиця:
+                      Налаштування складу (warehouse_settings)'
+                    example: Механические
+                  warehouse_to_guid:
+                    type: string
+                    description: 'Гуід складу розвантаження. Таблиця: Склади (warehouse)'
+                    example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+                  warehouse_to_code:
+                    type: string
+                    description: 'Код складу розвантаження. Таблиця: Склади (warehouse)'
+                    example: '3510100000004'
+                  warehouse_to_name:
+                    type: string
+                    description: 'Назва складу розвантаження. Таблиця: Склади (warehouse)'
+                    example: Кропивницький ОЕЗ, ПРАТ
+                  warehouse_to_address:
+                    type: string
+                    description: 'Адреса складу розвантаження. Таблиця: Склади (warehouse)'
+                    example:
+                      Україна, Кіровоградська обл., м. Кропивницький, вулиця
+                      Урожайна 30
+                  warehouse_to_short_address:
+                    type: string
+                    description:
+                      'Коротка адреса складу розвантаження. Таблиця: Склади
+                      (warehouse)'
+                    example: вулиця Урожайна 30
+                  warehouse_to_lat:
+                    type: string
+                    description: 'Довгота складу розвантаження. Таблиця: Склади (warehouse)'
+                    example: '48.512828'
+                  warehouse_to_lng:
+                    type: string
+                    description: 'Широта складу розвантаження. Таблиця: Склади (warehouse)'
+                    example: '32.246397'
+                  warehouse_to_max_height:
+                    type: number
+                    description:
+                      'Максимальна висота складу розвантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 3.2
+                  warehouse_to_max_weight:
+                    type: number
+                    description:
+                      'Максимальна ширина складу розвантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 6.4
+                  warehouse_to_max_length:
+                    type: number
+                    description:
+                      'Максимальна довжина складу розвантаження. Таблиця:
+                      Заявки (requests)'
+                    example: 8.4
+                  warehouse_to_weight_type:
+                    type: string
+                    description:
+                      'Тип ваг складу розвантаження. Варіанти: Механические,
+                      Электронные. Якщо значення null, то ключ не передається. Таблиця:
+                      Заявки (requests)'
+                    example: Механические
+                  warehouse_to_bd_on:
+                    type: string
+                    description:
+                      'BD On для складу розвантаження. Варіанти: 1, 0.
+                      Таблиця: Налаштування складу (warehouse_settings)'
+                    example: Механические
+                  loading_type:
+                    type: string
+                    description:
+                      'Тип завантаження/тип вантажу. Варіанти: mound, pouring.
+                      Якщо значення null, то ключ не передається. Таблиця: Рейси (races)'
+                    example: mound
+                  last_event_guid:
+                    type: string
+                    description: 'Код останньої події рейсу. Таблиця: Подій (events)'
+                    example: GOTO_UNLOAD
+                  last_event_name_ua:
+                    type: string
+                    description:
+                      'Назва останньої події рейсу (укр.). Таблиця: Подій
+                      (events)'
+                    example: Вирушив до пункту РОЗВАНТАЖЕННЯ
+                  last_event_name_ru:
+                    type: string
+                    description:
+                      'Назва останньої події рейсу (рос.). Таблиця: Подій
+                      (events)'
+                    example: Выехал в пункт РАЗГРУЗКИ
+                  last_event_date:
+                    type: string
+                    description:
+                      'Дата останньої події рейсу (рос.). Таблиця: Рейси
+                      (races)'
+                    example: 27.08.2020 22:24:19
+                  handle_status:
+                    type: string
+                    description:
+                      'Статус обробки рейсу. Варіанти: ready, dash, inactive,
+                      canceled. Таблиця: Рейси (races)'
+                    example: ready
+  /pq_queues_request.create_by_race:
+    post:
+      tags:
+        - Електронна черга
+      summary: Реєстрація запиту на чергу
+      description: |
+        Передавши відповідні параметри, ви реєструєте запит на додавання чи вибуття з електронної черги
+      operationId: createPQQueueByRace
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для реєстрації запиту на чергу
+        content:
+          '*/*':
+            schema:
+              required:
+                - check_geo
+                - direction
+                - race_guid
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  description: Ідентифікатор рейсу
+                  format: uuid
+                  example: f3628624-da75-a99f-404d-4b47eac7db5f
+                direction:
+                  type: string
+                  description: Напрямок ("loading", "unloading")
+                  example: loading
+                check_geo:
+                  type: number
+                  description:
+                    Необхідність перевірки геокординат (1 - необхідна перевірка,
+                    0 - перевірка не потрібна)
+                  example: 1.0
+                geo_lat:
+                  type: number
+                  description: Широта (геокординати)
+                  example: 49.59776
+                geo_lng:
+                  type: number
+                  description: Довгота (геокординати)
+                  example: 34.51029
+        required: true
+      responses:
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  guid:
+                    type: string
+                    description: Ідентифікатор запиту на чергу
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+      deprecated: true
+      x-codegen-request-body-name: payload
+  /departure_permission:
+    get:
+      tags:
+        - Електронна черга
+      summary: Отримання рейсів Направлення на в'їзд
+      description: |
+        Передавши відповідні параметри, ви отримаєте реси документу Дозвіл на в'їзд
+      operationId: departurePermissionGetRaces
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: client_guid
+          in: query
+          description: Унікальний ідентифікатор документа
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/departurePermissionRace'
+        400:
+          description: Неправильний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+    post:
+      tags:
+        - Електронна черга
+      summary: Створення Направлення на в'їзд
+      description: |
+        Передавши відповідні параметри, ви створите новий документ Дозвіл на в'їзд
+      operationId: departurePermission
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення документа
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  description:
+                    Напрямок ("loading", "unloading"). Для неперсоналізованих
+                    обов'язкове
+                  example: loading
+                loading_type:
+                  type: string
+                  description:
+                    Тип завантаження ("mound", "pouring"). Для неперсоналізованих
+                    обов'язкове
+                  example: mound
+                client_guid:
+                  type: string
+                  description: Унікальний ідентифікатор документа. Обов'язкове
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
+                author:
+                  type: string
+                  description: ПІБ автора
+                  example: Тоторо М. I.
+                goods_code:
+                  type: string
+                  description: Код товару
+                  example: ГРЕЧИХА
+                vehicle_count:
+                  type: number
+                  description:
+                    Кількість транспортний засобів. Для неперсоналізованих
+                    більше 0
+                  example: 3.0
+                warehouse_code:
+                  type: string
+                  description: Склад напрямку. Для неперсоналізованих обов'язкове
+                  example: КАТЕРИНІВВ
+                gate:
+                  type: string
+                  description: Ворота в'їзду
+                  example: GATES 123
+                personalized:
+                  type: integer
+                  description: Персоналізоване. Доступні значення 0, 1. Обов'язкове
+                  example: 1
+                races:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/departurePermissionRaceEntryTrackGuids'
+        required: true
+      responses:
+        200:
+          description: Запис створено з помилками
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  message:
+                    type: string
+                    description: Причина помилки
+                    example: Profile not found
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        409:
+          description: поле client_guid не унікальне
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  msg:
+                    type: string
+                    description: поле client_guid не унікальне
+                    example:
+                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.U_DEPARTURE_PERMISSION_1)
+                      violated'
+      x-codegen-request-body-name: payload
+  /pq_technical_downtime:
+    post:
+      tags:
+        - Електронна черга
+      summary: Створення документу Технічний простой
+      description: |
+        Передавши відповідні параметри, ви створите новий документ Технічний простой
+      operationId: technicalDowntime
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення документа
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  description: Напрямок ("loading", "unloading")
+                  example: loading
+                loading_type:
+                  type: string
+                  description: Тип завантаження ("mound", "pouring")
+                  example: mound
+                client_guid:
+                  type: string
+                  description: Унікальний ідентифікатор документа
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
+                beginning_date:
+                  type: string
+                  description: Дата початку простоя
+                  example: 27.12.2019 12:46:44
+                ending_date:
+                  type: string
+                  description: Дата закінчення простоя
+                  example: 29.12.2019 12:46:44
+                acceptance_rate:
+                  type: number
+                  description: Темп приймання, транспортних засобів/год
+                  example: 5.0
+                downtime_cause:
+                  type: string
+                  description: Причина простоя
+                  example: Сніг пішов
+                warehouse_code:
+                  type: string
+                  description: Склад напрямку
+                  example: КАТЕРИНІВВ
+                goods_guid:
+                  type: string
+                  description: Код товару
+                  example: ОЛІЯ_СОН
+        required: true
+      responses:
+        200:
+          description: Запис створено з помилками
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  message:
+                    type: string
+                    description: Причина помилки
+                    example: No data found
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        409:
+          description: поле client_guid не унікальне
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  msg:
+                    type: string
+                    description: поле client_guid не унікальне
+                    example:
+                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.UNQ_PQ_TECHNICAL_DOWNTIME_CLIENT_GUID)
+                      violated'
+      x-codegen-request-body-name: payload
+  /vehicles_register.subscription:
+    get:
+      tags:
+        - Наряди
+      summary: Отримати по підписці всі наряди ТЗ
+      description:
+        "Передавши відповідні параметри, ви отримуєте всі наряди, які \n\
+        зареєстровані для вашого клієнта\n"
+      operationId: getRequestsVehiclesRegisters
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: number
+        - name: offset
+          in: query
+          schema:
+            type: number
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/autoRequestVehicleRegister'
+        400:
+          description: Неправильний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+  /vehicles_register.subscription/clean:
+    post:
+      tags:
+        - Наряди
+      summary: Реєстрація запиту на чергу
+      description: |
+        Передавши відповідні параметри, ви знімаєте з підписки наряди для вашого клієнта
+      operationId: cleanRequestsVehiclesRegisters
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для знянття з підписки нарядів
+        content:
+          '*/*':
+            schema:
+              required:
+                - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      guid:
+                        type: string
+                        description:
+                          guid або guid_client наряду, який необхідно зняти
+                          з підписки
+                        example: 0de7a635-fcc9-316e-a23b-8ea16e874271
+        required: true
+      responses:
+        200:
+          description: Наряди знято з піписки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+      x-codegen-request-body-name: payload
+components:
+  schemas:
+    autoRequestVehicleRegister:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: 5f39369f-a855-c46c-790c-78e8dfe9af62
+        guid_client:
+          type: string
+          description: GUID наданий клієнтською системою (споживачем підписки)
+          example: 5f39369f-a855-c46c-790c-78e8dfe9af68
+        date_from_utc:
+          type: string
+          example: 2020-01-27T12:00:00Z
+        date_to_utc:
+          type: string
+          example: 2020-01-28T12:00:00Z
+        trips_quantity:
+          type: number
+          example: 1.0
+        status:
+          type: string
+          example: New
+        handle_status:
+          type: string
+          example: ready
+        phone:
+          type: string
+          example: '380999999999'
+        request_guid:
+          type: string
+          example: 8e7eb741-63a8-ff94-84d7-1b6dbf4bf199
+        request_guid_client:
+          type: string
+          description: GUID наданий клієнтською системою (споживачем підписки)
+          example: 8e7eb741-63a8-ff94-84d7-1b6dbf4bf199
+        request_client_number:
+          type: string
+          example: Z_041922
+        request_schedule_date:
+          type: string
+          example: 2020-01-27T00:00:00Z
+        point_from_name:
+          type: string
+          example: Балинівка
+        point_from_region_ua:
+          type: string
+          example: Хмельницька
+        point_from_region_ru:
+          type: string
+          example: Хмельницкая
+        point_from_koatuu:
+          type: string
+          example: '6821880302'
+        point_to_name:
+          type: string
+          example: Бандурка
+        point_to_region_ua:
+          type: string
+          example: Миколаївська
+        point_to_region_ru:
+          type: string
+          example: Николаевская
+        point_to_koatuu:
+          type: string
+          example: '4825487602'
+        goods_name_ua:
+          type: string
+          example: Соняшник
+        goods_name_ru:
+          type: string
+          example: Подсолнечник
+        driver:
+          type: object
+          properties:
+            guid_carrier:
+              type: string
+              example: f633fd05-ff9e-4d90-0f86-c86ddcfbc0ed
+            name:
+              type: string
+              example: МЕЛЬНИК В.М.
+            firts_name:
+              type: string
+              example: Вячеслав
+            middle_name:
+              type: string
+              example: Миколайович
+            last_name:
+              type: string
+              example: Мельник
+            cert_serial_number:
+              type: string
+              example: ВВВ888888
+            phone:
+              type: string
+              example: '380673222858'
+            pass_number:
+              type: string
+              example: SG 888888
+            pass_date:
+              type: string
+              example: 2019-07-08T00:00:00Z
+            pass_issued:
+              type: string
+              example: PPPPPPPPPPPPPPPPPPPP
+            pass_type:
+              type: string
+              example: passport
+        vehicle:
+          $ref: '#/components/schemas/autoTruck'
+        trailer:
+          $ref: '#/components/schemas/autoTrailer'
+    autoTruck:
+      type: object
+      properties:
+        guid_carrier:
+          type: string
+          example: d520e5ac-10d4-39ba-1c66-16c1146fb3d4
+        vehicle_number:
+          type: string
+          example: ХХ0007ХХ
+        tech_passport:
+          type: string
+          example: DDD888881
+        brand:
+          type: string
+          example: Нефаз
+        model:
+          type: string
+          example: '4444'
+        kind:
+          type: string
+          example: AUTOMOBILE
+    autoTrailer:
+      type: object
+      properties:
+        guid_carrier:
+          type: string
+          example: baa14e02-d785-2846-cc20-b8c6dabe095f
+        vehicle_number:
+          type: string
+          example: UU7000UU
+        tech_passport:
+          type: string
+          example: HGJ566587
+        brand:
+          type: string
+          example: Нефаз
+        model:
+          type: string
+          example: '4444'
+        kind:
+          type: string
+          example: AUTOMOBILE
+    departurePermissionRace:
+      type: object
+      properties:
+        race_number:
+          type: string
+          example: 191203-0001
+        truck:
+          type: string
+          example: DF82323
+        trailer:
+          type: string
+          example: DF82323
+        entry_guid_truck:
+          type: string
+          example: ААА999999
+        driver_name:
+          type: string
+          example: Безштанько М. Р.
+        driver_phone:
+          type: string
+          example: '380674561234'
+        doc_number:
+          type: string
+          example: '381'
+        doc_processing_date:
+          type: string
+          description: Дата опрацювання документа
+          example: 04.12.2019 10:40:48
+        doc_status:
+          type: string
+          description:
+            Статус документа (done - виконано, error - виконано з помилками,
+            new - новий, draft - чорновик)
+          example: done
+        warehouse_code:
+          type: string
+          example: БАНДУР МЕЗ
+        goods_classifier_code:
+          type: string
+          example: СОНЯШНИК
+        goods_name:
+          type: string
+          example: Соняшник
+        goods_name_ru:
+          type: string
+          example: Подсолнечник
+    departurePermissionRaceEntryTrackGuids:
+      type: object
+      properties:
+        entry_track_guid:
+          type: string
+          format: uuid
+          example: 36f9532e-079c-11ea-5888-0242ac140003

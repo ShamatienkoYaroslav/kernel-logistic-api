@@ -1,0 +1,10 @@
+openapi: 3.0.1
+
+info:
+  title: Integration API
+  description: Колекція вузлів API для зовнішньої інтеграції внутрішніх та зовнішніх клієнтів з логістикою
+  version: 1.0.0
+
+servers:
+  - description: Development Server
+    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/i/v1

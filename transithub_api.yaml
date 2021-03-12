@@ -1,14 +1,13 @@
 openapi: 3.0.0
 
-servers:
-  # Added by API Auto Mocking Plugin
-  - description: Development
-    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub
-
 info:
-  description: Колекція вузлів API для Trantihub
-  version: '1.0.0'
   title: Transithub API
+  description: Колекція вузлів API логістики для порталу Trantihub
+  version: 1.0.0
+
+servers:
+  - description: Development Serevr
+    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub
 
 tags:
   - name: Інтерфейс водія

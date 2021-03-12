@@ -1,0 +1,5988 @@
+openapi: 3.0.1
+
+info:
+  title: Logistics API
+  description: Стара колекція вузлів API для зовнішньої інтеграції (Навік, 1C та бот). Дана колекція не розвивається і буде видалена.
+  version: 0.2.0
+
+servers:
+  - description: Development Server
+    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/v1
+
+paths:
+  /driver:
+    get:
+      tags:
+      - Drivers
+      summary: отримати Водіїв
+      description: |
+        By passing in the appropriate options, you can search for
+        available drivers in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: cert_serial_number
+        in: query
+        description: сертифікат водія
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: phone of driver
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/Driver'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    put:
+      tags:
+      - Drivers
+      summary: оновлення Водіїв
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - guid
+                    - name
+                    - nsi_code
+                    type: object
+                    properties:
+                      guid:
+                        type: string
+                        example: 53b92d54-3554-940e-0c86-7b8a06d4fc44
+                      nsi_code:
+                        type: string
+                        example: ІХА131211
+                      name:
+                        type: string
+                        example: ПОЧЕРНІН О.В.
+                      pass_number:
+                        type: string
+                        example: "23423534"
+                      pass_issued:
+                        type: string
+                        example: МВС
+                      pass_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      validation_place:
+                        type: string
+                        example: Миргородська дільниця
+                      validation_author:
+                        type: string
+                        example: Дядя Вася
+                      validation_source:
+                        type: string
+                        example: UE
+                      validation_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      first_name:
+                        type: string
+                        example: Олег
+                      middle_name:
+                        type: string
+                        example: Васильович
+                      last_name:
+                        type: string
+                        example: ПОЧЕРНІН
+                      full_name:
+                        type: string
+                        example: ПОЧЕРНІН Олег Васильович
+                      phone:
+                        type: string
+                        example: +380975489832
+                      info:
+                        required:
+                        - author
+                        - created_at
+                        - place
+                        type: object
+                        properties:
+                          place:
+                            type: string
+                            example: Миргородська дільниця
+                          created_at:
+                            type: string
+                            example: 11.12.2017 16:26:12
+                          author:
+                            type: string
+                            example: Дядя Вася
+                      _search_back_key:
+                        type: string
+                        description: Службове поле, потрібне тільки для 1С
+                        example: f97abb84-5638-11e5-800d-002590fd6f2b
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+                        nsi_code:
+                          type: string
+                          example: ІХА131211
+                        nsi_code_slug:
+                          type: string
+                          example: ІХА131211
+                        name:
+                          type: string
+                          example: ПОЧЕРНІН О.В.
+                        pass_number:
+                          type: string
+                          example: "23423534"
+                        pass_issued:
+                          type: string
+                          example: МВС
+                        pass_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        validation_place:
+                          type: string
+                          example: Миргородська дільниця
+                        validation_author:
+                          type: string
+                          example: Дядя Вася
+                        validatiot_source:
+                          type: string
+                          example: UE
+                        validation_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        first_name:
+                          type: string
+                          example: Олег
+                        middle_name:
+                          type: string
+                          example: Васильович
+                        last_name:
+                          type: string
+                          example: ПОЧЕРНІН
+                        full_name:
+                          type: string
+                          example: ПОЧЕРНІН Олег Васильович
+                        phone:
+                          type: string
+                          example: +380975489832
+                        _search_back_key:
+                          type: string
+                          description: Службове поле, потрібне тільки для 1С
+                          example: f97abb84-5638-11e5-800d-002590fd6f2b
+                        _state:
+                          type: string
+                          description: Службове поле, показує операцію виконану над
+                            об'єктом (created, exist, changed)
+                          example: created
+                        _err:
+                          type: string
+                          description: Службове поле, наявність якого означає, що
+                            при створенні об'єкту була помилка. Поле описує помилку.
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - Drivers
+      summary: створення Водіїв
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - name
+                    - nsi_code
+                    type: object
+                    properties:
+                      nsi_code:
+                        type: string
+                        example: ІХА131211
+                      name:
+                        type: string
+                        example: ПОЧЕРНІН О.В.
+                      pass_number:
+                        type: string
+                        example: "23423534"
+                      pass_issued:
+                        type: string
+                        example: МВС
+                      pass_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      validation_place:
+                        type: string
+                        example: Миргородська дільниця
+                      validation_author:
+                        type: string
+                        example: Дядя Вася
+                      validation_source:
+                        type: string
+                        example: UE
+                      validation_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      first_name:
+                        type: string
+                        example: Олег
+                      middle_name:
+                        type: string
+                        example: Васильович
+                      last_name:
+                        type: string
+                        example: ПОЧЕРНІН
+                      full_name:
+                        type: string
+                        example: ПОЧЕРНІН Олег Васильович
+                      phone:
+                        type: string
+                        example: +380975489832
+                      info:
+                        required:
+                        - author
+                        - created_at
+                        - place
+                        type: object
+                        properties:
+                          place:
+                            type: string
+                            example: Миргородська дільниця
+                          created_at:
+                            type: string
+                            example: 11.12.2017 16:26:12
+                          author:
+                            type: string
+                            example: Дядя Вася
+                      _search_back_key:
+                        type: string
+                        description: Службове поле, потрібне тільки для 1С
+                        example: f97abb84-5638-11e5-800d-002590fd6f2b
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+                        nsi_code:
+                          type: string
+                          example: ІХА131211
+                        nsi_code_slug:
+                          type: string
+                          example: IXA131211
+                        name:
+                          type: string
+                          example: ПОЧЕРНІН О.В.
+                        pass_number:
+                          type: string
+                          example: "23423534"
+                        pass_issued:
+                          type: string
+                          example: МВС
+                        pass_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        validation_place:
+                          type: string
+                          example: Миргородська дільниця
+                        validation_author:
+                          type: string
+                          example: Дядя Вася
+                        validatiot_source:
+                          type: string
+                          example: UE
+                        validation_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        first_name:
+                          type: string
+                          example: Олег
+                        middle_name:
+                          type: string
+                          example: Васильович
+                        last_name:
+                          type: string
+                          example: ПОЧЕРНІН
+                        full_name:
+                          type: string
+                          example: ПОЧЕРНІН Олег Васильович
+                        phone:
+                          type: string
+                          example: +380975489832
+                        _search_back_key:
+                          type: string
+                          description: Службове поле, потрібне тільки для 1С
+                          example: f97abb84-5638-11e5-800d-002590fd6f2b
+                        _state:
+                          type: string
+                          description: Службове поле, показує операцію виконану над
+                            об'єктом (created, exist, changed)
+                          example: created
+                        _err:
+                          type: string
+                          description: Службове поле, наявність якого означає, що
+                            при створенні об'єкту була помилка. Поле описує помилку.
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /driver/exchange:
+    get:
+      tags:
+      - Drivers
+      summary: отримати Водіїв, зареєстрованих до обміну
+      description: передавши токен, отримує всіх зареєстрованих водіїв до обміну
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: ліміт елементів
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DriverExchange'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /driver/exchange/clean:
+    post:
+      tags:
+      - Drivers
+      summary: знімає Водіїв з реєстрації
+      description: передавши токен, знімає водіїв з реєстрації
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          '*/*':
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - ref
+                    - table
+                    type: object
+                    properties:
+                      ref:
+                        type: string
+                        example: af7a88d7-3c99-be71-9707-b91757c0cecd
+                      table:
+                        type: string
+                        example: drivers
+        required: true
+      responses:
+        200:
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_Response'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /driver/auth:
+    post:
+      tags:
+      - Drivers
+      summary: авторизація водія
+      description: передавши токен, реєструє водія
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - cert_serial_number
+              - first_name
+              - last_name
+              - phone
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Степан
+                middle_name:
+                  type: string
+                  example: Степанович
+                last_name:
+                  type: string
+                  example: Степанець
+                cert_serial_number:
+                  type: string
+                  example: ОІА469643
+                phone:
+                  type: string
+                  example: "0990413599"
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      required:
+                      - cert_serial_number
+                      - name
+                      - phone
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                          example: Степан
+                        middle_name:
+                          type: string
+                          example: Степанович
+                        last_name:
+                          type: string
+                          example: Степанець
+                        name:
+                          type: string
+                          example: СТЕПАНЕЦЬ С.С.
+                        full_name:
+                          type: string
+                          example: СТЕПАНЕЦЬ СТЕПАН СТЕПАНОВИЧ
+                        cert_serial_number:
+                          type: string
+                          example: ОІА469643
+                        cert_serial_number_slug:
+                          type: string
+                          example: ОІА469643
+                        phone:
+                          type: string
+                          example: "0990413599"
+                        _state:
+                          type: string
+                          example: created
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /driver/contact_info.find_driver:
+    get:
+      tags:
+      - Drivers
+      summary: пошук водіїв по контактним даним
+      description: передавши контактні дані, отримати водіїв
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: тип контактної інформації (phone, viber, telegram, messenger,
+          email)
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: значення контактної інформації
+        schema:
+          type: string
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/Driver'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /driver/contact_info:
+    get:
+      tags:
+      - Drivers
+      summary: добавити нову контактну інформацію
+      description: добавити нову контактну інформацію для Водія
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: guid
+        in: query
+        description: guid Водія
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: PHONE
+                        value:
+                          type: string
+                          example: +3800000000
+                        main:
+                          type: number
+                          example: 1.0
+    post:
+      tags:
+      - Drivers
+      summary: добавити нову контактну інформацію
+      description: добавити нову контактну інформацію для Водія
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: guid
+        in: query
+        description: guid Водія
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              required:
+              - type
+              - value
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: phone
+                value:
+                  type: string
+                  example: +380000000000
+                main:
+                  type: number
+                  example: 1.0
+                description:
+                  type: string
+                  example: some description
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  guid:
+                    type: string
+                    example: db3c3a1e-7ada-c0e7-0d1a-758fe28523b8
+                  type:
+                    type: string
+                    example: phone
+                  value:
+                    type: string
+                    example: +380000000000
+                  main:
+                    type: number
+                    example: 1.0
+                  description:
+                    type: string
+                    example: some description
+      x-codegen-request-body-name: body
+  /events:
+    get:
+      tags:
+      - Events
+      summary: отримати всі події
+      description: передавши токен, повертає список подій
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: id події
+        schema:
+          type: string
+      - name: kind
+        in: query
+        description: тип події
+        schema:
+          type: string
+      - name: for_bot
+        in: query
+        description: для ботів
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 61.0
+                        name:
+                          type: string
+                          example: Претензія по якості
+                        guid:
+                          type: string
+                          example: ARBITRAGE
+                        type:
+                          type: string
+                          example: IN_PROGRESS
+                        kind:
+                          type: string
+                          example: OTHER
+                        service:
+                          type: boolean
+                          example: false
+                        status:
+                          type: string
+                          example: Претензії по якості
+                        order_:
+                          type: number
+                          example: 0.0
+                        need_geo:
+                          type: boolean
+                          example: false
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /goods:
+    get:
+      tags:
+      - Goods
+      summary: отримати всі вантажі
+      description: передавши токен, повертає список вантажів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: id вантажу
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: ім'я вантажу
+        schema:
+          type: string
+      - name: classificator_code
+        in: query
+        description: код класифікатору вантажу
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 61.0
+                        name:
+                          type: string
+                          example: Пшениця
+                        classificator_code:
+                          type: string
+                          example: ПШЕНИЦЯ
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Goods
+      summary: створення нового вантажу
+      description: передавши токен, створює новий вантаж
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Пшениця
+                classificator_code:
+                  type: string
+                  example: ПШЕНИЦЯ
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 61.0
+                        name:
+                          type: string
+                          example: Пшениця
+                        classificator_code:
+                          type: string
+                          example: ПШЕНИЦЯ
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /locality:
+    get:
+      tags:
+      - Locality
+      summary: отримати всі пункти
+      description: передавши токен, повертає список пунктів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: id пункту
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: ім'я пункту
+        schema:
+          type: string
+      - name: region
+        in: query
+        description: область пункту
+        schema:
+          type: string
+      - name: district
+        in: query
+        description: район пункту
+        schema:
+          type: string
+      - name: kind
+        in: query
+        description: вид пункту
+        schema:
+          type: string
+      - name: kind_id
+        in: query
+        description: вид пункту (id)
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Locality'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Locality
+      summary: створення нового пункту
+      description: передавши токен, створює новий пункт
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Устивиця
+                name_ru:
+                  type: string
+                  example: Устивиця
+                kind:
+                  type: string
+                  example: Населенный пункт
+                kind_id:
+                  type: number
+                  description: 1 - країна, 2 - область, 3 - район, 4 - населений пункт
+                  example: 1.0
+                description:
+                  type: string
+                  example: Україна, Полтавська, Великобагачанський район, Устивиця
+                description_ru:
+                  type: string
+                  example: Україна, Полтавська, Великобагачанський район, Устивиця
+                koatuu:
+                  type: string
+                  example: "5320285301"
+                type:
+                  type: string
+                  example: C
+                region_code:
+                  type: string
+                  example: "53"
+                region_name:
+                  type: string
+                  example: Полтавська
+                region_name_ru:
+                  type: string
+                  example: Полтавська
+                district_code:
+                  type: string
+                  example: "53202"
+                district_name:
+                  type: string
+                  example: Великобагачанський район
+                district_name_ru:
+                  type: string
+                  example: Великобагачанський район
+                country_code:
+                  type: string
+                  example: UA
+                country_name:
+                  type: string
+                  example: Україна
+                country_name_ru:
+                  type: string
+                  example: Україна
+                lat:
+                  type: string
+                  example: "872368"
+                lng:
+                  type: string
+                  example: "872368"
+                locality_type:
+                  type: string
+                  example: Село
+                locality_type_ru:
+                  type: string
+                  example: Село
+                guid:
+                  type: string
+                  example: 06A3424E-C3DC-48CF-A524-125A3D3BB7C2
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Locality'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /order:
+    get:
+      tags:
+      - Orders
+      summary: отримати замовлення
+      description: передавши токен, повератє список замовлень
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 1000.0
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "3423"
+                        guid:
+                          type: string
+                          example: 4DC73463-30C1-42FE-A082-6A274B191842
+                        goods:
+                          type: string
+                          example: Насіння соняшника
+                        created_at:
+                          type: string
+                          example: 11.10.2017 13:02:18
+                        warehouse_from:
+                          type: string
+                          example: "6321480501001"
+                        warehouse_to:
+                          type: string
+                          example: "3510100000003"
+                        point_from:
+                          type: string
+                          example: "6821880302"
+                        point_to:
+                          type: string
+                          example: "3510100000"
+                        route:
+                          type: string
+                          example: https://www.google.ru/maps/dir/48.068988,33.500193/48.125057,31.028868/@48.0291169,32.2646208,9z/data=!4m2!4m1!3e0
+                        distance:
+                          type: number
+                          example: 1000.0
+                        travel_time:
+                          type: number
+                          example: 45.0
+                        owner:
+                          type: string
+                          example: Кернел Трейд
+                        client:
+                          type: string
+                          example: Кернел Трейд
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Orders
+      summary: створення нового замовлення
+      description: передавши токен, створює нове замовлення
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                guid:
+                  type: string
+                  example: 4DC73463-30C1-42FE-A082-6A274B191842
+                goods:
+                  type: string
+                  example: Насіння соняшника
+                created_at:
+                  type: string
+                  example: 11.10.2017 13:02:18
+                warehouse_from:
+                  type: string
+                  example: "6321480501001"
+                warehouse_to:
+                  type: string
+                  example: "3510100000003"
+                point_from:
+                  type: string
+                  example: "6821880302"
+                point_to:
+                  type: string
+                  example: "3510100000"
+                route:
+                  type: string
+                  example: https://www.google.ru/maps/dir/48.068988,33.500193/48.125057,31.028868/@48.0291169,32.2646208,9z/data=!4m2!4m1!3e0
+                distance:
+                  type: number
+                  example: 1000.0
+                travel_time:
+                  type: number
+                  example: 45.0
+                owner:
+                  type: string
+                  example: Кернел Трейд
+                client:
+                  type: string
+                  example: Кернел Трейд
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "3423"
+                        guid:
+                          type: string
+                          example: 4DC73463-30C1-42FE-A082-6A274B191842
+                        goods:
+                          type: string
+                          example: Насіння соняшника
+                        created_at:
+                          type: string
+                          example: 11.10.2017 13:02:18
+                        warehouse_from:
+                          type: string
+                          example: "6321480501001"
+                        warehouse_to:
+                          type: string
+                          example: "3510100000003"
+                        point_from:
+                          type: string
+                          example: "6821880302"
+                        point_to:
+                          type: string
+                          example: "3510100000"
+                        route:
+                          type: string
+                          example: https://www.google.ru/maps/dir/48.068988,33.500193/48.125057,31.028868/@48.0291169,32.2646208,9z/data=!4m2!4m1!3e0
+                        distance:
+                          type: number
+                          example: 1000.0
+                        travel_time:
+                          type: number
+                          example: 45.0
+                        owner:
+                          type: string
+                          example: Кернел Трейд
+                        client:
+                          type: string
+                          example: Кернел Трейд
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /race:
+    get:
+      tags:
+      - Races
+      summary: отримати всі рейси
+      description: передавши токен, повертає список рейсів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: id рейсу
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 14.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Race'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Races
+      summary: створення нового рейсу
+      description: передавши токен, створює новий рейс
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                driver_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                request:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                vehicles_register:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                warehouse_from:
+                  type: string
+                  example: "3534234"
+                warehouse_to:
+                  type: string
+                  example: "3534234"
+                point_from:
+                  type: string
+                  example: "3534234"
+                point_to:
+                  type: string
+                  example: "3534234"
+                distance:
+                  type: number
+                  example: 50.0
+                travel_time:
+                  type: number
+                  example: 5.0
+                vehicle:
+                  type: string
+                  example: ОА5609ОО
+                waybill:
+                  type: string
+                  example: ав4353453
+                quantity:
+                  type: number
+                  example: 20.0
+                goods:
+                  type: number
+                  example: 20.0
+                finish_date:
+                  type: string
+                  example: 2017-10-12T07:20:31Z
+                source:
+                  type: string
+                  example: bot
+                channel:
+                  type: string
+                  example: main
+                channel_user:
+                  type: string
+                  example: username
+                channel_chat:
+                  type: string
+                  example: main-v
+                trailer:
+                  type: string
+                  example: "32645"
+                bot_driver_fullname:
+                  type: string
+                  example: Прізвище Імя
+                bot_driver_cert:
+                  type: string
+                  example: "324345124"
+                slack_channel_id:
+                  type: string
+                  example: 34yerdcgct43
+                entry_insert_date:
+                  type: string
+                  example: 2017-10-12T07:20:31Z
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 5bbd73b8-119a-af08-1f7d-5523ac7643dc
+                        request:
+                          type: number
+                          example: 612.0
+                        driver:
+                          type: number
+                          example: 6.0
+                        number:
+                          type: string
+                          example: 180510-4
+                        created_at:
+                          type: string
+                          example: 2017-10-12T07:20:31Z
+                        phone:
+                          type: string
+                          example: "380971688870"
+                        warehouse_from:
+                          type: string
+                          example: "6134645765"
+                        warehouse_to:
+                          type: string
+                          example: "6134645765"
+                        distance:
+                          type: number
+                          example: 24.0
+                        travel_time:
+                          type: number
+                          example: 5.0
+                        vehicle:
+                          type: string
+                          example: ОА5609ОО
+                        status:
+                          type: string
+                          example: REGISTERED
+                        waybill:
+                          type: string
+                          example: ав43583
+                        quantity:
+                          type: number
+                          example: 613.0
+                        goods:
+                          type: number
+                          example: 31.0
+                        finish_date:
+                          type: string
+                          example: 2017-10-12T07:20:31Z
+                        source:
+                          type: string
+                          example: bot
+                        channel:
+                          type: string
+                          example: main
+                        channel_user:
+                          type: string
+                          example: username
+                        channel_chat:
+                          type: string
+                          example: main-v
+                        point_from:
+                          type: string
+                          example: "5320285301"
+                        point_to:
+                          type: string
+                          example: "5320285302"
+                        trailer:
+                          type: string
+                          example: "32645"
+                        driver_name:
+                          type: string
+                          example: Чайка Максим
+                        warehouse_from_name:
+                          type: string
+                          example: Головний
+                        warehouse_to_name:
+                          type: string
+                          example: Допоміжний
+                        full_address_from:
+                          type: string
+                          example: Україна, Полтавська, Великобагачанський район,
+                            Устивиця 12
+                        full_address_to:
+                          type: string
+                          example: Україна, Полтавська, Великобагачанський район,
+                            Устивиця 13
+                        point_from_name:
+                          type: string
+                          example: Устивиця
+                        point_to_name:
+                          type: string
+                          example: Устивиця
+                        point_description_from:
+                          type: string
+                          example: Україна, Полтавська, Великобагачанський район,
+                            Устивиця
+                        point_description_to:
+                          type: string
+                          example: Україна, Полтавська, Великобагачанський район,
+                            Устивиця
+                        goods_name:
+                          type: string
+                          example: Насіння пшениці
+                        entry_insert_date:
+                          type: string
+                          example: 2017-10-12T07:20:31Z
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /race.registerevent:
+    post:
+      tags:
+      - Races
+      summary: передавши токен, реєструє подію в рейсі
+      description: реєстрація події рейсу
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  example: 5bbd73b8-119a-af08-1f7d-5523ac7643dc
+                event:
+                  type: string
+                  example: AT_LOADPOINT
+                lat:
+                  type: string
+                  example: "34.65676"
+                lon:
+                  type: string
+                  example: "23.34546"
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_Response'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /race/exchange:
+    get:
+      tags:
+      - Races
+      summary: отримати всі актуальні рейси для клієнта апі
+      description: передавши токен, повертає список рейсів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 7ae4ae26-95f4-2efd-1943-7bea7a0f5ad1
+                        number:
+                          type: string
+                          example: 180510-4
+                        created_at:
+                          type: string
+                          example: 10.05.2018 16:33:27
+                        created_at_utc:
+                          type: string
+                          example: 2018-05-10T16:33:27Z
+                        request_guid:
+                          type: string
+                          example: 796136c7-38c6-f6d9-1510-500e145abe0a
+                        vehicles_register_guid:
+                          type: string
+                          example: c6e9f2ef-870d-a582-2f73-d70880fee986
+                        driver_guid:
+                          type: string
+                          example: c6e9f2ef-870d-a582-2f73-d70880fee986
+                        driver_class_guid:
+                          type: string
+                          example: ccb2dc97-47e0-77a9-df33-6bce358fe486
+                        driver_name:
+                          type: string
+                          example: ЧАЙКА МАКСИМ
+                        driver_cert_serial_number:
+                          type: string
+                          example: ЧВЙ000
+                        phone:
+                          type: string
+                          example: "380985115326"
+                        channel:
+                          type: string
+                          example: telegram
+                        channel_user:
+                          type: string
+                          example: 52 B
+                        channel_chat:
+                          type: string
+                          example: "87158640"
+                        vehicle:
+                          type: string
+                          example: АВ0032КК
+                        point_from_koatuu:
+                          type: string
+                          example: "5310100000"
+                        point_from_name:
+                          type: string
+                          example: Полтава
+                        point_from_name_ru:
+                          type: string
+                          example: Полтава
+                        point_from_description:
+                          type: string
+                          example: Україна, Полтавська обл., м. Полтава
+                        point_from_description_ru:
+                          type: string
+                          example: Украина, Полтавская обл., г. Полтава
+                        warehouse_from_code:
+                          type: string
+                          example: ПОЛТАВСКИЙ
+                        warehouse_from_class_code:
+                          type: string
+                          example: "5310100000004"
+                        warehouse_from_name:
+                          type: string
+                          example: Полтавський ОЕЗ
+                        warehouse_from_full_address:
+                          type: string
+                          example: Україна, Полтавська обл., м. Полтава, Вулиця М.Бірюзова
+                            17
+                        consignor_name:
+                          type: string
+                          example: ТОВ Кононівський елеватор
+                        consignor_reg_code:
+                          type: string
+                          example: "32284263"
+                        point_to_koatuu:
+                          type: string
+                          example: "0510100000"
+                        point_to_name:
+                          type: string
+                          example: Вінниця
+                        point_to_name_ru:
+                          type: string
+                          example: Винница
+                        point_to_description:
+                          type: string
+                          example: Україна, Вінницька обл., м. Вінниця
+                        point_to_description_ru:
+                          type: string
+                          example: Украина, Винницкая обл., г. Винница
+                        warehouse_to_code:
+                          type: string
+                          example: АГРОГРАД В
+                        warehouse_to_class_code:
+                          type: string
+                          example: "0510100000001"
+                        warehouse_to_name:
+                          type: string
+                          example: Агроград В
+                        warehouse_to_full_address:
+                          type: string
+                          example: Україна, Вінницька обл., м. Вінниця, Вулиця Лебединського
+                            11
+                        consignee_name:
+                          type: string
+                          example: ТОВ Вовчанський КХП
+                        consignee_reg_code:
+                          type: string
+                          example: "31690744"
+                        last_truck_event_date:
+                          type: string
+                          example: 10.05.2018 16:33:27
+                        last_truck_event_date_utc:
+                          type: string
+                          example: 2018-05-10T16:33:27Z
+                        last_truck_event_guid:
+                          type: string
+                          example: REGISTERED
+                        last_truck_event_name:
+                          type: string
+                          example: Зареєстровано
+                        last_truck_event_name_ru:
+                          type: string
+                          example: Зарегистрировано
+                        quantity:
+                          type: string
+                          example: "50"
+                        goods_guid:
+                          type: string
+                          example: ЯЧМІНЬ
+                        goods_name:
+                          type: string
+                          example: Ячмінь
+                        goods_name_ru:
+                          type: string
+                          example: Ячмень
+                        source:
+                          type: string
+                          example: track-check
+                        carrier_name:
+                          type: string
+                          example: Kernel Logistics
+                        carrier_guid:
+                          type: string
+                          example: 5943fc56-542d-5d04-db41-247e9705385c
+                        client_name:
+                          type: string
+                          example: User Company
+                        client_guid:
+                          type: string
+                          example: 6838cf33-6326-412b-410f-7fed57e71f54
+                        waybill:
+                          type: object
+                          properties:
+                            waybill_number:
+                              type: string
+                              example: "12123"
+                            waybill_date:
+                              type: string
+                              example: 12.07.2018 00:00:00
+                            consignor_weight:
+                              type: number
+                              example: 20.0
+                            net_weight:
+                              type: number
+                              example: 18.0
+                        events:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              event_date:
+                                type: string
+                                example: 10.05.2018 16:33:27
+                              event_date_utc:
+                                type: string
+                                example: 2018-05-10T16:33:27Z
+                              event_guid:
+                                type: string
+                                example: REGISTERED
+                              event_name:
+                                type: string
+                                example: Зареєстровано
+                              event_name_ru:
+                                type: string
+                                example: Зарегистрировано
+                              race_guid:
+                                type: string
+                                example: 7ae4ae26-95f4-2efd-1943-7bea7a0f5ad1
+                              lat:
+                                type: string
+                                example: "4536.3248"
+                              lon:
+                                type: string
+                                example: "4536.3248"
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /race/exchange/clean:
+    post:
+      tags:
+      - Races
+      summary: очищення елементів обміну
+      description: очищення елементів обміну рейсів для API клієнта
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      guid:
+                        type: string
+                        example: 7ae4ae26-95f4-2efd-1943-7bea7a0f5ad1
+        required: true
+      responses:
+        200:
+          description: result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_Response'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /race/geo:
+    get:
+      tags:
+      - Races
+      summary: отримати геолокацію
+      description: отримати геолокацію рейсу
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: race_guid
+        in: query
+        description: guid of race
+        schema:
+          type: string
+      - name: only_new
+        in: query
+        description: 1 - true, 0 - false
+        schema:
+          type: number
+      - name: set_period_mark
+        in: query
+        description: 1 - true, 0 - false
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: de08a038-c8be-e8ad-2256-c8ce612f7a34
+                        date:
+                          type: string
+                          example: 07.05.2018 14:04:41
+                        date_utc:
+                          type: string
+                          example: 2018-05-07T14:04:41Z
+                        lng:
+                          type: string
+                          example: "28.4682169"
+                        lat:
+                          type: string
+                          example: "49.233083"
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /race/geo.set_period:
+    post:
+      tags:
+      - Races
+      summary: встановити період отримання нової геолокації рейсу
+      description: встановити період
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  example: 2be6a18a-8277-5da2-7142-0de0e2288891
+                period:
+                  type: string
+                  example: 05.10.2018 15:13:50
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  state:
+                    type: string
+                    example: created
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /request:
+    get:
+      tags:
+      - Request
+      summary: отримати всі заявки
+      description: передавши токен, повертає список заявок
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: driver_c_guid
+        in: query
+        description: classifier guid of driver
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Request'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Request
+      summary: створення нової заявки
+      description: передавши токен, створює нову заявку
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: guid
+        in: query
+        description: guid заявки
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                goods:
+                  type: string
+                  example: ПШЕНИЦЯ
+                warehouse_from:
+                  type: string
+                  example: "5324280901003"
+                warehouse_to:
+                  type: string
+                  example: "5310100000004"
+                point_from:
+                  type: string
+                  example: "5324280901"
+                point_to:
+                  type: string
+                  example: "5310100000"
+                route:
+                  type: string
+                  example: https://www.google.ru/maps/dir/49.639141,34.142599/49.599607,34.520231/@49.5707894,34.5097527,10z/data=!4m2!4m1!3e0
+                distance:
+                  type: number
+                  example: 20.0
+                travel_time:
+                  type: number
+                  example: 30.0
+                client_number:
+                  type: string
+                  example: "12"
+                schedule_date:
+                  type: string
+                  example: 03.05.2018 15:55:00
+                order:
+                  type: string
+                  example: 3d07f317-6d05-5481-7ecc-fe6cb76ec21c
+                carrier:
+                  type: string
+                  description: TransitHub Company guid
+                  example: 54b44800-ee22-e9a8-4aba-df5df9031cf0
+                carrier_name:
+                  type: string
+                  example: Test
+                carrier_edrpou:
+                  type: string
+                  example: "123345"
+                agreement_number:
+                  type: string
+                  example: "1"
+                agreement_date:
+                  type: string
+                  example: 03.05.2018 15:55:00
+                client:
+                  type: string
+                  description: TransitHub Company guid
+                  example: ccbcaab9-8fb1-742d-ade8-528608f73e05
+                client_name:
+                  type: string
+                  example: Test
+                guid_client:
+                  type: string
+                  example: 3d07f3176d0554817eccfe6cb76ec21c
+                logist_name:
+                  type: string
+                  example: Vasia Logistenko
+                logist_phone:
+                  type: string
+                  example: "0642378910"
+                logist_email:
+                  type: string
+                  example: test@sdfs.c
+                dispetcher_group:
+                  type: string
+                  example: r
+                rate:
+                  type: number
+                  example: 12.0
+                status_code:
+                  type: string
+                  example: ready
+                warehouse_from_schedule_from:
+                  type: string
+                  example: 10:00:00
+                warehouse_from_schedule_to:
+                  type: string
+                  example: 19:00:00
+                warehouse_from_address:
+                  type: string
+                  example: Вулиця 40 років перемоги 25
+                warehouse_to_schedule_from:
+                  type: string
+                  example: 10:00:00
+                warehouse_to_schedule_to:
+                  type: string
+                  example: 19:00:00
+                warehouse_to_address:
+                  type: string
+                  example: Вулиця Громадянська 117
+                info:
+                  type: string
+                  example: some info
+                comment_1:
+                  type: string
+                  example: some comment
+                comment_2:
+                  type: string
+                  example: some comment2
+                slack_channel_id:
+                  type: string
+                  example: 34yerdcgct43
+                rate_of_loss_auto:
+                  type: number
+                  example: 1.25
+                rate_of_loss_train:
+                  type: number
+                  example: 1.75
+                goods_cost:
+                  type: number
+                  example: 1200.5
+                warehouse_from_max_height:
+                  type: number
+                  example: 3.75
+                warehouse_from_max_weight:
+                  type: number
+                  example: 12.5
+                warehouse_from_max_length:
+                  type: number
+                  example: 12.65
+                warehouse_from_weight_type:
+                  type: string
+                  example: тип ваг 1
+                warehouse_from_autotrain_type:
+                  type: string
+                  example: тип автопоїзду 12
+                warehouse_to_max_height:
+                  type: number
+                  example: 4.0
+                warehouse_to_max_weight:
+                  type: number
+                  example: 14.5
+                warehouse_to_max_length:
+                  type: number
+                  example: 11.7
+                warehouse_to_weight_type:
+                  type: string
+                  example: тип ваг 111
+                warehouse_to_autotrain_type:
+                  type: string
+                  example: тип автопоїзду 100
+                carrier_organisation_guid:
+                  type: string
+                  example: adaf4a42-42d5-2ea0-42e2-a29409c9c995
+                client_organisation_guid:
+                  type: string
+                  example: a29d1b72-fe7e-9f83-0cef-14f2d46591cd
+                manager_name:
+                  type: string
+                  example: Вася
+                manager_phone:
+                  type: string
+                  example: "38064739473"
+                manager_email:
+                  type: string
+                  example: test@kernel.ua
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                  goods:
+                    type: string
+                    example: ПШЕНИЦЯ
+                  warehouse_from:
+                    type: string
+                    example: "5324280901003"
+                  warehouse_to:
+                    type: string
+                    example: "5310100000004"
+                  point_from:
+                    type: string
+                    example: "5324280901"
+                  point_to:
+                    type: string
+                    example: "5310100000"
+                  route:
+                    type: string
+                    example: https://www.google.ru/maps/dir/49.639141,34.142599/49.599607,34.520231/@49.5707894,34.5097527,10z/data=!4m2!4m1!3e0
+                  distance:
+                    type: number
+                    example: 20.0
+                  travel_time:
+                    type: number
+                    example: 30.0
+                  client_number:
+                    type: number
+                    example: 12.0
+                  schedule_date:
+                    type: string
+                    example: 03.05.2018 15:55:00
+                  order:
+                    type: string
+                    example: 3d07f317-6d05-5481-7ecc-fe6cb76ec21c
+                  carrier:
+                    type: string
+                    description: TransitHub Company guid
+                    example: 54b44800-ee22-e9a8-4aba-df5df9031cf0
+                  carrier_name:
+                    type: string
+                    example: Test
+                  carrier_edrpou:
+                    type: string
+                    example: "123345"
+                  agreement_number:
+                    type: string
+                    example: "1"
+                  agreement_date:
+                    type: string
+                    example: 03.05.2018 15:55:00
+                  client:
+                    type: string
+                    description: TransitHub Company guid
+                    example: ccbcaab9-8fb1-742d-ade8-528608f73e05
+                  client_name:
+                    type: string
+                    example: Test
+                  guid_client:
+                    type: string
+                    example: 3d07f3176d0554817eccfe6cb76ec21c
+                  logist_name:
+                    type: string
+                    example: Vasia Logistenko
+                  logist_phone:
+                    type: string
+                    example: "0642378910"
+                  logist_email:
+                    type: string
+                    example: test@sdfs.c
+                  dispetcher_group:
+                    type: string
+                    example: r
+                  rate:
+                    type: number
+                    example: 12.0
+                  status_code:
+                    type: string
+                    example: ready
+                  warehouse_from_schedule_from:
+                    type: string
+                    example: 10:00:00
+                  warehouse_from_schedule_to:
+                    type: string
+                    example: 19:00:00
+                  warehouse_to_schedule_from:
+                    type: string
+                    example: 10:00:00
+                  warehouse_to_schedule_to:
+                    type: string
+                    example: 19:00:00
+                  warehouse_from_address:
+                    type: string
+                    example: Вулиця 40 років перемоги 25
+                  warehouse_to_address:
+                    type: string
+                    example: Вулиця Громадянська 117
+                  info:
+                    type: string
+                    example: some info
+                  comment_1:
+                    type: string
+                    example: some comment
+                  comment_2:
+                    type: string
+                    example: some comment2
+                  slack_channel_id:
+                    type: string
+                    example: 34yerdcgct43
+                  rate_of_loss_auto:
+                    type: number
+                    example: 1.25
+                  rate_of_loss_train:
+                    type: number
+                    example: 1.75
+                  goods_cost:
+                    type: number
+                    example: 1200.5
+                  warehouse_from_max_height:
+                    type: number
+                    example: 3.75
+                  warehouse_from_max_weight:
+                    type: number
+                    example: 12.5
+                  warehouse_from_max_length:
+                    type: number
+                    example: 12.65
+                  warehouse_from_weight_type:
+                    type: string
+                    example: тип ваг 1
+                  warehouse_from_autotrain_type:
+                    type: string
+                    example: тип автопоїзду 12
+                  warehouse_to_max_height:
+                    type: number
+                    example: 4.0
+                  warehouse_to_max_weight:
+                    type: number
+                    example: 14.5
+                  warehouse_to_max_length:
+                    type: number
+                    example: 11.7
+                  warehouse_to_weight_type:
+                    type: string
+                    example: тип ваг 111
+                  warehouse_to_autotrain_type:
+                    type: string
+                    example: тип автопоїзду 100
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /request.addCorrection:
+    post:
+      tags:
+      - Request
+      summary: отримати всі заявки
+      description: передавши токен, повертає список заявок
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      guid:
+                        type: string
+                        example: 57b4fcc9-7498-19b1-9241-76e74edf389d
+                      guid_client:
+                        type: string
+                        example: 57b4fcc9749819b1924176e74edf389d
+                      date:
+                        type: string
+                        example: 03.05.2018 15:55:00
+                      quantity_t:
+                        type: number
+                        example: 10.0
+                      quantity_vehicles:
+                        type: number
+                        example: 1.0
+                      vehicles_limitation:
+                        type: number
+                        example: 0.0
+                      comment:
+                        type: string
+                        example: some comment
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _state:
+                          type: string
+                          example: Created
+                        status:
+                          type: boolean
+                          example: true
+                        guid:
+                          type: string
+                          example: 57b4fcc9-7498-19b1-9241-76e74edf389d
+                        guid_client:
+                          type: string
+                          example: 57b4fcc9749819b1924176e74edf389d
+                        date:
+                          type: string
+                          example: 03.05.2018 15:55:00
+                        quantity_t:
+                          type: number
+                          example: 10.0
+                        quantity_vehicles:
+                          type: number
+                          example: 1.0
+                        vehicles_limitation:
+                          type: number
+                          example: 0.0
+                        comment:
+                          type: string
+                          example: some comment
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /vehicles_register:
+    post:
+      tags:
+      - Vehicles Register
+      summary: створення реєстру ТС
+      description: передавши токен, створю реєстр ТС
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: guid
+        in: query
+        description: Унікальний ідентифікатор реєстру ТС (при оновленні)
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request_guid_client:
+                  type: string
+                  description: Унікальний ідентиифікатор заявки в базі клієнта
+                  example: "123456789"
+                vehicle:
+                  type: string
+                  description: Номер транспортного засобу
+                  example: ВМ1372АТ
+                trailer:
+                  type: string
+                  description: Номер причепу
+                  example: АХ8268АК
+                driver:
+                  type: string
+                  description: Сертифікат водія
+                  example: ОІА538502
+                trips_quantity:
+                  type: number
+                  description: Кількість поїздок
+                  example: 1.0
+                phone:
+                  type: string
+                  description: Контактний номер телефону
+                  example: "063673472"
+                phone_bot:
+                  type: string
+                  description: Контактний номер телефону (бот)
+                  example: "063673472"
+                date_from:
+                  type: string
+                  example: 12.10.2017 07:20:31
+                date_to:
+                  type: string
+                  example: 12.10.2017 07:20:31
+                guid_client:
+                  type: string
+                  description: GUID із системи клієнта
+                  example: "1242345765"
+                vehicle_number:
+                  type: string
+                  description: Номер транспортного засобу
+                  example: АВ2389АМ
+                vehicle_tech_pass:
+                  type: string
+                  description: Номер технічного паспорту транспортного засобу
+                  example: САЕ379940
+                vehicle_brand:
+                  type: string
+                  description: Марка транспортного засобу
+                  example: TESLA
+                vehicle_model:
+                  type: string
+                  description: Модель транспортного засобу
+                  example: MODEL X
+                trailer_number:
+                  type: string
+                  description: Номер причепу
+                  example: ВМ1372АТ
+                trailer_tech_pass:
+                  type: string
+                  description: Номер технічного паспорту причепу
+                  example: САК199355
+                trailer_brand:
+                  type: string
+                  description: Марка причепу
+                  example: TESLA
+                trailer_model:
+                  type: string
+                  description: Модель причепу
+                  example: MODEL X
+                driver_fullname:
+                  type: string
+                  description: Прізвище, імя, по-батькові водія
+                  example: МИХАЙЛЮК ІГОР ПЕТРОВИЧ
+                driver_cert_serial_number:
+                  type: string
+                  description: Посвідчення водія
+                  example: АБХ292041
+                driver_pass_number:
+                  type: string
+                  description: Паспорт водія
+                  example: СА618689
+                driver_pass_given:
+                  type: string
+                  description: Місце та дата видачі паспорту
+                  example: м.Київ 15.02.2010
+                driver_phone:
+                  type: string
+                  description: Телефон водія
+                  example: "380956961627"
+                register_status:
+                  type: string
+                  description: Статус реєстра ТС (new, disabled)
+                  example: new
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус операції
+                    example: true
+                  state:
+                    type: string
+                    description: Тип операції
+                    example: created
+                  guid:
+                    type: string
+                    description: Унікальний ідентифікатор реєстру ТС
+                    example: 503f3c33-2a32-3991-052c-f6282df25eda
+                  request_guid_client:
+                    type: string
+                    description: Унікальний ідентиифікатор заявки в базі клієнта
+                    example: "123456789"
+                  vehicle:
+                    type: string
+                    description: Номер транспортного засобу
+                    example: ВМ1372АТ
+                  trailer:
+                    type: string
+                    description: Номер причепу
+                    example: АХ8268АК
+                  driver:
+                    type: string
+                    description: Сертифікат водія
+                    example: ОІА538502
+                  trips_quantity:
+                    type: number
+                    description: Кількість поїздок
+                    example: 1.0
+                  phone:
+                    type: string
+                    description: Контактний номер телефону
+                    example: "063673472"
+                  phone_bot:
+                    type: string
+                    description: Контактний номер телефону (бот)
+                    example: "063673472"
+                  date_from:
+                    type: string
+                    example: 12.10.2017 07:20:31
+                  date_to:
+                    type: string
+                    example: 12.10.2017 07:20:31
+                  guid_client:
+                    type: string
+                    description: GUID із системи клієнта
+                    example: "1242345765"
+                  vehicle_number:
+                    type: string
+                    description: Номер транспортного засобу
+                    example: АВ2389АМ
+                  vehicle_tech_pass:
+                    type: string
+                    description: Номер технічного паспорту транспортного засобу
+                    example: САЕ379940
+                  vehicle_brand:
+                    type: string
+                    description: Марка транспортного засобу
+                    example: TESLA
+                  vehicle_model:
+                    type: string
+                    description: Модель транспортного засобу
+                    example: MODEL X
+                  trailer_number:
+                    type: string
+                    description: Номер причепу
+                    example: ВМ1372АТ
+                  trailer_tech_pass:
+                    type: string
+                    description: Номер технічного паспорту причепу
+                    example: САК199355
+                  trailer_brand:
+                    type: string
+                    description: Марка причепу
+                    example: TESLA
+                  trailer_model:
+                    type: string
+                    description: Модель причепу
+                    example: MODEL X
+                  driver_fullname:
+                    type: string
+                    description: Прізвище, імя, по-батькові водія
+                    example: МИХАЙЛЮК ІГОР ПЕТРОВИЧ
+                  driver_cert_serial_number:
+                    type: string
+                    description: Посвідчення водія
+                    example: АБХ292041
+                  driver_pass_number:
+                    type: string
+                    description: Паспорт водія
+                    example: СА618689
+                  driver_pass_given:
+                    type: string
+                    description: Місце та дата видачі паспорту
+                    example: м.Київ 15.02.2010
+                  driver_phone:
+                    type: string
+                    description: Телефон водія
+                    example: "380956961627"
+                  register_status:
+                    type: string
+                    description: Статус реєстра ТС (new, disabled)
+                    example: new
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /vehicles:
+    get:
+      tags:
+      - Vehicles
+      summary: отримати ТС
+      description: |
+        By passing in the appropriate options, you can search for
+        available vehicles in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: v_number
+        in: query
+        description: vehicle's number of vehicle
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    put:
+      tags:
+      - Vehicles
+      summary: оновлення ТС
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - guid
+                    - nsi_code
+                    type: object
+                    properties:
+                      guid:
+                        type: string
+                        example: 53b92d54-3554-940e-0c86-7b8a06d4fc44
+                      nsi_code:
+                        type: string
+                        example: ТЕСТ010420182
+                      model:
+                        type: string
+                        example: Model X
+                      brand:
+                        type: string
+                        example: Tesla
+                      tech_passport:
+                        type: string
+                        example: "12"
+                      kind:
+                        type: string
+                        example: AUTOMOBILE
+                      validation_place:
+                        type: string
+                        example: Миргородська дільниця
+                      validation_author:
+                        type: string
+                        example: Дядя Вася
+                      validation_source:
+                        type: string
+                        example: UE
+                      validation_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      color:
+                        type: string
+                        example: Червоний
+                      cargo_capacity:
+                        type: number
+                        example: 10000.0
+                      net:
+                        type: number
+                        example: 10000.0
+                      gross:
+                        type: number
+                        example: 12000.0
+                      tara:
+                        type: number
+                        example: 2000.0
+                      type:
+                        required:
+                        - name
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: ZERNOVOZ
+                          name:
+                            type: string
+                            example: Зерновоз
+                          kind:
+                            type: string
+                            example: AUTOMOBILE
+                          trailer:
+                            type: number
+                            example: 0.0
+                      subtype:
+                        required:
+                        - name
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Тест
+                      info:
+                        required:
+                        - author
+                        - created_at
+                        - place
+                        type: object
+                        properties:
+                          place:
+                            type: string
+                            example: Миргородська дільниця
+                          created_at:
+                            type: string
+                            example: 11.12.2017 16:26:12
+                          author:
+                            type: string
+                            example: Дядя Вася
+                      _search_back_key:
+                        type: string
+                        description: Службове поле, потрібне тільки для 1С
+                        example: f97abb84-5638-11e5-800d-002590fd6f2b
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+                        nsi_code:
+                          type: string
+                          example: ТЕСТ010420182
+                        nsi_code_slug:
+                          type: string
+                          example: TEST010420182
+                        model:
+                          type: string
+                          example: Model X
+                        brand:
+                          type: string
+                          example: Tesla
+                        tech_passport:
+                          type: string
+                          example: "12"
+                        kind:
+                          type: string
+                          example: AUTOMOBILE
+                        validation_place:
+                          type: string
+                          example: Миргородська дільниця
+                        validation_author:
+                          type: string
+                          example: Дядя Вася
+                        validatiot_source:
+                          type: string
+                          example: UE
+                        validation_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        color:
+                          type: string
+                          example: Червоний
+                        cargo_capacity:
+                          type: number
+                          example: 10000.0
+                        net:
+                          type: number
+                          example: 10000.0
+                        gross:
+                          type: number
+                          example: 12000.0
+                        tara:
+                          type: number
+                          example: 2000.0
+                        type:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: ZERNOVOZ
+                            name:
+                              type: string
+                              example: Зерновоз
+                            kind:
+                              type: string
+                              example: AUTOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        subtype:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Тест
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        _search_back_key:
+                          type: string
+                          description: Службове поле, потрібне тільки для 1С
+                          example: f97abb84-5638-11e5-800d-002590fd6f2b
+                        _state:
+                          type: string
+                          description: Службове поле, показує операцію виконану над
+                            об'єктом (created, exist, changed)
+                          example: created
+                        _err:
+                          type: string
+                          description: Службове поле, наявність якого означає, що
+                            при створенні об'єкту була помилка. Поле описує помилку.
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - Vehicles
+      summary: створення ТС
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - nsi_code
+                    type: object
+                    properties:
+                      nsi_code:
+                        type: string
+                        example: ТЕСТ010420182
+                      model:
+                        type: string
+                        example: Model X
+                      brand:
+                        type: string
+                        example: Tesla
+                      tech_passport:
+                        type: string
+                        example: "12"
+                      kind:
+                        type: string
+                        example: AUTOMOBILE
+                      validation_place:
+                        type: string
+                        example: Миргородська дільниця
+                      validation_author:
+                        type: string
+                        example: Дядя Вася
+                      validation_source:
+                        type: string
+                        example: UE
+                      validation_date:
+                        type: string
+                        example: 04.01.2018 0:00:00
+                      color:
+                        type: string
+                        example: Червоний
+                      cargo_capacity:
+                        type: number
+                        example: 10000.0
+                      net:
+                        type: number
+                        example: 10000.0
+                      gross:
+                        type: number
+                        example: 12000.0
+                      tara:
+                        type: number
+                        example: 2000.0
+                      type:
+                        required:
+                        - name
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: ZERNOVOZ
+                          name:
+                            type: string
+                            example: Зерновоз
+                          kind:
+                            type: string
+                            example: AUTOMOBILE
+                          trailer:
+                            type: number
+                            example: 0.0
+                      subtype:
+                        required:
+                        - name
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Тест
+                      info:
+                        required:
+                        - author
+                        - created_at
+                        - place
+                        type: object
+                        properties:
+                          place:
+                            type: string
+                            example: Миргородська дільниця
+                          created_at:
+                            type: string
+                            example: 11.12.2017 16:26:12
+                          author:
+                            type: string
+                            example: Дядя Вася
+                      _search_back_key:
+                        type: string
+                        description: Службове поле, потрібне тільки для 1С
+                        example: f97abb84-5638-11e5-800d-002590fd6f2b
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+                        nsi_code:
+                          type: string
+                          example: ТЕСТ010420182
+                        nsi_code_slug:
+                          type: string
+                          example: TEST010420182
+                        model:
+                          type: string
+                          example: Model X
+                        brand:
+                          type: string
+                          example: Tesla
+                        tech_passport:
+                          type: string
+                          example: "12"
+                        kind:
+                          type: string
+                          example: AUTOMOBILE
+                        validation_place:
+                          type: string
+                          example: Миргородська дільниця
+                        validation_author:
+                          type: string
+                          example: Дядя Вася
+                        validatiot_source:
+                          type: string
+                          example: UE
+                        validation_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        color:
+                          type: string
+                          example: Червоний
+                        cargo_capacity:
+                          type: number
+                          example: 10000.0
+                        net:
+                          type: number
+                          example: 10000.0
+                        gross:
+                          type: number
+                          example: 12000.0
+                        tara:
+                          type: number
+                          example: 2000.0
+                        type:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: ZERNOVOZ
+                            name:
+                              type: string
+                              example: Зерновоз
+                            kind:
+                              type: string
+                              example: AUTOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        subtype:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Тест
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        _search_back_key:
+                          type: string
+                          description: Службове поле, потрібне тільки для 1С
+                          example: f97abb84-5638-11e5-800d-002590fd6f2b
+                        _state:
+                          type: string
+                          description: Службове поле, показує операцію виконану над
+                            об'єктом (created, exist, changed)
+                          example: created
+                        _err:
+                          type: string
+                          description: Службове поле, наявність якого означає, що
+                            при створенні об'єкту була помилка. Поле описує помилку.
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /vehicles/exchange:
+    get:
+      tags:
+      - Vehicles
+      summary: отримати зареєстровані для обміну ТС
+      description: метод для отримання ТС зареєстрованих до обміну
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: ліміт елементів
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VehicleExchange'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /vehicles/exchange/clean:
+    post:
+      tags:
+      - Vehicles
+      summary: знімає ТС з реєстрації
+      description: передавши токен, знімає ТС з реєстрації
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          '*/*':
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - ref
+                    - table
+                    type: object
+                    properties:
+                      ref:
+                        type: string
+                        example: af7a88d7-3c99-be71-9707-b91757c0cecd
+                      table:
+                        type: string
+                        example: vehicles
+        required: true
+      responses:
+        200:
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_Response'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /vehicles/types:
+    put:
+      tags:
+      - Vehicles Types & Subtypes
+      summary: оновлення існуючих Типів та Підтипів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        required:
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Test
+                          kind:
+                            type: string
+                            example: AUTHOMOBILE
+                          trailer:
+                            type: number
+                            example: 0.0
+                      subtype:
+                        required:
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Test
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            kind:
+                              type: string
+                              example: AUTHOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              example: exist
+                        subtype:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            _state:
+                              type: string
+                              example: exist
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - Vehicles Types & Subtypes
+      summary: створення або отримання існуючих Типів та Підтипів
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        required:
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Test
+                          kind:
+                            type: string
+                            example: AUTHOMOBILE
+                          trailer:
+                            type: number
+                            example: 0.0
+                      subtype:
+                        required:
+                        - nsi_code
+                        type: object
+                        properties:
+                          nsi_code:
+                            type: string
+                            example: TEST
+                          name:
+                            type: string
+                            example: Test
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            kind:
+                              type: string
+                              example: AUTHOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              example: exist
+                        subtype:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            _state:
+                              type: string
+                              example: exist
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /vehicles/types/exchange:
+    get:
+      tags:
+      - Vehicles Types & Subtypes
+      summary: отримати зареєстровані для обміну Тип або Підтип
+      description: метод для отримання Тип або Підтип зареєстрованих до обміну
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: ліміт елементів
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            kind:
+                              type: string
+                              example: AUTHOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              example: changed
+                        subtype:
+                          required:
+                          - nsi_code
+                          type: object
+                          properties:
+                            guid:
+                              type: string
+                              example: 3b693f51-43ee-b641-2507-cfd60ecf86cf
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Test
+                            _state:
+                              type: string
+                              example: changed
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /vehicles/types/exchange/clean:
+    post:
+      tags:
+      - Vehicles Types & Subtypes
+      summary: знімає Тип або Підтип з реєстрації
+      description: передавши токен, знімає Тип або Підтип з реєстрації
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          '*/*':
+            schema:
+              required:
+              - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                    - ref
+                    - table
+                    type: object
+                    properties:
+                      ref:
+                        type: string
+                        example: af7a88d7-3c99-be71-9707-b91757c0cecd
+                      table:
+                        type: string
+                        description: types or subtypes
+                        example: types
+        required: true
+      responses:
+        200:
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_Response'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error "table_name" varchar(150) path '$.table', "table_name"
+            varchar(150) path '$.table',
+          content: {}
+      x-codegen-request-body-name: body
+  /warehouse:
+    get:
+      tags:
+      - Warehouse
+      summary: отримати Склади
+      description: |
+        By passing in the appropriate options, you can search for
+        available warehouse in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: id of warehouse
+        schema:
+          type: string
+      - name: code
+        in: query
+        description: code of warehouse
+        schema:
+          type: string
+      - name: koatuu
+        in: query
+        description: KOATUU of warehouse
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WarehouseREAD'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - Warehouse
+      summary: створення або оновлення Складів
+      parameters:
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Warehouse item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarehousePOST'
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content: {}
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/authentication:
+    post:
+      tags:
+      - TransitHub Users
+      summary: аутентифікація користувача TransitHub
+      parameters:
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@test.com
+                password:
+                  type: string
+                  example: "1"
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_exist:
+                    type: boolean
+                    example: false
+                  id:
+                    type: string
+                    example: "1"
+                  email:
+                    type: string
+                    example: test@test.com
+                  firstname:
+                    type: string
+                    example: Han
+                  lastname:
+                    type: string
+                    example: Solo
+                  access_token:
+                    type: string
+                    example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTUyMzQ5MTIwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMSJ9.yB-IhvY-p_tDC4z6LphleYIOg7fsWPM1tar-eUFcVi8
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/users:
+    put:
+      tags:
+      - TransitHub Users
+      summary: оновити користувача TransitHub
+      parameters:
+      - name: Authorization
+        in: header
+        description: JWT
+        required: true
+        schema:
+          type: string
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        description: user's id
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - firstname
+              - lastname
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@test.com
+                firstname:
+                  type: string
+                  example: Han
+                lastname:
+                  type: string
+                  example: Solo
+                language:
+                  type: string
+                  example: ua
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  user_exist:
+                    type: boolean
+                  id:
+                    type: number
+                    example: 44.0
+                  email:
+                    type: string
+                    example: test@test.com
+                  firstname:
+                    type: string
+                    example: Han
+                  lastname:
+                    type: string
+                    example: Solo
+                  lang:
+                    type: string
+                    example: ua
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - TransitHub Users
+      summary: створити користувача TransitHub
+      parameters:
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - firstname
+              - lastname
+              - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@test.com
+                password:
+                  type: string
+                  example: "1"
+                firstname:
+                  type: string
+                  example: Han
+                lastname:
+                  type: string
+                  example: Solo
+                language:
+                  type: string
+                  example: ua
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_exist:
+                    type: boolean
+                  email:
+                    type: string
+                    example: test@test.com
+                  firstname:
+                    type: string
+                    example: Han
+                  lastname:
+                    type: string
+                    example: Solo
+                  language:
+                    type: string
+                    example: ua
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/users.add_to_company:
+    post:
+      tags:
+      - TransitHub Users
+      summary: добавити користувача TransitHub в компанію
+      parameters:
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - company_guid
+              - user_id
+              type: object
+              properties:
+                company_guid:
+                  type: number
+                  example: 44.0
+                user_id:
+                  type: number
+                  example: 1.0
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  user_exist:
+                    type: boolean
+                  company_exist:
+                    type: boolean
+                  company_guid:
+                    type: number
+                    example: 44.0
+                  user_id:
+                    type: number
+                    example: 1.0
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/users.update_password:
+    put:
+      tags:
+      - TransitHub Users
+      summary: оновити пароль TransitHub користувача
+      parameters:
+      - name: Authorization
+        in: header
+        description: JWT
+        required: true
+        schema:
+          type: string
+      - name: client_token
+        in: query
+        description: Token of client
+        required: true
+        schema:
+          type: string
+      - name: user_id
+        in: query
+        description: user's id
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+              - password_new
+              - password_old
+              type: object
+              properties:
+                password_old:
+                  type: string
+                  example: old
+                password_new:
+                  type: string
+                  example: new
+        required: true
+      responses:
+        201:
+          description: item created or updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  user_exist:
+                    type: boolean
+                  user_id:
+                    type: number
+                    example: 1.0
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/companies:
+    get:
+      tags:
+      - TransitHub Companys
+      summary: отримати Компанії TransitHub
+      description: |
+        By passing in the appropriate options, you can search for
+        available companys in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: user_id
+        in: query
+        description: id of user
+        schema:
+          type: string
+      - name: workspace_name
+        in: query
+        description: name of company's workspace
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/TransitHubCompany'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - TransitHub Companys
+      summary: створення Компанії TransitHub
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - name
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Зелені Віники
+                edrpou:
+                  type: number
+                  example: 11111111
+        required: true
+      responses:
+        200:
+          description: result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  company_exist:
+                    type: boolean
+                  guid:
+                    type: string
+                    example: 5943fc56-542d-5d04-db41-247e9705385c
+                  name:
+                    type: string
+                    example: Зелені Віники
+                  workspave_name:
+                    type: string
+                    example: zeleni-vinuku
+                  edrpou:
+                    type: number
+                    example: 11111111
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/drivers:
+    get:
+      tags:
+      - TransitHub Drivers
+      summary: отримати Водіїв TransitHub
+      description: |
+        By passing in the appropriate options, you can search for
+        available drivers in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: external_user_id
+        in: query
+        description: external user id
+        schema:
+          type: string
+      - name: workspace
+        in: query
+        description: workspace's name
+        required: true
+        schema:
+          type: string
+      - name: cert_serial_number
+        in: query
+        description: сертифікат водія
+        schema:
+          type: string
+      - name: phone
+        in: query
+        description: phone of driver
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          minimum: 0
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/TransitHubDriver'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    put:
+      tags:
+      - TransitHub Drivers
+      summary: оновлення Водія TransitHub
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: guid
+        in: query
+        description: guid Водія
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - cert_serial_number
+              - first_name
+              - last_name
+              - workspace
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Степан
+                middle_name:
+                  type: string
+                  example: Степанович
+                last_name:
+                  type: string
+                  example: Степанець
+                cert_serial_number:
+                  type: string
+                  example: ОІА469643
+                phone:
+                  type: string
+                  example: "0990413599"
+                pass_issued:
+                  type: string
+                  example: test
+                pass_serial:
+                  type: string
+                  example: test
+                pass_number:
+                  type: number
+                  example: 1212342.0
+                pass_date:
+                  type: string
+                  example: 04.01.2018 0:00:00
+                workspace:
+                  type: string
+                  example: tr
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      required:
+                      - cert_serial_number
+                      - name
+                      - phone
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                          example: Степан
+                        middle_name:
+                          type: string
+                          example: Степанович
+                        last_name:
+                          type: string
+                          example: Степанець
+                        name:
+                          type: string
+                          example: СТЕПАНЕЦЬ С.С.
+                        full_name:
+                          type: string
+                          example: СТЕПАНЕЦЬ СТЕПАН СТЕПАНОВИЧ
+                        cert_serial_number:
+                          type: string
+                          example: ОІА469643
+                        cert_serial_number_slug:
+                          type: string
+                          example: ОІА469643
+                        phone:
+                          type: string
+                          example: "0990413599"
+                        pass_issued:
+                          type: string
+                          example: test
+                        pass_serial:
+                          type: string
+                          example: test
+                        pass_number:
+                          type: number
+                          example: 1212342.0
+                        pass_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        company_id:
+                          type: number
+                          example: 43.0
+                        external_user_id:
+                          type: string
+                          example: tr 213
+                        c_guid:
+                          type: string
+                          example: 62d6fe3b-a703-6e99-4a95-2e551b5a343d
+                        _state:
+                          type: string
+                          example: created
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+    post:
+      tags:
+      - TransitHub Drivers
+      summary: створення Водія TransitHub
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              required:
+              - cert_serial_number
+              - external_user_id
+              - first_name
+              - last_name
+              - workspace
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Степан
+                middle_name:
+                  type: string
+                  example: Степанович
+                last_name:
+                  type: string
+                  example: Степанець
+                cert_serial_number:
+                  type: string
+                  example: ОІА469643
+                phone:
+                  type: string
+                  example: "0990413599"
+                pass_issued:
+                  type: string
+                  example: test
+                pass_serial:
+                  type: string
+                  example: test
+                pass_number:
+                  type: number
+                  example: 1212342.0
+                pass_date:
+                  type: string
+                  example: 04.01.2018 0:00:00
+                workspace:
+                  type: string
+                  example: tr
+                external_user_id:
+                  type: string
+                  example: tr 213
+                contact_info_type:
+                  type: string
+                  example: telegram
+                contact_info_value:
+                  type: string
+                  example: sd2334534v
+                contact_info_description:
+                  type: string
+                  example: id of telegram channel
+        required: true
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  items:
+                    type: array
+                    items:
+                      required:
+                      - cert_serial_number
+                      - name
+                      - phone
+                      type: object
+                      properties:
+                        first_name:
+                          type: string
+                          example: Степан
+                        middle_name:
+                          type: string
+                          example: Степанович
+                        last_name:
+                          type: string
+                          example: Степанець
+                        name:
+                          type: string
+                          example: СТЕПАНЕЦЬ С.С.
+                        full_name:
+                          type: string
+                          example: СТЕПАНЕЦЬ СТЕПАН СТЕПАНОВИЧ
+                        cert_serial_number:
+                          type: string
+                          example: ОІА469643
+                        cert_serial_number_slug:
+                          type: string
+                          example: ОІА469643
+                        phone:
+                          type: string
+                          example: "0990413599"
+                        pass_issued:
+                          type: string
+                          example: test
+                        pass_serial:
+                          type: string
+                          example: test
+                        pass_number:
+                          type: number
+                          example: 1212342.0
+                        pass_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        company_id:
+                          type: number
+                          example: 43.0
+                        company_workspace_name:
+                          type: string
+                          example: td
+                        external_user_id:
+                          type: string
+                          example: tr 213
+                        c_guid:
+                          type: string
+                          example: 62d6fe3b-a703-6e99-4a95-2e551b5a343d
+                        contact_info_type:
+                          type: string
+                          example: telegram
+                        contact_info_value:
+                          type: string
+                          example: sd2334534v
+                        contact_info_description:
+                          type: string
+                          example: id of telegram channel
+                        _state:
+                          type: string
+                          example: created
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /transithub/driver/contact_info.find_driver:
+    get:
+      tags:
+      - TransitHub Drivers
+      summary: пошук водіїв по контактним даним
+      description: передавши контактні дані, отримати водіїв
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: workspace
+        in: query
+        description: workspace's name
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: тип контактної інформації (phone, viber, telegram, messenger,
+          email)
+        schema:
+          type: string
+      - name: value
+        in: query
+        description: значення контактної інформації
+        schema:
+          type: string
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/TransitHubDriver'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+  /transithub/vehicles:
+    get:
+      tags:
+      - TransitHub Vehicles
+      summary: отримати ТС TransitHub
+      description: |
+        By passing in the appropriate options, you can search for
+        available vehicles in the system
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: workspace
+        in: query
+        description: workspace's name
+        required: true
+        schema:
+          type: string
+      - name: v_number
+        in: query
+        description: vehicle's number of vehicle
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: maximum number of records to return
+        schema:
+          type: number
+      - name: offset
+        in: query
+        description: number of records to skip for pagination
+        schema:
+          type: number
+      responses:
+        200:
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "true"
+                  items:
+                    $ref: '#/components/schemas/TransitHubVehicle'
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+    post:
+      tags:
+      - TransitHub Vehicles
+      summary: створення ТС
+      parameters:
+      - name: client_token
+        in: query
+        description: token of client (NAV, 1C)
+        required: true
+        schema:
+          type: string
+      - name: workspace
+        in: query
+        description: workspace's name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: тіло запиту - всі об'єкти для обробки
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                v_number:
+                  type: string
+                  example: ТЕСТ010420182
+                model:
+                  type: string
+                  example: Model X
+                brand:
+                  type: string
+                  example: Tesla
+                tech_passport:
+                  type: string
+                  example: "12"
+                kind:
+                  type: string
+                  example: AUTOMOBILE
+                validation_place:
+                  type: string
+                  example: Миргородська дільниця
+                validation_author:
+                  type: string
+                  example: Дядя Вася
+                validation_source:
+                  type: string
+                  example: UE
+                validation_date:
+                  type: string
+                  example: 04.01.2018 0:00:00
+                color:
+                  type: string
+                  example: Червоний
+                cargo_capacity:
+                  type: number
+                  example: 10000.0
+                net:
+                  type: number
+                  example: 10000.0
+                gross:
+                  type: number
+                  example: 12000.0
+                tara:
+                  type: number
+                  example: 2000.0
+                type:
+                  required:
+                  - name
+                  - nsi_code
+                  type: object
+                  properties:
+                    nsi_code:
+                      type: string
+                      example: ZERNOVOZ
+                    name:
+                      type: string
+                      example: Зерновоз
+                    kind:
+                      type: string
+                      example: AUTOMOBILE
+                    trailer:
+                      type: number
+                      example: 0.0
+                subtype:
+                  required:
+                  - name
+                  - nsi_code
+                  type: object
+                  properties:
+                    nsi_code:
+                      type: string
+                      example: TEST
+                    name:
+                      type: string
+                      example: Тест
+                info:
+                  required:
+                  - author
+                  - created_at
+                  - place
+                  type: object
+                  properties:
+                    place:
+                      type: string
+                      example: Миргородська дільниця
+                    created_at:
+                      type: string
+                      example: 11.12.2017 16:26:12
+                    author:
+                      type: string
+                      example: Дядя Вася
+        required: true
+      responses:
+        200:
+          description: items created or return info about existed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+                        c_guid:
+                          type: string
+                          example: 166425da-7795-d7b8-5f62-5c43b5f0c953
+                        v_number:
+                          type: string
+                          example: ТЕСТ010420182
+                        v_number_slug:
+                          type: string
+                          example: TEST010420182
+                        model:
+                          type: string
+                          example: Model X
+                        brand:
+                          type: string
+                          example: Tesla
+                        tech_passport:
+                          type: string
+                          example: "12"
+                        kind:
+                          type: string
+                          example: AUTOMOBILE
+                        validation_place:
+                          type: string
+                          example: Миргородська дільниця
+                        validation_author:
+                          type: string
+                          example: Дядя Вася
+                        validatiot_source:
+                          type: string
+                          example: UE
+                        validation_date:
+                          type: string
+                          example: 04.01.2018 0:00:00
+                        color:
+                          type: string
+                          example: Червоний
+                        cargo_capacity:
+                          type: number
+                          example: 10000.0
+                        net:
+                          type: number
+                          example: 10000.0
+                        gross:
+                          type: number
+                          example: 12000.0
+                        tara:
+                          type: number
+                          example: 2000.0
+                        type:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: ZERNOVOZ
+                            name:
+                              type: string
+                              example: Зерновоз
+                            kind:
+                              type: string
+                              example: AUTOMOBILE
+                            trailer:
+                              type: number
+                              example: 0.0
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        subtype:
+                          required:
+                          - name
+                          - nsi_code
+                          type: object
+                          properties:
+                            nsi_code:
+                              type: string
+                              example: TEST
+                            name:
+                              type: string
+                              example: Тест
+                            _state:
+                              type: string
+                              description: Службове поле, показує операцію виконану
+                                над об'єктом (created, exist, changed)
+                              example: created
+                        _state:
+                          type: string
+                          description: Службове поле, показує операцію виконану над
+                            об'єктом (created, exist, changed)
+                          example: created
+        400:
+          description: bad input parameter
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    WarehouseREAD:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 1004
+        name:
+          type: string
+          example: Елагрі-Деренівка
+        lat:
+          type: string
+          example: 49,2422707
+        lng:
+          type: string
+          example: 49,2422707
+        full_address:
+          type: string
+          example: Україна, Тернопільська, Теребовлянський район, с. Деренівка, Вулиця
+            Промислова 11
+        street_type:
+          type: string
+          example: Вулиця
+        street_name:
+          type: string
+          example: Промислова
+        building_n:
+          type: string
+          example: "11"
+        kt:
+          type: integer
+          example: 0
+        location_type_code:
+          type: string
+          example: ЭЛЕВАТОР
+        location_type:
+          type: string
+          example: Село
+        geo_status:
+          type: string
+          example: Не проверено
+        koatuu:
+          type: string
+          example: "6125082702"
+        classificator_code:
+          type: string
+          example: "6125082702002"
+        is_used:
+          type: boolean
+          example: true
+        code:
+          type: string
+          example: ЕЛАГРІКРАС
+        organisation:
+          type: string
+          example: Зелена Долина
+        edrpou:
+          type: string
+          example: "12334564"
+        kind:
+          type: string
+          description: 'Варіанти: елеватор, завод, порт, тік, господарство'
+          example: господарство
+        country_code:
+          type: string
+          example: UA
+        country_name:
+          type: string
+          example: Україна
+        region_code:
+          type: string
+          example: "51"
+        region_name:
+          type: string
+          example: Одеська
+        district_code:
+          type: string
+          example: "51229"
+        district_name:
+          type: string
+          example: Подільський район
+        locality:
+          type: string
+          example: Бочманівка
+        code_ad:
+          type: string
+          example: ЕЛАГРІКРАС
+    WarehousePOST:
+      required:
+      - classificator_code
+      - geo_status
+      - location_type
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Елагрі-Деренівка
+        lat:
+          type: string
+          example: 49,2422707
+        lng:
+          type: string
+          example: 49,2422707
+        full_address:
+          type: string
+          example: Україна, Тернопільська, Теребовлянський район, с. Деренівка, Вулиця
+            Промислова 11
+        street_type:
+          type: string
+          example: Вулиця
+        street_name:
+          type: string
+          example: Промислова
+        building_n:
+          type: string
+          example: "11"
+        legal_entity:
+          type: string
+          example: 34 696 571
+        kt:
+          type: integer
+          example: 0
+        location_type_code:
+          type: string
+          example: ЭЛЕВАТОР
+        location_type:
+          type: string
+          example: Село
+        geo_status:
+          type: string
+          example: Не проверено
+        koatuu:
+          type: string
+          example: "6125082702"
+        classificator_code:
+          type: string
+          example: "6125082702002"
+        is_used:
+          type: boolean
+          example: true
+        code:
+          type: string
+          example: ЕЛАГРІКРАС
+        organisation:
+          type: string
+          example: Зелена Долина
+        edrpou:
+          type: string
+          example: "12334564"
+        kind:
+          type: string
+          description: 'Варіанти: елеватор, завод, порт, тік, господарство'
+          example: господарство
+        code_ad:
+          type: string
+          example: ЕЛАГРІКРАС
+    Driver:
+      required:
+      - cert_serial_number
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 1004
+        name:
+          type: string
+          example: Кононенко В.І.
+        cert_serial_number:
+          type: string
+          example: ВХТ041293
+        cert_serial_number_slug:
+          type: string
+          example: VXT0412
+        pass_number:
+          type: string
+          example: ""
+        pass_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        pass_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        pass_issued:
+          type: string
+          example: ""
+        phone:
+          type: string
+          example: +380635432749
+        first_name:
+          type: string
+          example: Василь
+        middle_name:
+          type: string
+          example: Іванович
+        last_name:
+          type: string
+          example: Кононенко
+        full_name:
+          type: string
+          example: Кононенко Василь Іванович
+        validation_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        validation_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        validation_place:
+          type: string
+          example: Миргородська дільниця
+        validation_author:
+          type: string
+          example: Автор валідації
+        validation_source:
+          type: string
+          example: UE
+        guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+    TransitHubDriver:
+      required:
+      - cert_serial_number
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 1004
+        company_id:
+          type: number
+          example: 2.0
+        name:
+          type: string
+          example: Кононенко В.І.
+        cert_serial_number:
+          type: string
+          example: ВХТ041293
+        cert_serial_number_slug:
+          type: string
+          example: VXT0412
+        pass_number:
+          type: string
+          example: ""
+        pass_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        pass_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        pass_issued:
+          type: string
+          example: ""
+        phone:
+          type: string
+          example: +380635432749
+        first_name:
+          type: string
+          example: Василь
+        middle_name:
+          type: string
+          example: Іванович
+        last_name:
+          type: string
+          example: Кононенко
+        full_name:
+          type: string
+          example: Кононенко Василь Іванович
+        guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+        external_user_id:
+          type: string
+          example: telegram 324234
+        c_guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+    DriverExchange:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 1004
+        name:
+          type: string
+          example: Кононенко В.І.
+        nsi_code:
+          type: string
+          example: ВХТ041293
+        nsi_code_slug:
+          type: string
+          example: VXT041293
+        pass_number:
+          type: string
+          example: ""
+        pass_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        pass_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        pass_issued:
+          type: string
+          example: ""
+        phone:
+          type: string
+          example: +380635432749
+        first_name:
+          type: string
+          example: Василь
+        middle_name:
+          type: string
+          example: Іванович
+        last_name:
+          type: string
+          example: Кононенко
+        full_name:
+          type: string
+          example: Кононенко Василь Іванович
+        validation_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        validation_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        validation_place:
+          type: string
+          example: Миргородська дільниця
+        validation_author:
+          type: string
+          example: Автор валідації
+        validation_source:
+          type: string
+          example: UE
+        info_author:
+          type: string
+          example: Дядя Вася
+        info_place:
+          type: string
+          example: Миргородська дільниц
+        info_created_at:
+          type: string
+          example: 04.01.2018 0:00:00
+        info_created_at_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+        _state:
+          type: string
+          example: changed (змінено) or deleted (видалено)
+    TransitHubVehicle:
+      required:
+      - v_number
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 193
+        company_id:
+          type: number
+          example: 2.0
+        v_number:
+          type: string
+          example: АВ2356ВВ
+        v_number_slug:
+          type: string
+          example: AB2356BB
+        model:
+          type: string
+          example: Model X
+        tech_passport:
+          type: string
+          example: "12365465"
+        brand:
+          type: number
+          example: 23.0
+        type:
+          type: number
+          example: 108.0
+        subtype:
+          type: number
+          example: 12.0
+        kind:
+          type: string
+          example: AUTOMOBILE
+        validation_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        validation_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        validation_place:
+          type: string
+          example: ""
+        validation_author:
+          type: string
+          example: ""
+        validation_source:
+          type: string
+          example: UE
+        gross:
+          type: number
+          example: 20000.0
+        tara:
+          type: number
+          example: 4000.0
+        net:
+          type: number
+          example: 16000.0
+        cargo_capacity:
+          type: number
+          example: 16000.0
+        color:
+          type: string
+          example: Червоний
+        guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+        c_guid:
+          type: string
+          example: 166425da-7795-d7b8-5f62-5c43b5f0c953
+    Vehicle:
+      required:
+      - v_number
+      type: object
+      properties:
+        id:
+          type: integer
+          description: generated by system
+          example: 193
+        v_number:
+          type: string
+          example: АВ2356ВВ
+        v_number_slug:
+          type: string
+          example: AB2356BB
+        model:
+          type: string
+          example: Model X
+        tech_passport:
+          type: string
+          example: "12365465"
+        brand:
+          type: number
+          example: 23.0
+        type:
+          type: number
+          example: 108.0
+        subtype:
+          type: number
+          example: 12.0
+        kind:
+          type: string
+          example: AUTOMOBILE
+        validation_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        validation_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        validation_place:
+          type: string
+          example: ""
+        validation_author:
+          type: string
+          example: ""
+        validation_source:
+          type: string
+          example: UE
+        gross:
+          type: number
+          example: 20000.0
+        tara:
+          type: number
+          example: 4000.0
+        net:
+          type: number
+          example: 16000.0
+        cargo_capacity:
+          type: number
+          example: 16000.0
+        color:
+          type: string
+          example: Червоний
+        guid:
+          type: string
+          example: 548acce7-9b1f-40b0-fe26-fceea4b72965
+    VehicleExchange:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: 84c15667-d5b5-97b0-145d-147fb70a7ddc
+        nsi_code:
+          type: string
+          example: ТЕСТ010420182
+        nsi_code_slug:
+          type: string
+          example: TEST010420182
+        model:
+          type: string
+          example: Model X
+        brand:
+          type: string
+          example: Tesla
+        tech_passport:
+          type: string
+          example: "12"
+        kind:
+          type: string
+          example: AUTOMOBILE
+        validation_place:
+          type: string
+          example: Миргородська дільниця
+        validation_author:
+          type: string
+          example: Дядя Вася
+        validatiot_source:
+          type: string
+          example: UE
+        validation_date:
+          type: string
+          example: 04.01.2018 0:00:00
+        validation_date_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        info_author:
+          type: string
+          example: Дядя Вася
+        info_place:
+          type: string
+          example: Миргородська дільниц
+        info_created_at:
+          type: string
+          example: 04.01.2018 0:00:00
+        info_created_at_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        color:
+          type: string
+          example: Червоний
+        cargo_capacity:
+          type: number
+          example: 10000.0
+        net:
+          type: number
+          example: 10000.0
+        gross:
+          type: number
+          example: 12000.0
+        tara:
+          type: number
+          example: 2000.0
+        type:
+          type: object
+          properties:
+            nsi_code:
+              type: string
+              example: ZERNOVOZ
+            name:
+              type: string
+              example: Зерновоз
+            kind:
+              type: string
+              example: AUTOMOBILE
+            trailer:
+              type: number
+              example: 0.0
+            _state:
+              type: string
+              description: Службове поле, показує операцію виконану над об'єктом (created,
+                exist, changed)
+              example: exist
+        subtype:
+          type: object
+          properties:
+            nsi_code:
+              type: string
+              example: TEST
+            name:
+              type: string
+              example: Тест
+            _state:
+              type: string
+              description: Службове поле, показує операцію виконану над об'єктом (created,
+                exist, changed)
+              example: exist
+        _state:
+          type: string
+          description: Службове поле, показує операцію виконану над об'єктом (created,
+            exist, changed)
+          example: changed
+    Locality:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 61.0
+        name:
+          type: string
+          example: Устивиця
+        name_ru:
+          type: string
+          example: Устивиця
+        kind:
+          type: string
+          example: Населенный пункт
+        description:
+          type: string
+          example: Україна, Полтавська, Великобагачанський район, Устивиця
+        description_ru:
+          type: string
+          example: Україна, Полтавська, Великобагачанський район, Устивиця
+        koatuu:
+          type: string
+          example: "5320285301"
+        type:
+          type: string
+          example: C
+        region_code:
+          type: string
+          example: "53"
+        region_name:
+          type: string
+          example: Полтавська
+        region_name_ru:
+          type: string
+          example: Полтавська
+        district_code:
+          type: string
+          example: "53202"
+        district_name:
+          type: string
+          example: Великобагачанський район
+        district_name_ru:
+          type: string
+          example: Великобагачанський район
+        country_code:
+          type: string
+          example: UA
+        country_name:
+          type: string
+          example: Україна
+        country_name_ru:
+          type: string
+          example: Україна
+        lat:
+          type: string
+          example: "872368"
+        lng:
+          type: string
+          example: "872368"
+        locality_type:
+          type: string
+          example: Село
+        locality_type_ru:
+          type: string
+          example: Село
+        guid:
+          type: string
+          example: 06A3424E-C3DC-48CF-A524-125A3D3BB7C2
+    Race:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: 5bbd73b8-119a-af08-1f7d-5523ac7643dc
+        request:
+          type: number
+          example: 612.0
+        driver:
+          type: number
+          example: 6.0
+        number:
+          type: string
+          example: 180510-4
+        created_at:
+          type: string
+          example: 12.09.2017 20:20:54
+        created_at_utc:
+          type: string
+          example: 2017-09-12T20:20:54Z
+        phone:
+          type: string
+          example: "380971688870"
+        warehouse_from:
+          type: string
+          example: "6134645765"
+        warehouse_to:
+          type: string
+          example: "6134645765"
+        distance:
+          type: number
+          example: 24.0
+        travel_time:
+          type: number
+          example: 5.0
+        vehicle:
+          type: string
+          example: ОА5609ОО
+        status:
+          type: string
+          example: REGISTERED
+        waybill:
+          type: string
+          example: ав43583'
+        quantity:
+          type: number
+          example: 613.0
+        goods:
+          type: number
+          example: 31.0
+        finish_date:
+          type: string
+          example: 12.09.2017 20:20:54
+        finish_date_utc:
+          type: string
+          example: 2017-10-12T07:20:31Z
+        source:
+          type: string
+          example: bot
+        channel:
+          type: string
+          example: main
+        channel_user:
+          type: string
+          example: username
+        channel_chat:
+          type: string
+          example: main-v
+        point_from:
+          type: string
+          example: "5320285301"
+        point_to:
+          type: string
+          example: "5320285302"
+        trailer:
+          type: string
+          example: "32645"
+        last_event:
+          type: string
+          example: AT_LOADPOINT
+        last_event_date:
+          type: string
+          example: 17.05.2018 12:31:21
+        last_event_date_utc:
+          type: string
+          example: 2018-05-17T12:31:21Z
+        last_event_lon:
+          type: string
+          example: "34.65676"
+        last_event_lat:
+          type: string
+          example: "23.34546"
+    Request:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 61.0
+        number:
+          type: string
+          example: "612"
+        created_at:
+          type: string
+          example: 12.09.2017 20:20:54
+        created_at_utc:
+          type: string
+          example: 2017-10-12T07:20:31Z
+        client:
+          type: string
+          example: Кернел
+        route:
+          type: string
+          example: https://www.google.ru/maps/dir/48.068988,33.500193/48.125057,31.028868/@48.0291169,32.2646208,9z/data=!4m2!4m1!3e0
+        carrier_id:
+          type: number
+          example: 613.0
+        carrier_name:
+          type: string
+          example: Перевізник
+        goods_id:
+          type: number
+          example: 5.0
+        goods_name:
+          type: string
+          example: Пшениця
+        point_from_id:
+          type: number
+          example: 54.0
+        point_from_name:
+          type: string
+          example: Устивиця
+        point_from_koatuu:
+          type: string
+          example: "5320285301"
+        point_from_description:
+          type: string
+          example: Україна, Полтавська, Великобагачанський район, Устивиця
+        point_to_id:
+          type: number
+          example: 54.0
+        point_to_name:
+          type: string
+          example: Грянчиха
+        point_to_koatuu:
+          type: string
+          example: "5320285302"
+        point_to_description:
+          type: string
+          example: Україна, Полтавська, Великобагачанський район, Грянчиха
+        warehouse_from_id:
+          type: number
+          example: 3801.0
+        warehouse_from_address:
+          type: string
+          example: Україна, Харківська, Великобурлуцький район, смт. Великий Бурлук,
+            Вулиця Свердлова 2-Б
+        warehouse_from_koatuu:
+          type: string
+          example: "6321455100"
+        warehouse_from_classificator:
+          type: string
+          example: "6321455100001"
+        warehouse_from_street:
+          type: string
+          example: Свердлова
+        warehouse_from_street_type:
+          type: string
+          example: Вулиця
+        warehouse_from_building:
+          type: string
+          example: 2-Б
+        warehouse_to_id:
+          type: number
+          example: 3802.0
+        warehouse_to_address:
+          type: string
+          example: Україна, Миколаївська, Арбузинський район, сел. Кавуни, Вулиця
+            Елеваторна 10
+        warehouse_to_koatuu:
+          type: string
+          example: "4820381501"
+        warehouse_to_classificator:
+          type: string
+          example: "4820381501001"
+        warehouse_to_street:
+          type: string
+          example: Елеваторна
+        warehouse_to_street_type:
+          type: string
+          example: Вулиця
+        warehouse_to_building:
+          type: string
+          example: "10"
+        driver_fullname:
+          type: string
+          example: Вася Крутий
+        driver_cert:
+          type: string
+          example: ""
+        vehicle_number:
+          type: string
+          example: АВ3456ВВ
+        trailer_number:
+          type: string
+          example: ВВ2222ВВ
+        slack_channel_id:
+          type: string
+          example: 34yerdcgct43
+        rate_of_loss_auto:
+          type: number
+          example: 1.25
+        rate_of_loss_train:
+          type: number
+          example: 1.75
+        goods_cost:
+          type: number
+          example: 1200.5
+        warehouse_from_max_height:
+          type: number
+          example: 3.75
+        warehouse_from_max_weight:
+          type: number
+          example: 12.5
+        warehouse_from_max_length:
+          type: number
+          example: 12.65
+        warehouse_from_weight_type:
+          type: string
+          example: тип ваг 1
+        warehouse_from_autotrain_type:
+          type: string
+          example: тип автопоїзду 12
+        warehouse_to_max_height:
+          type: number
+          example: 4.0
+        warehouse_to_max_weight:
+          type: number
+          example: 14.5
+        warehouse_to_max_length:
+          type: number
+          example: 11.7
+        warehouse_to_weight_type:
+          type: string
+          example: тип ваг 111
+        warehouse_to_autotrain_type:
+          type: string
+          example: тип автопоїзду 100
+        guid:
+          type: string
+          example: 06A3424E-C3DC-48CF-A524-125A3D3BB7C2
+    VehiclesRegister:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 61.0
+        number:
+          type: string
+          example: "53434"
+        carrier:
+          type: number
+          example: 613.0
+        goods:
+          type: string
+          example: Насіння соняшника
+        created_at:
+          type: string
+          example: 12.09.2017 20:20:54
+        _created_by:
+          type: number
+          example: 564.0
+        warehouse_from:
+          type: number
+          example: 3801.0
+        warehouse_to:
+          type: number
+          example: 3802.0
+        point_from:
+          type: number
+          example: 54.0
+        point_to_id:
+          type: number
+          example: 56.0
+        request:
+          type: string
+          example: 9a34e9e4-ec00-b425-0371-149895900abd
+        date_from:
+          type: string
+          example: 12.10.2017 07:20:31
+        date_to:
+          type: string
+          example: 12.10.2017 07:20:31
+    TransitHubCompany:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: 5943fc56-542d-5d04-db41-247e9705385c
+        name:
+          type: string
+          example: Зелені Віники
+        workspace_name:
+          type: string
+          example: zeleni-vinuku
+        edrpou:
+          type: number
+          example: 11111111
+    _Response:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
