@@ -6,7 +6,7 @@ info:
   version: 1.0.0
 
 servers:
-  - description: Development Serevr
+  - description: Development Server
     url: https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub
 
 tags:
