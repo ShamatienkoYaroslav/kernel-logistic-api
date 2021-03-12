@@ -642,3 +642,163 @@ paths:
                     type: string
                     example: '27.08.2020 23:58 (СЕГОДНЯ)'
                     description: 'Дата очікування в черзі завантаження (укр.). Таблиця: якщо є журнал черги для рейсу, то дані беруться із Статистики рейсу (race_statistics), інакше з Показників виду черги (pq_queue_temps)'
+                  queue_to_guid:
+                    type: string
+                    example: 'e0aa433a-3a0c-3743-2aa5-94396a758b7a'
+                    description: 'Гуід черги розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_name:
+                    type: string
+                    example: 'Основна черга приймання соняшника'
+                    description: 'Назва черги розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_address:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, вул. Урожайна, 30'
+                    description: 'Адреса черги розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_number:
+                    type: number
+                    example: 24
+                    description: 'Номер в черзі розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_status:
+                    type: string
+                    example: 'in_process'
+                    description: 'Статус в черзі розвантаження. Варіанти: in_process, rejected, in_queue, drop, in_process_to_drop, dropped, in_process_shift, in_process_move_to_entry. Таблиця: Рейси (races)'
+                  queue_to_is_test:
+                    type: string
+                    example: 1
+                    description: 'Признак, що черга розвантаження в тестовому режимі. Варіанти: 1, 0. Якщо значення null, то ключ не передається, Таблиця: Вид черги (pq_queue)'
+                  queue_to_lat:
+                    type: number
+                    example: 48.512969
+                    description: 'Щирота черги розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_lng:
+                    type: number
+                    example: 32.246173
+                    description: 'Довгота черги розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_radius:
+                    type: number
+                    example: 9000
+                    description: 'Радіус доступності реєстрації в черзі розвантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_to_load:
+                    type: string
+                    example: 'increase'
+                    description: 'Стан черги розвантаження. Варіанти: increase, decrease, not_change, quickly_decrease. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_to_state_ua:
+                    type: string
+                    example: 'Збільшується'
+                    description: 'Назва стану черги розвантаження (укр.). Варіанти: Збільшується, Зменшується, Не змінюється, Швидко зменшується. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_to_state_ru:
+                    type: string
+                    example: 'Увеличивается'
+                    description: 'Назва стану черги розвантаження (рос.). Варіанти: Увеличивается, Уменьшается, Не изменяется, Быстро уменьшается. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_to_verification_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата верифікації черги розвантаження (рос.). Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_waiting_time_ua:
+                    type: string
+                    example: '1 год'
+                    description: 'Час очікування в черзі розвантаження (укр.). Таблиця: якщо є журнал черги для рейсу, то дані беруться із Статистики рейсу (race_statistics), інакше з Показників виду черги (pq_queue_temps)'
+                  queue_to_waiting_time_ru:
+                    type: string
+                    example: '1 час'
+                    description: 'Час очікування в черзі розвантаження (рос.). Таблиця: якщо є журнал черги для рейсу, то дані беруться із Статистики рейсу (race_statistics), інакше з Показників виду черги (pq_queue_temps)'
+                  queue_to_waiting_date_ua:
+                    type: string
+                    example: '27.08.2020 23:58 (СЬОГОДНІ)'
+                    description: 'Дата очікування в черзі розвантаження (укр.). Таблиця: якщо є журнал черги для рейсу, то дані беруться із Статистики рейсу (race_statistics), інакше з Показників виду черги (pq_queue_temps)'
+                  queue_to_waiting_date_ru:
+                    type: string
+                    example: '27.08.2020 23:58 (СЕГОДНЯ)'
+                    description: 'Дата очікування в черзі розвантаження (укр.). Таблиця: якщо є журнал черги для рейсу, то дані беруться із Статистики рейсу (race_statistics), інакше з Показників виду черги (pq_queue_temps)'
+                  queue_from_registration_available:
+                    type: boolean
+                    example: false
+                    description: 'Доступність реєстрації в черзі завантаження'
+                  queue_from_registration_availability_code:
+                    type: string
+                    example: '005'
+                    description: 'Код повідомлення доступності реєстрації в черзі завантаження'
+                  queue_from_registration_availability_text_ua:
+                    type: string
+                    example: 'Онлайн-реєстрація в черзі буде доступна з 28.08.2020 02:29 через 3 год 30 хв.'
+                    description: 'Текст повідомлення доступності реєстрації в черзі завантаження (укр.)'
+                  queue_from_registration_availability_text_ru:
+                    type: string
+                    example: 'Онлайн-регистрация в очереди будет доступна с 28.08.2020 02:29 через 3 час 30 мин.'
+                    description: 'Текст повідомлення доступності реєстрації в черзі завантаження (рос.)'
+                  queue_to_registration_available:
+                    type: boolean
+                    example: false
+                    description: 'Доступність реєстрації в черзі розвантаження'
+                  queue_to_registration_availability_code:
+                    type: string
+                    example: '005'
+                    description: 'Код повідомлення доступності реєстрації в черзі розвантаження'
+                  queue_to_registration_availability_text_ua:
+                    type: string
+                    example: 'Онлайн-реєстрація в черзі буде доступна з 28.08.2020 02:29 через 3 год 30 хв.'
+                    description: 'Текст повідомлення доступності реєстрації в черзі розвантаження (укр.)'
+                  queue_to_registration_availability_text_ru:
+                    type: string
+                    example: 'Онлайн-регистрация в очереди будет доступна с 28.08.2020 02:29 через 3 час 30 мин.'
+                    description: 'Текст повідомлення доступності реєстрації в черзі розвантаження (рос.)'
+                  request_schedule_date:
+                    type: string
+                    example: '27.08.2020'
+                    description: 'Дата графіку заявки рейсу. Таблиця: Заявки (requests)'
+                  queue_profile_from_verification_available:
+                    type: number
+                    example: 0
+                    description: 'Признак доступності верифікації в профілі черг завантаження. Варіанти: 1, 0. Таблиця: Профіль черг (pq_queue_profile)'
+                  is_verified_from:
+                    type: number
+                    example: 0
+                    description: 'Признак пройденої верифікації при завантаженні. Варіанти: 1, 0. Таблиця: Статистика рейсу (race_statistics)'
+                  verifying_date_from:
+                    type: string
+                    example: '27.08.2020 23:58'
+                    description: 'Дата пройденої верифікації при завантаженні. Таблиця: Статистика рейсу (race_statistics)'
+                  verification_status_from:
+                    type: string
+                    example: 'draft'
+                    description: 'Статус пройденої верифікації при завантаженні. Варіанти: draft, to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_to_verification_available:
+                    type: number
+                    example: 0
+                    description: 'Признак доступності верифікації в профілі черг розвантаження. Варіанти: 1, 0. Таблиця: Профіль черг (pq_queue_profile)'
+                  is_verified_to:
+                    type: number
+                    example: 0
+                    description: 'Признак пройденої верифікації при розвантаженні. Варіанти: 1, 0. Таблиця: Статистика рейсу (race_statistics)'
+                  verifying_date_to:
+                    type: string
+                    example: '27.08.2020 23:58'
+                    description: 'Дата пройденої верифікації при розвантаженні. Таблиця: Статистика рейсу (race_statistics)'
+                  verification_status_to:
+                    type: string
+                    example: 'draft'
+                    description: 'Статус пройденої верифікації при розвантаженні. Варіанти: draft, to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_from_verification_status:
+                    type: string
+                    example: 'available'
+                    description: 'Статус пройденої верифікації при завантаженні по профілю черги. Варіанти: to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_to_verification_status:
+                    type: string
+                    example: 'available'
+                    description: 'Статус пройденої верифікації при розвантаженні по профілю черги. Варіанти: to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  is_verification_available:
+                    type: boolean
+                    example: false
+                    description: 'Доступність верифікації по признаку реєстрації ТТН в рейсі. true - ТТН зареєстрована, false - ТТН не зареєстрована. Таблиця: Рейси (races)'
+                  verification_access_error_code:
+                    type: string
+                    example: '037'
+                    description: 'Код помилки верифікації. Таблиця: Шаблони текстів (text_template)'
+                  verification_access_error_ua:
+                    type: string
+                    example: '037'
+                    description: 'Текст помилки верифікації (укр.). Таблиця: Шаблони текстів (text_template)'
+                  verification_access_error_ru:
+                    type: string
+                    example: '037'
+                    description: 'Текст помилки верифікації (рос.). Таблиця: Шаблони текстів (text_template)'
