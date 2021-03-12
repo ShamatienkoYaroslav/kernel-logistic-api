@@ -1,0 +1,608 @@
+openapi: 3.0.0
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Development
+    url: https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub
+
+info:
+  description: Колекція вузлів API для Trantihub
+  version: "1.0.0"
+  title: Transithub API
+  
+tags:
+  - name: Інтерфейс водія
+    description: Вузли для інтерфейсу водія
+  - name: Рейс
+    description: Вузли для роботи з рейсами
+
+paths:
+  /driver/races/status:
+    get:
+      tags:
+      - Інтерфейс водія
+      - Рейс
+      summary: Актуальний рейс водія
+      operationId: driverRacesStatus
+      description: |
+        Пошук актуального рейсу для водія
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Телефон водія
+          schema:
+            type: string
+        - in: query
+          name: vehicle_number
+          description: Номер транспортного засобу
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані актуального рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  race_status:
+                    type: string
+                    example: 'IN_PROGRESS'
+                    description: 'Статус рейсу. Варіанти: REGISTERED, IN_PROGRESS, DONE, CANCELED, PAUSE. Таблиця: Рейси (races)'
+                  guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід рейсу. Таблиця: Рейси (races)'
+                  number:
+                    type: string
+                    example: '200827-0192'
+                    description: 'Номер рейсу. Таблиця: Рейси (races)'
+                  date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата рейсу. Таблиця: Рейси (races)'
+                  source:
+                    type: string
+                    example: 'track_check'
+                    description: 'Джерело рейсу. Таблиця: Рейси (races)'
+                  queue_from_registration_source:
+                    type: string
+                    example: 'track_check'
+                    description: 'Джерело реєстрації в черзі на завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_registration_source:
+                    type: string
+                    example: 'track_check'
+                    description: 'Джерело реєстрації в черзі на розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  entry_guid_track:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Entry Guid Track. Таблиця: Рейси (races)'
+                  barcode:
+                    type: string
+                    example: '335060005532965762747441881103117533991'
+                    description: 'Штрихкод. Генерується на основі Entry Guid Track. Таблиця: Рейси (races)'
+                  queue_from_registered_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата реєстрації в черзі на завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_registered_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата реєстрації в черзі на розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_from_timing_out_1:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Таймінг вибуття 1 на завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_from_timing_out_2:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Таймінг вибуття 2 на завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_timing_out_1:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Таймінг вибуття 1 на розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_timing_out_2:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Таймінг вибуття 2 на розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  vehicle_register_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід наряду. Таблиця: Наряди (request_vehicle_register)'
+                  request_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід заявки. Таблиця: Заявка (requests)'
+                  request_client_number:
+                    type: string
+                    example: 'Z_058436'
+                    description: 'Клієнтський номер заявки. Таблиця: Заявка (requests)'
+                  manager_name:
+                    type: string
+                    example: 'Сергій Юрійович Курбатов'
+                    description: 'Назва менеджера. Таблиця: Заявка (requests)'
+                  manager_phone:
+                    type: string
+                    example: '380999999999'
+                    description: 'Телефон менеджера. Таблиця: Заявка (requests)'
+                  manager_email:
+                    type: string
+                    example: 'manager@kernel.ua'
+                    description: 'Електронна пошта менеджера. Таблиця: Заявка (requests)'
+                  additional_info:
+                    type: string
+                    example: 'Будь-який текст'
+                    description: 'Коментар до заявки. Таблиця: Заявка (requests)'
+                  additional_info_2:
+                    type: string
+                    example: 'Додатковий текст'
+                    description: 'Додатковий коментар до заявки. Таблиця: Заявка (requests)'
+                  vehicle_number:
+                    type: string
+                    example: 'ВА8783СС'
+                    description: 'Реєстраційний номер транспортного засобу. Таблиця: Рейси (races)'
+                  trailer_number:
+                    type: string
+                    example: 'ВА3272ХО'
+                    description: 'Реєстраційний номер причіпу. Якщо рейс без причіпу, то значення - no_trailer. Таблиця: Рейси (races)'
+                  no_trailer:
+                    type: number
+                    example: 1
+                    description: 'Признак відсутності причіпу. 1 - відсутній. Якщо причіп вказано в рейсів, то даний ключ не передається. Таблиця: Рейси (races)'
+                  consignor_name:
+                    type: string
+                    example: 'ПРАТ Кропивницький ОЕЗ'
+                    description: 'Назва вантажовідправника. Таблиця: Рейси (races)'
+                  consignor_code:
+                    type: string
+                    example: '999999999'
+                    description: 'Код ЄДРПОУ вантажовідправника. Таблиця: Рейси (races)'
+                  consignee_name:
+                    type: string
+                    example: 'ПРАТ Кропивницький ОЕЗ'
+                    description: 'Назва вантажоотримувача. Таблиця: Рейси (races)'
+                  consignee_code:
+                    type: string
+                    example: '999999999'
+                    description: 'Код ЄДРПОУ вантажоотримувача. Таблиця: Рейси (races)'
+                  driver_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід водія. Таблиця: Водії ТХ (th_drivers)'
+                  driver_fullname:
+                    type: string
+                    example: 'Шевченко Тарас Григорович'
+                    description: 'Повна назва водія. Таблиця: Водії ТХ (th_drivers)'
+                  driver_phone:
+                    type: string
+                    example: '380999999999'
+                    description: 'Номер телефону водія. Таблиця: Рейси (races)'
+                  driver_phone_additional:
+                    type: string
+                    example: '380999999999'
+                    description: 'Додатковий номер телефону водія. Таблиця: Рейси (races)'
+                  driver_cert:
+                    type: string
+                    example: 'КВІ111111'
+                    description: 'Сертифікат водія. Таблиця: Рейси (races)'
+                  driver_id_card:
+                    type: string
+                    example: 'КВІ111111'
+                    description: 'ID-карта водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  driver_id_card_date:
+                    type: string
+                    example: '27.08.2020'
+                    description: 'Дата ID-карти водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  driver_id_card_issued:
+                    type: string
+                    example: '27.08.2020'
+                    description: 'Місце видачі ID-карти водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  person_docs_type:
+                    type: string
+                    example: 'passport'
+                    description: 'Тип документу водія. Варіанти: passport, id_card. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  pass_serial:
+                    type: string
+                    example: 'СМ'
+                    description: 'Серія паспорту водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  pass_number:
+                    type: string
+                    example: '3456'
+                    description: 'Номер паспорту водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  pass_date:
+                    type: string
+                    example: '27.08.2020'
+                    description: 'Дата видачі паспорту водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  pass_issued:
+                    type: string
+                    example: 'Місцевим РВ МВС'
+                    description: 'Місце видачі паспорту водія. Таблиця: Водії ТХ по наряду рейсу (th_drivers)'
+                  distance:
+                    type: number
+                    example: '20'
+                    description: 'Відстань по заявці. Таблиця: Таблиця: Заявка (requests)'
+                  route:
+                    type: string
+                    example: 'https:\/\/www.google.com\/maps\/dir\/?api=1&origin=49.0750249,29.6002885&destination=48.512828,32.246397&waypoints=49.0748577,29.5991683|49.11226629999999,29.6139251|49.11226629999999,29.6139251|49.11254350000001,29.6142191|49.11254350000001,29.6142191|49.01441639999999,29.7081856|49.01441639999999,29.7081856|49.0077767,29.7027976|49.0077767,29.7027976|49.0057127,29.7606889|49.0057127,29.7606889|48.9955309,29.8072143|48.9955309,29.8072143|48.99371,29.8076215|48.99371,29.8076215|48.9938381,29.8079734|48.9938381,29.8079734|48.9851149,29.8138711|48.9851149,29.8138711|48.77297129999999,29.9880175|48.77297129999999,29.9880175|48.7196704,30.2719297|48.7196704,30.2719297|48.51343689999999,32.1601865|48.51343689999999,32.1601865|48.5078287,32.1956255|48.5078287,32.1956255|48.50386959999999,32.2222363|48.50386959999999,32.2222363|48.5016343,32.2372127|48.5016343,32.2372127|48.5129272,32.2485576|48.5129272,32.2485576|48.5143443,32.2491464|48.5143443,32.2491464|48.5135798,32.2482478|48.5135798,32.2482478|48.5131942,32.2485712|48.5131942,32.2485712|48.512809,32.2464139&key=AIzaSyAeJ9YCwS1u5xRGjVe-6xSG0CCA4tOqJUA'
+                    description: 'Посилання ан маршрут. Таблиця: Таблиця: Заявка (requests) або Рейси (races). Якщо маршрут в заявці не вказано, то береться значення із таблиці рейсів'
+                  point_from_koatuu:
+                    type: string
+                    example: '0523184101'
+                    description: 'Код КОАТУУ населеного пункту завантаження. Таблиця: Населені пункти (locality)'
+                  point_from_name_ua:
+                    type: string
+                    example: 'Підвисоке'
+                    description: 'Назва населеного пункту завантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_from_name_ru:
+                    type: string
+                    example: 'Подвысокое'
+                    description: 'Назва населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
+                  point_from_region_name_ua:
+                    type: string
+                    example: 'Вінницька'
+                    description: 'Область населеного пункту завантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_from_region_name_ru:
+                    type: string
+                    example: 'Винницкая'
+                    description: 'Область населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
+                  point_from_description:
+                    type: string
+                    example: 'Україна, Вінницька обл., Оратівський район, с. Підвисоке'
+                    description: 'Адреса населеного пункту завантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_from_description_ua:
+                    type: string
+                    example: 'Україна, Вінницька обл., Оратівський район, с. Підвисоке'
+                    description: 'Адреса населеного пункту завантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_from_description_ru:
+                    type: string
+                    example: 'Украина, Винницкая обл., Оратовский район, с. Подвысокое'
+                    description: 'Адреса населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
+                  
+                  point_to_koatuu:
+                    type: string
+                    example: '0523184101'
+                    description: 'Код КОАТУУ населеного пункту розвантаження. Таблиця: Населені пункти (locality)'
+                  point_to_name_ua:
+                    type: string
+                    example: 'Підвисоке'
+                    description: 'Назва населеного пункту розвантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_to_name_ru:
+                    type: string
+                    example: 'Подвысокое'
+                    description: 'Назва населеного пункту розвантаження (рос.). Таблиця: Населені пункти (locality)'
+                  point_to_region_name_ua:
+                    type: string
+                    example: 'Вінницька'
+                    description: 'Область населеного пункту розвантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_to_region_name_ru:
+                    type: string
+                    example: 'Винницкая'
+                    description: 'Область населеного пункту розвантаження (рос.). Таблиця: Населені пункти (locality)'
+                  point_to_description:
+                    type: string
+                    example: 'Україна, Вінницька обл., Оратівський район, с. Підвисоке'
+                    description: 'Адреса населеного пункту розвантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_to_description_ua:
+                    type: string
+                    example: 'Україна, Вінницька обл., Оратівський район, с. Підвисоке'
+                    description: 'Адреса населеного пункту розвантаження (укр.). Таблиця: Населені пункти (locality)'
+                  point_to_description_ru:
+                    type: string
+                    example: 'Украина, Винницкая обл., Оратовский район, с. Подвысокое'
+                    description: 'Адреса населеного пункту розвантаження (рос.). Таблиця: Населені пункти (locality)'
+                  carrier_name:
+                    type: string
+                    example: 'ФОП Перевізник П. П.'
+                    description: 'Назва перевізника. Таблиця: Рейси (races)'
+                  carrier_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід перевізника. Таблиця: Рейси (races)'
+                  carrier_code:
+                    type: string
+                    example: '999999999'
+                    description: 'Код ЄДРПОУ перевізника. Таблиця: Рейси (races)'
+                  client_name:
+                    type: string
+                    example: 'ФОП Клієнт'
+                    description: 'Назва клієнта. Таблиця: Заявки (requests)'
+                  goods_guid:
+                    type: string
+                    example: 'СОНЯШНИК'
+                    description: 'Гуід вантажу. Таблиця: Вантаж (goods)'
+                  goods_name:
+                    type: string
+                    example: 'Соняшник'
+                    description: 'Назва вантажу. Таблиця: Вантаж (goods)'
+                  goods_desc:
+                    type: string
+                    example: 'Соняшник'
+                    description: 'Опис вантажу. Таблиця: Вантаж (goods)'
+                  goods_name_ua:
+                    type: string
+                    example: 'Соняшник'
+                    description: 'Назва вантажу (укр.). Таблиця: Вантаж (goods)'
+                  goods_name_ru:
+                    type: string
+                    example: 'Подсолнечник'
+                    description: 'Назва вантажу (рос.). Таблиця: Вантаж (goods)'
+                  quantity:
+                    type: number
+                    example: 10
+                    description: 'Кількість вантажу в тонах. Таблиця: Рейси (races)'
+                  customer_kt:
+                    type: number
+                    example: 1
+                    description: 'Признак того, що замовник є КернелТрейд. Таблиця: Рейси (races)'
+                  customer_kt_ua:
+                    type: string
+                    example: 'Так'
+                    description: 'Признак того, що замовник є КернелТрейд (укр.). Варіанти: Так, Ні. Таблиця: Рейси (races)'
+                  customer_kt_ru:
+                    type: string
+                    example: 'Так'
+                    description: 'Признак того, що замовник є КернелТрейд (рос.). Варіанти: Да, Нет. Таблиця: Рейси (races)'
+                  th_carrier_org_name:
+                    type: string
+                    example: 'ФОП Перевізник П. П.'
+                    description: 'Назва перевізника. Таблиця: Рейси (races)'
+                  waybill_number:
+                    type: string
+                    example: 'ТН345'
+                    description: 'Номер ТТН. Таблиця: Рейси (races)'
+                  waybill_date:
+                    type: string
+                    example: '27.08.2020'
+                    description: 'Дата ТТН. Таблиця: Рейси (races)'
+                  waybill_netto_in:
+                    type: number
+                    example: 20000
+                    description: 'Вага нетто ТТН вантажовідрпавника. Таблиця: Рейси (races)'
+                  waybill_netto_out:
+                    type: number
+                    example: 20000
+                    description: 'Вага нетто ТТН вантажоотримувача. Таблиця: Рейси (races)'
+                  waybill_gross:
+                    type: number
+                    example: 24000
+                    description: 'Вага брутто ТТН вантажовідрпавника. Таблиця: Рейси (races)'
+                  waybill_tara:
+                    type: number
+                    example: 4000
+                    description: 'Вага тара ТТН вантажовідрпавника. Таблиця: Рейси (races)'
+                  no_waybill_weight:
+                    type: number
+                    example: 0
+                    description: 'ТТН без ваги. Варіанти: 1, 0. Якщо значення null, то ключ не передається. Таблиця: Рейси (races)'
+                  waybill_registration_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата реєстрації ТТН. Таблиця: Рейси (races)'
+                  waybill_consignee_gross:
+                    type: number
+                    example: 24000
+                    description: 'Вага брутто ТТН вантажоотримувача. Таблиця: Рейси (races)'
+                  waybill_consignee_tare:
+                    type: number
+                    example: 4000
+                    description: 'Вага тара ТТН вантажоотримувача. Таблиця: Рейси (races)'
+                  warehouse_from_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_code:
+                    type: string
+                    example: '3510100000004'
+                    description: 'Код складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ, ПРАТ'
+                    description: 'Назва складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_address:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, вулиця Урожайна 30'
+                    description: 'Адреса складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_short_address:
+                    type: string
+                    example: 'вулиця Урожайна 30'
+                    description: 'Коротка адреса складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_lat:
+                    type: string
+                    example: '48.512828'
+                    description: 'Довгота складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_lng:
+                    type: string
+                    example: '32.246397'
+                    description: 'Широта складу завантаження. Таблиця: Склади (warehouse)'
+                  warehouse_from_max_height:
+                    type: number
+                    example: 3.2
+                    description: 'Максимальна висота складу завантаження. Таблиця: Заявки (requests)'
+                  warehouse_from_max_weight:
+                    type: number
+                    example: 6.4
+                    description: 'Максимальна ширина складу завантаження. Таблиця: Заявки (requests)'
+                  warehouse_from_max_length:
+                    type: number
+                    example: 8.4
+                    description: 'Максимальна довжина складу завантаження. Таблиця: Заявки (requests)'
+                  warehouse_from_weight_type:
+                    type: string
+                    example: 'Механические'
+                    description: 'Тип ваг складу завантаження. Варіанти: Механические, Электронные. Якщо значення null, то ключ не передається. Таблиця: Заявки (requests)'
+                  warehouse_from_bd_on:
+                    type: string
+                    example: 'Механические'
+                    description: 'BD On для складу завантаження. Варіанти: 1, 0. Таблиця: Налаштування складу (warehouse_settings)'
+                  
+                  warehouse_to_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Гуід складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_code:
+                    type: string
+                    example: '3510100000004'
+                    description: 'Код складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ, ПРАТ'
+                    description: 'Назва складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_address:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, вулиця Урожайна 30'
+                    description: 'Адреса складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_short_address:
+                    type: string
+                    example: 'вулиця Урожайна 30'
+                    description: 'Коротка адреса складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_lat:
+                    type: string
+                    example: '48.512828'
+                    description: 'Довгота складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_lng:
+                    type: string
+                    example: '32.246397'
+                    description: 'Широта складу розвантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_max_height:
+                    type: number
+                    example: 3.2
+                    description: 'Максимальна висота складу розвантаження. Таблиця: Заявки (requests)'
+                  warehouse_to_max_weight:
+                    type: number
+                    example: 6.4
+                    description: 'Максимальна ширина складу розвантаження. Таблиця: Заявки (requests)'
+                  warehouse_to_max_length:
+                    type: number
+                    example: 8.4
+                    description: 'Максимальна довжина складу розвантаження. Таблиця: Заявки (requests)'
+                  warehouse_to_weight_type:
+                    type: string
+                    example: 'Механические'
+                    description: 'Тип ваг складу розвантаження. Варіанти: Механические, Электронные. Якщо значення null, то ключ не передається. Таблиця: Заявки (requests)'
+                  warehouse_to_bd_on:
+                    type: string
+                    example: 'Механические'
+                    description: 'BD On для складу розвантаження. Варіанти: 1, 0. Таблиця: Налаштування складу (warehouse_settings)'
+                  loading_type:
+                    type: string
+                    example: 'mound'
+                    description: 'Тип завантаження/тип вантажу. Варіанти: mound, pouring. Якщо значення null, то ключ не передається. Таблиця: Рейси (races)'
+                  last_event_guid:
+                    type: string
+                    example: 'GOTO_UNLOAD'
+                    description: 'Код останньої події рейсу. Таблиця: Подій (events)'
+                  last_event_name_ua:
+                    type: string
+                    example: 'Вирушив до пункту РОЗВАНТАЖЕННЯ'
+                    description: 'Назва останньої події рейсу (укр.). Таблиця: Подій (events)'
+                  last_event_name_ru:
+                    type: string
+                    example: 'Выехал в пункт РАЗГРУЗКИ'
+                    description: 'Назва останньої події рейсу (рос.). Таблиця: Подій (events)'
+                  last_event_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата останньої події рейсу (рос.). Таблиця: Рейси (races)'
+                  handle_status:
+                    type: string
+                    example: 'ready'
+                    description: 'Статус обробки рейсу. Варіанти: ready, dash, inactive, canceled. Таблиця: Рейси (races)'
+                  queue_from_registered:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата реєстрації в черзі завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_registered:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата реєстрації в черзі розватаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_from_guid:
+                    type: string
+                    example: 'e0aa433a-3a0c-3743-2aa5-94396a758b7a'
+                    description: 'Гуід черги завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_name:
+                    type: string
+                    example: 'Основна черга приймання соняшника'
+                    description: 'Назва черги завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_address:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, вул. Урожайна, 30'
+                    description: 'Адреса черги завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_number:
+                    type: number
+                    example: 24
+                    description: 'Номер в черзі завантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_from_status:
+                    type: string
+                    example: 'in_process'
+                    description: 'Статус в черзі завантаження. Варіанти: in_process, rejected, in_queue, drop, in_process_to_drop, dropped, in_process_shift, in_process_move_to_entry. Таблиця: Рейси (races)'
+                  queue_from_is_test:
+                    type: string
+                    example: 1
+                    description: 'Признак, що черга завантаження в тестовому режимі. Варіанти: 1, 0. Якщо значення null, то ключ не передається, Таблиця: Вид черги (pq_queue)'
+                  queue_from_lat:
+                    type: number
+                    example: 48.512969
+                    description: 'Щирота черги завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_lng:
+                    type: number
+                    example: 32.246173
+                    description: 'Довгота черги завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_radius:
+                    type: number
+                    example: 9000
+                    description: 'Радіус доступності реєстрації в черзі завантаження. Таблиця: Вид черги (pq_queue)'
+                  queue_from_load:
+                    type: string
+                    example: 'increase'
+                    description: 'Стан черги завантаження. Варіанти: increase, decrease, not_change, quickly_decrease. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_from_state_ua:
+                    type: string
+                    example: 'Збільшується'
+                    description: 'Назва стану черги завантаження (укр.). Варіанти: Збільшується, Зменшується, Не змінюється, Швидко зменшується. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_from_state_ru:
+                    type: string
+                    example: 'Увеличивается'
+                    description: 'Назва стану черги завантаження (рос.). Варіанти: Увеличивается, Уменьшается, Не изменяется, Быстро уменьшается. Таблиця: Показники виду черг (pq_queue_temps)'
+                  queue_from_verification_date:
+                    type: string
+                    example: '27.08.2020 22:24:19'
+                    description: 'Дата верифікації черги завантаження (рос.). Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_from_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ'
+                    description: 'Назва профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_from_guid:
+                    type: string
+                    example: 'e36aa43c-839f-482e-0dd8-4d668234a56e'
+                    description: 'Гуід профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_to_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ'
+                    description: 'Назва профілю черг розвантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_to_guid:
+                    type: string
+                    example: 'e36aa43c-839f-482e-0dd8-4d668234a56e'
+                    description: 'Гуід профілю черг розвантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_prof_from_koatuu:
+                    type: string
+                    example: '4825487602'
+                    description: 'Код КОАТУУ населеного пункту профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_prof_from_region:
+                    type: string
+                    example: 'Полтавська'
+                    description: 'Область населеного пункту профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
