@@ -796,9 +796,9 @@ paths:
                     description: 'Код помилки верифікації. Таблиця: Шаблони текстів (text_template)'
                   verification_access_error_ua:
                     type: string
-                    example: '037'
+                    example: 'Верифікація недоступна. Заповніть дані ТТН'
                     description: 'Текст помилки верифікації (укр.). Таблиця: Шаблони текстів (text_template)'
                   verification_access_error_ru:
                     type: string
-                    example: '037'
+                    example: 'Верификация недоступна. Заполните данные ТТН'
                     description: 'Текст помилки верифікації (рос.). Таблиця: Шаблони текстів (text_template)'
