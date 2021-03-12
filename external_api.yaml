@@ -14,14 +14,14 @@ tags:
     description: Програмний інтерфейс для роботи з електронними чергами
   - name: Наряди
     description: Програмний інтерфейс для роботи з нарядами ТЗ розділу "Авто"
-  - name: Рейс водія
+  - name: Рейси водія
     description: Програмний інтерфейс для роботи з рейсами водія
 
 paths:
   /driver/races/status:
     get:
       tags:
-        - Рейс водія
+        - Рейси водія
       summary: Актуальний рейс водія
       description: |
         Пошук актуального рейсу для водія
@@ -657,8 +657,7 @@ paths:
                     example: ready
     put:
       tags:
-        - Інтерфейс водія
-        - Рейс
+        - Рейси водія
       summary: Прийняття в роботу актуального рейсу водія
       operationId: driverRacesStatusPut
       description: |
