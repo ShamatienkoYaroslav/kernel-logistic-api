@@ -21,10 +21,10 @@ paths:
       tags:
         - Інтерфейс водія
         - Рейс
-      summary: Актуальний рейс водія
-      operationId: driverRacesStatus
+      summary: Пошук актуальний рейсу водія
+      operationId: driverRacesStatusGet
       description: |
-        Пошук актуального рейсу для водія
+        Пошук актуального рейсу водія та додаткової інформації по номеру телефону водія або номеру транспортного засобу
       parameters:
         - in: query
           name: client_token
@@ -801,3 +801,119 @@ paths:
                     type: string
                     example: 'Верификация недоступна. Заполните данные ТТН'
                     description: 'Текст помилки верифікації (рос.). Таблиця: Шаблони текстів (text_template)'
+
+    put:
+      tags:
+        - Інтерфейс водія
+        - Рейс
+      summary: Прийняття в роботу актуального рейсу водія
+      operationId: driverRacesStatusPut
+      description: |
+        Оновлення актуального рейсу водія по гуіду рейсу. Виконується прийняття рейсу в роботу, створення запиту на додаваня в чергу та встановлення джерела реєстрації в чергу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+            example: 'e0d22acfba67c35937f2e26c7b6344e6'
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+            example: 'eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTUzMDU3NjAwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMzYxIn0.a_TvXjWMTzAJOuvH05qZJFMb4oBP7ADDzQUYq7Nhj2U'
+        - in: query
+          name: race_guid
+          description: Гуід рейсу
+          schema:
+            type: string
+            example: 'fc1235b4-4a1b-762b-dc8a-59e506534327'
+      requestBody:
+        description: Тіло запиту.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  example: 'unloading'
+                  description: 'Напрямок черги. Якщо значення не передано - оновлюються всі напрямки. Варіанти: loading, unloading'
+                source:
+                  type: string
+                  example: 'th'
+                  enum: [th, th_disp]
+                  description: 'Джерело реєстрації в черзі. Варіанти: th, th_disp. Якщо значення не передано, то використовується варіант th.'
+      responses:
+        '200':
+          description: 'Оновлення пройшло успішно'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  race_guid:
+                    type: string
+                    example: 'fc1235b4-4a1b-762b-dc8a-59e506534327'
+                    description: 'Гуід оновленого рейсу'
+        '401':
+          description: 'Неавторизований користувач'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+
+components:
+  schemas:
+    _UserisNotAuthorized:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'User is not authorized'
+          description: 'Повідомлення'
+    _ClientHasNoRights:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'Client has no rights'
+          description: 'Повідомлення'
+    _NoDataFound:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'No data found'
+          description: 'Повідомлення'

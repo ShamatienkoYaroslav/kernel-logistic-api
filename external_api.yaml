@@ -655,6 +655,76 @@ paths:
                       'Статус обробки рейсу. Варіанти: ready, dash, inactive,
                       canceled. Таблиця: Рейси (races)'
                     example: ready
+    put:
+      tags:
+        - Інтерфейс водія
+        - Рейс
+      summary: Прийняття в роботу актуального рейсу водія
+      operationId: driverRacesStatusPut
+      description: |
+        Оновлення актуального рейсу водія по гуіду рейсу. Виконується прийняття рейсу в роботу, створення запиту на додаваня в чергу та встановлення джерела реєстрації в чергу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+            example: 'e0d22acfba67c35937f2e26c7b6344e6'
+        - in: query
+          name: race_guid
+          description: Гуід рейсу
+          schema:
+            type: string
+            example: 'fc1235b4-4a1b-762b-dc8a-59e506534327'
+      requestBody:
+        description: Тіло запиту.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source:
+                  type: string
+                  example: 'track_check'
+                  enum: [track_check, th, th_disp, bulkdata]
+                  description: 'Джерело реєстрації в черзі. Варіанти: track_check, th, th_disp, bulkdata. Якщо значення не передано, то використовується track_check.'
+      responses:
+        '200':
+          description: 'Оновлення пройшло успішно'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  race_guid:
+                    type: string
+                    example: 'fc1235b4-4a1b-762b-dc8a-59e506534327'
+                    description: 'Гуід оновленого рейсу'
+        '401':
+          description: 'Неавторизований користувач'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+
   /pq_queues_request.create_by_race:
     post:
       tags:
@@ -1406,3 +1476,36 @@ components:
           type: string
           format: uuid
           example: 36f9532e-079c-11ea-5888-0242ac140003
+    _UserisNotAuthorized:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'User is not authorized'
+          description: 'Повідомлення'
+    _ClientHasNoRights:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'Client has no rights'
+          description: 'Повідомлення'
+    _NoDataFound:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'No data found'
+          description: 'Повідомлення'
