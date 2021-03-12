@@ -7,9 +7,9 @@ servers:
 
 info:
   description: Колекція вузлів API для Trantihub
-  version: "1.0.0"
+  version: '1.0.0'
   title: Transithub API
-  
+
 tags:
   - name: Інтерфейс водія
     description: Вузли для інтерфейсу водія
@@ -20,8 +20,8 @@ paths:
   /driver/races/status:
     get:
       tags:
-      - Інтерфейс водія
-      - Рейс
+        - Інтерфейс водія
+        - Рейс
       summary: Актуальний рейс водія
       operationId: driverRacesStatus
       description: |
@@ -272,7 +272,7 @@ paths:
                     type: string
                     example: 'Украина, Винницкая обл., Оратовский район, с. Подвысокое'
                     description: 'Адреса населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
-                  
+
                   point_to_koatuu:
                     type: string
                     example: '0523184101'
@@ -449,7 +449,7 @@ paths:
                     type: string
                     example: 'Механические'
                     description: 'BD On для складу завантаження. Варіанти: 1, 0. Таблиця: Налаштування складу (warehouse_settings)'
-                  
+
                   warehouse_to_guid:
                     type: string
                     example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
@@ -606,3 +606,7 @@ paths:
                     type: string
                     example: 'Полтавська'
                     description: 'Область населеного пункту профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_prof_from_locality_name:
+                    type: string
+                    example: 'Кропивницький'
+                    description: 'Назва населеного пункту профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
