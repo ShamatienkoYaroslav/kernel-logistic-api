@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: Transithub API
   description: Колекція вузлів API логістики для порталу Trantihub
-  version: 1.0.0
+  version: 1.0.1
 
 servers:
   - description: Development Server
@@ -14,6 +14,8 @@ tags:
     description: Вузли для інтерфейсу водія
   - name: Рейс
     description: Вузли для роботи з рейсами
+  - name: Чорний список
+    description: Вузли для роботи з чорним списком
 
 paths:
   /driver/races/status:
@@ -882,6 +884,71 @@ paths:
               schema:
                 $ref: '#/components/schemas/_NoDataFound'
 
+  /blacklist/check:
+    get:
+      tags:
+        - Чорний список
+      summary: Перевірка водія на предмет занесення до чорного списку
+      operationId: blackListCheckGet
+      description: |
+        Перевірка водія на предмет занесення до чорного списку по номеру посвідчення/телефону
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: driver_cert
+          description: Посвідчення водія (серія і номер)
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Телефон водія
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по приналежності до чорного списку
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  in_blacklist:
+                    type: boolean
+                    example: false
+                    description: 'Індикатор приналежності до чорного списку'
+                  created_at:
+                    type: string
+                    example: '17.03.2021 00:00:00'
+                    description: 'Дата внесення в чорний список'
+                  text_ua:
+                    type: string
+                    example: 'Водій перебуває в \"Чорному списку\'
+                    description: 'Текст повідомлення користувачу (українською)'
+                  text_ru:
+                    type: string
+                    example: 'Водитель находится в \"Чорном списке\'
+                    description: 'Текст повідомлення користувачу (російською)'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
 components:
   schemas:
     _UserisNotAuthorized:
@@ -917,3 +984,15 @@ components:
           type: string
           example: 'No data found'
           description: 'Повідомлення'
+    _BadRequest:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        msg:
+          type: string
+          example: 'Invalid income data'
+          description: 'Повідомлення'
+    
