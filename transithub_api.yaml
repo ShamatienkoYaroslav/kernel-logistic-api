@@ -289,7 +289,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         '401':
-          description: 'Поганий запит'
+          description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
