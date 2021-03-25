@@ -16,8 +16,77 @@ tags:
     description: Вузли для роботи з рейсами
   - name: Чорний список
     description: Вузли для роботи з чорним списком
+  - name: Профіль черги
+    description: Вузли для роботи з профілем черги
+  - name: Поклажодавці
+    description: Вузли для роботи з профілем черги
 
 paths:
+  /blacklist/check:
+    get:
+      tags:
+        - Чорний список
+      summary: Перевірка водія на признак наявності в чорному списку
+      operationId: blackListCheckGet
+      description: |
+        Перевірка водія на признак наявності в чорному списку по номеру посвідчення/телефону
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: driver_cert
+          description: Посвідчення водія (серія і номер)
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Телефон водія
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по приналежності до чорного списку
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  in_blacklist:
+                    type: boolean
+                    example: false
+                    description: 'Індикатор приналежності до чорного списку'
+                  created_at:
+                    type: string
+                    example: '17.03.2021 00:00:00'
+                    description: 'Дата внесення в чорний список'
+                  text_ua:
+                    type: string
+                    example: 'Водій перебуває в \"Чорному списку\'
+                    description: 'Текст повідомлення користувачу (українською)'
+                  text_ru:
+                    type: string
+                    example: 'Водитель находится в \"Чорном списке\'
+                    description: 'Текст повідомлення користувачу (російською)'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
   /driver/races:
     get:
       tags:
@@ -62,226 +131,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  guid:
-                    type: string
-                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
-                    description: 'Гуід рейсу. Таблиця: Рейси (races)'
-                  vehicle_number:
-                    type: string
-                    example: 'АА0001АА'
-                    description: 'Державний номер авто. Таблиця: Рейси (races)'
-                  trailer_number:
-                    type: string
-                    example: 'АА0001АА'
-                    description: 'Державний номер причепа. Таблиця: Рейси (races)'
-                  point_from_koatuu:
-                    type: string
-                    example: '1225286609'
-                    description: 'Код КОАТУУ пункту навантаження. Таблиця: Рейси (races)'
-                  point_from_name:
-                    type: string
-                    example: 'Райполе'
-                    description: 'Назва пункту навантаження. Таблиця: Населені пункти (locality)'
-                  point_from_region_name_ua:
-                    type: string
-                    example: 'Дніпропетровська'
-                    description: 'Назва регіону пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_from_region_name_ru:
-                    type: string
-                    example: 'Днепропетровская'
-                    description: 'Назва регіону пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_from_description_ua:
-                    type: string
-                    example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
-                    description: 'Повна адреса населеного пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_from_description_ru:
-                    type: string
-                    example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
-                    description: 'Повна адреса населеного пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_to_koatuu:
-                    type: string
-                    example: '1225286609'
-                    description: 'Код КОАТУУ пункту розвантаження. Таблиця: Рейси (races)'
-                  point_to_name:
-                    type: string
-                    example: 'Райполе'
-                    description: 'Назва пункту розвантаження. Таблиця: Населені пункти (locality)'
-                  point_to_region_name_ua:
-                    type: string
-                    example: 'Дніпропетровська'
-                    description: 'Назва регіону пункту розвантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_to_region_name_ru:
-                    type: string
-                    example: 'Днепропетровская'
-                    description: 'Назва регіону пункту розвантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_to_description_ua:
-                    type: string
-                    example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
-                    description: 'Повна адреса населеного пункту розвантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  point_to_description_ru:
-                    type: string
-                    example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
-                    description: 'Повна адреса населеного пункту розвантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
-                  warehouse_from_code:
-                    type: string
-                    example: '0523410100001'
-                    description: 'Код класифікатору складу навантаження. Таблиця: Рейси (races)'
-                  warehouse_from_name:
-                    type: string
-                    example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
-                    description: 'Назва складу навантаження. Таблиця: Склади (warehouse)'
-                  warehouse_from_address:
-                    type: string
-                    example: 'Мурманська, 53'
-                    description: 'Адреса складу навантаження. Таблиця: Склади (warehouse)'
-                  warehouse_to_code:
-                    type: string
-                    example: '0523410100001'
-                    description: 'Код класифікатору складу poзвантаження. Таблиця: Рейси (races)'
-                  warehouse_to_name:
-                    type: string
-                    example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
-                    description: 'Назва складу poзвантаження. Таблиця: Склади (warehouse)'
-                  warehouse_to_address:
-                    type: string
-                    example: 'Мурманська, 53'
-                    description: 'Адреса складу poзвантаження. Таблиця: Склади (warehouse)'
-                  goods_guid:
-                    type: string
-                    example: 'ПШЕНИЦЯ_НЕВИЗН'
-                    description: 'Код класифікатора вантажу. Таблиця: Вантажі (goods)'
-                  goods_name:
-                    type: string
-                    example: 'Пшениця невизначена'
-                    description: 'Назва вантажу. Таблиця: Вантажі (goods)'
-                  quantity:
-                    type: string
-                    example: '30'
-                    description: 'Кількість по ТТН, т. Таблиця: Рейси (races)'
-                  waybill_number:
-                    type: string
-                    example: 'ТТН00000012345'
-                    description: 'Номер ТТН. Таблиця: Рейси (races)'
-                  waybill_date:
-                    type: string
-                    example: '22.02.2021 00:00:00'
-                    description: 'Дата ТТН. Таблиця: Рейси (races)'
-                  no_waybill_weight:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
                     type: integer
-                    example: 0
-                    description: 'Не вказано вагу по ТТН. Значення(1,0). Таблиця: Рейси (races)'
-                  customer_name:
-                    type: string
-                    example: 'Кернел Трейд'
-                    description: 'Назва замовника. Таблиця: Рейси (races)'
-                  customer_code:
-                    type: string
-                    example: '3308479112'
-                    description: 'Код ЄДРПОУ замовника. Таблиця: Рейси (races)'
-                  customer_kt:
-                    type: integer
-                    example: 1
-                    description: 'Вказує чи замовник є КТ(рейс створений по заявці). Таблиця: Рейси (races)'
-                  race_number:
-                    type: string
-                    example: '210222-0357'
-                    description: 'Номер рейсу. Таблиця: Рейси (races)'
-                  waybill_guid:
-                    type: string
-                    example: '210222-0357'
-                    description: 'Унікальний ідентифікатор зв''язаної ТТН. Таблиця: ТТН (waybill)'
-                  carrier_code:
-                    type: string
-                    example: '3308479112'
-                    description: 'Код ЄДРПОУ перевізника. Інтерфейс водія. Таблиця: Рейси (races)'
-                  consignor_name:
-                    type: string
-                    example: 'Кернел Трейд'
-                    description: 'Назва вантажовідправника. Інтерфейс водія. Таблиця: Рейси (races)'
-                  consignor_code:
-                    type: string
-                    example: '3308479112'
-                    description: 'Код ЄДРПОУ вантажовідправника. Інтерфейс водія. Таблиця: Рейси (races)'
-                  consignee_name:
-                    type: string
-                    example: 'Кернел Трейд'
-                    description: 'Назва вантажоодержувача. Інтерфейс водія. Таблиця: Рейси (races)'
-                  consignee_code:
-                    type: string
-                    example: '3308479112'
-                    description: 'Код ЄДРПОУ вантажоодержувача. Інтерфейс водія. Таблиця: Рейси (races)'
-                  created_at:
-                    type: string
-                    example: '22.02.2021 11:22:50'
-                    description: 'Дата створення рейсу. Інтерфейс водія. Таблиця: Рейси (races)'
-                  driver_fullname:
-                    type: string
-                    example: 'Мельник Вячеславв Миколайович'
-                    description: 'ПІБ водія. Інтерфейс водія. Таблиця: Рейси (races)'
-                  driver_phone:
-                    type: string
-                    example: '380673222858'
-                    description: 'Номер телефону водія. Інтерфейс водія. Таблиця: Рейси (races)'
-                  driver_phone_additional:
-                    type: string
-                    example: '380673222858'
-                    description: 'Номер телефону водія додатковий. Інтерфейс водія. Таблиця: Рейси (races)'
-                  route:
-                    type: string
-                    example: 'https:\/\/www.google.com.ua\/maps\/dir\/48.188876,33'
-                    description: 'Посилання з маршрутом Google maps. Інтерфейс водія. Таблиця: Рейси/Заявки (races/requests)'
-                  race_status:
-                    type: string
-                    example: 'DONE'
-                    description: 'Статус рейсу водія. Значення(Завершено/DONE, Відмінено/CANCELED) Інтерфейс водія. Таблиця: Рейси (races)'
-                  waybill_netto_out:
-                    type: integer
-                    example: 30000
-                    description: 'Вага нетто відпраника, кг. Інтерфейс водія. Таблиця: Рейси (races)'
-                  request_carrier_name:
-                    type: string
-                    example: 'Кернел Трейд'
-                    description: 'Назва перевізника по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  request_carrier_edrpou:
-                    type: string
-                    example: '3308479112'
-                    description: 'Код ЄДРПОУ перевізника по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  manager_name:
-                    type: string
-                    example: 'Федуркин Дмитрий Николаевич'
-                    description: 'ПІБ менеджера по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  manager_phone:
-                    type: string
-                    example: '380503885891'
-                    description: 'Номер телефону менеджера по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  request_client_number:
-                    type: string
-                    example: 'Z_060481'
-                    description: 'Номер заявки. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  request_schedule_date:
-                    type: string
-                    example: '18.03.2021 00:00:00'
-                    description: 'Дата завантаження заявки. Інтерфейс водія. Таблиця: Заявки (requests)'
-                  pass_date:
-                    type: string
-                    example: '18.03.2021 00:00:00'
-                    description: 'Паспорт дата видачі. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
-                  pass_issued:
-                    type: string
-                    example: 'Вінниця, Бершадь МВС'
-                    description: 'Паспорт виданий. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
-                  pass_number:
-                    type: string
-                    example: '123456'
-                    description: 'Паспорт номер. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
-                  pass_serial:
-                    type: string
-                    example: 'КР'
-                    description: 'Паспорт серія. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
-                  person_docs_type:
-                    type: string
-                    example: 'КР'
-                    description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+                    example: 3
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/DriverRace'
         '403':
           description: 'Клієнт немає прав доступу'
           content:
@@ -294,7 +153,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
-  
   /driver/races/status:
     get:
       tags:
@@ -1160,15 +1018,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFound'
-
-  /blacklist/check:
+  /pq_queue_profiles/cargo_owners:
     get:
       tags:
-        - Чорний список
-      summary: Перевірка водія на признак наявності в чорному списку
-      operationId: blackListCheckGet
+        - Профіль черги
+        - Поклажодавці
+      summary: Поклажодавці профіля черги
+      operationId: PQueueProfileCargoOwnersGET
       description: |
-        Перевірка водія на признак наявності в чорному списку по номеру посвідчення/телефону
+        Поклажодавці профіля черги.
       parameters:
         - in: query
           name: client_token
@@ -1177,18 +1035,28 @@ paths:
           schema:
             type: string
         - in: query
-          name: driver_cert
-          description: Посвідчення водія (серія і номер)
+          name: access_token
+          description: Токен доступу (сесії)
           schema:
             type: string
         - in: query
-          name: driver_phone
-          description: Телефон водія
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
           schema:
             type: string
       responses:
         '200':
-          description: Дані по приналежності до чорного списку
+          description: Дані по поклажодавцям профіля черги
           content:
             application/json:
               schema:
@@ -1198,34 +1066,25 @@ paths:
                     type: boolean
                     example: true
                     description: 'Статус відповіді'
-                  in_blacklist:
-                    type: boolean
-                    example: false
-                    description: 'Індикатор приналежності до чорного списку'
-                  created_at:
-                    type: string
-                    example: '17.03.2021 00:00:00'
-                    description: 'Дата внесення в чорний список'
-                  text_ua:
-                    type: string
-                    example: 'Водій перебуває в \"Чорному списку\'
-                    description: 'Текст повідомлення користувачу (українською)'
-                  text_ru:
-                    type: string
-                    example: 'Водитель находится в \"Чорном списке\'
-                    description: 'Текст повідомлення користувачу (російською)'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/PQueueProfileCargoOwner'
         '403':
           description: 'Клієнт немає прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        '400':
-          description: 'Поганий запит'
+        '401':
+          description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+  
 components:
   schemas:
     _UserisNotAuthorized:
@@ -1272,4 +1131,238 @@ components:
           type: string
           example: 'Invalid income data'
           description: 'Повідомлення'
+    DriverRace:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+          description: 'Гуід рейсу. Таблиця: Рейси (races)'
+        vehicle_number:
+          type: string
+          example: 'АА0001АА'
+          description: 'Державний номер авто. Таблиця: Рейси (races)'
+        trailer_number:
+          type: string
+          example: 'АА0001АА'
+          description: 'Державний номер причепа. Таблиця: Рейси (races)'
+        point_from_koatuu:
+          type: string
+          example: '1225286609'
+          description: 'Код КОАТУУ пункту навантаження. Таблиця: Рейси (races)'
+        point_from_name:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту навантаження. Таблиця: Населені пункти (locality)'
+        point_from_region_name_ua:
+          type: string
+          example: 'Дніпропетровська'
+          description: 'Назва регіону пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_region_name_ru:
+          type: string
+          example: 'Днепропетровская'
+          description: 'Назва регіону пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_description_ua:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+          description: 'Повна адреса населеного пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_description_ru:
+          type: string
+          example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
+          description: 'Повна адреса населеного пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_koatuu:
+          type: string
+          example: '1225286609'
+          description: 'Код КОАТУУ пункту розвантаження. Таблиця: Рейси (races)'
+        point_to_name:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту розвантаження. Таблиця: Населені пункти (locality)'
+        point_to_region_name_ua:
+          type: string
+          example: 'Дніпропетровська'
+          description: 'Назва регіону пункту розвантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_region_name_ru:
+          type: string
+          example: 'Днепропетровская'
+          description: 'Назва регіону пункту розвантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_description_ua:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+          description: 'Повна адреса населеного пункту розвантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_description_ru:
+          type: string
+          example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
+          description: 'Повна адреса населеного пункту розвантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        warehouse_from_code:
+          type: string
+          example: '0523410100001'
+          description: 'Код класифікатору складу навантаження. Таблиця: Рейси (races)'
+        warehouse_from_name:
+          type: string
+          example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
+          description: 'Назва складу навантаження. Таблиця: Склади (warehouse)'
+        warehouse_from_address:
+          type: string
+          example: 'Мурманська, 53'
+          description: 'Адреса складу навантаження. Таблиця: Склади (warehouse)'
+        warehouse_to_code:
+          type: string
+          example: '0523410100001'
+          description: 'Код класифікатору складу poзвантаження. Таблиця: Рейси (races)'
+        warehouse_to_name:
+          type: string
+          example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
+          description: 'Назва складу poзвантаження. Таблиця: Склади (warehouse)'
+        warehouse_to_address:
+          type: string
+          example: 'Мурманська, 53'
+          description: 'Адреса складу poзвантаження. Таблиця: Склади (warehouse)'
+        goods_guid:
+          type: string
+          example: 'ПШЕНИЦЯ_НЕВИЗН'
+          description: 'Код класифікатора вантажу. Таблиця: Вантажі (goods)'
+        goods_name:
+          type: string
+          example: 'Пшениця невизначена'
+          description: 'Назва вантажу. Таблиця: Вантажі (goods)'
+        quantity:
+          type: string
+          example: '30'
+          description: 'Кількість по ТТН, т. Таблиця: Рейси (races)'
+        waybill_number:
+          type: string
+          example: 'ТТН00000012345'
+          description: 'Номер ТТН. Таблиця: Рейси (races)'
+        waybill_date:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: 'Дата ТТН. Таблиця: Рейси (races)'
+        no_waybill_weight:
+          type: integer
+          example: 0
+          description: 'Не вказано вагу по ТТН. Значення(1,0). Таблиця: Рейси (races)'
+        customer_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва замовника. Таблиця: Рейси (races)'
+        customer_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ замовника. Таблиця: Рейси (races)'
+        customer_kt:
+          type: integer
+          example: 1
+          description: 'Вказує чи замовник є КТ(рейс створений по заявці). Таблиця: Рейси (races)'
+        race_number:
+          type: string
+          example: '210222-0357'
+          description: 'Номер рейсу. Таблиця: Рейси (races)'
+        waybill_guid:
+          type: string
+          example: '210222-0357'
+          description: 'Унікальний ідентифікатор зв''язаної ТТН. Таблиця: ТТН (waybill)'
+        carrier_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ перевізника. Інтерфейс водія. Таблиця: Рейси (races)'
+        consignor_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва вантажовідправника. Інтерфейс водія. Таблиця: Рейси (races)'
+        consignor_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ вантажовідправника. Інтерфейс водія. Таблиця: Рейси (races)'
+        consignee_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва вантажоодержувача. Інтерфейс водія. Таблиця: Рейси (races)'
+        consignee_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ вантажоодержувача. Інтерфейс водія. Таблиця: Рейси (races)'
+        created_at:
+          type: string
+          example: '22.02.2021 11:22:50'
+          description: 'Дата створення рейсу. Інтерфейс водія. Таблиця: Рейси (races)'
+        driver_fullname:
+          type: string
+          example: 'Мельник Вячеславв Миколайович'
+          description: 'ПІБ водія. Інтерфейс водія. Таблиця: Рейси (races)'
+        driver_phone:
+          type: string
+          example: '380673222858'
+          description: 'Номер телефону водія. Інтерфейс водія. Таблиця: Рейси (races)'
+        driver_phone_additional:
+          type: string
+          example: '380673222858'
+          description: 'Номер телефону водія додатковий. Інтерфейс водія. Таблиця: Рейси (races)'
+        route:
+          type: string
+          example: 'https:\/\/www.google.com.ua\/maps\/dir\/48.188876,33'
+          description: 'Посилання з маршрутом Google maps. Інтерфейс водія. Таблиця: Рейси/Заявки (races/requests)'
+        race_status:
+          type: string
+          example: 'DONE'
+          description: 'Статус рейсу водія. Значення(Завершено/DONE, Відмінено/CANCELED) Інтерфейс водія. Таблиця: Рейси (races)'
+        waybill_netto_out:
+          type: integer
+          example: 30000
+          description: 'Вага нетто відпраника, кг. Інтерфейс водія. Таблиця: Рейси (races)'
+        request_carrier_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва перевізника по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
+        request_carrier_edrpou:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ перевізника по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
+        manager_name:
+          type: string
+          example: 'Федуркин Дмитрий Николаевич'
+          description: 'ПІБ менеджера по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
+        manager_phone:
+          type: string
+          example: '380503885891'
+          description: 'Номер телефону менеджера по заявці. Інтерфейс водія. Таблиця: Заявки (requests)'
+        request_client_number:
+          type: string
+          example: 'Z_060481'
+          description: 'Номер заявки. Інтерфейс водія. Таблиця: Заявки (requests)'
+        request_schedule_date:
+          type: string
+          example: '18.03.2021 00:00:00'
+          description: 'Дата завантаження заявки. Інтерфейс водія. Таблиця: Заявки (requests)'
+        pass_date:
+          type: string
+          example: '18.03.2021 00:00:00'
+          description: 'Паспорт дата видачі. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+        pass_issued:
+          type: string
+          example: 'Вінниця, Бершадь МВС'
+          description: 'Паспорт виданий. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+        pass_number:
+          type: string
+          example: '123456'
+          description: 'Паспорт номер. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+        pass_serial:
+          type: string
+          example: 'КР'
+          description: 'Паспорт серія. Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+        person_docs_type:
+          type: string
+          example: 'КР'
+          description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+    PQueueProfileCargoOwner:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'ТОВ Дружба Нова'
+          description: 'Назва поклажодавця'
+        code_edrpou:
+          type: string
+          example: '0003343431'
+          description: 'Код ЄДРПОУ поклажодавця'
     
