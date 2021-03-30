@@ -1108,6 +1108,16 @@ paths:
           schema:
             type: string
         - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
           name: phone
           description: Телефон водія
           schema:
@@ -1122,6 +1132,12 @@ paths:
           description: Значення(1,0). Ознака інтерфейса водія
           schema:
             type: integer
+        - in: query
+          name: status
+          description: Статус обміну пакету документів
+          schema:
+            type: string
+            enum: [draft, rejected, confirmed, in_progress, to_exchange]
       responses:
         '200':
           description: Дані рейсу водія
