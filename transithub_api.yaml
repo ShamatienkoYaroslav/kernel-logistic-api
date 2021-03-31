@@ -157,6 +157,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
+  /driver/waybills:
+    post:
+      tags:
+        - Рейс
+      summary: Створення/оновлення ТТН в рейсі
+      description: Точка створення/оновлення ТТН, що використовує процедуру оновлення таблиці рейсів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: Унікальний ідентифікатор рейсу
+                cargo_owner_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: Унікальний ідентифікатор поклажодавця
+                operation_kind:
+                  type: string
+                  enum: [CARGO_OWNER_ONLY, DEFAULT]
+                  description: Вид операції оновлення
+      responses:
+        200:
+          description: returns update results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  race_guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+        401:
+          description: User is not authorized
+          content: {}
+        403:
+          description: Client has no rights
+          content: {}
+        404:
+          description: no data found
+          content: {}
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
   /driver/races/status:
     get:
       tags:
@@ -1750,6 +1814,10 @@ components:
           type: string
           example: '0003343431'
           description: 'Код ЄДРПОУ поклажодавця'
+        cargo_owner_guid:
+          type: string
+          example: 'cf5ac228-04d1-e530-e351-ead65b83f97c'
+          description: 'Унікальний ідентифікатор поклажодавця'
     GlobalSettings:
       type: object
       properties:
