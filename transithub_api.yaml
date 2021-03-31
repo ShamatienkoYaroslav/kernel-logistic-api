@@ -22,6 +22,8 @@ tags:
     description: Вузли для роботи з профілем черги
   - name: ТТН
     description: Вузли для роботи з товарно-транспортними накладними
+  - name: Глобальні налаштування
+    description: Глобальні налаштування для роботи Transithub
 
 paths:
   /blacklist/check:
@@ -1168,7 +1170,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
-  
+  /global_settings:
+    get:
+      tags:
+        - Глобальні налаштування
+      summary: Гобальні налашатування для ТХ
+      operationId: globalSettings
+      description: |
+        Глобальні налаштування для роботи Transithub.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+            example: 'e0d22acfba67c35937f2e26c7b6344e6'
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+      responses:
+        200:
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GlobalSettings'
+                  - $ref: '#/components/schemas/_ComplexError'
+
 components:
   schemas:
     _UserisNotAuthorized:
@@ -1215,6 +1247,24 @@ components:
           type: string
           example: 'Invalid income data'
           description: 'Повідомлення'
+    _ComplexError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: number
+              example: 20000
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid client_token
+              description: Сповіщення помилки
+            detail:
+              type: string
+              example: You need to specify correct values for client token. Please contact with API''s admin.
+              description: Деталі помилки
     DriverRace:
       type: object
       properties:
@@ -1345,7 +1395,7 @@ components:
         waybill_guid:
           type: string
           example: '210222-0357'
-          description: 'Унікальний ідентифікатор зв''язаної ТТН. Таблиця: ТТН (waybill)'
+          description: "Унікальний ідентифікатор зв'язаної ТТН. Таблиця: ТТН (waybill)"
         carrier_code:
           type: string
           example: '3308479112'
@@ -1492,7 +1542,7 @@ components:
         files_count:
           type: integer
           example: 0
-          description: 'Кількість файлів в пакетах документів до ТТН. Таблиця: ТТН (waybill)' 
+          description: 'Кількість файлів в пакетах документів до ТТН. Таблиця: ТТН (waybill)'
         race_number:
           type: string
           example: '210222-0357'
@@ -1700,4 +1750,18 @@ components:
           type: string
           example: '0003343431'
           description: 'Код ЄДРПОУ поклажодавця'
-    
+    GlobalSettings:
+      type: object
+      properties:
+        is_use_blacklist_check_in_vehicle_registers_generator:
+          type: boolean
+          example: true
+          description: Признак чи потрібна перевірка водія на присутність в чорному списку при створенні нарядів
+        is_use_blacklist_check_in_vehicle_registers_generator_text_ua:
+          type: string
+          example: Водій в чорному списку
+          description: Текст попередження, що водій в чорному списку (укр.)
+        is_use_blacklist_check_in_vehicle_registers_generator_text_ru:
+          type: string
+          example: Водитель в черном списке
+          description: Текст попередження, що водій в чорному списку (рус.)
