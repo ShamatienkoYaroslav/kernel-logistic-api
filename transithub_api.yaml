@@ -2350,7 +2350,7 @@ components:
         truck_model:
           type: string
           example: 53363
-          description: Марка транспортного засобу
+          description: Модель транспортного засобу
         trailer_number:
           type: string
           example: BI7886CA
