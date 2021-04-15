@@ -1623,6 +1623,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
+  /waybill_template:
+    get:
+      tags:
+        - ТТН
+      summary: Макет ТТН
+      operationId: waybillTemplate
+      description: |
+        Отримання даних ТТН по ідентифікатору рейсу, наряду, заявцки і самої ТТН
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело даних (таблиця)
+          schema:
+            type: string
+            enum: [waybill, race, request, vehicles_register]
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису таблиці
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 1
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/WaybillTemplate'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights' 
   /waybills/history:
     get:
       tags:
@@ -2274,6 +2324,106 @@ components:
           type: string
           example: 'КР'
           description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+    WaybillTemplate:
+      type: object
+      properties:
+        waybill_number:
+          type: string
+          example: ТТН00000012345
+          description: Номер ТТН
+        waybill_date:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: Дата ТТН
+        truck_number:
+          type: string
+          example: BI7886CA
+          description: Державний номер транспортного засобу
+        truck_brand:
+          type: string
+          example: МАЗ
+          description: Марка транспортного засобу
+        truck_type:
+          type: string
+          example: Вантажний
+          description: Тип транспортного засобу
+        truck_model:
+          type: string
+          example: 53363
+          description: Марка транспортного засобу
+        trailer_number:
+          type: string
+          example: BI7886CA
+          description: Державний номер причепу
+        trailer_type:
+          type: string
+          example: Напівпричіп
+          description: Тип причепу
+        carrier_name:
+          type: string
+          example: ТОВ Кернел-Трейд
+          description: Назва перевізника
+        carrier_code:
+          type: string
+          example: 0005656568888
+          description: Код ЄДРПОУ перевізника
+        driver_fullname:
+          type: string
+          example: Мельник Вячеславв Миколайович
+          description: ПІБ водія
+        driver_cert:
+          type: string
+          example: ВАЕ606282
+          description: Посвідчення водія
+        customer_name:
+          type: string
+          example: Кернел-Трейд
+          description: Назва замовника
+        customer_code:
+          type: string
+          example: '3308479112'
+          description: Код ЄДРПОУ замовника
+        consignor_name:
+          type: string
+          example: Кернел-Трейд
+          description: Назва вантажовідправника
+        consignor_code:
+          type: string
+          example: '3308479112'
+          description: Код ЄДРПОУ вантажовідправника
+        consignee_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва вантажоодержувача. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        consignee_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ вантажоодержувача. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        address_from:
+          type: string
+          example: Індустріальна 12
+          description: Адреса складу навантаження
+        address_to:
+          type: string
+          example: Індустріальна 12
+          description: Адреса складу розвантаження
+        full_address_from:
+          type: string
+          example: Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 45
+          description: Повна адреса складу навантаження
+        full_address_to:
+          type: string
+          example: Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 45
+          description: Повна адреса складу розвантаження
+        goods_name:
+          type: string
+          example: Соняшник
+          description: Назва вантажу
+        goods_loading_type:
+          type: string
+          enum: [mound, pouring]
+          example: mound
+          description: Тип погрузки вантажу. Значення(насип, налив)
     PQueueProfileCargoOwner:
       type: object
       properties:
