@@ -2490,6 +2490,34 @@ components:
           enum: [mound, pouring]
           example: mound
           description: Тип погрузки вантажу. Значення(насип, налив)
+        quantity:
+          type: number
+          example: 657
+          description: Орієнтовний тонаж, тонн
+        consignor_gross:
+          type: number
+          example: 657 689
+          description: Вага брутто відправника, кг
+        consignor_tara:
+          type: number
+          example: 657 454
+          description: Вага тара відправника, кг
+        consignor_net:
+          type: number
+          example: 657 567
+          description: Вага нетто відправника, кг
+        consignee_gross:
+          type: number
+          example: 657 689
+          description: Вага брутто отримувача, кг
+        consignee_tara:
+          type: number
+          example: 657 454
+          description: Вага тара отримувача, кг
+        consignee_net:
+          type: number
+          example: 657 567
+          description: Вага нетто отримувача, кг
     PQueueProfileCargoOwner:
       type: object
       properties:
