@@ -184,15 +184,15 @@ paths:
                 race_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description: 
+                  description:
                     'Унікальний ідентифікатор рейсу. Використовується для оновлення даних в існуючому рейсі.
-                     Таблиця: Рейси (races)'
+                    Таблиця: Рейси (races)'
                 vehicles_register_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description: 
-                    'Унікальний ідентифікатор наряду, на підставі якого буде створено рейс. 
-                     Таблиця: Наряди (request_vehicles_register)'
+                  description:
+                    'Унікальний ідентифікатор наряду, на підставі якого буде створено рейс.
+                    Таблиця: Наряди (request_vehicles_register)'
                 request:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
@@ -352,23 +352,19 @@ paths:
                 goods_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description:
-                    'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом ТХ'
+                  description: 'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом ТХ'
                 goods:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description: 
-                    'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом БОТа'
+                  description: 'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом БОТа'
                 finish_date:
                   type: string
                   example: 09.04.2021 15:21:08
-                  description: 
-                    Дата закінчення
+                  description: Дата закінчення
                 user_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description: 
-                    'Унікальний ідентифікатор користувача. Таблиця: ТХ користувачі (th_users)'
+                  description: 'Унікальний ідентифікатор користувача. Таблиця: ТХ користувачі (th_users)'
                 handle_status:
                   type: string
                   enum: [inactive, dash, ready]
@@ -491,7 +487,8 @@ paths:
                     type: string
                     enum: [CANCELED, DONE, PAUSE, IN_PROGRESS, REGISTERED]
                     example: IN_PROGRESS
-                    description: 'Статус рейсу. Значення(Зареєстровано, Виконується, Завершено, Відмінено, Пауза) 
+                    description:
+                      'Статус рейсу. Значення(Зареєстровано, Виконується, Завершено, Відмінено, Пауза)
                       Таблиця: Рейси (races)'
                   waybill:
                     type: string
@@ -705,7 +702,8 @@ paths:
       tags:
         - ТТН
       summary: Створення/оновлення ТТН на підставі рейсу
-      description: Точка створення/оновлення ТТН, що використовує процедуру оновлення таблиці рейсів 
+      description:
+        Точка створення/оновлення ТТН, що використовує процедуру оновлення таблиці рейсів
         та створює/оновлює ТТН на підставі рейсу
       parameters:
         - in: query
@@ -1745,7 +1743,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights' 
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /waybills/history:
     get:
       tags:
@@ -1844,11 +1842,6 @@ paths:
           schema:
             type: string
             example: 'e0d22acfba67c35937f2e26c7b6344e6'
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          schema:
-            type: string
       responses:
         200:
           description: Дані рейсу водія
@@ -2527,3 +2520,15 @@ components:
           type: string
           example: Водитель в черном списке
           description: Текст попередження, що водій в чорному списку (рус.)
+        access_to_search_in_registration_journal_text_ua:
+          type: string
+          example: 'Пошук доступний лише зареєстрованим користувачам'
+          description: Текст попередження, що пошук в публічному журналі черг на лендінгу доступний лише зареєстрованим користувачам (укр.)
+        access_to_search_in_registration_journal_text_ru:
+          type: string
+          example: 'Пошук доступний лише зареєстрованим користувачам'
+          description: Текст попередження, що пошук в публічному журналі черг на лендінгу доступний лише зареєстрованим користувачам (рус.)
+        is_vehicle_number_mask_used_in_th_pq_queue_registration_journal:
+          type: boolean
+          example: true
+          description: Признак чи потрібно застосовувати алготирм приховування номерів ТС в публічному журналі черг
