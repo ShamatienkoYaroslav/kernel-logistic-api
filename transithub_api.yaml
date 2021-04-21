@@ -1548,6 +1548,22 @@ paths:
                     type: string
                     example: 'Верификация недоступна. Заполните данные ТТН'
                     description: 'Текст помилки верифікації (рос.). Таблиця: Шаблони текстів (text_template)'
+                  queue_from_wait_time:
+                    type: integer
+                    example: 60
+                    description: 'Прогнозований час очікування водія в черзі навантаження до моменту вибуття. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_wait_time:
+                    type: integer
+                    example: 60
+                    description: 'Прогнозований час очікування водія в черзі розвантаження до моменту вибуття. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_from_number_in_multiqueue:
+                    type: integer
+                    example: 60
+                    description: 'Поточний порядковий номер рейсу в черзі навантаження. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_to_number_in_multiqueue:
+                    type: integer
+                    example: 60
+                    description: 'Поточний порядковий номер рейсу в черзі розвантаження. Таблиця: Статистика рейсу (race_statistics)'
 
     put:
       tags:
