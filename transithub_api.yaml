@@ -1551,19 +1551,19 @@ paths:
                   queue_from_wait_time:
                     type: integer
                     example: 60
-                    description: 'Прогнозований час очікування водія в черзі навантаження до моменту вибуття. Таблиця: Статистика рейсу (race_statistics)'
+                    description: 'Прогнозований час очікування водія в черзі навантаження до моменту вибуття, хв. Таблиця: Статистика рейсу (race_statistics)'
                   queue_to_wait_time:
                     type: integer
                     example: 60
-                    description: 'Прогнозований час очікування водія в черзі розвантаження до моменту вибуття. Таблиця: Статистика рейсу (race_statistics)'
+                    description: 'Прогнозований час очікування водія в черзі розвантаження до моменту вибуття, хв. Таблиця: Статистика рейсу (race_statistics)'
                   queue_from_number_in_multiqueue:
                     type: integer
-                    example: 60
-                    description: 'Поточний порядковий номер рейсу в черзі навантаження. Таблиця: Статистика рейсу (race_statistics)'
+                    example: 1
+                    description: 'Поточний порядковий номер рейсу в черзі навантаження (режим = мультичерга). Таблиця: Статистика рейсу (race_statistics)'
                   queue_to_number_in_multiqueue:
                     type: integer
-                    example: 60
-                    description: 'Поточний порядковий номер рейсу в черзі розвантаження. Таблиця: Статистика рейсу (race_statistics)'
+                    example: 3
+                    description: 'Поточний порядковий номер рейсу в черзі розвантаження (режим = мультичерга). Таблиця: Статистика рейсу (race_statistics)'
 
     put:
       tags:
