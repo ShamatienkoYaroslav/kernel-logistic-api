@@ -826,6 +826,22 @@ paths:
                     type: string
                     example: 'track_check'
                     description: 'Джерело рейсу. Таблиця: Рейси (races)'
+                  for_owner_name:
+                    type: string
+                    example: 'ТОВ Кернел-Трейд'
+                    description: 'Назва поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_code:
+                    type: string
+                    example: '068787868888'
+                    description: 'Код ЄДРПОУ поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_comments:
+                    type: string
+                    example: 'Коментар'
+                    description: 'Примітка поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Рейси (races)'
                   queue_from_registration_source:
                     type: string
                     example: 'track_check'
@@ -1018,7 +1034,7 @@ paths:
                     type: string
                     example: 'Украина, Винницкая обл., Оратовский район, с. Подвысокое'
                     description: 'Адреса населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
-
+                  
                   point_to_koatuu:
                     type: string
                     example: '0523184101'
