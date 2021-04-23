@@ -2749,7 +2749,7 @@ components:
           example: 1
           description: |
             Ознака активності документу. Таблиця: Електронна черга/довідники/Види черг(Види документів)(pq_queue_to_document_type)
-        schema:
+        items:
           $ref: '#/components/schemas/ArrayOfFiles'
     VerificationFilesGetDocumentTypeEmpty:
       type: object
@@ -2789,7 +2789,7 @@ components:
               type: string
               example: 'Примітка'
               description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
-            schema:
+            files:
               $ref: '#/components/schemas/ArrayOfFiles'
         ttn:
           type: object
@@ -2822,6 +2822,6 @@ components:
               type: string
               example: 'Примітка'
               description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
-            schema:
+            files:
               $ref: '#/components/schemas/ArrayOfFiles'
                 
