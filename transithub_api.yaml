@@ -826,6 +826,14 @@ paths:
                     type: string
                     example: 'track_check'
                     description: 'Джерело рейсу. Таблиця: Рейси (races)'
+                  profile_from_cargo_owner_accessible:
+                    type: integer
+                    example: 1
+                    description: 'Ознака доступності поклажодавця для профіля черги навантаження. Таблиця: Профілі черги (pq_queue_profiles)'
+                  profile_to_cargo_owner_accessible:
+                    type: integer
+                    example: 1
+                    description: 'Ознака доступності поклажодавця для профіля черги розвантаження. Таблиця: Профілі черги (pq_queue_profiles)'
                   for_owner_name:
                     type: string
                     example: 'ТОВ Кернел-Трейд'
