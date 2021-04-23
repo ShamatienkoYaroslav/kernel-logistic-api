@@ -24,6 +24,8 @@ tags:
     description: Вузли для роботи з товарно-транспортними накладними
   - name: Глобальні налаштування
     description: Глобальні налаштування для роботи Transithub
+  - name: Верифікація
+    description: Верифікація документів рейсу
 
 paths:
   /blacklist/check:
@@ -1734,6 +1736,74 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
+  /race/verification/photo:
+    get:
+      tags:
+        - Верифікація
+      summary: Верифікація документів рейсу
+      operationId: raceVerificationPhoto
+      description: |
+        Верифікація документів рейсу.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор профіля рейсу
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: |
+            Тип документу. "document" - підсистема пакетів документів.
+            la, ttn - верифікація документів.
+          schema:
+            type: string
+            enum: [la, ttn, document]
+        - in: query
+          name: direction
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: handle_status
+          description: Статус обробки файлу(до перевірки, відхилено, погоджено)
+          schema:
+            type: string
+            enum: [to_check, rejected, accepted]
+      responses:
+        '200':
+          description: Дані по верифікації файлів (document_type = la/ttn)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/VerificationFilesGetDocumentTypeLaORttn'
+                  - $ref: '#/components/schemas/VerificationFilesGetDocumentTypeEmpty'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
   /waybill_template:
     get:
       tags:
@@ -2600,3 +2670,158 @@ components:
           type: boolean
           example: true
           description: Признак чи потрібно застосовувати алготирм приховування номерів ТС в публічному журналі черг
+    ArrayOfFiles:
+      description: files
+      type: array
+      items:
+        type: object 
+        properties:
+          guid:
+            type: string
+            example: a00cd45a-fe37-69a6-6940-a7ca51290bbd
+            description: |
+              Унікальний ідентифікатор файлу. Таблиця: Файли(race_ttn_files)
+          handle_status:
+            type: string
+            enum: [to_check, rejected, accepted]
+            example: to_check
+            description: |
+              Статус обробки файлу(до перевірки, відхилено, погоджено). Таблиця: Файли(race_ttn_files)
+          file_name:
+            type: string
+            example: 'Назва файлу'
+            description: 'Назва файлу. Таблиця: Файли(race_ttn_files)'
+          mime_type:
+            type: string
+            example: 'image/jpeg'
+            description: 'Медіа тип файлу. Таблиця: Файли(race_ttn_files)'
+          source:
+            type: string
+            example: 'th'
+            description: 'Джерело створення файлу. Таблиця: Файли(race_ttn_files)'
+          created_at:
+            type: string
+            example: '22.04.2021 15:40:24'
+            description: 'Дата і час створення файлу. Таблиця: Файли(race_ttn_files)'
+          link:
+            type: string
+            example: 'https:\/\/devkernel.apex.rest:8443\/ords\/kernel_logistic\/v1\/transithub\/sharepoint\/file?client_token=e0d22acfba67c35937f2e26c7b6344e6&url=https:\/\/kernelgroupua.sharepoint.com\/sites\/dynamics\/BulkData_Scan\/a00cd45a-fe37-69a6-6940-a7ca51290bbd.jpg'
+            description: 'Посилання для перегляду файлу. Таблиця: Файли(race_ttn_files)'
+          dispatcher_edited_at:
+            type: string
+            example: '22.04.2021 15:40:24'
+            description: 'Дата і час редагування файлу. Таблиця: Файли(race_ttn_files)'
+          rejected:
+            type: integer
+            example: 1
+            description: 'Ознака відхилено:так/ні(1,0). Таблиця: Файли(race_ttn_files)'
+          reject_reason_ua:
+            type: string
+            example: 'Погана якість фото'
+            description: 'Причина відхилення українською, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
+          reject_reason_ru:
+            type: string
+            example: 'Плохое качество фото'
+            description: 'Причина відхилення російською, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
+          reject_note:
+            type: string
+            example: 'Примітка'
+            description: 'Примітка користувача, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
+    VerificationFilesGetDocumentTypeLaORttn:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: 'Статус відповіді'
+        name_ua:
+          type: string
+          example: 'Посвідчення якості'
+          description: |
+            Назва документу українською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+        name_ru:
+          type: string
+          example: 'Удостоверение качества'
+          description: |
+            Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+        is_active:
+          type: integer
+          example: 1
+          description: |
+            Ознака активності документу. Таблиця: Електронна черга/довідники/Види черг(Види документів)(pq_queue_to_document_type)
+        schema:
+          $ref: '#/components/schemas/ArrayOfFiles'
+    VerificationFilesGetDocumentTypeEmpty:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: 'Статус відповіді'
+        la:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [to_check, rejected, accepted]
+              example: to_check
+              description: |
+                Статус обробки файлу(до перевірки, відхилено, погоджено). Таблиця: Файли(race_ttn_files)
+            name_ua:
+              type: string
+              example: 'Посвідчення якості'
+              description: |
+                Назва документу українською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            name_ru:
+              type: string
+              example: 'Удостоверение качества'
+              description: |
+                Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            source:
+                type: string
+                example: 'th'
+                description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+            date_at:
+              type: string
+              example: '22.04.2021 15:40:24'
+              description: 'Дата і час створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+            note:
+              type: string
+              example: 'Примітка'
+              description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
+            schema:
+              $ref: '#/components/schemas/ArrayOfFiles'
+        ttn:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: [to_check, rejected, accepted]
+              example: to_check
+              description: |
+                Статус обробки файлу(до перевірки, відхилено, погоджено). Таблиця: Файли(race_ttn_files)
+            name_ua:
+              type: string
+              example: 'ТТН'
+              description: |
+                Назва документу українською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            name_ru:
+              type: string
+              example: 'ТТН'
+              description: |
+                Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            source:
+                type: string
+                example: 'th'
+                description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+            date_at:
+              type: string
+              example: '22.04.2021 15:40:24'
+              description: 'Дата і час створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+            note:
+              type: string
+              example: 'Примітка'
+              description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
+            schema:
+              $ref: '#/components/schemas/ArrayOfFiles'
+                
