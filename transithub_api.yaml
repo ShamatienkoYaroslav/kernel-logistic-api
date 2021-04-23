@@ -1785,7 +1785,7 @@ paths:
             enum: [to_check, rejected, accepted]
       responses:
         '200':
-          description: Дані по верифікації файлів (document_type = la/ttn)
+          description: Дані по верифікації файлів
           content:
             application/json:
               schema:
@@ -2729,6 +2729,7 @@ components:
             description: 'Примітка користувача, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
+      description: Дані по верифікації файлів (document_type = la/ttn)
       properties:
         status:
           type: boolean
@@ -2753,6 +2754,7 @@ components:
           $ref: '#/components/schemas/ArrayOfFiles'
     VerificationFilesGetDocumentTypeEmpty:
       type: object
+      description: Дані по верифікації файлів (document_type = пусто)
       properties:
         status:
           type: boolean
