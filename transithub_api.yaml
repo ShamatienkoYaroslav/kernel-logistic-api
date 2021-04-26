@@ -176,6 +176,13 @@ paths:
           description: Токен доступу (сесії)
           schema:
             type: string
+            example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTYxOTEzNjAwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMjc1In0.SxKsJVFRW5GHJVUyapKZ3QV3ob4iM0rjq03TFsiAXpM
+        - in: query
+          name: with_barcode
+          description: Признак, що рейс потрібно повертати із штрихкодом
+          schema:
+            type: boolean
+            example: false
       requestBody:
         description: тіло запиту
         content:
@@ -319,10 +326,6 @@ paths:
                   type: string
                   example: 0001
                   description: ID каналу слак
-                waybill_number:
-                  type: string
-                  example: 210329-00000099
-                  description: Номер ТТН рейсу. Використовується клієнтом ТХ
                 waybill:
                   type: string
                   example: 210329-00000099
@@ -354,11 +357,19 @@ paths:
                 goods_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
-                  description: 'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом ТХ'
-                goods:
-                  type: string
-                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
                   description: 'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом БОТа'
+                goods_name_ua:
+                  type: string
+                  example: Соняшник
+                  description: 'Назва вантажу (укр.). Таблиця: Вантажі (goods).'
+                goods_name_ru:
+                  type: string
+                  example: Подсолнух
+                  description: 'Назва вантажу (рус.). Таблиця: Вантажі (goods).'
+                barcode:
+                  type: string
+                  example: 894t367854t78382r
+                  description: Шрихкод рейсу
                 finish_date:
                   type: string
                   example: 09.04.2021 15:21:08
@@ -1044,7 +1055,7 @@ paths:
                     type: string
                     example: 'Украина, Винницкая обл., Оратовский район, с. Подвысокое'
                     description: 'Адреса населеного пункту завантаження (рос.). Таблиця: Населені пункти (locality)'
-                  
+
                   point_to_koatuu:
                     type: string
                     example: '0523184101'
@@ -2674,7 +2685,7 @@ components:
       description: files
       type: array
       items:
-        type: object 
+        type: object
         properties:
           guid:
             type: string
@@ -2780,9 +2791,9 @@ components:
               description: |
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
             source:
-                type: string
-                example: 'th'
-                description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+              type: string
+              example: 'th'
+              description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
             date_at:
               type: string
               example: '22.04.2021 15:40:24'
@@ -2813,9 +2824,9 @@ components:
               description: |
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
             source:
-                type: string
-                example: 'th'
-                description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
+              type: string
+              example: 'th'
+              description: 'Джерело створення файлу. Таблиця: Статистика верифікації(race_statistic_verification)'
             date_at:
               type: string
               example: '22.04.2021 15:40:24'
@@ -2826,4 +2837,3 @@ components:
               description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
             files:
               $ref: '#/components/schemas/ArrayOfFiles'
-                
