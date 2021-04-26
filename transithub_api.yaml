@@ -179,10 +179,10 @@ paths:
             example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTYxOTEzNjAwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMjc1In0.SxKsJVFRW5GHJVUyapKZ3QV3ob4iM0rjq03TFsiAXpM
         - in: query
           name: with_barcode
-          description: Признак, що рейс потрібно повертати із штрихкодом
+          description: 'Признак, що рейс потрібно повертати із штрихкодом. Варіанти: 0, 1'
           schema:
-            type: boolean
-            example: false
+            type: number
+            example: 0
       requestBody:
         description: тіло запиту
         content:
