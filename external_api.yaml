@@ -743,7 +743,7 @@ paths:
             type: string
         - in: query
           name: race_guid
-          description: Унікальний ідентифікатор профіля рейсу
+          description: Унікальний ідентифікатор рейсу
           schema:
             type: string
         - in: query
@@ -1059,6 +1059,154 @@ paths:
                     description: Статус обробки запиту
                     example: false
       x-codegen-request-body-name: payload
+  /verification/reasons:
+    get:
+      tags:
+        - Верифікація
+      summary: Отримати причини відхилення документів при верифікації.
+      operationId: raceVerificationPhotoReasonsBotGet
+      description: |
+        Передавши відповідні параметри, ви отримаєте перелік причин відхилення документів при верифікації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по причинах відхилення документів при верифікації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationRejectReasons'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+  /verification/status:
+    get:
+      tags:
+        - Верифікація
+      summary: Отримати статус верифікації документів рейсу.
+      operationId: raceVerificationPhotoStatusBotGet
+      description: |
+        Передавши відповідні параметри, ви отримаєте статус верифікації документів рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: Тип документу. la, ttn (Посвідчення якості та ТТН).
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn]
+        - in: query
+          name: direction
+          required: true
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: history
+          description: Ознака історії. Значення(0,1). 0 - отримати останній запис. 1 - отримати усі записи
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Дані по статусу документів при верифікації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatus'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+    post:
+      tags:
+        - Верифікація
+      summary: Встановити статус верифікації документів рейсу.
+      operationId: raceVerificationPhotoStatusBotPost
+      description: |
+        Передавши відповідні параметри, ви встановите статус верифікації документів рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: Тип документу. la, ttn (Посвідчення якості та ТТН).
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn]
+        - in: query
+          name: direction
+          required: true
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: new_status
+          description: Статус верифікації
+          schema:
+            type: string
+            enum: [to_check, rejected, accepted]
+      responses:
+        '200':
+          description: Дані по статусу документів при верифікації
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Cтатус відповіді
+                    example: ture
+                  new_status:
+                    type: string
+                    description: Новий статус верифікації документу
+                    example: to_check
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /pq_queues_request.create_by_race:
     post:
       tags:
@@ -1966,6 +2114,40 @@ components:
               description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
             files:
               $ref: '#/components/schemas/ArrayOfFiles'
+    VerificationRejectReasons:
+      type: object
+      description: Причини відхилення документів при верифікації
+      properties:
+        code:
+          type: string
+          example: PR_01
+          description: Код причини
+        name_ua:
+          type: string
+          example: 'Посвідчення якості'
+          description: Назва причини українською
+        name_ru:
+          type: string
+          example: 'Удостоверение качества'
+          description: Назва причини російською
+    VerificationStatus:
+      type: object
+      description: Статуси документів при верифікації
+      properties:
+        status:
+          type: string
+          enum: [to_check, rejected, accepted]
+          example: to_check
+          description: Статус верифікації
+        source:
+          type: string
+          enum: [track_check, th]
+          example: track_check
+          description: Джерело створення
+        created_at:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: Дата і час створення
     _UserisNotAuthorized:
       type: object
       properties:
