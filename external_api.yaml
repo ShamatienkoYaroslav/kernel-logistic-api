@@ -730,7 +730,7 @@ paths:
     get:
       tags:
         - Верифікація
-      summary: Верифікація документів рейсу.
+      summary: Отримати документи рейсу та їх вкладення.
       operationId: raceVerificationPhotoBotGet
       description: |
         Передавши відповідні параметри, ви отримаєте перелік документів/файлів рейсу
@@ -786,7 +786,7 @@ paths:
     post:
       tags:
         - Верифікація
-      summary: Верифікація документів рейсу
+      summary: Створити нове вкладення документу рейсу
       operationId: raceVerificationPhotoBotPost
       description: |
         Передавши відповідні параметри, ви створите новий запис для рейсу з вкладеним файлом.
@@ -908,7 +908,7 @@ paths:
     put:
       tags:
         - Верифікація
-      summary: Верифікація документів рейсу
+      summary: Оновити запис вкладення документу рейсу
       operationId: raceVerificationPhotoBotPut
       description: |
         Передавши відповідні параметри, ви оновите існуючий запис рейсу з вкладеним файлом.
@@ -1001,12 +1001,52 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+      x-codegen-request-body-name: payload
+    delete:
+      tags:
+        - Верифікація
+      summary: Видалити запис вкладення документу рейсу
+      operationId: raceVerificationPhotoBotDelete
+      description: |
+        Передавши відповідні параметри, ви видалите існуючий запис рейсу з вкладеним файлом.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: query
+          description: Унікальний ідентифікатор запису, який потрібно оновити
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Запис видалено
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
                   status:
                     type: boolean
                     description: Статус обробки запиту
-                    example: false
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         404:
           description: Дані не знайдено
           content:
