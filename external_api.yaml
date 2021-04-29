@@ -831,6 +831,19 @@ paths:
           required: true
           schema:
             type: string
+        - name: content_type
+          in: query
+          description: Тип медіафайлу
+          required: true
+          example: image/jpeg
+          schema:
+            type: string
+        - name: file_url
+          in: query
+          description: Посилання на завантаження файлу. 
+            Використовується як альтернатива, коли неможливо передати файл в тілі, як бінарні дані
+          schema:
+            type: string
         - name: file_name
           in: query
           description: Назва файла
@@ -849,7 +862,6 @@ paths:
             schema:
               type: string
               format: binary
-        required: true
       responses:
         201:
           description: Запис створено
