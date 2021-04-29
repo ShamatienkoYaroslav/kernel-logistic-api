@@ -782,6 +782,7 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRights'
     post:
       tags:
@@ -820,6 +821,7 @@ paths:
           description: |
             Напрямок черги (навантаження/розвантаження). 
             Використовується для визначення поточної черги рейсу
+          required: true
           schema:
             type: string
             enum: [loading, unloading]
@@ -891,18 +893,21 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
         404:
           description: Дані не знайдено
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
         400:
           description: Дані не знайдено
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_BadRequest'
       x-codegen-request-body-name: payload
     put:
@@ -1001,12 +1006,14 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
         404:
           description: Дані не знайдено
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
     delete:
@@ -1046,18 +1053,8 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        404:
-          description: Дані не знайдено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
       x-codegen-request-body-name: payload
   /verification/reasons:
     get:
@@ -1086,6 +1083,7 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRights'
   /verification/status:
     get:
@@ -1142,6 +1140,7 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRights'
     post:
       tags:
@@ -1206,6 +1205,7 @@ paths:
           content:
             application/json:
               schema:
+                name: error
                 $ref: '#/components/schemas/_ClientHasNoRights'
   /pq_queues_request.create_by_race:
     post:
@@ -2195,33 +2195,45 @@ components:
     _ClientHasNoRightsNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-          description: 'Статус відповіді'
-        msg:
+        code:
+          type: integer
+          example: 20000
+          description: Код помилки
+        message:
           type: string
-          example: 'Client has no rights'
-          description: 'Повідомлення'
+          example: Invalid client_token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for client token. Please contact with API's admin."
+          description: Деталі
     _NoDataFoundNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-          description: 'Статус відповіді'
-        msg:
+        code:
+          type: integer
+          example: 20002
+          description: Код помилки
+        message:
           type: string
-          example: 'No data found'
-          description: 'Повідомлення'
+          example: Object not found by guid
+          description: Повідомлення
+        detail:
+          type: string
+          example: "Can't find object by given guid. Please contact with API's admin."
+          description: Деталі
     _BadRequestNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-          description: 'Статус відповіді'
-        msg:
+        code:
+          type: integer
+          example: 20001
+          description: Код помилки
+        message:
           type: string
-          example: 'Bad request'
-          description: 'Повідомлення'
+          example: Invalid income data
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values in params, headers and body payload. Please contact with API's admin."
+          description: Деталі
