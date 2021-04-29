@@ -834,7 +834,6 @@ paths:
         - name: content_type
           in: query
           description: Тип медіафайлу
-          required: true
           example: image/jpeg
           schema:
             type: string
