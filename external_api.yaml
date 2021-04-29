@@ -1084,7 +1084,7 @@ paths:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /verification/status:
     get:
       tags:
@@ -1141,7 +1141,7 @@ paths:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
         - Верифікація
@@ -1206,7 +1206,7 @@ paths:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /pq_queues_request.create_by_race:
     post:
       tags:
