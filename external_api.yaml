@@ -783,7 +783,7 @@ paths:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
         - Верифікація
@@ -908,7 +908,7 @@ paths:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
       x-codegen-request-body-name: payload
     put:
       tags:
