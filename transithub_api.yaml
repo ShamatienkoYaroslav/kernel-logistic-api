@@ -1808,13 +1808,491 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '401':
           description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+    delete:
+      tags:
+        - Верифікація
+      summary: Видалити запис вкладення документу рейсу
+      operationId: raceVerificationPhotoBotDelete
+      description: |
+        Передавши відповідні параметри, ви видалите існуючий запис рейсу з вкладеним файлом.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: query
+          description: Унікальний ідентифікатор запису, який потрібно оновити
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Запис видалено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+      x-codegen-request-body-name: payload
+  /race/verification/reasons:
+    get:
+      tags:
+        - Верифікація
+      summary: Отримати причини відхилення документів при верифікації.
+      operationId: raceVerificationPhotoReasonsBotGet
+      description: |
+        Передавши відповідні параметри, ви отримаєте перелік причин відхилення документів при верифікації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по причинах відхилення документів при верифікації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationRejectReasons'
+        '401':
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+    post:
+      tags:
+        - Верифікація
+      summary: Оновити запис вкладення документу рейсу
+      operationId: raceVerificationPhotoBotPut
+      description: |
+        Передавши відповідні параметри, ви оновите існуючий запис рейсу з вкладеним файлом.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: query
+          description: Унікальний ідентифікатор запису, який потрібно оновити
+          required: true
+          schema:
+            type: string
+        - name: handle_status
+          in: query
+          required: true
+          schema:
+            type: string
+            description: Статус обробки файлу(відхилено, погоджено)
+            enum: [rejected, accepted]
+        - name: reason_code
+          in: query
+          description: Код причини відхилення, якщо відхилено
+          schema:
+            type: string
+        - name: note
+          in: query
+          description: Примітка диспетчера
+          schema:
+            type: string
+      responses:
+        200:
+          description: Запис оновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  guid:
+                    type: string
+                    description: Ідентифікатор запиту на чергу
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  handle_status:
+                    type: string
+                    description: Статус обробки файлу(чорновик, до перевірки, відхилено, погоджено)
+                    enum: [draft, to_check, rejected, accepted]
+                  source:
+                    type: string
+                    description: Джерело створення
+                    enum: [track_check, th]
+                    example: track_check
+                  created_at:
+                    type: string
+                    description: Дата створення
+                    example: 28.04.2021 18:41:52
+                  dispatcher_edited_at:
+                    type: string
+                    description: Дата редагування
+                    example: 28.04.2021 18:41:52
+                  link:
+                    type: string
+                    description: Посилання для перегляду файлу
+                    example: "https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6"
+                  rejected:
+                    type: integer
+                    description: Ознака "відхилено". Значення(1,0)
+                    example: 1
+                  reject_reason_ua:
+                    type: string
+                    description: Причина відхилення українською
+                    example: Погана якість фото
+                  reject_reason_ru:
+                    type: string
+                    description: Причина відхилення російською
+                    example: Низкое качество фото
+                  reject_note:
+                    type: string
+                    description: Примітка диспетчера
+                    example: Примітка
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_NoDataFoundNew'
+      x-codegen-request-body-name: payload
+  /race/verification:
+    get:
+      tags:
+        - Верифікація
+      summary: Отримати статус верифікації документів рейсу.
+      operationId: raceVerificationPhotoStatusBotGet
+      description: |
+        Передавши відповідні параметри, ви отримаєте статус верифікації документів рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: Тип документу. la, ttn (Посвідчення якості та ТТН).
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn]
+        - in: query
+          name: direction
+          required: true
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: history
+          description: Ознака історії. Значення(0,1). 0 - отримати останній запис. 1 - отримати усі записи
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Дані по статусу документів при верифікації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatus'
+        '401':
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+    post:
+      tags:
+        - Верифікація
+      summary: Встановити статус верифікації документів рейсу.
+      operationId: raceVerificationPhotoStatusBotPost
+      description: |
+        Передавши відповідні параметри, ви встановите статус верифікації документів рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: Тип документу. la, ttn (Посвідчення якості та ТТН).
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn]
+        - in: query
+          name: direction
+          required: true
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: new_status
+          description: Статус верифікації
+          schema:
+            type: string
+            enum: [to_check, rejected, accepted]
+      responses:
+        '200':
+          description: Дані по статусу документів при верифікації
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Cтатус відповіді
+                    example: ture
+                  new_status:
+                    type: string
+                    description: Новий статус верифікації документу
+                    example: to_check
+        '401':
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'            
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+  /verification/photo:
+    post:
+      tags:
+        - Верифікація
+      summary: Створити нове вкладення документу рейсу
+      operationId: raceVerificationPhotoBotPost
+      description: |
+        Передавши відповідні параметри, ви створите новий запис для рейсу з вкладеним файлом.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: document_type
+          in: query
+          description: |
+            Тип документу. "document" - підсистема пакетів документів.
+            la, ttn - верифікація документів.
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn, document]
+        - name: type
+          in: query
+          description: |
+            Тип приналежності
+            Для верифікації документів рейсу використовуємо type="race"
+          required: true
+          schema:
+            type: string
+            enum: [race, accreditation]
+        - name: direction
+          in: query
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          required: true
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - name: race_guid
+          in: query
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - name: content_type
+          in: query
+          description: Тип медіафайлу
+          example: image/jpeg
+          schema:
+            type: string
+        - name: file_url
+          in: query
+          description: Посилання на завантаження файлу. 
+            Використовується як альтернатива, коли неможливо передати файл в тілі, як бінарні дані
+          schema:
+            type: string
+        - name: file_name
+          in: query
+          description: Назва файла
+          schema:
+            type: string
+        - name: source
+          in: query
+          description: Джерело створення
+          schema:
+            type: string
+            enum: [track_check, th]
+      requestBody:
+        description: Дані для реєстрації запиту на чергу
+        content:
+          '*/*':
+            schema:
+              type: string
+              format: binary
+      responses:
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  guid:
+                    type: string
+                    description: Ідентифікатор запиту на чергу
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  handle_status:
+                    type: string
+                    description: Статус обробки файлу(чорновик, до перевірки, відхилено, погоджено)
+                    enum: [draft, to_check, rejected, accepted]
+                  file_name:
+                    type: string
+                    description: Назва файлу
+                    example: DOCUMENT_123
+                  source:
+                    type: string
+                    description: Джерело створення
+                    enum: [track_check, th]
+                    example: track_check
+                  created_at:
+                    type: string
+                    description: Дата створення
+                    example: 28.04.2021 18:41:52
+                  link:
+                    type: string
+                    description: Посилання для перегляду файлу
+                    example: "https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6"
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        400:
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+      x-codegen-request-body-name: payload
+    
   /waybill_template:
     get:
       tags:
@@ -1986,6 +2464,21 @@ components:
           type: string
           example: 'User is not authorized'
           description: 'Повідомлення'
+    _UserisNotAuthorizedNew:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20003
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid access token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for access token. Please contact with API's admin."
+          description: Деталі
     _ClientHasNoRights:
       type: object
       properties:
@@ -1997,6 +2490,21 @@ components:
           type: string
           example: 'Client has no rights'
           description: 'Повідомлення'
+    _ClientHasNoRightsNew:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20000
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid client_token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for client token. Please contact with API's admin."
+          description: Деталі
     _NoDataFound:
       type: object
       properties:
@@ -2008,6 +2516,21 @@ components:
           type: string
           example: 'No data found'
           description: 'Повідомлення'
+    _NoDataFoundNew:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20002
+          description: Код помилки
+        message:
+          type: string
+          example: Object not found by guid
+          description: Повідомлення
+        detail:
+          type: string
+          example: "Can't find object by given guid. Please contact with API's admin."
+          description: Деталі
     _BadRequest:
       type: object
       properties:
@@ -2019,6 +2542,21 @@ components:
           type: string
           example: 'Invalid income data'
           description: 'Повідомлення'
+    _BadRequestNew:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20001
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid income data
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values in params, headers and body payload. Please contact with API's admin."
+          description: Деталі
     _ComplexError:
       type: object
       properties:
@@ -2837,3 +3375,38 @@ components:
               description: 'Примітка користувача, якщо відхилено = так. Таблиця: Статистика верифікації(race_statistic_verification)'
             files:
               $ref: '#/components/schemas/ArrayOfFiles'
+    VerificationRejectReasons:
+      type: object
+      description: Причини відхилення документів при верифікації
+      properties:
+        code:
+          type: string
+          example: PR_01
+          description: Код причини
+        name_ua:
+          type: string
+          example: 'Посвідчення якості'
+          description: Назва причини українською
+        name_ru:
+          type: string
+          example: 'Удостоверение качества'
+          description: Назва причини російською
+    VerificationStatus:
+      type: object
+      description: Статуси документів при верифікації
+      properties:
+        status:
+          type: string
+          enum: [to_check, rejected, accepted]
+          example: to_check
+          description: Статус верифікації
+        source:
+          type: string
+          enum: [track_check, th]
+          example: track_check
+          description: Джерело створення
+        created_at:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: Дата і час створення
+    
