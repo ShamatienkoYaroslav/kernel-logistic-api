@@ -1765,11 +1765,13 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
+          required: true
           schema:
             type: string
         - in: query
           name: race_guid
-          description: Унікальний ідентифікатор профіля рейсу
+          description: Унікальний ідентифікатор рейсу
+          required: true
           schema:
             type: string
         - in: query
@@ -1785,6 +1787,7 @@ paths:
           description: |
             Напрямок черги (навантаження/розвантаження). 
             Використовується для визначення поточної черги рейсу
+          required: true
           schema:
             type: string
             enum: [loading, unloading]
@@ -1826,6 +1829,12 @@ paths:
         - name: client_token
           in: query
           description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
           required: true
           schema:
             type: string
@@ -1880,6 +1889,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
+          required: true
           schema:
             type: string
       responses:
@@ -2039,6 +2049,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
+          required: true
           schema:
             type: string
         - in: query
@@ -2107,6 +2118,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
+          required: true
           schema:
             type: string
         - in: query
@@ -2185,6 +2197,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
+          required: true
           schema:
             type: string
         - name: document_type
