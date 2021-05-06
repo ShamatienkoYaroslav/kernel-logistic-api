@@ -1088,7 +1088,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerificationRejectReasons'
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRejectReasons'
         '403':
           description: 'Клієнт немає прав доступу'
           content:
@@ -1145,7 +1154,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerificationStatus'
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationStatus'
         '403':
           description: 'Клієнт немає прав доступу'
           content:
