@@ -2153,11 +2153,11 @@ components:
           description: Код причини
         name_ua:
           type: string
-          example: 'Посвідчення якості'
+          example: 'Низька якість фото'
           description: Назва причини українською
         name_ru:
           type: string
-          example: 'Удостоверение качества'
+          example: 'Низкое качество фото'
           description: Назва причини російською
     VerificationStatus:
       type: object
