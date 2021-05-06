@@ -1333,10 +1333,10 @@ paths:
     get:
       tags:
         - Поклажодавці
-      summary: Поклажодавці профіля черги
+      summary: Отримати активних поклажодавців профіля черги
       operationId: PQueueProfileCargoOwnersGET
       description: |
-        Поклажодавці профіля черги.
+        Передавши відповідні параметри ви отримаєте усіх активних поклажодавців профіля черги
       parameters:
         - in: query
           name: client_token
@@ -1382,13 +1382,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        '401':
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /departure_permission:
     get:
       tags:
