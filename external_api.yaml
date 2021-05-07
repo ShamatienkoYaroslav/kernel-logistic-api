@@ -660,6 +660,14 @@ paths:
                       'Статус обробки рейсу. Варіанти: ready, dash, inactive,
                       canceled. Таблиця: Рейси (races)'
                     example: ready
+                  profile_from_cargo_owner_accessible:
+                    type: integer
+                    example: 1
+                    description: 'Ознака доступності поклажодавця для профіля черги навантаження. Таблиця: Профілі черги (pq_queue_profiles)'
+                  profile_to_cargo_owner_accessible:
+                    type: integer
+                    example: 0
+                    description: 'Ознака доступності поклажодавця для профіля черги розвантаження. Таблиця: Профілі черги (pq_queue_profiles)'
     put:
       tags:
         - Рейси водія
