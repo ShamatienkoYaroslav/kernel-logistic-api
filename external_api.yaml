@@ -684,6 +684,23 @@ paths:
                     type: string
                     example: 'e36aa43c-839f-482e-0dd8-4d668234a56e'
                     description: 'Гуід профілю черг розвантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  for_owner_name:
+                    type: string
+                    example: 'ТОВ Кернел-Трейд'
+                    description: 'Назва поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_code:
+                    type: string
+                    example: '068787868888'
+                    description: 'Код ЄДРПОУ поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_comments:
+                    type: string
+                    example: 'Коментар'
+                    description: 'Примітка поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_guid:
+                    type: string
+                    example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+                    description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Рейси (races)'
+                  
     put:
       tags:
         - Рейси водія
