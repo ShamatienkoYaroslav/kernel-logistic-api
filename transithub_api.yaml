@@ -3440,11 +3440,11 @@ components:
           description: Код статусу верифікації
         status_ua:
           type: string
-          example: to_check
+          example: До перевірки
           description: Назва статусу верифікації українською
         status_ru:
           type: string
-          example: to_check
+          example: К проверке
           description: Назва статусу верифікації російською
         source:
           type: string
