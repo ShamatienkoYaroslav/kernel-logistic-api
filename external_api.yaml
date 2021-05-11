@@ -668,6 +668,22 @@ paths:
                     type: integer
                     example: 0
                     description: 'Ознака доступності поклажодавця для профіля черги розвантаження. Таблиця: Профілі черги (pq_queue_profiles)'
+                  queue_profile_from_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ'
+                    description: 'Назва профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_from_guid:
+                    type: string
+                    example: 'e36aa43c-839f-482e-0dd8-4d668234a56e'
+                    description: 'Гуід профілю черг завантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_to_name:
+                    type: string
+                    example: 'Кропивницький ОЕЗ'
+                    description: 'Назва профілю черг розвантаження, Таблиця: Профіль черг (pq_queue_profile)'
+                  queue_profile_to_guid:
+                    type: string
+                    example: 'e36aa43c-839f-482e-0dd8-4d668234a56e'
+                    description: 'Гуід профілю черг розвантаження, Таблиця: Профіль черг (pq_queue_profile)'
     put:
       tags:
         - Рейси водія
