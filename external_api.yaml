@@ -1219,6 +1219,7 @@ paths:
             enum: [loading, unloading]
         - in: query
           name: new_status
+          required: true
           description: Статус верифікації
           schema:
             type: string
