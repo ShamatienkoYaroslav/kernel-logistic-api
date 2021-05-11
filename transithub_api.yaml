@@ -3437,7 +3437,15 @@ components:
           type: string
           enum: [to_check, rejected, accepted]
           example: to_check
-          description: Статус верифікації
+          description: Код статусу верифікації
+        status_ua:
+          type: string
+          example: to_check
+          description: Назва статусу верифікації українською
+        status_ru:
+          type: string
+          example: to_check
+          description: Назва статусу верифікації російською
         source:
           type: string
           enum: [track_check, th]
