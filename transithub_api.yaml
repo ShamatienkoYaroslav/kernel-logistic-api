@@ -1600,7 +1600,15 @@ paths:
                     type: integer
                     example: 3
                     description: 'Поточний порядковий номер рейсу в черзі розвантаження (режим = мультичерга). Таблиця: Статистика рейсу (race_statistics)'
-
+                  race_duration_ua:
+                    type: string
+                    example: 23 дн 4 год
+                    description: 'Тривалість рейсу (укр.). Таблиця: рейси (races)'
+                  race_duration_ru:
+                    type: string
+                    example: 23 дн 4 ч
+                    description: 'Тривалість рейсу (рос.). Таблиця: рейси (races)'
+    
     put:
       tags:
         - Інтерфейс водія
