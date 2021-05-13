@@ -26,6 +26,8 @@ tags:
     description: Глобальні налаштування для роботи Transithub
   - name: Верифікація
     description: Верифікація документів рейсу
+  - name: Водії
+    description: Вузли для роботи з водіями
 
 paths:
   /blacklist/check:
@@ -1688,6 +1690,82 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFound'
+  /drivers.update_by_dispatcher:
+    put:
+      tags:
+        - Водії
+      summary: Оновлення даних водія диспетчером
+      operationId: driverUpdateByDispatcherPut
+      description: |
+        Передавши відповідні параметри, ви оновите існуючий запис водія.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: driver_guid
+          in: query
+          description: Унікальний ідентифікатор запису, який потрібно оновити
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для оновлення запису водія
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: "Ім'я водія"
+                  example: Микола
+                middle_name:
+                  type: string
+                  description: "По-батькові водія"
+                  example: Васильович
+                last_name:
+                  type: string
+                  description: "Прізвище водія"
+                  example: Товкач
+                cert_serial_number:
+                  type: string
+                  description: "Серія та номер посвідченн водія"
+                  example: РО67824
+        required: true
+      responses:
+        200:
+          description: Запис оновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  driver_guid:
+                    type: string
+                    description: Унікальний ідентифікатор водія
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        400:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+      x-codegen-request-body-name: payload
   /pq_queue_profiles/cargo_owners:
     get:
       tags:
