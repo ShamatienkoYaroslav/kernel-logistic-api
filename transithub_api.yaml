@@ -1732,7 +1732,7 @@ paths:
                   example: Товкач
                 cert_serial_number:
                   type: string
-                  description: "Серія та номер посвідченн водія"
+                  description: "Серія та номер посвідчення водія"
                   example: РО67824
         required: true
       responses:
