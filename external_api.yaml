@@ -1207,6 +1207,20 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VerificationStatus'
+                  text_ua:
+                    type: string
+                    example: Верифікація - це підтвердження коректності ТТН. 
+                    description: |
+                      Текст шаблону повідомлення українською. Код шаблону 041.
+                      Виводиться, коли масив статусів(items) порожній. 
+                      Таблиця: шаблони текстів (text_template)"
+                  text_ru:
+                    type: string
+                    example: Верификация - это подтверждение корректности ТТН
+                    description: |
+                      Текст шаблону повідомлення російською. Код шаблону 041.
+                      Виводиться, коли масив статусів(items) порожній. 
+                      Таблиця: шаблони текстів (text_template)"
         '403':
           description: 'Клієнт немає прав доступу'
           content:
@@ -2289,6 +2303,14 @@ components:
           type: string
           example: К проверке
           description: Назва статусу верифікації російською
+        text_ua:
+          type: string
+          example: Верифікація - це підтвердження коректності ТТН. 
+          description: "Текст шаблону повідомлення українською. Таблиця: шаблони текстів (text_template)"
+        text_ru:
+          type: string
+          example: Верификация - это подтверждение корректности ТТН
+          description: "Текст шаблону повідомлення російською. Таблиця: шаблони текстів (text_template)"
         source:
           type: string
           enum: [track_check, th]
