@@ -20,9 +20,108 @@ tags:
     description: Верифікація документів рейсу
   - name: Поклажодавці
     description: Поклажодавці профіля черги
+  - name: Контрагенти
+    description: Вузли для роботи з таблицею контрагентів
 
 
 paths:
+  /contragent:
+    post:
+      tags:
+        - Контрагенти
+      summary: Створити/оновити контрагента по коду ЕДРПОУ
+      operationId: contragentPost
+      description: |
+        Передавши відповідні параметри, ви створите новий 
+        або оновите існуючий (у випадку, якщо запис 
+        з вказаним кодом ЕДРПОУ вже існує) запис контрагента.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для реєстрації запиту на чергу
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Назва контрагента
+                  example: ТОВ Кернел-Трейд
+                code:
+                  type: string
+                  description: Код ЕДРПОУ контрагента
+                  example: '034556565646'
+      responses:
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    description: Унікальний ідентифікатор запису
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  name:
+                    type: string
+                    description: Назва контрагента
+                    example: ТОВ Кернел-Трейд
+                  edrpou:
+                    type: string
+                    description: Код ЕДРПОУ контрагента
+                    example: '034556565646'
+        200:
+          description: Запис оновлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    description: Унікальний ідентифікатор запису
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  name:
+                    type: string
+                    description: Назва контрагента
+                    example: ТОВ Кернел-Трейд
+                  edrpou:
+                    type: string
+                    description: Код ЕДРПОУ контрагента
+                    example: '034556565646'
+        403:
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        400:
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+      x-codegen-request-body-name: payload
+    
   /driver/races/status:
     get:
       tags:
