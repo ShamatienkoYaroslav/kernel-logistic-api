@@ -124,9 +124,9 @@ paths:
           schema:
             type: string
       requestBody:
-        description: Дані для реєстрації запиту на чергу
+        description: тіло запиту
         content:
-          '*/*':
+          application/json:
             schema:
               type: object
               properties:
