@@ -3725,6 +3725,18 @@ components:
           type: number
           example: 657 567
           description: Вага нетто отримувача, кг
+        consignor_address:
+          type: string
+          example: Україна, Вінницька обл., Тиврівський район, с. Колюхів
+          description: "Юридична адреса вантажовідправника. Таблиця: контрагенти (contragent)"
+        consignee_address:
+          type: string
+          example: Україна, Вінницька обл., Тиврівський район, с. Колюхів
+          description: "Юридична адреса вантажоодержувача. Таблиця: контрагенти (contragent)"
+        carrier_address:
+          type: string
+          example: Україна, Вінницька обл., Тиврівський район, с. Колюхів
+          description: "Юридична адреса перевізника. Таблиця: контрагенти (contragent)"
     PQueueProfileCargoOwner:
       type: object
       properties:
