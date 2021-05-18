@@ -3636,10 +3636,18 @@ components:
           type: string
           example: ТОВ Кернел-Трейд
           description: Назва перевізника
-        carrier_code:
+        carrier_edrpou:
           type: string
           example: 0005656568888
           description: Код ЄДРПОУ перевізника
+        cargo_owner_name:
+          type: string
+          example: ТОВ Кернел-Трейд
+          description: Назва поклажодавця
+        cargo_owner_edrpou:
+          type: string
+          example: 0005656568888
+          description: Код ЄДРПОУ поклажодавця
         driver_fullname:
           type: string
           example: Мельник Вячеславв Миколайович
