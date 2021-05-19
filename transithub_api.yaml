@@ -3745,10 +3745,10 @@ components:
           type: string
           example: Україна, Вінницька обл., Тиврівський район, с. Колюхів
           description: "Юридична адреса вантажоодержувача. Таблиця: контрагенти (contragent)"
-        carrier_address:
+        customer_address:
           type: string
           example: Україна, Вінницька обл., Тиврівський район, с. Колюхів
-          description: "Юридична адреса перевізника. Таблиця: контрагенти (contragent)"
+          description: "Юридична адреса замовника. Таблиця: контрагенти (contragent)"
     PQueueProfileCargoOwner:
       type: object
       properties:
