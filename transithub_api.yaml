@@ -3656,6 +3656,10 @@ components:
           type: string
           example: ВАЕ606282
           description: Посвідчення водія
+        driver_phone:
+          type: string
+          example: 380967356671
+          description: Номер телефона водія
         customer_name:
           type: string
           example: Кернел-Трейд
