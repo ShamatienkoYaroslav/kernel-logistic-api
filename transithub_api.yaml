@@ -1815,8 +1815,23 @@ paths:
             type: string
         - name: driver_guid
           in: query
-          description: Унікальний ідентифікатор запису, який потрібно оновити
-          required: true
+          description: Унікальний ідентифікатор запису, який потрібно оновити.
+            Як альтернативний варіант можна оновити запис водія по його номеру телефону і компанії,
+            передавши параметри driver_phone і company_guid
+          schema:
+            type: string
+        - name: driver_phone
+          in: query
+          description: Номер телефону водія. 
+            Використовуєм разом з параметром company_guid, для пошуку 
+            потрібного запису водія по номеру і компанії
+          schema:
+            type: string
+        - name: company_guid
+          in: query
+          description: Унікальний ідентифікатор запису компанії. 
+            Використовуєм разом з параметром driver_phone, для пошуку 
+            потрібного запису водія по номеру і компанії
           schema:
             type: string
       requestBody:
