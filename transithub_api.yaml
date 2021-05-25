@@ -40,6 +40,16 @@ tags:
     description: Вузли для роботи з к-стю нарядів для заявки
   - name: Контрагенти
     description: Вузли для роботи з таблицею контрагентів
+  - name: "T008 - Статус водія"
+    description: Вузол для роботи із зміною статусу водія
+  - name: "T009 - Закладки"
+    description: Вузол для роботи із закладками користувача
+  - name: "T010 - Фільтри користувача"
+    description: Вузол для роботи із фільтрами користувача та їх наборами
+  - name: "T011 - Статус ТЗ"
+    description: Вузол для роботи із зміною статусу ТЗ
+  - name: "T012 - Акредитація (документи)"
+    description: Вузол для роботи з документами для акредитації
 
 paths:
   /blacklist/check:
@@ -137,7 +147,7 @@ paths:
                 code:
                   type: string
                   description: Код ЕДРПОУ контрагента
-                  example: '034556565646'
+                  example: "034556565646"
       responses:
         201:
           description: Запис створено
@@ -162,7 +172,7 @@ paths:
                   edrpou:
                     type: string
                     description: Код ЕДРПОУ контрагента
-                    example: '034556565646'
+                    example: "034556565646"
         200:
           description: Запис оновлено
           content:
@@ -186,23 +196,23 @@ paths:
                   edrpou:
                     type: string
                     description: Код ЕДРПОУ контрагента
-                    example: '034556565646'
+                    example: "034556565646"
         403:
-          description: 'Клієнт немає прав доступу'
+          description: "Клієнт немає прав доступу"
           content:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+                $ref: "#/components/schemas/_ClientHasNoRightsNew"
         400:
           description: Поганий запит
           content:
             application/json:
               schema:
                 name: error
-                $ref: '#/components/schemas/_BadRequestNew'
+                $ref: "#/components/schemas/_BadRequestNew"
       x-codegen-request-body-name: payload
-  
+
   /driver/races:
     get:
       tags:
@@ -1822,15 +1832,15 @@ paths:
             type: string
         - name: driver_phone
           in: query
-          description: Номер телефону водія. 
-            Використовуєм разом з параметром company_guid, для пошуку 
+          description: Номер телефону водія.
+            Використовуєм разом з параметром company_guid, для пошуку
             потрібного запису водія по номеру і компанії
           schema:
             type: string
         - name: company_guid
           in: query
-          description: Унікальний ідентифікатор запису компанії. 
-            Використовуєм разом з параметром driver_phone, для пошуку 
+          description: Унікальний ідентифікатор запису компанії.
+            Використовуєм разом з параметром driver_phone, для пошуку
             потрібного запису водія по номеру і компанії
           schema:
             type: string
@@ -2734,18 +2744,29 @@ paths:
           schema:
             type: string
       responses:
-        "403":
-          description: "Клієнт не має прав доступу"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_ClientHasNoRights"
-        "400":
+        400:
           description: "Поганий запит"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
     post:
       tags: ["T002 - Наряди"]
       summary: Створення/оновлення наряду
@@ -2806,20 +2827,29 @@ paths:
           schema:
             type: string
       responses:
-        "401":
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
           description: "Клієнт не авторизований"
           content:
             application/json:
               schema:
                 name: error
                 $ref: "#/components/schemas/_UserisNotAuthorizedNew"
-        "403":
+        403:
           description: "Клієнт не має прав доступу"
           content:
             application/json:
               schema:
-                name: error
-                $ref: "#/components/schemas/_ClientHasNoRightsNew"
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
   /vehicles:
     get:
       tags: ["T003 - Транспортні засоби"]
@@ -2860,18 +2890,77 @@ paths:
           schema:
             type: string
       responses:
-        "403":
-          description: "Клієнт не має прав доступу"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_ClientHasNoRights"
-        "400":
+        400:
           description: "Поганий запит"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /vehicles.change_status:
+    put:
+      tags: ["T011 - Статус ТЗ", "T004 - Транспортні засоби"]
+      summary: Оновлення статусу ТЗ
+      operationId: vehiclesChangeStatusPut
+      description: |
+        Оновлення статусу ("В роботі"/"Архів") ТЗ
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор ТЗ
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
   /drivers:
     get:
       tags: ["T004 - Водії"]
@@ -2912,18 +3001,77 @@ paths:
           schema:
             type: string
       responses:
-        "403":
-          description: "Клієнт не має прав доступу"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_ClientHasNoRights"
-        "400":
+        400:
           description: "Поганий запит"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /driver.change_status:
+    put:
+      tags: ["T008 - Статус водія", "T004 - Водії"]
+      summary: Оновлення статусу водія
+      operationId: driverChangeStatusPut
+      description: |
+        Оновлення статусу ("В роботі"/"Архів") водія
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор водія
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
   /requests:
     get:
       tags: ["T007 - Заявки"]
@@ -2964,18 +3112,29 @@ paths:
           schema:
             type: string
       responses:
-        "403":
-          description: "Клієнт не має прав доступу"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_ClientHasNoRights"
-        "400":
+        400:
           description: "Поганий запит"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
   /requests.get_vr_counts:
     get:
       tags: ["T007 - Заявки", "T005 - Заявки (к-сть нарядів)"]
@@ -3001,19 +3160,424 @@ paths:
           schema:
             type: string
       responses:
-        "403":
-          description: "Клієнт не має прав доступу"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/_ClientHasNoRights"
-        "400":
+        400:
           description: "Поганий запит"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/_BadRequest"
-
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /favorites:
+    get:
+      tags: ["T009 - Закладки"]
+      summary: Отримання закладок користувача
+      operationId: favoritesGet
+      description: |
+        Отримання закладок користувача
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: object_id
+          description: Унікальний ідентифікатор об'єкту
+          schema:
+            type: string
+        - in: query
+          name: table_name
+          description: Назва таблиці
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    post:
+      tags: ["T009 - Закладки"]
+      summary: Створення закладки
+      operationId: favoritesPost
+      description: Точка створення закладки (додання об'єкту в закладки)
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    delete:
+      tags: ["T009 - Закладки"]
+      summary: Видалення закладки
+      operationId: favoritesDelete
+      description: |
+        Передавши відповідні параметри, ви видалите існуючу закладку
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: object_id
+          description: Унікальний ідентифікатор об'єкту, який потрібно видалити
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: table_name
+          description: Назва таблиці
+          required: true
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /users_filters:
+    get:
+      tags: ["T010 - Фільтри користувача"]
+      summary: Отримання фільтрів користувача
+      operationId: usersFiltersGet
+      description: |
+        Отримання фільтрів користувача
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: list_name
+          description: Назва списку області фільтрів
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    post:
+      tags: ["T010 - Фільтри користувача"]
+      summary: Створення набору фільтрів
+      operationId: usersFiltersPost
+      description: Точка створення набору фільтрів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: list_name
+          description: Назва списку області фільтрів
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    delete:
+      tags: ["T010 - Фільтри користувача"]
+      summary: Видалення набору фільтрів
+      operationId: usersFiltersDelete
+      description: |
+        Передавши відповідні параметри, ви видалите існуючий набір фільтрів
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор набору філтрів, який потрібно видалити
+          required: true
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /accreditations/documents:
+    get:
+      tags: ["T012 - Акредитація (документи)"]
+      summary: Отримання документів об'єкту для акредитації
+      operationId: accreditationsDocumentsGet
+      description: |
+        Точка отримання документів об'єкту, що створенні для процесу акредитації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: owner_guid
+          description: Унікальний ідентифікатор об'єкту (власника документів)
+          schema:
+            type: string
+        - in: query
+          name: owner_type
+          description: Тип об'єкту (власника документів)
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор документу
+          schema:
+            type: string
+        - in: query
+          name: document_status
+          description: Статус документу
+          schema:
+            type: string
+        - in: query
+          name: document_type
+          description: Тип документу
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
 components:
   schemas:
     _UserisNotAuthorized:
