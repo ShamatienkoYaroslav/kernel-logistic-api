@@ -50,6 +50,22 @@ tags:
     description: Вузол для роботи із зміною статусу ТЗ
   - name: "T012 - Акредитація (документи)"
     description: Вузол для роботи з документами для акредитації
+  - name: "T013 - Документи"
+    description: Вузол для роботи з документами
+  - name: "T014 - Файли (вкладення)"
+    description: Вузол для роботи з файлами документу/рейсу
+  - name: "T015 - Організації компанії"
+    description: Вузол для роботи з організаціями компанії
+  - name: "T016 - Акредитація (перелік акредитацій)"
+    description: Вузол для роботи з акредитаціями (з переліком акредитацій)
+  - name: "T017 - Акредитація (список пар перевізника та замовника для акредитацій)"
+    description: Вузол для роботи з акредитаціями (з списком пар перевізника та замовника для акредитацій)
+  - name: "T018 - Акредитація (дії)"
+    description: Вузол для роботи з акредитаціями (з діями)
+  - name: "T019 - Акредитація (запити)"
+    description: Вузол для роботи з акредитаціями (із запитами)
+  - name: "T020 - Файли (вкладення)"
+    description: Вузол для роботи з файлами документу/рейсу
 
 paths:
   /blacklist/check:
@@ -1967,8 +1983,7 @@ paths:
                 $ref: "#/components/schemas/_UserisNotAuthorized"
   /race/verification/photo:
     get:
-      tags:
-        - Верифікація
+      tags: ["T020 - Файли (вкладення)", "T014 - Файли (вкладення)"]
       summary: Верифікація документів рейсу
       operationId: raceVerificationPhoto
       description: |
@@ -2037,12 +2052,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/_UserisNotAuthorizedNew"
     delete:
-      tags:
-        - Верифікація
-      summary: Видалити запис вкладення документу рейсу
+      tags: ["T020 - Файли (вкладення)", "T014 - Файли (вкладення)"]
+      summary: Видалити запис вкладення документу
       operationId: raceVerificationPhotoBotDelete
       description: |
-        Передавши відповідні параметри, ви видалите існуючий запис рейсу з вкладеним файлом.
+        Передавши відповідні параметри, ви видалите існуючий файл (вкладення) документу.
       parameters:
         - name: client_token
           in: query
@@ -2399,12 +2413,11 @@ paths:
                 $ref: "#/components/schemas/_ClientHasNoRightsNew"
   /verification/photo:
     post:
-      tags:
-        - Верифікація
-      summary: Створити нове вкладення документу рейсу
+      tags: ["T014 - Файли (вкладення)", "T020 - Файли (вкладення)"]
+      summary: Створити нове вкладення документу/рейсу
       operationId: raceVerificationPhotoBotPost
       description: |
-        Передавши відповідні параметри, ви створите новий запис для рейсу з вкладеним файлом.
+        Передавши відповідні параметри, ви створите новий запис для документу/рейсу рейсу з вкладеним файлом.
       parameters:
         - name: client_token
           in: query
@@ -3552,6 +3565,566 @@ paths:
         - in: query
           name: document_type
           description: Тип документу
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /documents:
+    post:
+      tags: ["T013 - Документи"]
+      summary: Створення нового документу
+      operationId: documentsPost
+      description: Точка створення нового документу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    put:
+      tags: ["T013 - Документи"]
+      summary: Оновлення документу
+      operationId: driverChangeStatusPut
+      description: |
+        Точка оновлення документу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор документу
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /organisations:
+    get:
+      tags: ["T015 - Організації компанії"]
+      summary: Отримання організацій компанії
+      operationId: organisationsGet
+      description: |
+        Точка отримання організацій для певної компанії
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+        - in: query
+          name: accreditation
+          description: Ознака акредитованості
+          schema:
+            type: boolean
+        - in: query
+          name: search
+          description: Ключове слово для пошуку
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /accreditations/states:
+    get:
+      tags: ["T016 - Акредитація (перелік акредитацій)"]
+      summary: Отримання списку акредитацій для конкретного перевізника та замовника
+      operationId: accreditationsStatesGet
+      description: |
+        Точка отримання списку акредитацій для конкретного перевізника та замовника
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису акредитації
+          schema:
+            type: string
+        - in: query
+          name: organization
+          description: Унікальний ідентифікатор замовника
+          schema:
+            type: string
+        - in: query
+          name: carrier_organization
+          description: Унікальний ідентифікатор перевізника
+          schema:
+            type: string
+        - in: query
+          name: vehicle_guid
+          description: Унікальний ідентифікатор ТЗ
+          schema:
+            type: string
+        - in: query
+          name: vehicle_number
+          description: Унікальний реєстраційний номер ТЗ
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    post:
+      tags: ["T016 - Акредитація (перелік акредитацій)"]
+      summary: Створення нового запису акредитації
+      operationId: accreditationsStatesPost
+      description: Точка створення запису акредитації для конкретного перевізника та замовника
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    put:
+      tags: ["T016 - Акредитація (перелік акредитацій)"]
+      summary: Оновлення запису акредитації
+      operationId: accreditationsStatesPut
+      description: |
+        Точка оновлення запису акредитації для конкретного перевізника та замовника
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: processing_status
+          description: Статус запису акредитації
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+    delete:
+      tags: ["T016 - Акредитація (перелік акредитацій)"]
+      summary: Видалення запису акредитації
+      operationId: accreditationsStatesDelete
+      description: |
+        Передавши відповідні параметри, ви видалите існуючий запис акредитації
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису акредитації
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /accreditations:
+    get:
+      tags:
+        [
+          "T017 - Акредитація (список пар перевізника та замовника для акредитацій)",
+        ]
+      summary: Отримання списку пар перевізника та замовника для акредитацій
+      operationId: accreditationsGet
+      description: |
+        Точка отримання списку пар перевізника та замовника для акредитацій
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису акредитації
+          schema:
+            type: string
+        - in: query
+          name: organization
+          description: Унікальний ідентифікатор запису
+          schema:
+            type: string
+        - in: query
+          name: th_company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+        - in: query
+          name: vehicle_guid
+          description: Унікальний ідентифікатор ТЗ
+          schema:
+            type: string
+        - in: query
+          name: processing_status
+          description: Статус акредитації
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /accreditations/states/actions:
+    get:
+      tags: ["T018 - Акредитація (дії)"]
+      summary: Отримання списку дій для процесу акредитації
+      operationId: accreditationsGet
+      description: |
+        Точка отримання списку дій для процесу акредитації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: state_guids
+          description: Масив унікальних ідентифікаторів дій
+          schema:
+            type: string
+      responses:
+        400:
+          description: "Поганий запит"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_BadRequest"
+        401:
+          description: "Клієнт не авторизований"
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: "#/components/schemas/_UserisNotAuthorizedNew"
+        403:
+          description: "Клієнт не має прав доступу"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/_ClientHasNoRights"
+        500:
+          description: server error
+          content: {}
+        x-codegen-request-body-name: body
+  /accreditations/states/requests:
+    get:
+      tags: ["T019 - Акредитація (запити)"]
+      summary: Отримання списку запитів для акредитації
+      operationId: accreditationsGet
+      description: |
+        Точка отримання списку запитів для акредитації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальнй ідентифікатор запиту
+          schema:
+            type: string
+        - in: query
+          name: processing_status
+          description: Статус акредитації
+          schema:
+            type: string
+        - in: query
+          name: kind
+          description: Тип запиту
+          schema:
+            type: string
+        - in: query
+          name: request_status
+          description: Статус запиту
+          schema:
+            type: string
+        - in: query
+          name: vehicle
+          description: Унікальний реєстраційний номер ТЗ
+          schema:
+            type: string
+        - in: query
+          name: organization
+          description: Унікальний ідентифікатор замовника
+          schema:
+            type: string
+        - in: query
+          name: carrier_organization
+          description: Унікальний ідентифікатор перевізника
           schema:
             type: string
       responses:
