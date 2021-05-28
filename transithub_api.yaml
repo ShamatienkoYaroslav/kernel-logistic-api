@@ -806,6 +806,30 @@ paths:
                   type: string
                   example: 380963458965
                   description: Додатковий номер телефону водія
+                consignor_name:
+                  type: string
+                  example: "ТОВ Кернел-Трейд"
+                  description: Назва вантажовідправника. Строка 250 символів"
+                consignor_code:
+                  type: string
+                  example: "0999323388"
+                  description: "Код ЄДРПОУ вантажовідправника. Строка 10 символів"
+                carrier_name:
+                  type: string
+                  example: "ТОВ Кернел-Трейд"
+                  description: Назва перевізника. Строка 250 символів"
+                carrier_code:
+                  type: string
+                  example: "0999323388"
+                  description: "Код ЄДРПОУ перевізника. Строка 10 символів"
+                customer_name:
+                  type: string
+                  example: "ТОВ Кернел-Трейд"
+                  description: Назва замовника. Строка 250 символів"
+                customer_code:
+                  type: string
+                  example: "0999323388"
+                  description: "Код ЄДРПОУ замовника. Строка 10 символів"
                 cargo_owner_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
