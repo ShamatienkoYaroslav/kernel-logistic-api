@@ -806,6 +806,19 @@ paths:
                   type: string
                   example: 380963458965
                   description: Додатковий номер телефону водія
+                driver_fullname:
+                  type: string
+                  example: Пастушок Леонід Леопольдович
+                  description: ПІБ водія
+                driver_cert:
+                  type: string
+                  example: ПР343434
+                  description: Посвідчення водія (номер і серія)
+                update_waybill:
+                  type: integer
+                  example: 1
+                  description: Ознака, що вказує на необхідність оновлення 
+                    даних в зв'язаній ТТН. Значення (0, 1)
                 consignor_name:
                   type: string
                   example: "ТОВ Кернел-Трейд"
