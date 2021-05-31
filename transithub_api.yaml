@@ -817,7 +817,8 @@ paths:
                 update_waybill:
                   type: integer
                   example: 1
-                  description: Ознака, що вказує на необхідність оновлення 
+                  description: |
+                    Ознака, що вказує на необхідність оновлення 
                     даних в зв'язаній ТТН. Значення (0, 1)
                 consignor_name:
                   type: string
