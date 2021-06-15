@@ -1298,6 +1298,18 @@ paths:
                     type: string
                     example: "Подсолнечник"
                     description: "Назва вантажу (рос.). Таблиця: Вантаж (goods)"
+                  harvest_year:
+                    type: string
+                    example: "2021"
+                    description: "Рік врожаю. Таблиця: Рейси (races)"
+                  queue_profile_from_harvest_year_in_use:
+                    type: integer
+                    example: 0
+                    description: "Ознака доступності року врожаю для профіля черги навантаження. Таблиця: Профілі черги (pq_queue_profiles)"
+                  queue_profile_to_harvest_year_in_use:
+                    type: integer
+                    example: 1
+                    description: "Ознака доступності року врожаю для профіля черги розвантаження. Таблиця: Профілі черги (pq_queue_profiles)"
                   quantity:
                     type: number
                     example: 10
