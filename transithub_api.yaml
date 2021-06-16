@@ -915,6 +915,10 @@ paths:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
                   description: Унікальний ідентифікатор рейсу
+                harvest_year:
+                  type: string
+                  example: "2020"
+                  description: Рік врожаю
                 cargo_owner_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
@@ -937,6 +941,10 @@ paths:
                   race_guid:
                     type: string
                     example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                  harvest_year:
+                    type: string
+                    example: "2020"
+                    description: Рік врожаю
         401:
           description: User is not authorized
           content: {}
