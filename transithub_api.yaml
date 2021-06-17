@@ -68,6 +68,8 @@ tags:
     description: Вузол для роботи з файлами документу/рейсу
   - name: 'T021 - Подорожній лист (інтерфейс водія)'
     description: Вузли для роботи водія із подорожніми листами
+  - name: 'T022 - Подорожній лист'
+    description: Вузли для роботи із подорожніми листами
 
 paths:
   /blacklist/check:
@@ -4279,6 +4281,157 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_StatusOnly'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /race.get_travel_letter_template:
+    get:
+      tags:
+        ['T021 - Подорожній лист (інтерфейс водія)', 'T022 - Подорожній лист']
+      summary: Зміна даних подорожнього листа
+      operationId: TravelLetterSet
+      description: |
+        Точка зміни даних подорожнього листа в рейсі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: GUID рейсу
+          schema:
+            type: string
+            example: '00014e20-b2b0-b68a-b3d6-a6cb2458e925'
+      responses:
+        200:
+          description: 'Вдалий запит'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vehicle_number:
+                    type: string
+                    example: 'BNM66666'
+                    description: 'Номер автомобіля'
+                  trailer_number:
+                    type: string
+                    example: 'BG555555'
+                    description: 'Номер причепа'
+                  driver_fullname:
+                    type: string
+                    example: 'Вау Вау Ваувочвич'
+                    description: 'ПІП водія'
+                  customer_name:
+                    type: string
+                    example: 'КернелТрейд'
+                    description: 'Замовник'
+                  weight_in:
+                    type: number
+                    example: 20000
+                    description: 'Вага відправника за ТТН'
+                  weight_out:
+                    type: number
+                    example: 20000
+                    description: 'Вага отримувача за ТТН'
+                  waybill_number:
+                    type: string
+                    example: 'ттн-007'
+                    description: 'Номер ТТН'
+                  travel_letter_departure_datetime:
+                    type: string
+                    example: '14.06.2021 13:26:33'
+                    description: 'Дата та час при виїзді'
+                  travel_letter_departure_remains:
+                    type: number
+                    example: 200
+                    description: 'Залишок пального на виїзді'
+                  travel_letter_return_datetime:
+                    type: string
+                    example: '15.06.2021 13:26:33'
+                    description: 'Дата та час при поверненні'
+                  travel_letter_return_remains:
+                    type: number
+                    example: 200
+                    description: 'Залишок пального при поверненні'
+                  travel_letter_mileage_to_loading_point:
+                    type: number
+                    example: 200
+                    description: 'Пробіг до пункту навантаження'
+                  travel_letter_mileage_with_cargo:
+                    type: number
+                    example: 200
+                    description: 'Пробіг з вантажем'
+                  travel_letter_mileage_empty_to_apt:
+                    type: number
+                    example: 200
+                    description: 'Пробіг до АТП'
+                  warehouse_from_name:
+                    type: string
+                    example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
+                    description: 'Склад навантаження'
+                  warehouse_to_name:
+                    type: string
+                    example: 'Техуніверсал-Індустрія ТОВ, с. Райполе'
+                    description: 'Придніпровський ОЕЗ'
+                  goods_name_ua:
+                    type: string
+                    example: 'Соняшник високоолеїновий'
+                    description: 'Вантаж (укр)'
+                  goods_name_ru:
+                    type: string
+                    example: 'Подсолнечник високоолеиновый'
+                    description: 'Вантаж (рус)'
+                  distance:
+                    type: number
+                    example: 170
+                    description: 'Відстань'
+                  point_from_name_ua:
+                    type: string
+                    example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+                    description: 'Пункт навантаження (укр)'
+                  point_from_name_ru:
+                    type: string
+                    example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
+                    description: 'Пункт навантаження (рус)'
+                  point_to_name_ua:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький'
+                    description: 'Пункт розвантаження (укр)'
+                  point_to_name_ru:
+                    type: string
+                    example: 'Украина, Кировоградская обл., г. Кропивницкий'
+                    description: 'Пункт розвантаження (рус)'
         400:
           description: 'Поганий запит'
           content:
