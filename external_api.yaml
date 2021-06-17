@@ -20,6 +20,8 @@ tags:
     description: Верифікація документів рейсу
   - name: Поклажодавці
     description: Поклажодавці профіля черги
+  - name: 'T001 - Подорожній лист'
+    description: Вузли для роботи водія із подорожніми листами
 
 paths:
   /driver/races/status:
@@ -699,7 +701,7 @@ paths:
                     type: string
                     example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
                     description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Рейси (races)'
-                  
+
     put:
       tags:
         - Рейси водія
@@ -881,7 +883,7 @@ paths:
             type: string
         - name: file_url
           in: query
-          description: Посилання на завантаження файлу. 
+          description: Посилання на завантаження файлу.
             Використовується як альтернатива, коли неможливо передати файл в тілі, як бінарні дані
           schema:
             type: string
@@ -940,7 +942,7 @@ paths:
                   link:
                     type: string
                     description: Посилання для перегляду файлу
-                    example: "https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6"
+                    example: 'https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6'
         403:
           description: 'Клієнт немає прав доступу'
           content:
@@ -1037,7 +1039,7 @@ paths:
                   link:
                     type: string
                     description: Посилання для перегляду файлу
-                    example: "https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6"
+                    example: 'https://devth.kernel.ua:8443/ords/kernel_logistic/v1/transithub/race/verification/photo/url/2572?client_token=e0d22acfba67c35937f2e26c7b6344e6'
                   rejected:
                     type: integer
                     description: Ознака "відхилено". Значення(1,0)
@@ -1208,7 +1210,7 @@ paths:
                       $ref: '#/components/schemas/VerificationStatus'
                   text_ua:
                     type: string
-                    example: Верифікація - це підтвердження коректності ТТН. 
+                    example: Верифікація - це підтвердження коректності ТТН.
                     description: |
                       Текст шаблону повідомлення українською. Код шаблону 041 виводиться,
                       якщо масив статусів(items) порожній. Решта статусів налаштовується в 
@@ -1892,8 +1894,140 @@ paths:
                     description: Статус обробки запиту
                     example: false
       x-codegen-request-body-name: payload
+  /race.set_travel_letter:
+    put:
+      tags: ['T001 - Подорожній лист']
+      summary: Зміна даних подорожнього листа
+      operationId: TravelLetterSet
+      description: |
+        Точка зміни даних подорожнього листа в рейсі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: GUID рейсу
+          schema:
+            type: string
+            example: '00014e20-b2b0-b68a-b3d6-a6cb2458e925'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                travel_letter_status:
+                  type: string
+                  example: 'draft'
+                  description: 'Статус подорожньго листа'
+                travel_letter_departure_datetime:
+                  type: string
+                  example: '17.06.2021 14:05:32'
+                  description: 'Дата та час виїзду'
+                travel_letter_departure_remains:
+                  type: number
+                  example: 120
+                  description: 'Залишок пальоного на момент виїзду'
+                travel_letter_return_datetime:
+                  type: string
+                  example: '18.06.2021 14:05:32'
+                  description: 'Дата та час повернення'
+                travel_letter_return_remains:
+                  type: number
+                  example: 60
+                  description: 'Залишок пальоного на момент повернення'
+                travel_letter_mileage_to_loading_point:
+                  type: number
+                  example: 70
+                  description: 'Пробіг до пункту навантаження, км'
+                travel_letter_mileage_with_cargo:
+                  type: number
+                  example: 70
+                  description: 'Пробіг з вантажем, км'
+                travel_letter_mileage_empty_to_apt:
+                  type: number
+                  example: 70
+                  description: 'Пробіг пустим до АТП, км'
+      responses:
+        200:
+          description: 'Вдалий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_StatusOnly'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+
 components:
   schemas:
+    _StatusOnly:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: 'Статус відповіді'
+    _ComplexError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: number
+              example: 20000
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid client_token
+              description: Сповіщення помилки
+            detail:
+              type: string
+              example: You need to specify correct values for client token. Please contact with API''s admin.
+              description: Деталі помилки
+    _UserisNotAuthorizedNew:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20003
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid access token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for access token. Please contact with API's admin."
+          description: Деталі
     autoRequestVehicleRegister:
       type: object
       properties:
