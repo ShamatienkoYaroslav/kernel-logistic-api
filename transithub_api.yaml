@@ -4479,6 +4479,11 @@ paths:
           description: Унікальний ідентифікатор профіля черги
           schema:
             type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
       responses:
         '200':
           description: Дані рейсу водія
