@@ -1937,7 +1937,6 @@ paths:
                     description: 'Статус відповіді'
                   url:
                     type: string
-                    example: 'https:\/\/kernel-transithub.herokuapp.com\/ua\/waybill-template'
                     description: 'Посилання на шаблон ТТН'
                   err_message:
                     type: string
