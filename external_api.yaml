@@ -1,9 +1,9 @@
-openapi: 3.0.1
+openapi: 3.0.0
 
 info:
   title: External API
   description: Колекція вузлів API для зовнішньої інтеграції з логістикою
-  version: 1.0.5.3
+  version: 1.0.5.4
 
 servers:
   - description: Development Server
