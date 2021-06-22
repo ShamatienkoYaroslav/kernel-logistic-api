@@ -22,6 +22,8 @@ tags:
     description: Поклажодавці профіля черги
   - name: 'T001 - Подорожній лист'
     description: Вузли для роботи водія із подорожніми листами
+  - name: ТТН
+    description: Вузли для роботи з товарно-транспортними накладними
 
 paths:
   /driver/races/status:
@@ -1894,6 +1896,68 @@ paths:
                     description: Статус обробки запиту
                     example: false
       x-codegen-request-body-name: payload
+  /waybill_template:
+    get:
+      tags:
+        - ТТН
+      summary: Макет ТТН
+      operationId: waybillTemplate
+      description: |
+        Отримання даних ТТН по ідентифікатору рейсу, наряду, заявцки і самої ТТН
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело даних (таблиця)
+          schema:
+            type: string
+            enum: [waybill, race, request, vehicles_register]
+        - in: query
+          name: guid
+          required: true
+          description: Унікальний ідентифікатор запису таблиці
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  url:
+                    type: string
+                    example: "https:\\kernel-transithub.herokuapp.com\ua\waybill-template?source=race&guid=420ec8bd-6d72-f174-fa77-30d4dec5a48d"
+                    description: 'Посилання на шаблон ТТН'
+                  err_message:
+                    type: string
+                    example: "Налаштування "Base URL транзітхаб клієнта" незаповнене! Зверніться в підтримку."
+                    description: 'Налаштовується в ТХ адмінці (Адміністрування/Налаштування/Додатково)'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        
+  
+
   /race.set_travel_letter:
     put:
       tags: ['T001 - Подорожній лист']
