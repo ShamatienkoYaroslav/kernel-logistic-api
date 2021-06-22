@@ -5721,6 +5721,10 @@ components:
             type: string
             example: Пшениця
             description: "Назва категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
+          goods_category_guid:
+            type: string
+            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
+            description: "Унікальний ідентифікатор категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
           in_queue:
             type: integer
             example: 5
