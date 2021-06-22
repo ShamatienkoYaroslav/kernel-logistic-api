@@ -1948,7 +1948,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '400':
           description: 'Поганий запит'
           content:
