@@ -1955,9 +1955,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
-        
-  
-
   /race.set_travel_letter:
     put:
       tags: ['T001 - Подорожній лист']
