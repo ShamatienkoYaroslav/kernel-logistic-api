@@ -2070,28 +2070,28 @@ paths:
             type: string
       responses:
         '200':
-         description: Дані по чергам доступним вказаному рейсу
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Статус відповіді'
-                  race_guid:
-                    type: string
-                    example: "947250ab-ba47-6b99-d35d-7c7a6e4d6669"
-                    description: Унікальний ідентифікатор рейсу
-                  to:
-                    type: object
-                    description: Дані по черзі розвантаження вказаного рейсу
-                    $ref: '#/components/schemas/PQueueStatisticsObject'
-                  from:
-                    type: object
-                    description: Дані по черзі навантаження вказаного рейсу
-                    $ref: '#/components/schemas/PQueueStatisticsObject'
+          description: Дані по чергам доступним вказаному рейсу
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                    race_guid:
+                      type: string
+                      example: "947250ab-ba47-6b99-d35d-7c7a6e4d6669"
+                      description: Унікальний ідентифікатор рейсу
+                    to:
+                      type: object
+                      description: Дані по черзі розвантаження вказаного рейсу
+                      $ref: '#/components/schemas/PQueueStatisticsObject'
+                    from:
+                      type: object
+                      description: Дані по черзі навантаження вказаного рейсу
+                      $ref: '#/components/schemas/PQueueStatisticsObject'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
