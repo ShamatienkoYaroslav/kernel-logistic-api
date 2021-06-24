@@ -3011,7 +3011,60 @@ paths:
           description: Унікальний ідентифікатор ТЗ
           schema:
             type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: ACTIVE
+                  enum: ['ARCHIVED', 'ACTIVE']
+                  description: 'Статус транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                author_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор користувача. Таблиця: Користувачі (th_users)'
       responses:
+        200:
+          description: returns update results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  vehicle_guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                    description: 'Унікальний ідентифікатор транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  vehicle_status:
+                    type: string
+                    example: ARCHIVED
+                    enum: ['ARCHIVED', 'ACTIVE']
+                    description: 'Статус транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  vehicle_status_date:
+                    type: string
+                    example: 09.04.2021 15:21:08
+                    description: 'Дата зміни статусу транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  error_code:
+                    type: string
+                    example: "047"
+                    description: 'Код шаблону сповіщення. Таблиця: Шаблони сповіщень (text_template)'
+                  error_text_ua:
+                    type: string
+                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    description: 'Повідомлення шаблону сповіщення українською. Таблиця: Шаблони сповіщень (text_template)'
+                  error_text_ru:
+                    type: string
+                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    description: 'Повідомлення шаблону сповіщення російською. Таблиця: Шаблони сповіщень (text_template)'
+
         400:
           description: 'Поганий запит'
           content:
