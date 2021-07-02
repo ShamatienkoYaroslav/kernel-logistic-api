@@ -70,6 +70,8 @@ tags:
     description: Вузли для роботи водія із подорожніми листами
   - name: 'T022 - Подорожній лист'
     description: Вузли для роботи із подорожніми листами
+  - name: 'Статистика черги'
+    description: Вузли для роботи зі статистикою черги
 
 paths:
   /blacklist/check:
@@ -3009,7 +3011,60 @@ paths:
           description: Унікальний ідентифікатор ТЗ
           schema:
             type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: ACTIVE
+                  enum: ['ARCHIVED', 'ACTIVE']
+                  description: 'Статус транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                author_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор користувача. Таблиця: Користувачі (th_users)'
       responses:
+        200:
+          description: returns update results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  vehicle_guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                    description: 'Унікальний ідентифікатор транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  vehicle_status:
+                    type: string
+                    example: ARCHIVED
+                    enum: ['ARCHIVED', 'ACTIVE']
+                    description: 'Статус транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  vehicle_status_date:
+                    type: string
+                    example: 09.04.2021 15:21:08
+                    description: 'Дата зміни статусу транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
+                  error_code:
+                    type: string
+                    example: "047"
+                    description: 'Код шаблону сповіщення. Таблиця: Шаблони сповіщень (text_template)'
+                  error_text_ua:
+                    type: string
+                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    description: 'Повідомлення шаблону сповіщення українською. Таблиця: Шаблони сповіщень (text_template)'
+                  error_text_ru:
+                    type: string
+                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    description: 'Повідомлення шаблону сповіщення російською. Таблиця: Шаблони сповіщень (text_template)'
+
         400:
           description: 'Поганий запит'
           content:
@@ -4457,6 +4512,109 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /pq_queues/statistics:
+    get:
+      tags:
+        - Статистика черги
+      summary: Звіт по статистиці рейсів в черзі
+      operationId: pq_queuesStatisticsGet
+      description: |
+        Звіт по статистиці рейсів в черзі.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: queue_profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/QueueStatisticsReportGoodsCategory'
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  queue_profile_name:
+                    type: string
+                    example: Трансбалктермінал
+                    description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                  queue_profile_guid:
+                    type: string
+                    example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+                    description: "Унікальний ідентифікатор профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                  in_queue:
+                    type: integer
+                    example: 5
+                    description: Кількість транспортних засобів в черзі
+                  in_territory:
+                    type: integer
+                    example: 0
+                    description: Кількість транспортних засобів, що знаходяться на території
+                  move_to_entry:
+                    type: integer
+                    example: 3
+                    description: Кількість транспортних засобів направлених на в'їзд
+                  waiting_for_registration:
+                    type: integer
+                    example: 1
+                    description: Кількість транспортних засобів, що очікують реєстрації
+                  total:
+                    type: integer
+                    example: 9
+                    description: Кількість транспортних засобів загальна
+                  in_queue_weight:
+                    type: integer
+                    example: 80
+                    description: Вага по транспортним засобам в черзі
+                  in_territory_weight:
+                    type: integer
+                    example: 0
+                    description: Вага по транспортним засобам, що знаходяться на території
+                  move_to_entry_weight:
+                    type: integer
+                    example: 0
+                    description: Вага по транспортним засобам, що направлені на в'їзд
+                  waiting_for_registration_weight:
+                    type: integer
+                    example: 10
+                    description: Вага по транспортним засобам, що очікують реєстрації
+                  total_weight:
+                    type: integer
+                    example: 90
+                    description: Загальна вага по транспортним засобам
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
 
 components:
   schemas:
@@ -5487,3 +5645,176 @@ components:
           type: string
           example: 22.04.2021 15:40:18
           description: Дата і час створення
+    QueueStatisticsReportLocation:
+      description: Місцезнаходження (Звіт статистики черги)
+      type: array
+      items:
+        type: object
+        description: Місцезнаходження (Звіт статистики черги)
+        properties:
+          location_guid:
+            type: string
+            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
+            description: "Унікальний ідентифікатор місцезнаходження. Таблиця: Місцезнаходження(location)"
+          location_name_ua:
+            type: string
+            example: У пункті призначення
+            description: "Назва місцезнаходження українською. Таблиця: Місцезнаходження(location)"
+          location_name_ru:
+            type: string
+            example: В пункте назначения
+            description: "Назва місцезнаходження російською. Таблиця: Місцезнаходження(location)"
+          in_queue:
+            type: integer
+            example: 5
+            description: Кількість транспортних засобів в черзі
+          in_territory:
+            type: integer
+            example: 0
+            description: Кількість транспортних засобів, що знаходяться на території
+          move_to_entry:
+            type: integer
+            example: 3
+            description: Кількість транспортних засобів направлених на в'їзд
+          waiting_for_registration:
+            type: integer
+            example: 1
+            description: Кількість транспортних засобів, що очікують реєстрації
+          total:
+            type: integer
+            example: 9
+            description: Кількість транспортних засобів загальна
+          in_queue_weight:
+            type: integer
+            example: 80
+            description: Вага по транспортним засобам в черзі
+          in_territory_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що знаходяться на території
+          move_to_entry_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що направлені на в'їзд
+          waiting_for_registration_weight:
+            type: integer
+            example: 10
+            description: Вага по транспортним засобам, що очікують реєстрації
+          total_weight:
+            type: integer
+            example: 90
+            description: Загальна вага по транспортним засобам
+    QueueStatisticsReportQueue:
+      description: Черга (Звіт статистики черги)
+      type: array
+      items:
+        type: object
+        description: Черга (Звіт статистики черги)
+        properties:
+          locations:
+              $ref: '#/components/schemas/QueueStatisticsReportLocation'
+          queue_guid:
+            type: string
+            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
+            description: "Унікальний ідентифікатор черги. Таблиця: Черги(pq_queue)"
+          queue_name:
+            type: string
+            example: Основна черга приймання Пшениці
+            description: "Назва черги. Таблиця: Черги(pq_queue)"
+          in_queue:
+            type: integer
+            example: 5
+            description: Кількість транспортних засобів в черзі
+          in_territory:
+            type: integer
+            example: 0
+            description: Кількість транспортних засобів, що знаходяться на території
+          move_to_entry:
+            type: integer
+            example: 3
+            description: Кількість транспортних засобів направлених на в'їзд
+          waiting_for_registration:
+            type: integer
+            example: 1
+            description: Кількість транспортних засобів, що очікують реєстрації
+          total:
+            type: integer
+            example: 9
+            description: Кількість транспортних засобів загальна
+          in_queue_weight:
+            type: integer
+            example: 80
+            description: Вага по транспортним засобам в черзі
+          in_territory_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що знаходяться на території
+          move_to_entry_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що направлені на в'їзд
+          waiting_for_registration_weight:
+            type: integer
+            example: 10
+            description: Вага по транспортним засобам, що очікують реєстрації
+          total_weight:
+            type: integer
+            example: 90
+            description: Загальна вага по транспортним засобам
+    QueueStatisticsReportGoodsCategory:
+      description: Категорія вантажу (Звіт статистики черги)
+      type: array
+      items:
+        type: object
+        description: Категорія вантажу (Звіт статистики черги)
+        properties:
+          queues:
+              $ref: '#/components/schemas/QueueStatisticsReportQueue'
+          goods_category_name:
+            type: string
+            example: Пшениця
+            description: "Назва категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
+          goods_category_guid:
+            type: string
+            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
+            description: "Унікальний ідентифікатор категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
+          in_queue:
+            type: integer
+            example: 5
+            description: Кількість транспортних засобів в черзі
+          in_territory:
+            type: integer
+            example: 0
+            description: Кількість транспортних засобів, що знаходяться на території
+          move_to_entry:
+            type: integer
+            example: 3
+            description: Кількість транспортних засобів направлених на в'їзд
+          waiting_for_registration:
+            type: integer
+            example: 1
+            description: Кількість транспортних засобів, що очікують реєстрації
+          total:
+            type: integer
+            example: 9
+            description: Кількість транспортних засобів загальна
+          in_queue_weight:
+            type: integer
+            example: 80
+            description: Вага по транспортним засобам в черзі
+          in_territory_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що знаходяться на території
+          move_to_entry_weight:
+            type: integer
+            example: 0
+            description: Вага по транспортним засобам, що направлені на в'їзд
+          waiting_for_registration_weight:
+            type: integer
+            example: 10
+            description: Вага по транспортним засобам, що очікують реєстрації
+          total_weight:
+            type: integer
+            example: 90
+            description: Загальна вага по транспортним засобам

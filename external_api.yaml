@@ -1,9 +1,9 @@
-openapi: 3.0.1
+openapi: 3.0.0
 
 info:
   title: External API
   description: Колекція вузлів API для зовнішньої інтеграції з логістикою
-  version: 1.0.5.3
+  version: 1.0.5.4
 
 servers:
   - description: Development Server
@@ -22,6 +22,10 @@ tags:
     description: Поклажодавці профіля черги
   - name: 'T001 - Подорожній лист'
     description: Вузли для роботи водія із подорожніми листами
+  - name: ТТН
+    description: Вузли для роботи з товарно-транспортними накладними
+  - name: Статистика черги
+    description: Вузли для роботи з чергами та їх статистикою
 
 paths:
   /driver/races/status:
@@ -1894,6 +1898,65 @@ paths:
                     description: Статус обробки запиту
                     example: false
       x-codegen-request-body-name: payload
+  /waybill_template:
+    get:
+      tags:
+        - ТТН
+      summary: Макет ТТН
+      operationId: waybillTemplate
+      description: |
+        Отримання даних ТТН по ідентифікатору рейсу, наряду, заявцки і самої ТТН
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело даних (таблиця)
+          schema:
+            type: string
+            enum: [waybill, race, request, vehicles_register]
+        - in: query
+          name: guid
+          required: true
+          description: Унікальний ідентифікатор запису таблиці
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  url:
+                    type: string
+                    example: 'https:\/\/kernel-transithub.herokuapp.com\/ua\/waybill-template?source=race&guid=420ec8bd-6d72-f174-fa77-30d4dec5a48d'
+                    description: 'Посилання на шаблон ТТН'
+                  err_message:
+                    type: string
+                    example: 'Налаштування "Base URL транзітхаб клієнта" незаповнене! Зверніться в підтримку.'
+                    description: 'Налаштовується в ТХ адмінці (Адміністрування/Налаштування/Додатково)'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
   /race.set_travel_letter:
     put:
       tags: ['T001 - Подорожній лист']
@@ -1985,7 +2048,63 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
-
+  /pq_queues.get_from_race_statistics:
+    get:
+      tags:
+        - Статистика черги
+      summary: Статистика черги
+      operationId: PQueueGetFromRaceStatistics
+      description: |
+        Отримання даних по чергам доступним вказаному рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по чергам доступним вказаному рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  race_guid:
+                    type: string
+                    example: "947250ab-ba47-6b99-d35d-7c7a6e4d6669"
+                    description: Унікальний ідентифікатор рейсу
+                  to:
+                    type: object
+                    description: Дані по черзі розвантаження вказаного рейсу
+                    $ref: '#/components/schemas/PQueueStatisticsObject'
+                  from:
+                    type: object
+                    description: Дані по черзі навантаження вказаного рейсу
+                    $ref: '#/components/schemas/PQueueStatisticsObject'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadReques'
+    
 components:
   schemas:
     _StatusOnly:
@@ -2447,6 +2566,137 @@ components:
           type: string
           example: 22.04.2021 15:40:18
           description: Дата і час створення
+    PQueueStatisticsObject:
+      type: object
+      description: Дані статистики черги рейсу
+      properties:
+        queue_name:
+          type: string
+          example: Основна черга приймання соняшника
+          description: "Назва виду черги. Таблиця: черги (pq_queue)"
+        queue_guid:
+          type: string
+          example: 46044620-6f3f-4c0d-610a-e9e43baf388e"
+          description: "Унікальний ідентифікатор черги. Таблиця: черги (pq_queue)"
+        queue_profile_name:
+          type: string
+          example: Полтавський ОЕЗ
+          description: "Назва профіля черги. Таблиця: Профілі черги (pq_queue_profile)"
+        is_multiqueue:
+          type: integer
+          example: 1
+          description: |
+            "Ознака мультичерги. Вказує, чи профіль є мультичергою чи ні. 
+            Значення:1,0. Таблиця: Профілі черги (pq_queue_profile)"
+        queue_state_name_ua:
+          type: string
+          example: Не змінюється
+          description: "Стан черги українською. Таблиця: Стани черг (pq_queue_state)"
+        queue_state_name_ru:
+          type: string
+          example: Не изменяется
+          description: "Стан черги російською. Таблиця: Стани черг (pq_queue_state)"
+        queue_state_load:
+          type: string
+          example: not_change
+          description: "Стан черги код. Таблиця: Стани черг (pq_queue_state)"
+        direction:
+          type: string
+          enum: [loading, unloading]
+          example: unloading
+          description: "Напрямок черги (навантаження/розвантаження). Таблиця: черги (pq_queue)"
+        registration_status:
+          type: string
+          enum: [in_process, rejected, in_queue, drop, in_process_to_drop, dropped, in_process_shift, in_process_move_to_entry, waiting_for_registration]
+          example: in_queue
+          description: |
+            "Статус реєстрації в черзі (обробляється на чергу, відхилено, в черзі,
+            направлено на в'їзд, в процессі вибуття, вибув з черги, обробляється переміщення,
+            обробляється направлення на в'їзд, очікує реєстрації). 
+            Таблиця: статистика рейсу (race_statistics)"
+        in_queue_all:
+          type: boolean
+          example: false
+          description: |
+            Ознака, що вказує на наявність рейсу в поточній черзі. 
+            Розраховується по значенням ключа "registration_status", що не дорівнює таким значенням:
+            in_process, rejected, dropped, waiting_for_registration
+        active:
+          type: integer
+          example: 1
+          description: "Ознака активності черги. Значення:1,0. Таблиця: зведена статистика черги (pq_queue_temps)"
+        is_test:
+          type: integer
+          example: 1
+          description: "Ознака черги, що працює в тестовому режимі. Значення:1,0. Таблиця: зведена статистика черги (pq_queue_temps)"
+        number_in_queue:
+          type: integer
+          example: 13
+          description: "Порядковий номер рейсу в черзі. Таблиця: статистика рейсу (race_statistics)"
+        number_in_multiqueue:
+          type: integer
+          example: 10
+          description: "Порядковий номер рейсу в мультичерзі. Таблиця: статистика рейсу (race_statistics)"
+        verification_complete:
+          type: boolean
+          example: false
+          description: "Ознака завершення верифікації документів рейсу. Таблиця: статистика рейсу (race_statistics)"
+        verification_date:
+          type: string
+          example: "05.02.2020 15:59:38"
+          description: "Дата і час верифікації документів рейсу. Таблиця: статистика рейсу (race_statistics)"
+        race_waiting_time_ua:
+          type: string
+          example: 3 год
+          description: "Час очікування рейсу в черзі українською. Таблиця: статистика рейсу (race_statistics)"
+        race_waiting_time_ru:
+          type: string
+          example: 3 год
+          description: "Час очікування рейсу в черзі російською. Таблиця: статистика рейсу (race_statistics)"
+        race_waiting_date_ua:
+          type: string
+          example: "23.06.2021 20:04 (СЬОГОДНІ)"
+          description: "Дата і час вибуття рейсу з черги українською. Таблиця: статистика рейсу (race_statistics)"
+        race_waiting_date_ru:
+          type: string
+          example: "23.06.2021 20:04 (СЕГОДНЯ)"
+          description: "Дата і час вибуття рейсу з черги російською. Таблиця: статистика рейсу (race_statistics)"
+        queue_waiting_time_ua:
+          type: string
+          example: 3 год
+          description: "Час очікування останнього рейсу в черзі українською. Таблиця: статистика рейсу (race_statistics)"
+        queue_waiting_time_ru:
+          type: string
+          example: 3 год
+          description: "Час очікування останнього рейсу в черзі російською. Таблиця: статистика рейсу (race_statistics)"
+        queue_waiting_date_ua:
+          type: string
+          example: "23.06.2021 20:04 (СЬОГОДНІ)"
+          description: "Дата і час вибуття останнього рейсу з черги українською. Таблиця: статистика рейсу (race_statistics)"
+        queue_waiting_date_ru:
+          type: string
+          example: "23.06.2021 20:04 (СЕГОДНЯ)"
+          description: "Дата і час вибуття останнього рейсу з черги російською. Таблиця: статистика рейсу (race_statistics)"
+        vehicles_in_queue:
+          type: integer
+          example: 10
+          description: "Кількість транспортних засобів в черзі. Таблиця: зведена статистика черги (pq_queue_temps)"
+        registration_available:
+          type: boolean
+          example: true
+          description: "ТОР ознака можливості реєстрації в черзі. Таблиця: статистика рейсу (race_statistics)"
+        registration_availability_code:
+          type: string
+          example: "004"
+          description: "Код шаблону сповіщення при забороні реєстрації в черзі. Таблиця: Шаблони текстів (text_template)"
+        registration_availability_text_ua:
+          type: string
+          example: "Онлайн-реєстрація в черзі буде доступна після виїзду авто зі складу навантаження. Цей статус оновлюється автоматично."
+          description: "Текст шаблону сповіщення при забороні реєстрації в черзі українською. Таблиця: Шаблони текстів (text_template)"
+        registration_availability_text_ru:
+          type: string
+          example: "Онлайн-регистрация в очереди будет доступна после выезда авто со склада погрузки. Этот статус обновляется автоматически."
+          description: "Текст шаблону сповіщення при забороні реєстрації в черзі російською. Таблиця: Шаблони текстів (text_template)"
     _UserisNotAuthorized:
       type: object
       properties:
