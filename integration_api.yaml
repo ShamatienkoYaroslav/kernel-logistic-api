@@ -1,10 +1,1042 @@
-openapi: 3.0.1
+openapi: 3.0.0
 
 info:
-  title: Integration API
-  description: Колекція вузлів API для зовнішньої інтеграції внутрішніх та зовнішніх клієнтів з логістикою
+  title: 'Integration API'
+  description: 'Колекція вузлів API для зовнішньої інтеграції внутрішніх та зовнішніх клієнтів з логістикою'
   version: 1.0.0
 
 servers:
-  - description: Development Server
+  - description: 'Development Server'
     url: https://devkernel.apex.rest:8443/ords/kernel_logistic/i/v1
+
+tags:
+  - name: 'Підписка'
+    description: 'Вузли для роботи з підписко'
+
+paths:
+  /subscription:
+    get:
+      tags:
+        - 'Підписка'
+      summary: Отримання даних по підписці
+      operationId: SubscriptionGet
+      description: |
+        Повертає дані підписки по вхідних параметрах. Дані підписки визначаються кодом вузла обміну.
+      parameters:
+        - in: query
+          name: token
+          description: Токен вузла обміну
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: node_code
+          description: Код вузла обміну
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          description: Початок періоду відбору
+          required: false
+          schema:
+            type: string
+            example: '14.06.2021 13:26:33'
+        - in: query
+          name: date_to
+          description: Кінець періоду відбору
+          required: false
+          schema:
+            type: string
+            example: '14.06.2021 14:26:33'
+        - in: query
+          name: limit
+          description: Oбмеження кількості елементів масиву
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: offset
+          description: Відступ по кількості елементів масиву
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус обробки запиту
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/Accreditation'
+                        - $ref: '#/components/schemas/VehiclesRegister'
+                        - $ref: '#/components/schemas/Request'
+                        - $ref: '#/components/schemas/TravelLetter'
+    post:
+      tags:
+        - 'Підписка'
+      summary: Зняття даних з підписки
+      operationId: SubscriptionPost
+      description: |
+        Зняття отриманих даних з підписки.
+      parameters:
+        - in: query
+          name: token
+          description: Токен вузла обміну
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: node_code
+          description: Код вузла обміну
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для зняття запитів з підписки
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Patch'
+
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус обробки запиту
+components:
+  schemas:
+    Patch:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: d520e5ac-10d4-39ba-1c66-16c1146fb3d4
+          description: Унікальний ідентифікатор запису
+    Accreditation:
+      type: object
+      properties:
+        status:
+          type: string
+          example: changed
+          description: 'статус запису підписки (створено, змінено, видалено)'
+        guid:
+          type: string
+          example: d520e5ac-10d4-39ba-1c66-16c1146fb3d4
+          description: Унікальний ідентифікатор запису
+        state_guid:
+          type: string
+          example: d520e5ac-10d4-39ba-1c66-16c1146fb3d4
+          description: Унікальний ідентифікатор стану акредитації
+        kind:
+          type: string
+          example: add
+          description: 'Вид запиту на акредитацію (add, remove)'
+        created_at:
+          type: string
+          example: '03.06.2020 10:34:37'
+          description: Дата створення запиту
+        request_status:
+          type: string
+          example: done
+          description: 'Статус запиту (draft-чорновик, ready-готовий, done-відправлено, cancelled - відхилено)'
+        processing_status:
+          type: string
+          example: in_progress
+          description: 'Статус обробки запиту (in_progress - обробляється, cancelled - неакредитовано, confirmed - акредитовано)'
+        table_type:
+          type: string
+          example: th_vehicles
+          description: 'Тип таблиці (th_vehicles - транспортні засоби, th_drivers - водії)'
+        comments:
+          type: string
+          description: Коментар
+        driver_guid:
+          type: string
+          example: 0da3a014-d9d4-490a-f6da-b799189c1056
+          description: Унікальний ідентифікатор водія
+        driver_name:
+          type: string
+          example: Безштанько Володмимир Григорович
+          description: ПІБ водія
+        driver_phone:
+          type: string
+          example: '380987013678'
+          description: Номер телефону
+        driver_cert_serial_number_slug:
+          type: string
+          example: ГФIЦ23K25
+          description: Посвідчення водія
+        vehicle_number_slug:
+          type: string
+          example: BB2222BB
+          description: Державний номер авто (слаг)
+        vehicle_number:
+          type: string
+          example: BB2222BB
+          description: Державний номер авто
+        vehicle_guid:
+          type: string
+          example: bdd545c3-acfa-4ca9-5e87-b69de7863e11
+          description: Унікальний ідентифікатор авто
+        vehicle_type:
+          type: string
+          example: ГРУЗ АВТ
+          description: Тип авто
+        vehicle_subtype:
+          type: string
+          example: КОНТЕЙНЕРОВОЗ
+          description: Підтип авто
+        vehicle_brand:
+          type: string
+          example: Mersedes
+          description: Марка авто
+        vehicle_model:
+          type: string
+          example: GL231
+          description: Модель авто
+        vehicle_tech_passport:
+          type: string
+          example: '698865432'
+          description: Свідоцтво про реєстрацію (серія номер) (Техпаспорт ТС)
+        vehicle_tech_passport_files:
+          type: array
+          items:
+            type: string
+            example: 'https://en.wikipedia.org/wiki/SharePoint'
+            description: Посилання на файл SharePoint
+        vehicle_width:
+          type: string
+          example: '3'
+          description: 'Габаритна ширина ТЗ, м'
+        vehicle_length:
+          type: string
+          example: '5'
+          description: 'Габаритна довжина ТЗ, м'
+        vehicle_height:
+          type: string
+          example: '3'
+          description: 'Габаритна висота ТЗ, м'
+        belonging_type:
+          type: string
+          example: ownership
+          description: 'Приналежність (ownership/rent:власність/оренда)'
+        contract_number:
+          type: string
+          example: ЕП-24353535000035
+          description: Номер договору
+        contract_from_date:
+          type: string
+          example: '12.06.2018 00:00:00'
+          description: Дата договору з
+        contract_to_date:
+          type: string
+          example: '12.06.2018 00:00:00'
+          description: Дата договору по
+        company_name:
+          type: string
+          example: Transithub Drivers
+          description: Назва акредитуючої компанії
+        company_guid:
+          type: string
+          example: Transithub Drivers
+          description: Унікальний ідентифікатор акредитуючої компанії
+        company_edrpou:
+          type: string
+          example: 895676666
+          description: Код ЄДРПОУ акредитуючої компанії
+        organization_name:
+          type: string
+          example: Transithub Drivers ( махновці )
+          description: Назва акредитуючої організації
+        organization_guid:
+          type: string
+          example: d83c835b-ec42-12c2-d600-86e7a2c35798
+          description: Унікальний ідентифікатор акредитуючої організації
+        organization_edrpou:
+          type: string
+          example: '88001235899'
+          description: Код ЄДРПОУ акредитуючої організації
+        carrier_company_name:
+          type: string
+          example: Transithub Drivers
+          description: Назва компанії перевізника
+        carrier_company_guid:
+          type: string
+          example: Transithub Drivers
+          description: Унікальний ідентифікатор компанії перевізника
+        carrier_company_edrpou:
+          type: string
+          example: '88001235899'
+          description: Код ЄДРПОУ компанії перевізника
+        carrier_organization_name:
+          type: string
+          example: Transithub Drivers
+          description: Назва організації перевізника
+        carrier_organization_guid:
+          type: string
+          example: d83c835b-ec42-12c2-d600-86e7a2c35798
+          description: Унікальний ідентифікатор організації перевізника
+        carrier_organization_edrpou:
+          type: string
+          example: '88001235899'
+          description: Код ЄДРПОУ організації перевізника
+        user_name:
+          type: string
+          example: Пупкін В. В.
+          description: ПІБ автора запиту
+        user_guid:
+          type: string
+          example: f3a7077a-cdf7-eefa-fb67-8e441544713d
+          description: Унікальний ідентифікатор автора запиту
+        processing_date:
+          type: string
+          example: '03.06.2020 10:36:36'
+          description: Дата обробки
+        dispatch_date:
+          type: string
+          example: '03.06.2020 10:36:36'
+          description: Дата відправки
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              last_update:
+                type: string
+                example: '03.06.2020 10:36:36'
+                description: Дата створення/оновлення
+              mime_type:
+                type: string
+                example: jpg
+                description: Медіа тип файлу
+              source:
+                type: string
+                example: th
+                description: Джерело створення
+              transfer_date:
+                type: string
+                example: '09.06.2020 09:44:20'
+                description: Дата передачі
+              transfer_state:
+                type: string
+                example: to_transfer
+                description: Стан передачі
+              sharepoint_url:
+                type: string
+                example: 'https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration'
+                description: Посилання на шерпоінт
+              file_guid:
+                type: string
+                example: d83c835b-ec42-12c2-d600-86e7a2c35798
+                description: Унікальний ідентифікатор запису
+    VehiclesRegister:
+      type: object
+      properties:
+        status:
+          type: string
+          example: changed
+          description: 'Код події (changed, deleted)'
+        VehiclesRegister_status:
+          type: string
+          example: New
+          description: Статус наряду
+        guid:
+          type: string
+          example: cfbdfb94-5723-cafa-b4ff-d660130cd12a
+          description: guid наряду
+        guid_client:
+          type: string
+          example: cfbdfb94-5723-cafa-b4ff-d660130cd12a
+          description: клієнтський guid наряду
+        created_at:
+          type: string
+          example: '09.06.2020 09:44:20'
+          description: Дата створення
+        created_at_utc:
+          type: string
+          example: 09-JUN-20
+          description: Дата створення UTC
+        date_from:
+          type: string
+          example: '09.06.2020 09:00:00'
+          description: Дата навантаження (початок)
+        date_from_utc:
+          type: string
+          example: 09-JUN-20
+          description: Дата навантаження (початок) UTC
+        date_to:
+          type: string
+          example: '09.06.2020 15:00:00'
+          description: Дата навантаження (закінчення)
+        date_to_utc:
+          type: string
+          example: 09-JUN-20
+          description: Дата навантаження (закінчення) UTC
+        trips_quantity:
+          type: integer
+          example: 1
+          description: Кількість поїздок
+        phone:
+          type: string
+          example: '380681234567'
+          description: Телефон
+        phone_bot:
+          type: string
+          example: '380681234567'
+          description: Телефон Бот
+        driver_guid:
+          type: string
+          example: d83c835b-ec42-12c2-d600-86e7a2c35798
+          description: guid водія
+        driver_fullname:
+          type: string
+          example: Шевченко Олег Петрович
+          description: ПІБ водія
+        driver_cert_serial_number:
+          type: string
+          example: ДД4444444
+          description: Водійське посвідчення
+        driver_pass_number:
+          type: string
+          example: ДД789456
+          description: Паспорт водія
+        driver_phone:
+          type: string
+          example: '3805909876543'
+          description: Телефон водія
+        vehicle_guid:
+          type: string
+          example: 083c835b-ec42-12c2-d600-86e7a2c35798
+          description: Guid ТС
+        vehicle_number:
+          type: string
+          example: AA1234BB
+          description: Номер ТС
+        vehicle_tech_passport:
+          type: string
+          example: ASA123123
+          description: Технічний паспорт ТС
+        vehicle_brand:
+          type: string
+          example: Mersedes
+          description: Марка ТС
+        vehicle_model:
+          type: string
+          example: А750
+          description: Модель ТС
+        trailer_guid:
+          type: string
+          example: 044c835b-ec42-12c2-d600-86e7a2c35798
+          description: Guid Причіп
+        trailer_number:
+          type: string
+          example: А75044
+          description: Номер Причіп
+        trailer_tech_passport:
+          type: string
+          example: А75023234
+          description: Технічний паспорт Причіп
+        trailer_brand:
+          type: string
+          example: Кроне
+          description: Марка Причіп
+        trailer_model:
+          type: string
+          example: '4450'
+          description: Модель Причіп
+        request_guid:
+          type: string
+          example: 044c835b-ec42-12c2-d600-86e7a2c35798
+          description: Guid заявки
+        request_guid_client:
+          type: string
+          example: 8B6C5D7D-838B-4EE1-B727-CEFB04D8126C
+          description: Клієнтський Guid заявки
+        request:
+          type: string
+          example: Z_051759
+          description: Номер заявки
+        th_client_guid:
+          type: string
+          example: d7a651df-d3d8-733b-66a3-cea057e168f6
+          description: Guid Клієнта TransitHub
+        client_name:
+          type: string
+          example: Кернел Трейд
+          description: Назва клієнта
+        schedule_date:
+          type: string
+          example: '11.06.2020 00:00:00'
+          description: Дата завантаження
+        schedule_date_utc:
+          type: string
+          example: 11-JUN-20
+          description: Дата завантаження UTC
+        th_carrier_guid:
+          type: string
+          example: d7a651df-d3d8-733b-66a3-cea057e168f6
+          description: Guid Перевізника TransitHub
+        carrier_name:
+          type: string
+          example: МИКОЛАЇВВТОРМЕТ ПП
+          description: Назва перевізника
+        carrier_edrpou:
+          type: string
+          example: '11051759'
+          description: ЄДРПОУ перевізника
+        agreement_number:
+          type: string
+          example: '51759'
+          description: Номер договору перевезення
+        agreement_date:
+          type: string
+          example: '11.06.2020 00:00:00'
+          description: Дата договору перевезення
+        agreement_date_utc:
+          type: string
+          example: 11-JUN-20
+          description: Дата договору перевезення UTC
+        logist_name:
+          type: string
+          example: Оковитий Олексій
+          description: Логіст
+        logist_phone:
+          type: string
+          example: '380671231231'
+          description: Логіст телефон
+        logist_email:
+          type: string
+          example: logist@company.com
+          description: Логіст пошта
+        dispetcher_group:
+          type: string
+          example: K
+          description: Група диспетчера
+        rate:
+          type: string
+          example: '309.7'
+          description: 'Тариф, грн/т'
+        quantity_t:
+          type: integer
+          example: 33
+          description: Кількість в тонах
+        quantity_vehicles:
+          type: integer
+          example: 3
+          description: Кількість ТС
+        vehicles_limitation:
+          type: integer
+          example: 0
+          description: Обмеження по ТС (1/0)
+        request_number:
+          type: string
+          example: '309'
+          description: Номер заявки
+        info:
+          type: string
+          example: додаткова інформація
+          description: Інформація
+        comment:
+          type: string
+          example: текст коментаря
+          description: Коментар
+        title:
+          type: string
+          example: Перевезти Соняшник з Колюхів в Колюхів
+          description: Заголовок
+        description:
+          type: string
+          example: 'Заявка 11576 від 09.06.2020 09:42:05 перевезти Соняшник з Колюхів в Колюхів'
+          description: Опис
+        short_description:
+          type: string
+          example: 'Заявка 11576 від 09.06.2020 09:42:05'
+          description: Короткий опис
+        route:
+          type: string
+          example: 'https:\/\/www.google.com.ua\/maps\/dir\/48.357331,34.124651\/48.51495,32.190519\/@48.4931694,32.895112,10z\/data=!4m9!4m8!1m5!3m4!1m2!1d32.6983748!2d48.729704!3s0x40d08df0755ea8e9:0x485c60eacc6ad586!1m0!3e0'
+          description: Маршрут
+        distance:
+          type: integer
+          example: 133
+          description: Відстань
+        travel_time:
+          type: integer
+          example: 123
+          description: Час в дорозі
+        goods_guid:
+          type: string
+          example: СОНЯШНИК
+          description: Вантаж Guid
+        goods_name:
+          type: string
+          example: Соняшник
+          description: Вантаж
+        goods_name_ru:
+          type: string
+          example: Подсолнечник
+          description: Груз
+        order_:
+          type: string
+          example: А123123
+          description: Замовлення
+        point_from_koatuu:
+          type: string
+          example: '1222055700'
+          description: Пункт навантаження КОАТУУ
+        point_from_name:
+          type: string
+          example: Божедарівка
+          description: Пункт навантаження Назва
+        point_from_name_ru:
+          type: string
+          example: Божедаровка
+          description: Пункт навантаження Название
+        point_from_description:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Криничанський район, смт. Божедарівка'
+          description: Пункт навантаження Опис
+        point_from_description_ru:
+          type: string
+          example: 'Украина, Днепропетровская обл., Криничанский район, пгт. Божедаровка'
+          description: Пункт навантаження Описание
+        point_to_koatuu:
+          type: string
+          example: '1222055700'
+          description: Пункт розвантаження КОАТУУ
+        point_to_name:
+          type: string
+          example: Божедарівка
+          description: Пункт розвантаження Назва
+        point_to_name_ru:
+          type: string
+          example: Божедаровка
+          description: Пункт розвантаження Название
+        point_to_description:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Криничанський район, смт. Божедарівка'
+          description: Пункт розвантаження Опис
+        point_to_description_ru:
+          type: string
+          example: 'Украина, Днепропетровская обл., Криничанский район, пгт. Божедаровка'
+          description: Пункт розвантаження Описание
+        warehouse_from_code:
+          type: string
+          example: БОЖЕДАРОВС
+          description: Склад навантаження Код
+        warehouse_from_class_code:
+          type: string
+          example: '1222055700001'
+          description: Склад навантаження Код Класифікатору
+        warehouse_from_name:
+          type: string
+          example: Божедарівський елеватор
+          description: Склад навантаження Назва
+        warehouse_from_address:
+          type: string
+          example: вулиця Виконкомівська 1
+          description: Склад навантаження Адреса
+        warehouse_from_schedule_from:
+          type: string
+          example: '8:00:00'
+          description: Склад навантаження Період роботи складу з
+        warehouse_from_schedule_to:
+          type: string
+          example: '18:00:00'
+          description: Склад навантаження Період роботи складу по
+        warehouse_to_code:
+          type: string
+          example: БОЖЕДАРОВС
+          description: Склад розвантаження Код
+        warehouse_to_class_code:
+          type: string
+          example: '1222055700001'
+          description: Склад розвантаження Код Класифікатору
+        warehouse_to_name:
+          type: string
+          example: Божедарівський елеватор
+          description: Склад розвантаження Назва
+        warehouse_to_address:
+          type: string
+          example: вулиця Виконкомівська 1
+          description: Склад розвантаження Адреса
+        warehouse_to_schedule_from:
+          type: string
+          example: '8:00:00'
+          description: Склад розвантаження Період роботи складу з
+        warehouse_to_schedule_to:
+          type: string
+          example: '18:00:00'
+          description: Склад розвантаження Період роботи складу по
+      description: Наряд
+    Request:
+      type: object
+      properties:
+        status:
+          type: string
+          example: changed
+          description: 'Код події (changed, deleted)'
+        guid:
+          type: string
+          example: cfbdfb94-5723-cafa-b4ff-d660130cd12a
+          description: guid
+        number:
+          type: string
+          example: '309'
+          description: Номер заявки
+        date:
+          type: string
+          example: '09.06.2020 09:44:20'
+          description: Дата створення
+        client_number:
+          type: string
+          example: Z_049003
+          description: Номер клієнта
+        schedule_date:
+          type: string
+          example: '11.06.2020 00:00:00'
+          description: Дата завантаження
+        carrier_name:
+          type: string
+          example: МИКОЛАЇВВТОРМЕТ ПП
+          description: Назва перевізника
+        carrier_edrpou:
+          type: string
+          example: '11051759'
+          description: ЄДРПОУ перевізника
+        client_name:
+          type: string
+          example: Кернел Трейд
+          description: Назва клієнта
+        logist_name:
+          type: string
+          example: Оковитий Олексій
+          description: Логіст
+        logist_phone:
+          type: string
+          example: '380671231231'
+          description: Логіст телефон
+        logist_email:
+          type: string
+          example: logist@company.com
+          description: Логіст пошта
+        manager_name:
+          type: string
+          example: Оковитий Олексій
+          description: Менеджер
+        manager_phone:
+          type: string
+          example: '380671231231'
+          description: Менеджер телефон
+        agreement_number:
+          type: string
+          example: '51759'
+          description: Номер договору перевезення
+        agreement_date:
+          type: string
+          example: '11.06.2020 00:00:00'
+          description: Дата договору перевезення
+        agreement_date_utc:
+          type: string
+          example: 11-JUN-20
+          description: Дата договору перевезення UTC
+        dispatcher_group:
+          type: string
+          example: K
+          description: Група диспетчера
+        rate:
+          type: string
+          example: '309.7'
+          description: 'Тариф, грн/т'
+        quantity_t:
+          type: integer
+          example: 33
+          description: Кількість в тонах
+        quantity_vehicles:
+          type: integer
+          example: 3
+          description: Кількість ТС
+        vehicles_limitation:
+          type: integer
+          example: 0
+          description: Обмеження по ТС (1/0)
+        info:
+          type: string
+          example: додаткова інформація
+          description: Інформація
+        comment:
+          type: string
+          example: текст коментаря
+          description: Коментар
+        title:
+          type: string
+          example: Перевезти Соняшник з Колюхів в Колюхів
+          description: Заголовок
+        description:
+          type: string
+          example: 'Заявка 11576 від 09.06.2020 09:42:05 перевезти Соняшник з Колюхів в Колюхів'
+          description: Опис
+        short_description:
+          type: string
+          example: 'Заявка 11576 від 09.06.2020 09:42:05'
+          description: Короткий опис
+        route:
+          type: string
+          example: 'https:\/\/www.google.com.ua\/maps\/dir\/48.357331,34.124651\/48.51495,32.190519\/@48.4931694,32.895112,10z\/data=!4m9!4m8!1m5!3m4!1m2!1d32.6983748!2d48.729704!3s0x40d08df0755ea8e9:0x485c60eacc6ad586!1m0!3e0'
+          description: Маршрут
+        distance:
+          type: integer
+          example: 133
+          description: Відстань
+        travel_time:
+          type: integer
+          example: 123
+          description: Час в дорозі
+        goods_code:
+          type: string
+          example: СОНЯШНИК
+          description: Вантаж Guid
+        goods_name:
+          type: string
+          example: Соняшник
+          description: Вантаж
+        goods_cost:
+          type: integer
+          example: 10700
+          description: Вартість
+        point_from_koatuu:
+          type: string
+          example: '1222055700'
+          description: Пункт навантаження КОАТУУ
+        point_from_name:
+          type: string
+          example: Божедарівка
+          description: Пункт навантаження Назва
+        point_from_description:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Криничанський район, смт. Божедарівка'
+          description: Пункт навантаження Опис
+        point_to_koatuu:
+          type: string
+          example: '1222055700'
+          description: Пункт розвантаження КОАТУУ
+        point_to_name:
+          type: string
+          example: Божедарівка
+          description: Пункт розвантаження Назва
+        point_to_description:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Криничанський район, смт. Божедарівка'
+          description: Пункт розвантаження Опис
+        warehouse_from_guid:
+          type: string
+          example: 1fc3512c-de09-9966-2bfa-379a09525e1e
+          description: Склад навантаження guid
+        warehouse_from_name:
+          type: string
+          example: Божедарівський елеватор
+          description: Склад навантаження Назва
+        warehouse_from_address:
+          type: string
+          example: вулиця Виконкомівська 1
+          description: Склад навантаження Адреса
+        warehouse_from_koatuu:
+          type: string
+          example: '3520883801'
+          description: Склад навантаження КОАТУУ
+        warehouse_to_guid:
+          type: string
+          example: 1fc3512c-de09-9966-2bfa-379a09525e1e
+          description: Склад розвантаження guid
+        warehouse_to_koatuu:
+          type: string
+          example: '3520883801'
+          description: Склад розвантаження КОАТУУ
+        warehouse_to_name:
+          type: string
+          example: Божедарівський елеватор
+          description: Склад розвантаження Назва
+        warehouse_to_address:
+          type: string
+          example: вулиця Виконкомівська 1
+          description: Склад розвантаження Адреса
+      description: Заявка
+    TravelLetter:
+      type: object
+      properties:
+        status:
+          type: string
+          example: 'sent'
+          description: 'Статус подорожнього листа'
+        mileage_with_cargo:
+          type: number
+          example: 20
+          description: 'Пробіг із вантажем, км'
+        mileage_to_loading_point:
+          type: number
+          example: 20
+          description: 'Пробіг до пункту навантаження, км'
+        mileage_empty_to_apt:
+          type: number
+          example: 20
+          description: 'Пробіг пустим до АТП, км'
+        departure_datetime:
+          type: string
+          example: '14.06.2021 13:26:33'
+          description: 'Дата та час виїзду'
+        departure_remains:
+          type: number
+          example: 200
+          description: 'Залишок пального при виїзді'
+        return_datetime:
+          type: string
+          example: '14.06.2021 13:15:00'
+          description: 'Дата та час повернення'
+        return_remains:
+          type: number
+          example: 508
+          description: 'Залишок пального при поверненні'
+        created_at:
+          type: string
+          example: '04.06.2021 17:38:00'
+          description: 'Дата та час створення'
+        driver_name:
+          type: string
+          example: 'Мельник В`ячеслав Степанович'
+          description: 'ПІП водія'
+        driver_cert:
+          type: string
+          example: 'ВАУ999999'
+          description: 'Посвідчення водія'
+        phone:
+          type: string
+          example: '380999999999'
+          description: 'Телефон водія'
+        truck_number:
+          type: string
+          example: 'BNM66666'
+          description: 'Реєстрацій номер вантажівки'
+        truck_brand:
+          type: string
+          example: 'Merceron'
+          description: 'Марка вантажівки'
+        trailer_number:
+          type: string
+          example: 'BNM66666'
+          description: 'Реєстрацій номер причіпу'
+        trailer_brand:
+          type: string
+          example: 'Merceron'
+          description: 'Марка причіпу'
+        goods:
+          type: string
+          example: 'Соняшник високоолеїновий'
+          description: 'Вантаж'
+        point_from_name:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+          description: 'Пункт завантаження'
+        point_to_name:
+          type: string
+          example: 'Україна, Кіровоградська обл., м. Кропивницький'
+          description: 'Пункт розвантаження'
+        point_from_address:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+          description: 'Адреса пункту завантаження'
+        point_to_address:
+          type: string
+          example: 'Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 53'
+          description: 'Адреса пункту розвантаження'
+        distance:
+          type: number
+          example: 170
+          description: 'Відстань, км'
+        consignor_name:
+          type: string
+          example: 'Відправник_1'
+          description: 'Відправник'
+        consignor_edrpou:
+          type: string
+          example: '34270933'
+          description: 'ЄДРПОУ відправника'
+        consignee_name:
+          type: string
+          example: 'Отримувач_1'
+          description: 'Отримувач'
+        consignee_edrpou:
+          type: string
+          example: '34334842'
+          description: 'ЄДРПОУ отримувача'
+        carrier_name:
+          type: string
+          example: 'ФОП Мельник'
+          description: 'Перевізник'
+        carrier_edrpou:
+          type: string
+          example: '3308479112'
+          description: 'ЄДРПОУ перевізника'
+        customer_name:
+          type: string
+          example: 'КернелТрейд'
+          description: 'Замовник'
+        customer_edrpou:
+          type: string
+          example: '31454383'
+          description: 'ЄДРПОУ замовника'
+        waybill_date:
+          type: string
+          example: '04.06.2021 00:00:00'
+          description: 'Дата ТТН'
+        waybill_number:
+          type: string
+          example: 'ттн-007'
+          description: 'Номер ТТН'
+        netto_out:
+          type: number
+          example: 20
+          description: Вага нетто відправника, т
+        netto_in:
+          type: number
+          example: 20
+          description: Вага нетто отримувача, т
+        gross_out:
+          type: number
+          example: 30
+          description: Вага брутто відправника, т
+        gross_in:
+          type: number
+          example: 30
+          description: Вага брутто отримувача, т
+        tar_out:
+          type: number
+          example: 10
+          description: Вага тари відправника, т
+        tar_in:
+          type: number
+          example: 10
+          description: Вага тари отримувача, т
