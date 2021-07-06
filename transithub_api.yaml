@@ -4507,6 +4507,10 @@ paths:
                     type: integer
                     example: 21
                     description: 'Перевезено. Кількість перевезеного вантажу (тонн брутто)'
+                  created_at:
+                    type: string
+                    example: '14.06.2021 13:26:33'
+                    description: 'Дата створення рейсу'
                   
         400:
           description: 'Поганий запит'
