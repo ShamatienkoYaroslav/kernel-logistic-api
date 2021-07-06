@@ -4399,10 +4399,18 @@ paths:
                     type: string
                     example: 'BNM66666'
                     description: 'Номер автомобіля'
+                  vehicle_brand:
+                    type: string
+                    example: 'BMW'
+                    description: 'Марка автомобіля'
                   trailer_number:
                     type: string
                     example: 'BG555555'
                     description: 'Номер причепа'
+                  trailer_brand:
+                    type: string
+                    example: 'BMW'
+                    description: 'Марка причепа'
                   driver_fullname:
                     type: string
                     example: 'Вау Вау Ваувочвич'
@@ -4483,10 +4491,23 @@ paths:
                     type: string
                     example: 'Україна, Кіровоградська обл., м. Кропивницький'
                     description: 'Пункт розвантаження (укр)'
-                  point_to_name_ru:
+                  quantity:
                     type: string
-                    example: 'Украина, Кировоградская обл., г. Кропивницкий'
-                    description: 'Пункт розвантаження (рус)'
+                    example: '15'
+                    description: 'Кількість вантажу в тоннах, що потрібно перевезти.'
+                  full_address_from:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, Пархоменка 61'
+                    description: 'Маршрут руху - звідки. Вказує нові назви пунктів, звідки здійснено перевезення вантажу, згідно з рядком "Пункт навантаження" ТТН'
+                  full_address_to:
+                    type: string
+                    example: 'Україна, Кіровоградська обл., м. Кропивницький, Пархоменка 61'
+                    description: 'Маршрут руху - куди. Вказує нові назви пунктів, куди здійснено перевезення вантажу, згідно з рядком "Пункт розвантаження" ТТН'
+                  consignee_gross:
+                    type: integer
+                    example: 21
+                    description: 'Перевезено. Кількість перевезеного вантажу (тонн брутто)'
+                  
         400:
           description: 'Поганий запит'
           content:
