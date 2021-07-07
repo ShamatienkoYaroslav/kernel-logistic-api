@@ -849,6 +849,10 @@ paths:
                   type: string
                   example: '0999323388'
                   description: 'Код ЄДРПОУ замовника. Строка 10 символів'
+                harvest_year:
+                  type: string
+                  example: '2020'
+                  description: 'Рік врожаю'
                 cargo_owner_guid:
                   type: string
                   example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
