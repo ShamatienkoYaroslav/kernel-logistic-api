@@ -22,6 +22,8 @@ tags:
     description: Поклажодавці профіля черги
   - name: 'T001 - Подорожній лист'
     description: Вузли для роботи водія із подорожніми листами
+  - name: 'T002 - Рейси'
+    description: Вузли для роботи з рейсами
   - name: ТТН
     description: Вузли для роботи з товарно-транспортними накладними
   - name: Статистика черги
@@ -774,6 +776,474 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFound'
+  /races:
+    post:
+      tags:
+        - 'T002 - Рейси'
+      summary: Створення рейсу водієм/по наряду
+      description: Точка створення рейсу водієм/по наряду
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description:
+                    'Унікальний ідентифікатор рейсу. Використовується для оновлення даних в існуючому рейсі.
+                    Таблиця: Рейси (races)'
+                vehicles_register_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description:
+                    'Унікальний ідентифікатор наряду, на підставі якого буде створено рейс.
+                    Таблиця: Наряди (request_vehicles_register)'
+                request:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
+                driver_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор водія. Таблиця: ТХ водії (th_drivers)'
+                driver_phone:
+                  type: string
+                  example: 380673222858
+                  description: Номер телефону водія
+                driver_phone_additional:
+                  type: string
+                  example: 380676125881
+                  description: Додатковий номер телефону водія
+                driver_full_name:
+                  type: string
+                  example: Поташнік Василь Михайлович
+                  description: ПІБ водія. Використовується клієнтом ТХ
+                bot_driver_fullname:
+                  type: string
+                  example: Поташнік Василь Михайлович
+                  description: ПІБ водія. Використовується клієнтом БОТа
+                driver_cert:
+                  type: string
+                  example: КИА 64932
+                  description: Посвідчення водія. Використовується клієнтом ТХ
+                bot_driver_cert:
+                  type: string
+                  example: КИА 64932
+                  description: Посвідчення водія. Використовується клієнтом БОТа
+                vehicle_number:
+                  type: string
+                  example: BI7886CA
+                  description: Державний номер транспортного засобу
+                trailer_number:
+                  type: string
+                  example: АА0086CA
+                  description: Державний номер причепу
+                no_trailer:
+                  type: integer
+                  example: 1
+                  description: Ознака наявності причепа. 1 - без причепу, 0 - з причепом.
+                point_from_koatuu:
+                  type: string
+                  example: '5310100000'
+                  description: Код КОАТУУ пункту навантаження. Використовується клієнтом ТХ
+                point_to_koatuu:
+                  type: string
+                  example: '5310100000'
+                  description: Код КОАТУУ пункту розвантаження. Використовується клієнтом ТХ
+                point_from:
+                  type: string
+                  example: '5310100000'
+                  description: Код КОАТУУ пункту навантаження. Використовується клієнтом БОТа
+                point_to:
+                  type: string
+                  example: '5310100000'
+                  description: Код КОАТУУ пункту розвантаження. Використовується клієнтом БОТа
+                warehouse_from_code:
+                  type: string
+                  example: '5310100000008'
+                  description: Код класифікатора складу навантаження.
+                warehouse_to_code:
+                  type: string
+                  example: '5310100000001'
+                  description: Код класифікатора складу розвантаження.
+                carrier_name:
+                  type: string
+                  example: ТОВ Кернел Трейд
+                  description: Назва організації перевізника.
+                carrier_guid:
+                  type: string
+                  example: ТОВ Кернел Трейд
+                  description: 'Унікальний ідентифікатор організації перевізника. Таблиця: ТХ організації (th_organisations)'
+                carrier_contragent_guid:
+                  type: string
+                  example: ТОВ Кернел Трейд
+                  description: 'Унікальний ідентифікатор перевізника. Таблиця: Контрагенти (contragent)'
+                sender_name:
+                  type: string
+                  example: ТОВ Кернел Трейд
+                  description: Назва відправника
+                for_owner_name:
+                  type: string
+                  example: ТОВ Кернел Трейд
+                  description: Назва поклажодавця
+                for_owner_code:
+                  type: string
+                  example: 5310100006
+                  description: Код ЄДРПОУ поклажодавця
+                for_owner_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор перевізника. Таблиця: Поклажодавці (pq_cargo_owner)'
+                direction:
+                  type: string
+                  enum: [loading, unloading]
+                  description: Напрямок (навантаження/розвантаження)
+                distance:
+                  type: integer
+                  example: 750
+                  description: Відстань
+                travel_time:
+                  type: integer
+                  example: 600
+                  description: Час подорожі
+                channel:
+                  type: string
+                  example: telegram
+                  description: Канал
+                channel_chat:
+                  type: string
+                  example: 87158640
+                  description: ID чату
+                channel_user:
+                  type: string
+                  example: Ihor Neshyk
+                  description: Користувач чату
+                slack_channel_id:
+                  type: string
+                  example: 0001
+                  description: ID каналу слак
+                waybill:
+                  type: string
+                  example: 210329-00000099
+                  description: Номер ТТН рейсу. Використовується клієнтом БОТа
+                waybill_date:
+                  type: string
+                  example: 09.04.2021 15:21:08
+                  description: Дата ТТН рейсу
+                quantity:
+                  type: string
+                  example: 09.04.2021 15:21:08
+                  description: Орієнтовний тоннаж по ТТН, тонн
+                waybill_netto_in:
+                  type: integer
+                  example: 6000
+                  description: Вага нетто отримувача, кг
+                waybill_netto_out:
+                  type: integer
+                  example: 6000
+                  description: Вага нетто відправника, кг
+                waybill_tara:
+                  type: integer
+                  example: 2000
+                  description: Вага тари відправника, кг
+                no_waybill_weight:
+                  type: integer
+                  example: 0
+                  description: Ознака невказаної ваги по ТТН. 1 - вагу не вказано, 0 - вагу вказано.
+                goods_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор вантажу. Таблиця: Вантажі (goods). Використовується клієнтом БОТа'
+                goods_name_ua:
+                  type: string
+                  example: Соняшник
+                  description: 'Назва вантажу (укр.). Таблиця: Вантажі (goods).'
+                goods_name_ru:
+                  type: string
+                  example: Подсолнух
+                  description: 'Назва вантажу (рус.). Таблиця: Вантажі (goods).'
+                barcode:
+                  type: string
+                  example: 894t367854t78382r
+                  description: Шрихкод рейсу
+                finish_date:
+                  type: string
+                  example: 09.04.2021 15:21:08
+                  description: Дата закінчення
+                user_guid:
+                  type: string
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  description: 'Унікальний ідентифікатор користувача. Таблиця: ТХ користувачі (th_users)'
+                handle_status:
+                  type: string
+                  enum: [inactive, dash, ready]
+                  example: inactive
+                  description: Cтатус виконання рейсу. Значення(неактивний, чорновик, готовий)
+                customer_kt:
+                  type: integer
+                  example: 0
+                  description: Вказує чи замовник є КТ(рейс створений по заявці). Значення(1, 0)
+                creation_source:
+                  type: string
+                  enum: [th, th_disp, bulkdata, track_check]
+                  example: bulkdata
+                  description: Джерело створення рейсу
+                comments:
+                  type: string
+                  example: Обміняю простору трьохкімнатну квартиру на козу
+                  description: Комментар до рейсу
+                lat:
+                  type: number
+                  example: 35,899
+                  description: Широта останньої події
+                lng:
+                  type: number
+                  example: 10,899
+                  description: Довгота останньої події
+      responses:
+        200:
+          description: returns update results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                    description: 'Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)'
+                  race_number:
+                    type: string
+                    example:
+                    description: 'Номер рейсу. Таблиця: Рейси (races)'
+                  race_date:
+                    type: string
+                    example: 09.04.2021 15:21:08
+                    description: 'Дата створення рейсу. Таблиця: Рейси (races)'
+                  phone:
+                    type: string
+                    example: 380673222858
+                    description: 'Номер телефону водія. Таблиця: Рейси (races)'
+                  request:
+                    type: integer
+                    example: 121212
+                    description: 'Iдентифікатор заявки. Таблиця: Рейси (races)'
+                  driver:
+                    type: integer
+                    example: 121212
+                    description: 'Iдентифікатор водія. Таблиця: Рейси (races)'
+                  created_at:
+                    type: string
+                    example: 2021-04-09T15:21:08Z
+                    description: 'Дата створення рейсу. Таблиця: Рейси (races)'
+                  warehouse_from:
+                    type: string
+                    example: 7120310100001
+                    description: 'Склад навантаження, код класифікатора. Таблиця: Рейси (races)'
+                  warehouse_to:
+                    type: string
+                    example: 7120310100001
+                    description: 'Склад розвантаження, код класифікатора. Таблиця: Рейси (races)'
+                  sender_name:
+                    type: string
+                    example: ТОВ "Кернел-трейд"
+                    description: 'Назва вантажовідправника. Таблиця: Рейси (races)'
+                  consignor_name:
+                    type: string
+                    example: ТОВ "Кернел-трейд"
+                    description: 'Назва вантажовідправника. Таблиця: Рейси (races)'
+                  consignor_reg_code:
+                    type: string
+                    example: 0898675453555
+                    description: 'Код ЄДРПОУ вантажовідправника. Таблиця: Рейси (races)'
+                  consignee_name:
+                    type: string
+                    example: ТОВ "Кернел-трейд"
+                    description: 'Назва вантажоодержувача. Таблиця: Рейси (races)'
+                  consignee_reg_code:
+                    type: string
+                    example: 0898675453555
+                    description: 'Код ЄДРПОУ вантажоодержувача. Таблиця: Рейси (races)'
+                  for_owner_name:
+                    type: string
+                    example: ТОВ "Кернел-трейд"
+                    description: 'Назва поклажодавця. Таблиця: Рейси (races)'
+                  for_owner_code:
+                    type: string
+                    example: 0898675453555
+                    description: 'Код ЄДРПОУ поклажодавця. Таблиця: Рейси (races)'
+                  distance:
+                    type: integer
+                    example: 123
+                    description: 'Відстань. Таблиця: Рейси (races)'
+                  travel_time:
+                    type: integer
+                    example: 8986
+                    description: 'Час подорожі. Таблиця: Рейси (races)'
+                  vehicle:
+                    type: string
+                    example: АХ2713АХ
+                    description: 'Номер транспортного засобу. Таблиця: Рейси (races)'
+                  trailer:
+                    type: string
+                    example: АА0086CA
+                    description: 'Номер причепу. Таблиця: Рейси (races)'
+                  race_status:
+                    type: string
+                    enum: [CANCELED, DONE, PAUSE, IN_PROGRESS, REGISTERED]
+                    example: IN_PROGRESS
+                    description:
+                      'Статус рейсу. Значення(Зареєстровано, Виконується, Завершено, Відмінено, Пауза)
+                      Таблиця: Рейси (races)'
+                  waybill:
+                    type: string
+                    example: 210401-0012
+                    description: 'Номер ТТН. Таблиця: Рейси (races)'
+                  quantity:
+                    type: string
+                    example: 20
+                    description: 'Орієнтований тонаж по ТТН. Таблиця: Рейси (races)'
+                  goods:
+                    type: integer
+                    example: 12432424
+                    description: 'Iдентифікатор вантажу. Таблиця: Рейси (races)'
+                  finish_date:
+                    type: string
+                    example: 2021-04-09T15:21:08Z
+                    description: 'Дата закінчення. Таблиця: Рейси (races)'
+                  source:
+                    type: string
+                    enum: [th, th_disp, bulkdata, track_check]
+                    example: bulkdata
+                    description: 'Джерело створення рейсу. Таблиця: Рейси (races)'
+                  channel:
+                    type: string
+                    example: telegram
+                    description: 'Канал. Таблиця: Рейси (races)'
+                  channel_chat:
+                    type: string
+                    example: 87158640
+                    description: 'ID чату. Таблиця: Рейси (races)'
+                  channel_user:
+                    type: string
+                    example: Ihor Neshyk
+                    description: 'Користувач чату. Таблиця: Рейси (races)'
+                  point_from:
+                    type: string
+                    example: '5310100000'
+                    description: 'Код КОАТУУ пункту навантаження. Таблиця: Рейси (races)'
+                  point_to:
+                    type: string
+                    example: '5310100000'
+                    description: 'Код КОАТУУ пункту розвантаження. Таблиця: Рейси (races)'
+                  bot_driver_fullname:
+                    type: string
+                    example: Поташнік Василь Михайлович
+                    description: 'ПІБ водія. Таблиця: Рейси (races)'
+                  bot_driver_cert:
+                    type: string
+                    example: КИА 64932
+                    description: 'Посвідчення водія. Таблиця: Рейси (races)'
+                  slack_channel_id:
+                    type: string
+                    example: 0001
+                    description: 'ID каналу слак. Таблиця: Рейси (races)'
+                  customer_kt:
+                    type: integer
+                    example: 0
+                    description: 'Вказує чи замовник є КТ(рейс створений по заявці). Значення(1, 0). Таблиця: Рейси (races)'
+                  customer_name:
+                    type: string
+                    example: ТОВ "Кернел-трейд"
+                    description: 'Назва замовника. Таблиця: Рейси (races)'
+                  customer_code:
+                    type: string
+                    example: 00999896666
+                    description: 'Код ЄДРПОУ замовника. Таблиця: Рейси (races)'
+                  th_carrier_org_name:
+                    type: string
+                    example: 00999896666
+                    description: 'Назва організації перевізника. Таблиця: Рейси (races)'
+                  driver_name:
+                    type: string
+                    example: Поташнік Василь Михайлович
+                    description: 'ПІБ водія. Таблиця: ТХ водії (th_drivers)'
+                  goods_name:
+                    type: string
+                    example: Соняшник високоолеїновий
+                    description: 'Назва вантажу. Таблиця: Вантажі (goods)'
+                  vehicles_register_guid:
+                    type: string
+                    example: a5b7ff0a-8a0c-fcf6-c9ca-6372e229bea8
+                    description: 'Унікальний ідентифікатор наряду. Таблиця: Наряди (request_vehicles_register)'
+                  warehouse_from_name:
+                    type: string
+                    example: Придніпровський ОЕЗ
+                    description: 'Назва складу навантаження. Таблиця: Склади (warehouse)'
+                  full_address_from:
+                    type: string
+                    example: Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 53
+                    description: 'Повна адреса складу навантаження. Таблиця: Склади (warehouse)'
+                  street_name_from:
+                    type: string
+                    example: Шевченка
+                    description: 'Назва вулиці складу навантаження. Таблиця: Склади (warehouse)'
+                  building_n_from:
+                    type: string
+                    example: 76
+                    description: 'Номер будинку складу навантаження. Таблиця: Склади (warehouse)'
+                  warehouse_to_name:
+                    type: string
+                    example: Придніпровський ОЕЗ
+                    description: 'Назва складу розвантаження. Таблиця: Склади (warehouse)'
+                  full_address_to:
+                    type: string
+                    example: Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 53
+                    description: 'Повна адреса складу розвантаження. Таблиця: Склади (warehouse)'
+                  street_name_to:
+                    type: string
+                    example: Шевченка
+                    description: 'Назва вулиці складу розвантаження. Таблиця: Склади (warehouse)'
+                  building_n_to:
+                    type: string
+                    example: 76
+                    description: 'Номер будинку складу розвантаження. Таблиця: Склади (warehouse)'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
   /verification:
     get:
       tags:
