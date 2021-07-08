@@ -825,6 +825,10 @@ paths:
                   description: |
                     Ознака, що вказує на необхідність оновлення 
                     даних в зв'язаній ТТН. Значення (0, 1)
+                waybill_number:
+                  type: string
+                  example: ттн-0003
+                  description: Номер ТТН
                 consignor_name:
                   type: string
                   example: 'ТОВ Кернел-Трейд'
