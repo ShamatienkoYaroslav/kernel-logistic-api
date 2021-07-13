@@ -2913,6 +2913,16 @@ components:
           example: 'Удостоверение качества'
           description: |
             Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+        user_help_ua:
+          type: string
+          example: "Текст українською"
+          description: |
+            Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
+        user_help_ru:
+          type: string
+          example: "Текст російською"
+          description: |
+            Правила для водія при веривікації російською. Таблиця: шаблони текстів (text_template)
         is_active:
           type: integer
           example: 1
@@ -2947,6 +2957,16 @@ components:
               example: 'Удостоверение качества'
               description: |
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            user_help_ua:
+              type: string
+              example: "Текст українською"
+              description: |
+                Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
+            user_help_ru:
+              type: string
+              example: 'Текст російською'
+              description: |
+                Правила для водія при веривікації російською. Таблиця: шаблони текстів (text_template)
             source:
               type: string
               example: 'th'
@@ -2980,6 +3000,16 @@ components:
               example: 'ТТН'
               description: |
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
+            user_help_ua:
+              type: string
+              example: "Текст українською"
+              description: |
+                Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
+            user_help_ru:
+              type: string
+              example: "Текст російською"
+              description: |
+                Правила для водія при веривікації російською. Таблиця: шаблони текстів (text_template)
             source:
               type: string
               example: 'th'
