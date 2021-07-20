@@ -70,8 +70,10 @@ tags:
     description: Вузли для роботи водія із подорожніми листами
   - name: 'T022 - Подорожній лист'
     description: Вузли для роботи із подорожніми листами
-  - name: 'Статистика черги'
+  - name: 'Т023 - Статистика черги'
     description: Вузли для роботи зі статистикою черги
+  - name: 'Т024 - Напрямки направлення'
+    description: Вузли для роботи з напрямками направлення
 
 paths:
   /blacklist/check:
@@ -4548,7 +4550,7 @@ paths:
   /pq_queues/statistics:
     get:
       tags:
-        - Статистика черги
+        - Т023 - Статистика черги
       summary: Звіт по статистиці рейсів в черзі
       operationId: pq_queuesStatisticsGet
       description: |
@@ -4648,6 +4650,94 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+  /pq_departure_permission_directions:
+    get:
+      tags:
+        - Т024 - Напрямки направлення
+      summary: Точка отримання списку напрямків направлення
+      operationId: pqDeparturePermissionDirectionsID
+      description: |
+        Точка отримання списку напрямків направлення.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: queue_profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТН
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по напрямкам направлень
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/Departure_permission_direction'
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  error_text_code:
+                    type: string
+                    example: 038
+                    description: "Код шаблону тексту помилки. Таблиця: Шаблони текстів(text_templeate)"
+                  entry_error_text_ua:
+                    type: string
+                    example: Текст помилки українською
+                    description: "Текст помилки українською. Таблиця: Шаблони текстів(text_templeate)"
+                  error_text_ru:
+                    type: string
+                    example: Текст помилки російською
+                    description: "Текст помилки російською. Таблиця: Шаблони текстів(text_templeate)"
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+
 
 components:
   schemas:
@@ -5003,6 +5093,39 @@ components:
           type: string
           example: 'КР'
           description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+    Departure_permission_direction:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 005_РОЗВ_ПРИДМЕЗ
+          description: 'Код напрямку направлення. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        name_ua:
+          type: string
+          example: Розвантаження на ПРИДМЕЗ
+          description: 'Назва напрямку направлення українською. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        name_ru:
+          type: string
+          example: Разгрузка на ПРИДМЕЗ
+          description: 'Назва напрямку направлення російською. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        pq_queue_status_after:
+          type: string
+          example: in_queue
+          description: | 
+            Статус в черзі після направлення. Варіанти: in_process, rejected, in_queue, drop, in_process_to_drop, dropped, in_process_shift, in_process_move_to_entry.
+            Таблиця: Напрямки направлення(pq_departure_permission_directions)
+        description_ua:
+          type: string
+          example: Текст опису
+          description: 'Опис напрямку направлення українською. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        description_ru:
+          type: string
+          example: Текст описания
+          description: 'Опис напрямку направлення російською. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        notice_task_code:
+          type: string
+          example: 003_РОУТЕР
+          description: 'Код шаблону сповіщення. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
     Waybill:
       type: object
       properties:
