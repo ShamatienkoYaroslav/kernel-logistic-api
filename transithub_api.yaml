@@ -2641,7 +2641,8 @@ paths:
       summary: Макет ТТН
       operationId: waybillTemplate
       description: |
-        Отримання даних ТТН по ідентифікатору рейсу, наряду, заявцки і самої ТТН
+        Отримання даних ТТН по ідентифікатору рейсу, наряду, заявцки і самої ТТН.
+        Передається пара параметрів source + guid або параметр race_number (в цьому випадку джерелом даних буде рейс, знайдений по номеру)
       parameters:
         - in: query
           name: client_token
@@ -2658,6 +2659,11 @@ paths:
         - in: query
           name: guid
           description: Унікальний ідентифікатор запису таблиці
+          schema:
+            type: string
+        - in: query
+          name: race_number
+          description: Номер рейсу
           schema:
             type: string
       responses:
