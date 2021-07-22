@@ -2054,6 +2054,83 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
+  /pq_queues_profiles:
+    get:
+      tags:
+        - Профіль черги
+      summary: Список профілів черги
+      operationId: PQueueProfilesGET
+      description: |
+        Список профілів черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+        - in: query
+          name: active
+          description: Ознака використання профіля
+          schema:
+            type: string
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Список профілів черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/PQueueProfile'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
   /race/verification/photo:
     get:
       tags: ['T020 - Файли (вкладення)', 'T014 - Файли (вкладення)']
@@ -5582,6 +5659,129 @@ components:
           type: string
           example: 'cf5ac228-04d1-e530-e351-ead65b83f97c'
           description: 'Унікальний ідентифікатор поклажодавця'
+    PQueueProfile:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Трансбалктермінал'
+          description: 'Назва профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        guid:
+          type: string
+          example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+          description: 'Унікальний ідентифікатор профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        lat:
+          type: number
+          example: 46.329429
+          description: 'Широта по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+        lng:
+          type: number
+          example: 46.329429
+          description: 'Довгота по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+        full_address:
+          type: string
+          example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
+          description: 'Повна адреса профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        description:
+          type: string
+          example: 'Опис профіля черги'
+          description: 'Опис профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        koatuu:
+          type: string
+          example: "5110800000"
+          description: 'Код КОАТУУ профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        name_order_slug:
+          type: string
+          example: "Transbalkterminal"
+          description: 'Назва сортування по слагу профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        building_n:
+          type: string
+          example: "58"
+          description: 'Номер будинку профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        district_code:
+          type: string
+          example: "REC100012"
+          description: 'Код району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        district_name:
+          type: string
+          example: "Чорноморська міська рада"
+          description: 'Назва району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        region_code:
+          type: string
+          example: "51"
+          description: 'Код області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        region_name:
+          type: string
+          example: "Одеська"
+          description: 'Назва області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        locality_name:
+          type: string
+          example: "Чорноморськ"
+          description: 'Назва населеного пункту профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        street_name:
+          type: string
+          example: "вулиця Сухолиманська"
+          description: 'Назва вулиці профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        company_guid:
+          type: string
+          example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+          description: 'Унікальний ідентифікатор компанії профіля черги'
+        author_user_guid:
+          type: string
+          example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          description: 'Унікальний ідентифікатор користувача, що створив профіль. Таблиця: ТХ користувачі (th_users)'
+        telegram_group:
+          type: string
+          example: "***"
+          description: 'Група в телеграмі для профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+        direction:
+          type: string
+          enum: [loading, unloading]
+          description: 'Напрямок (навантаження/розвантаження). Таблиця: Профілі черги (pq_queue_profile)'
+        loading_type:
+          type: string
+          enum: [mound, pouring]
+          description: 'Тип навантаження (насип/налив). Таблиця: Профілі черги (pq_queue_profile)'
+        multiqueue:
+          type: integer
+          enum: [0, 1]
+          description: 'Ознака мультичерги (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+        main_queue_guid:
+          type: string
+          example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+          description: 'Унікальний ідентифікатор основної черги профіля. Таблиця: Черги (pq_queue)'
+        main_queue_name:
+          type: string
+          example: 'Основна черга приймання вантажів'
+          description: 'Назва основної черги профіля. Таблиця: Черги (pq_queue)'
+        active:
+          type: integer
+          enum: [0, 1]
+          description: 'Ознака використання профілю (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+        allow_move_to_entry:
+          type: integer
+          enum: [0, 1]
+          description: 'Ознака використання направлень в профілі (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+        allow_move_to_entry_error_text_code:
+          type: string
+          example: '025'
+          description: 'Код шаблону текстів, що використовується при забороні направлень. Таблиця: Шаблони текстів (text_template)'
+        allow_move_to_entry_error_text_ua:
+          type: string
+          example: 'Текст повідомлення'
+          description: 'Текст повідомлення шаблону текстів, що використовується при забороні направлень. Таблиця: Шаблони текстів (text_template)'
+        allow_move_to_entry_error_text_ru:
+          type: string
+          example: 'Текст сooбщения'
+          description: 'Текст повідомлення шаблону текстів, що використовується при забороні направлень. Таблиця: Шаблони текстів (text_template)'
+        driver_rules_text_ua:
+          type: string
+          example: 'Текст правил'
+          description: 'Текст правил для водія. Таблиця: Шаблони текстів (text_template)'
+        driver_rules_text_ru:
+          type: string
+          example: 'Текст правил'
+          description: 'Текст правил для водія. Таблиця: Шаблони текстів (text_template)'
     GlobalSettings:
       type: object
       properties:
