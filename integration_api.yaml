@@ -891,6 +891,10 @@ components:
         status:
           type: string
           example: 'sent'
+          description: 'GUID подорожнього листа'
+        guid:
+          type: string
+          example: '6e048300-3196-61b4-285a-493729732e7f'
           description: 'Статус подорожнього листа'
         mileage_with_cargo:
           type: number
