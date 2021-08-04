@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: Transithub API
   description: Колекція вузлів API логістики для порталу Trantihub
-  version: 1.0.1
+  version: 1.0.2
 
 servers:
   - description: Development Server
@@ -2531,6 +2531,11 @@ paths:
           schema:
             type: string
             enum: [to_check, rejected, accepted]
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТХ
+          schema:
+            type: string
       responses:
         '200':
           description: Дані по статусу документів при верифікації

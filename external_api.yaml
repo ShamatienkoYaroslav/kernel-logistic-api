@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: External API
   description: Колекція вузлів API для зовнішньої інтеграції з логістикою
-  version: 1.0.5.4
+  version: 1.0.5.6
 
 servers:
   - description: Development Server
@@ -16,18 +16,18 @@ tags:
     description: Програмний інтерфейс для роботи з нарядами ТЗ розділу "Авто"
   - name: Рейси водія
     description: Програмний інтерфейс для роботи з рейсами водія
-  - name: Верифікація
-    description: Верифікація документів рейсу
   - name: Поклажодавці
     description: Поклажодавці профіля черги
   - name: 'T001 - Подорожній лист'
     description: Вузли для роботи водія із подорожніми листами
   - name: 'T002 - Рейси'
     description: Вузли для роботи з рейсами
-  - name: ТТН
+  - name: Т003 - ТТН
     description: Вузли для роботи з товарно-транспортними накладними
-  - name: Статистика черги
+  - name: Т004 - Статистика черги
     description: Вузли для роботи з чергами та їх статистикою
+  - name: Т005 - Верифікація
+    description: Верифікація документів рейсу
 
 paths:
   /driver/races/status:
@@ -1247,7 +1247,7 @@ paths:
   /verification:
     get:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Отримати документи рейсу та їх вкладення.
       operationId: raceVerificationPhotoBotGet
       description: |
@@ -1304,7 +1304,7 @@ paths:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Створити нове вкладення документу рейсу
       operationId: raceVerificationPhotoBotPost
       description: |
@@ -1441,7 +1441,7 @@ paths:
       x-codegen-request-body-name: payload
     put:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Оновити запис вкладення документу рейсу
       operationId: raceVerificationPhotoBotPut
       description: |
@@ -1547,7 +1547,7 @@ paths:
       x-codegen-request-body-name: payload
     delete:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Видалити запис вкладення документу рейсу
       operationId: raceVerificationPhotoBotDelete
       description: |
@@ -1588,7 +1588,7 @@ paths:
   /verification/reasons:
     get:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Отримати причини відхилення документів при верифікації.
       operationId: raceVerificationPhotoReasonsBotGet
       description: |
@@ -1626,7 +1626,7 @@ paths:
   /verification/status:
     get:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Отримати статус верифікації документів рейсу.
       operationId: raceVerificationPhotoStatusBotGet
       description: |
@@ -1707,7 +1707,7 @@ paths:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
-        - Верифікація
+        - Т005 - Верифікація
       summary: Встановити статус верифікації документів рейсу.
       operationId: raceVerificationPhotoStatusBotPost
       description: |
@@ -1748,6 +1748,11 @@ paths:
           schema:
             type: string
             enum: [to_check, rejected, accepted]
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТХ
+          schema:
+            type: string
       responses:
         '200':
           description: Дані по статусу документів при верифікації
@@ -1771,6 +1776,80 @@ paths:
               schema:
                 name: error
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
+  /verification/journal:
+    get:
+      tags:
+        - Т005 - Верифікація
+      summary: Отримати cписок верифікації пакетів документів та їх рейси за проміжок часу або для конкретного рейсу.
+      operationId: raceVerificationJournalEXT
+      description: |
+        Передавши відповідні параметри, ви отримаєте cписок верифікації пакетів документів та їх рейси
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація оффсет
+          schema:
+            type: integer
+        - in: query
+          name: date_from
+          description: Фільтр по даті подання пакету документів на верифікацію. Формат 02.07.2021 12:34:22
+          schema:
+            type: string
+        - in: query
+          name: date_to
+          description: Фільтр по даті подання пакету документів на верифікацію. Формат 02.07.2021 12:34:22
+          schema:
+            type: string
+        - in: query
+          name: get_files
+          description: Ознака необхідності повертати массив файлів до пакету документів. Значення(0,1). 0 - не поертати файли. 1 - повертати файли
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Дані по верифікації пакетів документів
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationJournal'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
   /pq_queues_request.create_by_race:
     post:
       tags:
@@ -2371,7 +2450,7 @@ paths:
   /waybill_template:
     get:
       tags:
-        - ТТН
+        - Т003 - ТТН
       summary: Макет ТТН
       operationId: waybillTemplate
       description: |
@@ -2521,7 +2600,7 @@ paths:
   /pq_queues.get_from_race_statistics:
     get:
       tags:
-        - Статистика черги
+        - Т004 - Статистика черги
       summary: Статистика черги
       operationId: PQueueGetFromRaceStatistics
       description: |
@@ -2573,7 +2652,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadReques'
+                $ref: '#/components/schemas/_BadRequest'
     
 components:
   schemas:
@@ -2895,6 +2974,21 @@ components:
             type: string
             example: 'Примітка'
             description: 'Примітка користувача, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
+    ArrayOfVerificationJournalFiles:
+      description: files
+      type: array
+      items:
+        type: object
+        properties:
+          guid:
+            type: string
+            example: a00cd45a-fe37-69a6-6940-a7ca51290bbd
+            description: |
+              Унікальний ідентифікатор файлу. Таблиця: Файли(race_ttn_files)
+          link:
+            type: string
+            example: 'https:\/\/devkernel.apex.rest:8443\/ords\/kernel_logistic\/v1\/transithub\/sharepoint\/file?client_token=e0d22acfba67c35937f2e26c7b6344e6&url=https:\/\/kernelgroupua.sharepoint.com\/sites\/dynamics\/BulkData_Scan\/a00cd45a-fe37-69a6-6940-a7ca51290bbd.jpg'
+            description: 'Посилання для перегляду файлу. Таблиця: Файли(race_ttn_files)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
@@ -3066,6 +3160,101 @@ components:
           type: string
           example: 22.04.2021 15:40:18
           description: Дата і час створення
+    VerificationJournal:
+      type: object
+      description: Статуси документів при верифікації
+      properties:
+        race_guid:
+          type: string
+          example: a00cd45a-fe37-69a6-6940-a7ca51290bbd
+          description: "Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)"
+        race_number:
+          type: string
+          example: 210802-0563
+          description: "Номер рейсу. Таблиця: Рейси (races)"
+        race_vehicle_slug:
+          type: string
+          example: AA9999BB
+          description: "Слаг номеру транспортного засобу. Таблиця: Рейси (races)"
+        race_driver_fullname:
+          type: string
+          example: Мельник Вячеслав Миколайович
+          description: "ПІБ водія. Таблиця: Рейси (races)"
+        race_driver_phone:
+          type: string
+          example: 380673222858
+          description: "Номер телефону водія. Таблиця: Рейси (races)"
+        race_status:
+          type: string
+          enum: [CANCELED, DONE, PAUSE, IN_PROGRESS, REGISTERED]
+          example: IN_PROGRESS
+          description: "Статус рейсу. Таблиця: Рейси (races)"
+        race_last_event_name:
+          type: string
+          example: Верифікацію підтверджено
+          description: "Назва останньої події рейсу. Таблиця: Рейси (races)"
+        race_warehouse_from_name:
+          type: string
+          example: Придніпровський ОЕЗ
+          description: "Назва складу навантаження. Таблиця: Склади (warehouse)"
+        race_warehouse_to_name:
+          type: string
+          example: Придніпровський ОЕЗ
+          description: "Назва складу розвантаження. Таблиця: Склади (warehouse)"
+        race_created_at:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: "Дата і час створення рейсу. Таблиця: Рейси (races)"
+        doc_package_id:
+          type: integer
+          example: 881
+          description: "Номер пакету документів верифікації. Таблиця: Пакети верифікації (race_statistic_verification)"
+        doc_package_status:
+          type: string
+          enum: [to_check, rejected, accepted]
+          example: to_check
+          description: "Код статусу верифікації пакету документів. Таблиця: Пакети верифікації (race_statistic_verification)"
+        doc_package_type:
+          type: string
+          enum: [ttn, la]
+          example: ttn
+          description: "Тип пакету документів верифікації. Таблиця: Пакети верифікації (race_statistic_verification)"
+        doc_package_created_at:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: "Дата і час створення пакету документів верифікації. Таблиця: Пакети верифікації (race_statistic_verification)"
+        doc_package_ready_to_check:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: "Дата і час подання пакету документів для верифікації. Таблиця: Статистика рейсу (race_statistic)"
+        doc_package_checked:
+          type: string
+          example: 22.04.2021 15:40:18
+          description: "Дата і час верифікації пакету документів. Таблиця: Статистика рейсу (race_statistic)"
+        doc_package_check_duration:
+          type: integer
+          example: 25
+          description: |
+            Тривалість верифікації пакету документів: Різниця doc_package_checked і doc_package_ready_to_check, 
+            якщо документи вже перевірені або поточної дати і doc_package_ready_to_check, якщо вони очікують перевірки
+        doc_package_checked_by:
+          type: string
+          example: Мельник Вячеслав Миколайович
+          description: "ПІБ користувача, що перевірив пакет документів. Таблиця: Пакети верифікації (race_statistic_verification)"
+        reject_reasons_ua:
+          type: string
+          example: Погана якість фото
+          description: "Причина відхилення пакету документів українською. Таблиця: Пакети верифікації (race_statistic_verification)"
+        reject_reasons_ru:
+          type: string
+          example: Низкое качество фото
+          description: "Причина відхилення пакету документів російською. Таблиця: Пакети верифікації (race_statistic_verification)"
+        reject_comments:
+          type: string
+          example: Раджу придбати кращу камеру
+          description: "Коментар користувача. Таблиця: Пакети верифікації (race_statistic_verification)"
+        files:
+          $ref: '#/components/schemas/ArrayOfVerificationJournalFiles'
     PQueueStatisticsObject:
       type: object
       description: Дані статистики черги рейсу
