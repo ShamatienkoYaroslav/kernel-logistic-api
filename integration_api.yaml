@@ -960,14 +960,18 @@ components:
           type: string
           example: 'Соняшник високоолеїновий'
           description: 'Вантаж'
-        point_from_name:
+        goods_nsi:
           type: string
-          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
-          description: 'Пункт завантаження'
-        point_to_name:
+          example: 'СОНЯШНИК ВО'
+          description: 'Код НДІ вантажу'
+        warehouse_from_nsi:
           type: string
-          example: 'Україна, Кіровоградська обл., м. Кропивницький'
-          description: 'Пункт розвантаження'
+          example: 'ТЕХУНІВЕРС'
+          description: 'Код НДІ складу завантаження'
+        warehouse_to_nsi:
+          type: string
+          example: 'ПРИДН_МЭЗ'
+          description: 'Код НДІ складу розвантаження'
         point_from_address:
           type: string
           example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
