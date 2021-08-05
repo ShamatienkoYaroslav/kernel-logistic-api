@@ -707,6 +707,62 @@ paths:
                     type: string
                     example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
                     description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Рейси (races)'
+                  queue_profile_from_verification_available:
+                    type: number
+                    example: 0
+                    description: 'Признак доступності верифікації в профілі черг завантаження. Варіанти: 1, 0. Таблиця: Профіль черг (pq_queue_profile)'
+                  is_verified_from:
+                    type: number
+                    example: 0
+                    description: 'Признак пройденої верифікації при завантаженні. Варіанти: 1, 0. Таблиця: Статистика рейсу (race_statistics)'
+                  verifying_date_from:
+                    type: string
+                    example: '27.08.2020 23:58'
+                    description: 'Дата пройденої верифікації при завантаженні. Таблиця: Статистика рейсу (race_statistics)'
+                  verification_status_from:
+                    type: string
+                    example: 'draft'
+                    description: 'Статус пройденої верифікації при завантаженні. Варіанти: draft, to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_to_verification_available:
+                    type: number
+                    example: 0
+                    description: 'Признак доступності верифікації в профілі черг розвантаження. Варіанти: 1, 0. Таблиця: Профіль черг (pq_queue_profile)'
+                  is_verified_to:
+                    type: number
+                    example: 0
+                    description: 'Признак пройденої верифікації при розвантаженні. Варіанти: 1, 0. Таблиця: Статистика рейсу (race_statistics)'
+                  verifying_date_to:
+                    type: string
+                    example: '27.08.2020 23:58'
+                    description: 'Дата пройденої верифікації при розвантаженні. Таблиця: Статистика рейсу (race_statistics)'
+                  verification_status_to:
+                    type: string
+                    example: 'draft'
+                    description: 'Статус пройденої верифікації при розвантаженні. Варіанти: draft, to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_from_verification_status:
+                    type: string
+                    example: 'available'
+                    description: 'Статус пройденої верифікації при завантаженні по профілю черги. Варіанти: to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  queue_profile_to_verification_status:
+                    type: string
+                    example: 'available'
+                    description: 'Статус пройденої верифікації при розвантаженні по профілю черги. Варіанти: to_check, accepted, rejected, available, disabled. Таблиця: Статистика рейсу (race_statistics)'
+                  is_verification_available:
+                    type: boolean
+                    example: false
+                    description: 'Доступність верифікації по признаку реєстрації ТТН в рейсі. true - ТТН зареєстрована, false - ТТН не зареєстрована. Таблиця: Рейси (races)'
+                  verification_access_error_code:
+                    type: string
+                    example: '037'
+                    description: 'Код помилки верифікації. Таблиця: Шаблони текстів (text_template)'
+                  verification_access_error_ua:
+                    type: string
+                    example: 'Верифікація недоступна. Заповніть дані ТТН'
+                    description: 'Текст помилки верифікації (укр.). Таблиця: Шаблони текстів (text_template)'
+                  verification_access_error_ru:
+                    type: string
+                    example: 'Верификация недоступна. Заполните данные ТТН'
+                    description: 'Текст помилки верифікації (рос.). Таблиця: Шаблони текстів (text_template)'
 
     put:
       tags:
