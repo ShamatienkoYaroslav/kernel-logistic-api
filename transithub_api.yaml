@@ -2588,7 +2588,7 @@ paths:
                   status:
                     type: boolean
                     description: Cтатус відповіді
-                    example: ture
+                    example: true
                   new_status:
                     type: string
                     description: Новий статус верифікації документу
