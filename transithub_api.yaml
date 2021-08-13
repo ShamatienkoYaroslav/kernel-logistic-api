@@ -2391,6 +2391,14 @@ paths:
                     type: string
                     description: Примітка диспетчера
                     example: Примітка
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -2468,7 +2476,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerificationStatus'
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationStatus'
+                  text_ua:
+                    type: string
+                    example: Верифікація - це підтвердження коректності ТТН.
+                    description: |
+                      Текст шаблону повідомлення українською. Код шаблону 041 виводиться,
+                      якщо масив статусів(items) порожній. Решта статусів налаштовується в 
+                      Адміністрування/Локалізація констант.
+                      Таблиця: шаблони текстів (text_template)"
+                  text_ru:
+                    type: string
+                    example: Верификация - это подтверждение корректности ТТН
+                    description: |
+                      Текст шаблону повідомлення російською. Код шаблону 041 виводиться,
+                      якщо масив статусів(items) порожній. Решта статусів налаштовується в 
+                      Адміністрування/Локалізація констант. 
+                      Таблиця: шаблони текстів (text_template)"
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         '401':
           description: 'Клієнт не авторизований'
           content:
@@ -2552,6 +2593,14 @@ paths:
                     type: string
                     description: Новий статус верифікації документу
                     example: to_check
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         '401':
           description: 'Клієнт не авторизований'
           content:

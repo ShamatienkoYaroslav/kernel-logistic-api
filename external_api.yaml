@@ -1586,6 +1586,14 @@ paths:
                     type: string
                     description: Примітка диспетчера
                     example: Примітка
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         403:
           description: Клієнт-споживаач API не має прав
           content:
@@ -1754,6 +1762,14 @@ paths:
                       якщо масив статусів(items) порожній. Решта статусів налаштовується в 
                       Адміністрування/Локалізація констант. 
                       Таблиця: шаблони текстів (text_template)"
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         '403':
           description: 'Клієнт немає прав доступу'
           content:
@@ -1825,6 +1841,14 @@ paths:
                     type: string
                     description: Новий статус верифікації документу
                     example: to_check
+                  race_status_text_ua:
+                    type: string
+                    example: Текст повідомлення
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" українською
+                  race_status_text_ru:
+                    type: string
+                    example: Текст сообщения
+                    description: Повідомлення користувачу при рейсі в статусі "Відмінено" російською
         '403':
           description: 'Клієнт немає прав доступу'
           content:
