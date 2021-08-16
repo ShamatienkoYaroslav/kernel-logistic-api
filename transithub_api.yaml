@@ -547,6 +547,10 @@ paths:
                   type: number
                   example: 10,899
                   description: Довгота останньої події
+                has_laboratory_test:
+                  type: integer
+                  enum: [0, 1]
+                  description: "Ознака наявності лабораторного аналізу. Таблиця: рейси(races)"
       responses:
         200:
           description: returns update results
@@ -870,6 +874,10 @@ paths:
                     Вид операції оновлення. Якщо передано CARGO_OWNER_UPDATE - оновлюється інформація
                     поклажожавця в рейсі і підпорядкованій ТТН (якщо вона існує). В іншому випадку (CARGO_OWNER_DEFAULT або пусто)
                     відпрацьовує стандартний функціонал оновлення
+                has_laboratory_test:
+                  type: integer
+                  enum: [0, 1]
+                  description: "Ознака наявності лабораторного аналізу. Таблиця: рейси(races)"
       responses:
         '200':
           description: returns update results

@@ -1066,6 +1066,10 @@ paths:
                   type: number
                   example: 10,899
                   description: Довгота останньої події
+                has_laboratory_test:
+                  type: integer
+                  enum: [0, 1]
+                  description: "Ознака наявності лабораторного аналізу. Таблиця: рейси(races)"
       responses:
         200:
           description: returns update results
