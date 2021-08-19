@@ -24,8 +24,6 @@ tags:
     description: Вузли для роботи з товарно-транспортними накладними
   - name: Глобальні налаштування
     description: Глобальні налаштування для роботи Transithub
-  - name: Верифікація
-    description: Верифікація документів рейсу
   - name: 'T002 - Наряди'
     description: Вузли для роботи з нарядами
   - name: 'T006 - Наряди (підписка до відправки)'
@@ -74,6 +72,8 @@ tags:
     description: Вузли для роботи зі статистикою черги
   - name: 'Т024 - Напрямки направлення'
     description: Вузли для роботи з напрямками направлення
+  - name: 'Т025 - Верифікація'
+    description: Верифікація документів рейсу
 
 paths:
   /blacklist/check:
@@ -1826,7 +1826,6 @@ paths:
                     type: string
                     example: 23 дн 4 ч
                     description: 'Тривалість рейсу (рос.). Таблиця: рейси (races)'
-
     put:
       tags:
         - Інтерфейс водія
@@ -2264,7 +2263,7 @@ paths:
   /race/verification/reasons:
     get:
       tags:
-        - Верифікація
+        - Т025 - Верифікація
       summary: Отримати причини відхилення документів при верифікації.
       operationId: raceVerificationPhotoReasonsBotGet
       description: |
@@ -2305,7 +2304,7 @@ paths:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
-        - Верифікація
+        - Т025 - Верифікація
       summary: Оновити запис вкладення документу рейсу
       operationId: raceVerificationPhotoBotPut
       description: |
@@ -2429,10 +2428,52 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
+  /verification_statistics/history:
+    get:
+      tags:
+        - Т025 - Верифікація
+      summary: Отримати історію статистики верифікації.
+      operationId: raceVerificationStatisticsHistoryGet
+      description: |
+        Передавши відповідні параметри, ви отримаєте історію статистики верифікації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: interval
+          description: Iнтервал в годинах, за який визначаэться статистика
+          required: true
+          schema:
+            type: integer
+            enum: [3, 6, 12, 24]
+      responses:
+        '200':
+            description: Дані по статистиці верифікації
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/VerificationRejectReasons'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /race/verification:
     get:
       tags:
-        - Верифікація
+        - Т025 - Верифікація
       summary: Отримати статус верифікації документів рейсу.
       operationId: raceVerificationPhotoStatusBotGet
       description: |
@@ -2534,7 +2575,7 @@ paths:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
-        - Верифікація
+        - Т025 - Верифікація
       summary: Встановити статус верифікації документів рейсу.
       operationId: raceVerificationPhotoStatusBotPost
       description: |
@@ -5928,6 +5969,22 @@ components:
             type: string
             example: 'Примітка'
             description: 'Примітка користувача, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
+    StatisticsHistoryDateValuePair:
+      description: Statistics history
+      type: array
+      items:
+        type: object
+        properties:
+          date_time:
+            type: string
+            example: "19.08.2021 11:34:40"
+            description: |
+              Дата і час розрахунку. Таблиця: Статистика черги(pq_queue_statistics)
+          value:
+            type: number
+            example: 345
+            description: |
+              Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
@@ -6099,6 +6156,43 @@ components:
           type: string
           example: 22.04.2021 15:40:18
           description: Дата і час створення
+    VerificationStatisticsHistory:
+      type: object
+      description: Причини відхилення документів при верифікації
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: Http response status
+        pq_queue_profile_name:
+          type: string
+          example: 'Придніпровський ОЕЗ ВО'
+          description: "Назва профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+        pq_queue_profile_guid:
+          type: string
+          example: '398521ca-e854-0688-255c-33587639ce28'
+          description: "Унікальний ідентифікатор профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+        files_count:
+          type: integer
+          example: 359
+          description: "Кількість файлів на перевірці у даний період часу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+        files_max_check_duration:
+          type: integer
+          example: 359
+          description: "Максимальна тривалість перевірки самого раннього файлу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+        count:
+          type: integer
+          example: 359
+          description: "Кількість записів в массивах. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+        files_count_list:
+          description: "Кількість файлів на перевірці у даний період часу, шт. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
+        files_check_duration:
+          description: "Максимальна тривалість перевірки самого раннього файлу у даний період часу, хв. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
+        files_checked:
+          description: "Середня кількість перевірених файлів у даний період часу, шт./год. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
     QueueStatisticsReportLocation:
       description: Місцезнаходження (Звіт статистики черги)
       type: array
