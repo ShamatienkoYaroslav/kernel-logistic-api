@@ -5970,21 +5970,18 @@ components:
             example: 'Примітка'
             description: 'Примітка користувача, якщо відхилено = так. Таблиця: Файли(race_ttn_files)'
     StatisticsHistoryDateValuePair:
-      description: Statistics history
-      type: array
-      items:
-        type: object
-        properties:
-          date_time:
-            type: string
-            example: "19.08.2021 11:34:40"
-            description: |
-              Дата і час розрахунку. Таблиця: Статистика черги(pq_queue_statistics)
-          value:
-            type: number
-            example: 345
-            description: |
-              Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
+      type: object
+      properties:
+        date_time:
+          type: string
+          example: "19.08.2021 11:34:40"
+          description: |
+            Дата і час розрахунку. Таблиця: Статистика черги(pq_queue_statistics)
+        value:
+          type: number
+          example: 345
+          description: |
+            Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
