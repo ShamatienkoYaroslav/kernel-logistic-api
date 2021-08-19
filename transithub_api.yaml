@@ -6186,12 +6186,15 @@ components:
           description: "Кількість записів в массивах. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
         files_count_list:
           description: "Кількість файлів на перевірці у даний період часу, шт. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          type: array
           $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
         files_check_duration:
           description: "Максимальна тривалість перевірки самого раннього файлу у даний період часу, хв. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          type: array
           $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
         files_checked:
           description: "Середня кількість перевірених файлів у даний період часу, шт./год. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          type: array
           $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
     QueueStatisticsReportLocation:
       description: Місцезнаходження (Звіт статистики черги)
