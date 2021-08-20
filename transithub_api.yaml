@@ -5979,7 +5979,7 @@ components:
             Дата і час розрахунку. Таблиця: Статистика черги(pq_queue_statistics)
         value:
           type: number
-          example: 345
+          example: 76
           description: |
             Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
     VerificationFilesGetDocumentTypeLaORttn:
@@ -6174,9 +6174,9 @@ components:
           example: 359
           description: "Кількість файлів на перевірці у даний період часу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
         files_max_check_duration:
-          type: integer
-          example: 359
-          description: "Максимальна тривалість перевірки самого раннього файлу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          type: number
+          example: 3.9
+          description: "Максимальна тривалість перевірки самого раннього файлу, год. Число, округлення до десятих. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
         count:
           type: integer
           example: 359
@@ -6187,7 +6187,7 @@ components:
           items:
             $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
         files_check_duration:
-          description: "Максимальна тривалість перевірки самого раннього файлу у даний період часу, хв. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          description: "Максимальна тривалість перевірки самого раннього файлу у даний період часу, год. Число, округлення до десятих. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
           type: array
           items:
             $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
