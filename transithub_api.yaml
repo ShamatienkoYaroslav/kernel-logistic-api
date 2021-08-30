@@ -950,6 +950,11 @@ paths:
                   type: string
                   enum: [CARGO_OWNER_UPDATE, CARGO_OWNER_DEFAULT]
                   description: Вид операції оновлення
+                has_laboratory_test:
+                  type: integer
+                  example: 1
+                  enum: [0, 1]
+                  description: Ознака наявності лабораторного аналіза
       responses:
         200:
           description: returns update results
