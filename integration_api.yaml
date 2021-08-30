@@ -936,6 +936,10 @@ components:
           type: string
           example: 'ВАУ999999'
           description: 'Посвідчення водія'
+        driver_cert_slug:
+          type: string
+          example: 'ВАУ999999'
+          description: 'Посвідчення водія'
         phone:
           type: string
           example: '380999999999'
@@ -944,11 +948,19 @@ components:
           type: string
           example: 'BNM66666'
           description: 'Реєстрацій номер вантажівки'
+        truck_number_slug:
+          type: string
+          example: 'BNM66666'
+          description: 'Реєстрацій номер вантажівки'
         truck_brand:
           type: string
           example: 'Merceron'
           description: 'Марка вантажівки'
         trailer_number:
+          type: string
+          example: 'BNM66666'
+          description: 'Реєстрацій номер причіпу'
+        trailer_number_slug:
           type: string
           example: 'BNM66666'
           description: 'Реєстрацій номер причіпу'
