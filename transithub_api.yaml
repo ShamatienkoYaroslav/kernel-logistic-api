@@ -2504,11 +2504,11 @@ paths:
             type: string
         - in: query
           name: document_type
-          description: Тип документу. la, ttn (Посвідчення якості та ТТН).
+          description: Тип документу. la, ttn (Посвідчення якості та ТТН) або all (для отримання загального статусу по рейсу вцілому).
           required: true
           schema:
             type: string
-            enum: [la, ttn]
+            enum: [la, ttn, all]
         - in: query
           name: direction
           required: true
