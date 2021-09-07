@@ -11,7 +11,9 @@ servers:
 
 tags:
   - name: 'Підписка'
-    description: 'Вузли для роботи з підписко'
+    description: 'Вузли для роботи з підпискою'
+  - name: 'Підсистема сповіщень'
+    description: 'Вузли для роботи з підсистемою сповіщень'
 
 paths:
   /subscription:
@@ -127,6 +129,83 @@ paths:
                     type: boolean
                     example: true
                     description: Статус обробки запиту
+  /notice:
+    post:
+      tags:
+        - 'Підсистема сповіщень'
+      summary: Створення завдання на сповіщення сторонніми клієнтами
+      operationId: ExternalNoticePost
+      description: |
+        Створення завдання на сповіщення сторонніми клієнтами
+      parameters:
+        - in: query
+          name: token
+          description: Токен вузла обміну
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: phone
+          description: Телефон отримувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: text
+          description: Текст повідомлення
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid_client
+          description: |
+            Iдентифікатор запиту (використовується для перевірки статусу запиту). Можна передавати свій або отримувати згенерований системою у відповіді на створене завдання
+          schema:
+            type: string
+        - in: query
+          name: type
+          description: |
+            Параметр для відправки голосового повідомлення. Якщо параметр не задати, то відбуватиметься відправка текстового повідомлення.
+          schema:
+            type: string
+            enum: [voice, null]
+        - in: query
+          name: send_sms
+          description: |
+            Параметр для текстових повідомдень. СМС відправиться тільки, якщо передати 1. 
+            Якщо передати 0 або нічого не передати, текстове повідомлення відправиться тільки у Телеграм.
+          schema:
+            type: integer
+            enum: [1, 0]
+        - in: query
+          name: race_guid
+          description: |
+            Параметр для пошуку відповідного рейсу. Рейс шукаємо по гуіду надходження або по гуіду видатку.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус обробки запиту
+                  guid_client:
+                    type: string
+                    example: "22226021-6f2d-37b3-c92f-ad7187b01a6e"
+                    description: Унікальний ідентифікатор запису
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRights'
 components:
   schemas:
     Patch:
@@ -1060,3 +1139,18 @@ components:
           type: number
           example: 10
           description: Вага тари отримувача, т
+    _ClientHasNoRights:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 20000
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid client_token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for client token. Please contact with API's admin."
+          description: Деталі
