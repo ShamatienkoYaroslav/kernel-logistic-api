@@ -74,6 +74,8 @@ tags:
     description: Вузли для роботи з напрямками направлення
   - name: 'Т025 - Верифікація'
     description: Верифікація документів рейсу
+  - name: "Т026 - Направлення на в'їзд"
+    description: "Вузли для роботи з документом Направлення на в'їзд"
 
 paths:
   /blacklist/check:
@@ -4928,7 +4930,185 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-
+  /departure_permission:
+    post:
+      tags:
+        - "Т026 - Направлення на в'їзд"
+      summary: Створити новий документ Направлення на в'їзд
+      operationId: PQDeparturePermissinPost
+      description: |
+        Передавши відповідні параметри, ви створите новий 
+        запис Направлення на в'їзд.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  enum: [loading, unloading]
+                  description: "Напрямок (навантаження/розвантаження). Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: unloading
+                loading_type:
+                  type: string
+                  enum: [mound, pouring]
+                  description: "Тип навантаження (насип/налив). Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: mound
+                comment:
+                  type: string
+                  description: "Коментар користувача. Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: Коментар користувача
+                goods_guid:
+                  type: string
+                  description: "Код вантажу. Таблиця: Вантажі (goods)"
+                  example: "ОЛІЯ_СОН"
+                personalized:
+                  type: integer
+                  enum: [0, 1]
+                  description: |
+                    Вказує на те чи є документ персоналізованим (рейси направляються користувачем)
+                    або неперсоналізованим (рейси для направлення відбираються автоматично системою).
+                    Таблиця: Направлення на в'їзд (departure_permission)
+                  example: 0
+                pq_dep_perm_direction_code:
+                  type: string
+                  description: "Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)"
+                  example: 004_РОЗВ_ТБТ
+                pq_queue_profile_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)"
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                pq_queue_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)"
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                pq_warehouse_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор cкладу черги. Таблиця: Склади черги (pq_warehouse)"
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                warehouse_code:
+                  type: string
+                  description: |
+                    Код складу, який пов'язаний зі cкладом черги. 
+                    Передаєм, якщо неможливо скористатися параметром pq_warehouse_guid
+                    Таблиця: Склади (warehouse)"
+                  example: ЗЕРНОГОР
+                th_user_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор користувача ТХ. Таблиця: Користувачі ТХ (th_users)"
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                quota_owner:
+                  type: string
+                  enum: [LOGISTICS, PURCHASE, AGRO]
+                  description: |
+                    Власник квоти рейсів. Агро - наявність ознаки is_agro рейсу; 
+                    Логістика - це наявна заявка; Закупка - заявка відсутня
+                    Таблиця: Направлення на в'їзд (departure_permission)
+                  example: LOGISTICS
+                vehicle_count:
+                  type: integer
+                  description: |
+                    Кількість авто, які потрібно направити. Використовується для неперсоналізованих
+                    направлень. Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: 5
+      responses:
+        200:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    description: "Унікальний ідентифікатор запису. Таблиця: Направлення на в'їзд (departure_permission)"
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  document_status:
+                    type: string
+                    enum: [new, done, error, draft]
+                    description: "Статус документу. Таблиця: Направлення на в'їзд (departure_permission)"                   
+                    example: new
+                  personalized:
+                    type: integer
+                    enum: [0, 1]
+                    description: |
+                      Вказує на те чи є документ персоналізованим (рейси направляються користувачем)
+                      або неперсоналізованим (рейси для направлення відбираються автоматично системою).
+                      Таблиця: Направлення на в'їзд (departure_permission)
+                    example: 0
+                  vehicle_count:
+                    type: integer
+                    description: |
+                      Кількість авто, які потрібно направити. Використовується для неперсоналізованих
+                      направлень. Таблиця: Направлення на в'їзд (departure_permission)"
+                    example: 5
+                  pq_queue_profile_guid:
+                    type: string
+                    description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)"
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  pq_queue_guid:
+                    type: string
+                    description: "Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)"
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  direction_schema_code:
+                    type: string
+                    description: "Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)"
+                    example: 004_РОЗВ_ТБТ
+        400:
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_NoDataFoundNew'
+      x-codegen-request-body-name: payload
+  
 
 components:
   schemas:
