@@ -4987,7 +4987,10 @@ paths:
                   example: 0
                 pq_dep_perm_direction_code:
                   type: string
-                  description: "Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)"
+                  description: |
+                    Код налаштування напрямку направлення. 
+                    Налаштування напрямків направлення використовується як альтернатива асистенту (параметр: quota_owner)
+                    Таблиця: Напрямки направлення (pq_departure_permission_directions)"
                   example: 004_РОЗВ_ТБТ
                 pq_queue_profile_guid:
                   type: string
@@ -5021,7 +5024,8 @@ paths:
                   enum: [LOGISTICS, PURCHASE, AGRO]
                   description: |
                     Власник квоти рейсів. Агро - наявність ознаки is_agro рейсу; 
-                    Логістика - це наявна заявка; Закупка - заявка відсутня
+                    Логістика - це наявна заявка; Закупка - заявка відсутня.
+                    Використовується асистентом, як альтернатива напрямків направлення (параметр: pq_dep_perm_direction_code)
                     Таблиця: Направлення на в'їзд (departure_permission)
                   example: LOGISTICS
                 vehicle_count:
