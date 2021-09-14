@@ -76,6 +76,8 @@ tags:
     description: Верифікація документів рейсу
   - name: "Т026 - Направлення на в'їзд"
     description: "Вузли для роботи з документом Направлення на в'їзд"
+  - name: 'T027 - Асистент направлень'
+    description: 'Вузли для роботи з асистентом направлень'
 
 paths:
   /blacklist/check:
@@ -552,7 +554,7 @@ paths:
                 has_laboratory_test:
                   type: integer
                   enum: [0, 1]
-                  description: "Ознака наявності лабораторного аналізу. Таблиця: рейси(races)"
+                  description: 'Ознака наявності лабораторного аналізу. Таблиця: рейси(races)'
       responses:
         200:
           description: returns update results
@@ -879,7 +881,7 @@ paths:
                 has_laboratory_test:
                   type: integer
                   enum: [0, 1]
-                  description: "Ознака наявності лабораторного аналізу. Таблиця: рейси(races)"
+                  description: 'Ознака наявності лабораторного аналізу. Таблиця: рейси(races)'
       responses:
         '200':
           description: returns update results
@@ -2465,11 +2467,11 @@ paths:
             enum: [3, 6, 12, 24]
       responses:
         '200':
-            description: Дані по статистиці верифікації
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/VerificationStatisticsHistory'
+          description: Дані по статистиці верифікації
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationStatisticsHistory'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
@@ -3257,15 +3259,15 @@ paths:
                     description: 'Дата зміни статусу транспортного засобу. Таблиця: Транспортні засоби (th_vehicles)'
                   error_code:
                     type: string
-                    example: "047"
+                    example: '047'
                     description: 'Код шаблону сповіщення. Таблиця: Шаблони сповіщень (text_template)'
                   error_text_ua:
                     type: string
-                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    example: 'Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!'
                     description: 'Повідомлення шаблону сповіщення українською. Таблиця: Шаблони сповіщень (text_template)'
                   error_text_ru:
                     type: string
-                    example: "Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!"
+                    example: 'Неможливо повернути з архіву: транспортний засіб BI5261EB для компанії Черги КЕРНЕЛ вже існує!'
                     description: 'Повідомлення шаблону сповіщення російською. Таблиця: Шаблони сповіщень (text_template)'
 
         400:
@@ -4714,7 +4716,7 @@ paths:
                     type: string
                     example: '14.06.2021 13:26:33'
                     description: 'Дата створення рейсу'
-                  
+
         400:
           description: 'Поганий запит'
           content:
@@ -4786,11 +4788,11 @@ paths:
                   queue_profile_name:
                     type: string
                     example: Трансбалктермінал
-                    description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                    description: 'Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)'
                   queue_profile_guid:
                     type: string
                     example: 9de597bc-d84d-3499-c5da-935f8f638e4e
-                    description: "Унікальний ідентифікатор профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                    description: 'Унікальний ідентифікатор профіля черги. Таблиця: Профілі черги(pq_queue_profile)'
                   in_queue:
                     type: integer
                     example: 5
@@ -4909,15 +4911,15 @@ paths:
                   error_text_code:
                     type: string
                     example: 038
-                    description: "Код шаблону тексту помилки. Таблиця: Шаблони текстів(text_templeate)"
+                    description: 'Код шаблону тексту помилки. Таблиця: Шаблони текстів(text_templeate)'
                   entry_error_text_ua:
                     type: string
                     example: Текст помилки українською
-                    description: "Текст помилки українською. Таблиця: Шаблони текстів(text_templeate)"
+                    description: 'Текст помилки українською. Таблиця: Шаблони текстів(text_templeate)'
                   error_text_ru:
                     type: string
                     example: Текст помилки російською
-                    description: "Текст помилки російською. Таблиця: Шаблони текстів(text_templeate)"
+                    description: 'Текст помилки російською. Таблиця: Шаблони текстів(text_templeate)'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
@@ -4975,8 +4977,8 @@ paths:
                   example: Коментар користувача
                 goods_guid:
                   type: string
-                  description: "Код вантажу. Таблиця: Вантажі (goods)"
-                  example: "ОЛІЯ_СОН"
+                  description: 'Код вантажу. Таблиця: Вантажі (goods)'
+                  example: 'ОЛІЯ_СОН'
                 personalized:
                   type: integer
                   enum: [0, 1]
@@ -4994,17 +4996,17 @@ paths:
                   example: 004_РОЗВ_ТБТ
                 pq_queue_profile_guid:
                   type: string
-                  description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)"
+                  description: 'Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                 pq_queue_guid:
                   type: string
-                  description: "Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)"
+                  description: 'Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)'
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                 pq_warehouse_guid:
                   type: string
-                  description: "Унікальний ідентифікатор cкладу черги. Таблиця: Склади черги (pq_warehouse)"
+                  description: 'Унікальний ідентифікатор cкладу черги. Таблиця: Склади черги (pq_warehouse)'
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                 warehouse_code:
@@ -5016,7 +5018,7 @@ paths:
                   example: ЗЕРНОГОР
                 th_user_guid:
                   type: string
-                  description: "Унікальний ідентифікатор користувача ТХ. Таблиця: Користувачі ТХ (th_users)"
+                  description: 'Унікальний ідентифікатор користувача ТХ. Таблиця: Користувачі ТХ (th_users)'
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                 quota_owner:
@@ -5054,7 +5056,7 @@ paths:
                   document_status:
                     type: string
                     enum: [new, done, error, draft]
-                    description: "Статус документу. Таблиця: Направлення на в'їзд (departure_permission)"                   
+                    description: "Статус документу. Таблиця: Направлення на в'їзд (departure_permission)"
                     example: new
                   personalized:
                     type: integer
@@ -5072,17 +5074,17 @@ paths:
                     example: 5
                   pq_queue_profile_guid:
                     type: string
-                    description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)"
+                    description: 'Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
                     format: uuid
                     example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                   pq_queue_guid:
                     type: string
-                    description: "Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)"
+                    description: 'Унікальний ідентифікатор запису черги. Таблиця: Черги (pq_queue)'
                     format: uuid
                     example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                   direction_schema_code:
                     type: string
-                    description: "Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)"
+                    description: 'Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)'
                     example: 004_РОЗВ_ТБТ
         400:
           description: Поганий запит
@@ -5112,7 +5114,82 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
-  
+  /departure_assistant:
+    get:
+      tags:
+        - 'T027 - Асистент направлень'
+      summary: Точка отримання рекомендацій асистента направлень
+      operationId: pqDepartureAssistant
+      description: |
+        Точка отримання рекомендацій асистента направлень.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pq_profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+            example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+        - in: query
+          name: pq_queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+            example: '34c0139c-d246-c638-8e61-12cbbffcb0a3'
+        - in: query
+          name: pq_warehouse_guid
+          description: Унікальний ідентифікатор складу черг
+          schema:
+            type: string
+            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
+        - in: query
+          name: goods_guid
+          description: Унікальний ідентифікатор вантажу
+          schema:
+            type: string
+            example: 'ЖИТО'
+        - in: query
+          name: quota_owner
+          description: Власник квоти
+          schema:
+            type: string
+            enum: [LOGISTICS, PURCHASE, AGRO]
+            example: PURCHASE
+
+      responses:
+        '200':
+          description: Дані асистента направлень
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/DepartureAssitantItems'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
 
 components:
   schemas:
@@ -5486,7 +5563,7 @@ components:
         pq_queue_status_after:
           type: string
           example: in_queue
-          description: | 
+          description: |
             Статус в черзі після направлення. Варіанти: in_process, rejected, in_queue, drop, in_process_to_drop, dropped, in_process_shift, in_process_move_to_entry.
             Таблиця: Напрямки направлення(pq_departure_permission_directions)
         description_ua:
@@ -5980,39 +6057,39 @@ components:
           description: 'Опис профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         koatuu:
           type: string
-          example: "5110800000"
+          example: '5110800000'
           description: 'Код КОАТУУ профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         name_order_slug:
           type: string
-          example: "Transbalkterminal"
+          example: 'Transbalkterminal'
           description: 'Назва сортування по слагу профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         building_n:
           type: string
-          example: "58"
+          example: '58'
           description: 'Номер будинку профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         district_code:
           type: string
-          example: "REC100012"
+          example: 'REC100012'
           description: 'Код району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         district_name:
           type: string
-          example: "Чорноморська міська рада"
+          example: 'Чорноморська міська рада'
           description: 'Назва району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         region_code:
           type: string
-          example: "51"
+          example: '51'
           description: 'Код області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         region_name:
           type: string
-          example: "Одеська"
+          example: 'Одеська'
           description: 'Назва області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         locality_name:
           type: string
-          example: "Чорноморськ"
+          example: 'Чорноморськ'
           description: 'Назва населеного пункту профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         street_name:
           type: string
-          example: "вулиця Сухолиманська"
+          example: 'вулиця Сухолиманська'
           description: 'Назва вулиці профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         company_guid:
           type: string
@@ -6020,11 +6097,11 @@ components:
           description: 'Унікальний ідентифікатор компанії профіля черги'
         author_user_guid:
           type: string
-          example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
           description: 'Унікальний ідентифікатор користувача, що створив профіль. Таблиця: ТХ користувачі (th_users)'
         telegram_group:
           type: string
-          example: "***"
+          example: '***'
           description: 'Група в телеграмі для профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
         direction:
           type: string
@@ -6163,7 +6240,7 @@ components:
       properties:
         date_time:
           type: string
-          example: "19.08.2021 11:34:40"
+          example: '19.08.2021 11:34:40'
           description: |
             Дата і час розрахунку. Таблиця: Статистика черги(pq_queue_statistics)
         value:
@@ -6191,7 +6268,7 @@ components:
             Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
         user_help_ua:
           type: string
-          example: "Правила для фото ТТН: ТТН повинна бути сфотографована в.."
+          example: 'Правила для фото ТТН: ТТН повинна бути сфотографована в..'
           description: |
             Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
         user_help_ru:
@@ -6235,7 +6312,7 @@ components:
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
             user_help_ua:
               type: string
-              example: "Правила для фото ТТН: ТТН повинна бути сфотографована в.."
+              example: 'Правила для фото ТТН: ТТН повинна бути сфотографована в..'
               description: |
                 Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
             user_help_ru:
@@ -6278,7 +6355,7 @@ components:
                 Назва документу російською. Таблиця: Електронна черга/довідники/Види документів(pq_document_type)
             user_help_ua:
               type: string
-              example: "Правила для фото ТТН: ТТН повинна бути сфотографована в.."
+              example: 'Правила для фото ТТН: ТТН повинна бути сфотографована в..'
               description: |
                 Правила для водія при веривікації українською. Таблиця: шаблони текстів (text_template)
             user_help_ru:
@@ -6353,35 +6430,35 @@ components:
         pq_queue_profile_name:
           type: string
           example: 'Придніпровський ОЕЗ ВО'
-          description: "Назва профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          description: 'Назва профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)'
         pq_queue_profile_guid:
           type: string
           example: '398521ca-e854-0688-255c-33587639ce28'
-          description: "Унікальний ідентифікатор профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          description: 'Унікальний ідентифікатор профіля черги. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)'
         files_count:
           type: integer
           example: 359
-          description: "Кількість файлів на перевірці у даний період часу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          description: 'Кількість файлів на перевірці у даний період часу. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)'
         files_max_check_duration:
           type: number
           example: 3.9
-          description: "Максимальна тривалість перевірки самого раннього файлу, год. Число, округлення до десятих. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          description: 'Максимальна тривалість перевірки самого раннього файлу, год. Число, округлення до десятих. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)'
         count:
           type: integer
           example: 359
-          description: "Кількість записів в массивах. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)"
+          description: 'Кількість записів в массивах. Таблиця: Статистика профіля черги. Зведена(pq_queue_profile_temps)'
         files_count_list:
-          description: "Кількість файлів на перевірці у даний період часу, шт. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          description: 'Кількість файлів на перевірці у даний період часу, шт. Таблиця: Статистика черги. Історія (pq_queue_statistics)'
           type: array
           items:
             $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
         files_check_duration:
-          description: "Максимальна тривалість перевірки самого раннього файлу у даний період часу, год. Число, округлення до десятих. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          description: 'Максимальна тривалість перевірки самого раннього файлу у даний період часу, год. Число, округлення до десятих. Таблиця: Статистика черги. Історія (pq_queue_statistics)'
           type: array
           items:
             $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
         files_checked:
-          description: "Середня кількість перевірених файлів у даний період часу, шт./год. Таблиця: Статистика черги. Історія (pq_queue_statistics)"
+          description: 'Середня кількість перевірених файлів у даний період часу, шт./год. Таблиця: Статистика черги. Історія (pq_queue_statistics)'
           type: array
           items:
             $ref: '#/components/schemas/StatisticsHistoryDateValuePair'
@@ -6394,16 +6471,16 @@ components:
         properties:
           location_guid:
             type: string
-            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
-            description: "Унікальний ідентифікатор місцезнаходження. Таблиця: Місцезнаходження(location)"
+            example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+            description: 'Унікальний ідентифікатор місцезнаходження. Таблиця: Місцезнаходження(location)'
           location_name_ua:
             type: string
             example: У пункті призначення
-            description: "Назва місцезнаходження українською. Таблиця: Місцезнаходження(location)"
+            description: 'Назва місцезнаходження українською. Таблиця: Місцезнаходження(location)'
           location_name_ru:
             type: string
             example: В пункте назначения
-            description: "Назва місцезнаходження російською. Таблиця: Місцезнаходження(location)"
+            description: 'Назва місцезнаходження російською. Таблиця: Місцезнаходження(location)'
           in_queue:
             type: integer
             example: 5
@@ -6452,15 +6529,15 @@ components:
         description: Черга (Звіт статистики черги)
         properties:
           locations:
-              $ref: '#/components/schemas/QueueStatisticsReportLocation'
+            $ref: '#/components/schemas/QueueStatisticsReportLocation'
           queue_guid:
             type: string
-            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
-            description: "Унікальний ідентифікатор черги. Таблиця: Черги(pq_queue)"
+            example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+            description: 'Унікальний ідентифікатор черги. Таблиця: Черги(pq_queue)'
           queue_name:
             type: string
             example: Основна черга приймання Пшениці
-            description: "Назва черги. Таблиця: Черги(pq_queue)"
+            description: 'Назва черги. Таблиця: Черги(pq_queue)'
           in_queue:
             type: integer
             example: 5
@@ -6509,15 +6586,15 @@ components:
         description: Категорія вантажу (Звіт статистики черги)
         properties:
           queues:
-              $ref: '#/components/schemas/QueueStatisticsReportQueue'
+            $ref: '#/components/schemas/QueueStatisticsReportQueue'
           goods_category_name:
             type: string
             example: Пшениця
-            description: "Назва категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
+            description: 'Назва категорії вантажу. Таблиця: Категорії вантажу(goods_category)'
           goods_category_guid:
             type: string
-            example: "ba287fd9-22c8-5349-65e5-4030d54f9986"
-            description: "Унікальний ідентифікатор категорії вантажу. Таблиця: Категорії вантажу(goods_category)"
+            example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+            description: 'Унікальний ідентифікатор категорії вантажу. Таблиця: Категорії вантажу(goods_category)'
           in_queue:
             type: integer
             example: 5
@@ -6558,3 +6635,84 @@ components:
             type: integer
             example: 90
             description: Загальна вага по транспортним засобам
+    DepartureAssitantItems:
+      description: Записи асистента направлень
+      type: array
+      items:
+        type: object
+        description: Категорія вантажу (Звіт статистики черги)
+        properties:
+          warehouse_guid:
+            type: string
+            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
+            description: 'GUID складу черг'
+          warehouse_name:
+            type: string
+            example: 'Трансбалктермінал'
+            description: 'Назва складу черг'
+          queue_guid:
+            type: string
+            example: '34c0139c-d246-c638-8e61-12cbbffcb0a3'
+            description: 'GUID виду черг'
+          queue_name:
+            type: string
+            example: 'Основна черга приймання вантажів'
+            description: 'Назва виду черг'
+          goods_guid:
+            type: string
+            example: 'ЖИТО'
+            description: 'GUID вантажу'
+          goods_name_ua:
+            type: string
+            example: 'Жито'
+            description: 'Назва вантажу (укр)'
+          goods_name_ru:
+            type: string
+            example: 'Рожь'
+            description: 'Назва вантажу (рус)'
+          quota_owner:
+            type: string
+            example: 'PURCHASE'
+            enum: [LOGISTICS, PURCHASE, AGRO]
+            description: 'Власник квоти'
+          quota_plan:
+            type: integer
+            example: 60
+            description: 'План квоти, т'
+          quota_date:
+            type: string
+            example: '30.08.2021'
+            description: 'Дата квоти'
+          waiting_for_registration_count:
+            type: integer
+            example: 0
+            description: 'Кількість транспортних засобів, що очікують реєстрації'
+          in_queue_count:
+            type: integer
+            example: 1
+            description: 'Кількість транспортних засобів, що перебувають в черзі'
+          departured_count:
+            type: integer
+            example: 1
+            description: 'Кількість транспортних засобів, що направленні на територію'
+          on_territory_count:
+            type: integer
+            example: 1
+            description: 'Кількість транспортних засобів, що на території'
+          used_quota:
+            type: integer
+            example: 12
+            description: 'Використано квоти, т'
+          done_quota:
+            type: integer
+            example: 12
+            description: 'Виконання квоти, %'
+          warehouse_max_count:
+            type: integer
+            example: 12
+            description: 'Максимальна  одночасна кількість транспортних засобів на території'
+          to_departure_count:
+            type: integer
+            example: 12
+            description: 'Доступно до направлення (рекоментація асистента)'
+          
