@@ -6715,4 +6715,31 @@ components:
             type: integer
             example: 12
             description: 'Доступно до направлення (рекоментація асистента)'
-          
+          quota_ratio:
+            type: integer
+            example: 25
+            description: 'Співвідношення у відстоках кількості квоти по профілю'
+          bandwidth_limit:
+            type: integer
+            example: 15
+            description: 'Обмеження пропускної здатності (різниця максимальної кількості зі складу та сумі кількості направлених і на території)'
+          quota_limit:
+            type: integer
+            example: 500
+            description: 'Обмеження по квоті (різниця кількості квоти та використаної квоти)'
+          is_downtime:
+            type: boolean
+            example: true
+            description: 'Наявність техпростою (якщо є, то кількість асистента 0)'
+          departured_weight:
+            type: integer
+            example: 1500
+            description: 'Сумарна вага авто направлених на в`їзд'
+          on_territory_weight:
+            type: integer
+            example: 1500
+            description: 'Сумарна вага авто на треиторії складу'
+          leaved_weight:
+            type: integer
+            example: 3000
+            description: 'Сумарна вага авто, які виїхали за територію'
