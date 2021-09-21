@@ -4991,7 +4991,7 @@ paths:
                   type: string
                   description: |
                     Код налаштування напрямку направлення. 
-                    Налаштування напрямків направлення використовується як альтернатива асистенту (параметр: quota_owner)
+                    Налаштування напрямків направлення використовується як кастомізовані відбори по статусу в черзі, місцезнаходженню і т.д.
                     Таблиця: Напрямки направлення (pq_departure_permission_directions)"
                   example: 004_РОЗВ_ТБТ
                 pq_queue_profile_guid:
@@ -5027,9 +5027,20 @@ paths:
                   description: |
                     Власник квоти рейсів. Агро - наявність ознаки is_agro рейсу; 
                     Логістика - це наявна заявка; Закупка - заявка відсутня.
-                    Використовується асистентом, як альтернатива напрямків направлення (параметр: pq_dep_perm_direction_code)
+                    Використовується механізмом "Асистент направлень"
                     Таблиця: Направлення на в'їзд (departure_permission)
                   example: LOGISTICS
+                quota_date:
+                  type: string
+                  format: dd.mm.yyyy
+                  description: "Дата квоти рейсів. Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: "16.09.2021"
+                suggested_assistant_vehicle_count:
+                  type: integer
+                  description: |
+                    Кількість авто, рекомендованих до направлення механізмом "Асистент направлень". 
+                    Таблиця: Направлення на в'їзд (departure_permission)"
+                  example: 10
                 vehicle_count:
                   type: integer
                   description: |
