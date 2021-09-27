@@ -3470,6 +3470,14 @@ components:
           type: string
           example: "Онлайн-регистрация в очереди будет доступна после выезда авто со склада погрузки. Этот статус обновляется автоматически."
           description: "Текст шаблону сповіщення при забороні реєстрації в черзі російською. Таблиця: Шаблони текстів (text_template)"
+        driver_rules_text_ua:
+          type: string
+          example: 'Текст правил'
+          description: 'Текст правил для водія. Таблиця: Шаблони текстів (text_template)'
+        driver_rules_text_ru:
+          type: string
+          example: 'Текст правил'
+          description: 'Текст правил для водія. Таблиця: Шаблони текстів (text_template)'
     _UserisNotAuthorized:
       type: object
       properties:
