@@ -3022,7 +3022,26 @@ paths:
           description: Унікальний ідентифікатор наряду
           schema:
             type: string
+        - in: query
+          name: document_exchange_status
+          description: Статус обміну пакету документів
+          schema:
+            type: string
+            enum: [draft, to_exchange, in_progress, confirmed, rejected]
       responses:
+        200:
+          description: Дані наряду
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/vehicleRegister'
         400:
           description: 'Поганий запит'
           content:
@@ -6754,3 +6773,21 @@ components:
             type: integer
             example: 3000
             description: 'Сумарна вага авто, які виїхали за територію'
+    vehicleRegister:
+      type: object
+      properties:
+        request_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
+        document_exchange_status:
+          type: string
+          enum: [draft, to_exchange, in_progress, confirmed, rejected]
+          example: in_progress
+          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        document_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        
+    
