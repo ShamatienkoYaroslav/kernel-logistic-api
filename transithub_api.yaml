@@ -4006,24 +4006,24 @@ paths:
                     example: 28.04.2021 18:41:52
                   comments:
                     type: string
-                    description: Коментар
-                    example: 'Текст користувача. Таблиця: Документи(documents)'
+                    description: 'Текст користувача. Таблиця: Документи(documents)'
+                    example: Коментар
                   is_archive:
                     type: integer
                     description: 'Ознака перебування документу в архіві. 1 - документ архівовано; 0 - документ не архівовано. Таблиця: Документи(documents)'
                     example: 0
                   document_kind_type:
                     type: string
-                    description: ttn
-                    example: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
+                    description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
+                    example: ttn
                   document_kind_name_ua:
                     type: string
-                    description: ТТН
-                    example: 'Назва виду пакету документів українською. Таблиця: Види пакетів документів(document_types)'
+                    description: 'Назва виду пакету документів українською. Таблиця: Види пакетів документів(document_types)'
+                    example: ТТН
                   document_kind_name_ru:
                     type: string
-                    description: ТТН
-                    example: 'Назва виду пакету документів російською. Таблиця: Види пакетів документів(document_types)'
+                    description: 'Назва виду пакету документів російською. Таблиця: Види пакетів документів(document_types)'
+                    example: ТТН
         400:
           description: 'Поганий запит'
           content:
