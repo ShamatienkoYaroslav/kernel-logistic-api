@@ -3022,7 +3022,26 @@ paths:
           description: Унікальний ідентифікатор наряду
           schema:
             type: string
+        - in: query
+          name: document_exchange_status
+          description: Статус обміну пакету документів
+          schema:
+            type: string
+            enum: [draft, to_exchange, in_progress, confirmed, rejected]
       responses:
+        200:
+          description: Дані наряду
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/VehicleRegister'
         400:
           description: 'Поганий запит'
           content:
@@ -3929,6 +3948,82 @@ paths:
           schema:
             type: string
       responses:
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    description: 'Ідентифікатор запиту на чергу. Таблиця: Документи(documents)'
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  owner_guid:
+                    type: string
+                    description: 'Ідентифікатор запису таблиці-власника документу. Таблиця: Документи(documents)'
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  owner_type:
+                    type: string
+                    description: | 
+                      Тип таблиці-власника документа. Тут вказується назва таблиці(
+                      Наряди, ТТН, Транспортні засоби, Запити на акредитацію). Таблиця: Документи(documents)
+                    enum: [request_vehicles_register, waybill, th_vehicles, accreditation_requests]
+                    example: request_vehicles_register
+                  exchange_status:
+                    type: string
+                    description: 'Статус обробки файлу(чорновик, до перевірки, на перевірці, відхилено, погоджено). Таблиця: Документи(documents)'
+                    enum: [draft, to_exchange, in_progress, rejected, confirmed]
+                  number:
+                    type: string
+                    description: 'Номер документу. Таблиця: Документи(documents)'
+                    example: ЭЛ06-201211-00201
+                  date_from:
+                    type: string
+                    description: 'Дата дії документу з. Таблиця: Документи(documents)'
+                    example: 28.04.2021 18:41:52
+                  date_to:
+                    type: string
+                    description: 'Дата дії документу по. Таблиця: Документи(documents)'
+                    example: 28.04.2021 18:41:52
+                  document_status:
+                    type: string
+                    description: 'Статус документу(дійсний, недійсний). Таблиця: Документи(documents)'
+                    enum: [valid, expired]
+                  created_at:
+                    type: string
+                    description: 'Дата створення документу. Таблиця: Документи(documents)'
+                    example: 28.04.2021 18:41:52
+                  updated_at:
+                    type: string
+                    description: 'Дата останньої редакції документу. Таблиця: Документи(documents)'
+                    example: 28.04.2021 18:41:52
+                  comments:
+                    type: string
+                    description: 'Текст користувача. Таблиця: Документи(documents)'
+                    example: Коментар
+                  is_archive:
+                    type: integer
+                    description: 'Ознака перебування документу в архіві. 1 - документ архівовано; 0 - документ не архівовано. Таблиця: Документи(documents)'
+                    example: 0
+                  document_kind_type:
+                    type: string
+                    description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
+                    example: ttn
+                  document_kind_name_ua:
+                    type: string
+                    description: 'Назва виду пакету документів українською. Таблиця: Види пакетів документів(document_types)'
+                    example: ТТН
+                  document_kind_name_ru:
+                    type: string
+                    description: 'Назва виду пакету документів російською. Таблиця: Види пакетів документів(document_types)'
+                    example: ТТН
         400:
           description: 'Поганий запит'
           content:
@@ -6805,6 +6900,7 @@ components:
             type: integer
             example: 3000
             description: 'Сумарна вага авто, які виїхали за територію'
+<<<<<<< HEAD
           queue_ratio:
             type: integer
             example: 47.8
@@ -6825,3 +6921,23 @@ components:
             type: integer
             example: 8
             description: 'Кількість авто складу, шт'
+=======
+    VehicleRegister:
+      type: object
+      properties:
+        request_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
+        document_exchange_status:
+          type: string
+          enum: [draft, to_exchange, in_progress, confirmed, rejected]
+          example: in_progress
+          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        document_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
+    
+    
+>>>>>>> d3613c44c12b7a573fd3a5154bad095b8a0c6c93
