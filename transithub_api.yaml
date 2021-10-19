@@ -3971,10 +3971,16 @@ paths:
                     example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                   owner_type:
                     type: string
-                    description: | 
+                    description: |
                       Тип таблиці-власника документа. Тут вказується назва таблиці(
                       Наряди, ТТН, Транспортні засоби, Запити на акредитацію). Таблиця: Документи(documents)
-                    enum: [request_vehicles_register, waybill, th_vehicles, accreditation_requests]
+                    enum:
+                      [
+                        request_vehicles_register,
+                        waybill,
+                        th_vehicles,
+                        accreditation_requests
+                      ]
                     example: request_vehicles_register
                   exchange_status:
                     type: string
@@ -6900,7 +6906,6 @@ components:
             type: integer
             example: 3000
             description: 'Сумарна вага авто, які виїхали за територію'
-<<<<<<< HEAD
           queue_ratio:
             type: integer
             example: 47.8
@@ -6921,7 +6926,6 @@ components:
             type: integer
             example: 8
             description: 'Кількість авто складу, шт'
-=======
     VehicleRegister:
       type: object
       properties:
@@ -6938,6 +6942,3 @@ components:
           type: string
           example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
           description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
-    
-    
->>>>>>> d3613c44c12b7a573fd3a5154bad095b8a0c6c93
