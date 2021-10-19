@@ -5034,7 +5034,7 @@ paths:
                   type: string
                   format: dd.mm.yyyy
                   description: "Дата квоти рейсів. Таблиця: Направлення на в'їзд (departure_permission)"
-                  example: "16.09.2021"
+                  example: '16.09.2021'
                 suggested_assistant_vehicle_count:
                   type: integer
                   description: |
@@ -5154,31 +5154,18 @@ paths:
             type: string
             example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
         - in: query
-          name: pq_queue_guid
-          description: Унікальний ідентифікатор черги
-          schema:
-            type: string
-            example: '34c0139c-d246-c638-8e61-12cbbffcb0a3'
-        - in: query
-          name: pq_warehouse_guid
-          description: Унікальний ідентифікатор складу черг
-          schema:
-            type: string
-            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
-        - in: query
           name: goods_guid
           description: Унікальний ідентифікатор вантажу
+          required: true
           schema:
             type: string
             example: 'ЖИТО'
         - in: query
-          name: quota_owner
-          description: Власник квоти
+          name: count
+          description: Загальна кількість на направлення
           schema:
-            type: string
-            enum: [LOGISTICS, PURCHASE, AGRO]
-            example: PURCHASE
-
+            type: number
+            example: 15
       responses:
         '200':
           description: Дані асистента направлень
@@ -5189,6 +5176,70 @@ paths:
                 properties:
                   items:
                     $ref: '#/components/schemas/DepartureAssitantItems'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+  /departure_assistant/max_count:
+    get:
+      tags:
+        - 'T027 - Асистент направлень'
+      summary: Точка отримання максимальнодоступної кількості для асистента направлень
+      operationId: pqDepartureAssistantMaxCount
+      description: |
+        Точка отримання максимальнодоступної кількості для асистента направлень.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pq_profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+            example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+        - in: query
+          name: goods_guid
+          description: Унікальний ідентифікатор вантажу
+          required: true
+          schema:
+            type: string
+            example: 'ЖИТО'
+      responses:
+        '200':
+          description: Дані максимальної кількості для асистента направлень
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 15
+                    description: 'Максимальнодопустима кількість для асистента'
+                  path:
+                    type: string
+                    example: 'WAREHOUSE'
+                    enum: ['WAREHOUSE', 'IN_QUEUE']
+                    description: 'Шлях розрахунку результату. WAREHOUSE - обмеження по вільних місцях на складах, IN_QUEUE - обмеження по кількості авто в чергах.'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
@@ -6754,3 +6805,23 @@ components:
             type: integer
             example: 3000
             description: 'Сумарна вага авто, які виїхали за територію'
+          queue_ratio:
+            type: integer
+            example: 47.8
+            description: 'Питома вага виду черги по власнику квоти, %'
+          quota_owner_ratio:
+            type: integer
+            example: 56.62
+            description: 'Питома вага власника квоти, %'
+          quota_owner_count:
+            type: integer
+            example: 7
+            description: 'Кількість авто власника квоти, шт'
+          warehouse_ratio:
+            type: integer
+            example: 43.72
+            description: 'Питома вага складу, %'
+          warehouse_count:
+            type: integer
+            example: 8
+            description: 'Кількість авто складу, шт'
