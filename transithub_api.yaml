@@ -3084,6 +3084,78 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: guid
+          description: Ідентифікатор запису наряду, для оновлення
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення нового пакету реєстру
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                request_guid:
+                  type: string
+                  description: 'Ідентифікатор заявки. Таблиця: заявки(requests)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                truck_guid:
+                  type: string
+                  description: 'Ідентифікатор запису автомобіля ТХ. Таблиця: ТХ транспортні засоби(th_vehicles)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                trailer_guid:
+                  type: string
+                  description: 'Ідентифікатор запису причепа ТХ. Таблиця: ТХ транспортні засоби(th_vehicles)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                driver_guid:
+                  type: string
+                  description: 'Ідентифікатор запису водія ТХ. Таблиця: ТХ водії(th_vehicles)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                company_guid:
+                  type: string
+                  description: 'Ідентифікатор запису компанії ТХ. Таблиця: ТХ компанії(th_companys)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                handle_status:
+                  type: string
+                  description: 'Статус обробки наряду (чорновик, готовий, скасований). Таблиця: Наряди (request_vehicles_register)'
+                  enum: [dash, ready, canceled]
+                  example: ready
+                trips_quantity:
+                  type: integer
+                  description: 'Кількість виїздів. Таблиця: Наряди (request_vehicles_register)'
+                  example: 2
+                ready_to_subscription:
+                  type: integer
+                  description: 'Готово до підпису. Таблиця: Наряди (request_vehicles_register)'
+                  enum: [0, 1]
+                  example: 1
+                max_vehicle_height:
+                  type: number
+                  example: 3
+                  description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+                max_vehicle_width:
+                  type: number
+                  example: 3
+                  description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+                sum_vehicle_length:
+                  type: number
+                  example: 3
+                  description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+                sum_vehicle_gross_weight:
+                  type: number
+                  example: 3
+                  description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+                sum_vehicle_gross_weight_without_loading:
+                  type: number
+                  example: 3
+                  description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
       responses:
         '401':
           description: 'Клієнт не авторизований'
@@ -3188,6 +3260,19 @@ paths:
           schema:
             type: string
       responses:
+        200:
+          description: Дані ТЗ
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/VehicleRegister'
         400:
           description: 'Поганий запит'
           content:
@@ -7126,3 +7211,86 @@ components:
           type: string
           example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
           description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_length:
+          type: number
+          example: 5
+          description: 'Довжина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_width:
+          type: number
+          example: 3
+          description: 'Ширина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_height:
+          type: number
+          example: 2.55
+          description: 'Висота транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_length:
+          type: number
+          example: 5
+          description: 'Довжина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_width:
+          type: number
+          example: 3
+          description: 'Ширина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_height:
+          type: number
+          example: 2.55
+          description: 'Висота причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+    Vehicle:
+      type: object
+      properties:
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
