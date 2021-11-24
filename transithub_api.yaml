@@ -6016,6 +6016,14 @@ components:
           type: string
           example: 003_РОУТЕР
           description: 'Код шаблону сповіщення. Таблиця: Напрямки направлення(pq_departure_permission_directions)'
+        pq_warehouse_guid:
+          type: string
+          example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+          description: "Унікальний ідентифікатор складу черги. Таблиця: Склади черги(pq_warehouse)"
+        pq_warehouse_name:
+          type: string
+          example: Кропивницький ХАБ
+          description: "Назва складу черги. Таблиця: Склади черги(pq_warehouse)"
     Waybill:
       type: object
       properties:
