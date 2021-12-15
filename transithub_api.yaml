@@ -3156,6 +3156,14 @@ paths:
                   type: number
                   example: 3
                   description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+                container_1:
+                  type: string
+                  example: Контейнер №1
+                  description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
+                container_2:
+                  type: string
+                  example: Контейнер №2
+                  description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
       responses:
         '401':
           description: 'Клієнт не авторизований'
@@ -7193,6 +7201,57 @@ components:
           type: number
           example: 3
           description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: increased
+          description: 'Норма навантаження транспортного засобу. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        trailer_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: increased
+          description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        auto_train_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: increased
+          description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        document_id:
+          type: integer
+          example: 294562
+          description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_name:
+          type: string
+          example: Кернел - Трейд ТОВ
+          description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_number:
+          type: string
+          example: "Z_069308"
+          description: 'Номер заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_name:
+          type: string
+          example: "Довгенко Анатолій Миколайович"
+          description: 'Назва перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_goods:
+          type: string
+          example: 'Пшениця'
+          description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
+        container_1:
+          type: string
+          example: Контейнер №1
+          description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
+        container_2:
+          type: string
+          example: Контейнер №2
+          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
     Vehicle:
       type: object
       properties:
