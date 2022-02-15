@@ -228,7 +228,7 @@ paths:
         content:
           application/xml:
             schema:
-              type: array
+              type: object
               xml:
                 name: waybill_events
               properties:
