@@ -1190,8 +1190,6 @@ components:
           type: string
           example: 000115ee-45d7-4890-8458-24d38164c10e
           description: Унікальний ідентифікатор запису
-          xml:
-            attribute: true
         signatory_role:
           type: string
           enum: [consignor, consignee, driver_issued, driver_received]
