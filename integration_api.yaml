@@ -14,6 +14,8 @@ tags:
     description: 'Вузли для роботи з підпискою'
   - name: 'Підсистема сповіщень'
     description: 'Вузли для роботи з підсистемою сповіщень'
+  - name: 'Є-ТТН. Історія підписів'
+    description: 'Вузли для роботи з історією підписів Є-ТТН'
 
 paths:
   /subscription:
@@ -199,6 +201,46 @@ paths:
                     type: string
                     example: "22226021-6f2d-37b3-c92f-ad7187b01a6e"
                     description: Унікальний ідентифікатор запису
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRights'
+  /e_waybill/signature_history:
+    post:
+      tags:
+      - Є-ТТН. Історія підписів
+      summary: Створення події підпису Є-ТТН
+      operationId: SignatureHistoryPost
+      description: |
+        Створення події підпису Є-ТТН
+      parameters:
+        - in: query
+          name: token
+          description: Токен вузла обміну
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення нового пакету документів
+        content:
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Waybill_event'
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус обробки запиту
         '403':
           description: 'Клієнт немає прав доступу'
           content:
@@ -1139,6 +1181,22 @@ components:
           type: number
           example: 10
           description: Вага тари отримувача, т
+    Waybill_event:
+      type: object
+      xml:
+        name: waybill_event
+      properties:
+        waybill_guid:
+          type: string
+          example: 000115ee-45d7-4890-8458-24d38164c10e
+          description: Унікальний ідентифікатор запису
+          xml:
+            attribute: true
+        signatory_role:
+          type: string
+          enum: [consignor, consignee, driver_issued, driver_received]
+          example: consignor
+          description: Роль підписанта
     _ClientHasNoRights:
       type: object
       properties:
