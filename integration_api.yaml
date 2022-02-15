@@ -1210,7 +1210,7 @@ components:
           description: Назва організації підписанта.
         signatory_org_сode:
           type: string
-          example: 0004546999
+          example: "0004546999"
           description: Код ЄДРПОУ організації підписанта.
         signed_at:
           type: string
