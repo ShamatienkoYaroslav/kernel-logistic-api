@@ -1189,12 +1189,28 @@ components:
         waybill_guid:
           type: string
           example: 000115ee-45d7-4890-8458-24d38164c10e
-          description: Унікальний ідентифікатор запису
+          description: Унікальний ідентифікатор запису ТТН в системі Транзітхаб
         signatory_role:
           type: string
           enum: [consignor, consignee, driver_issued, driver_received]
           example: consignor
-          description: Роль підписанта
+          description: Роль підписанта (consignor-відправник, consignee-отримувач, driver_issued-водій(здав), driver_received-водій(прийняв))
+        signatory_fullname:
+          type: string
+          example: Безштанько Панас Романович
+          description: ПІБ підписанта.
+        signatory_org_name:
+          type: string
+          example: ТОВ Кернел-Трейд
+          description: Назва організації підписанта.
+        signatory_org_сode:
+          type: string
+          example: ТОВ Кернел-Трейд
+          description: Код ЄДРПОУ організації підписанта.
+        signed_at:
+          type: string
+          example: 03.06.2022 16:29:00
+          description: Дата і час підпису.
     _ClientHasNoRights:
       type: object
       properties:
