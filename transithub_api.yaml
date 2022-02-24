@@ -959,6 +959,18 @@ paths:
                   example: 1
                   enum: [0, 1]
                   description: Ознака наявності лабораторного аналіза
+                error_text_code:
+                  type: string
+                  example: '060'
+                  description: 'Код шаблону сповіщення. Таблиця: шаблони текстів (text_template)'
+                error_text_ua:
+                  type: string
+                  example: Редагування ТТН заборонено. Рейс створено з БалкДати.
+                  description: 'Текст шаблону сповіщення українською. Таблиця: шаблони текстів (text_template)'
+                error_text_ru:
+                  type: string
+                  example: Редактирование ТТН запрещено. Рейс создан из БалкДаты.
+                  description: 'Текст шаблону сповіщення російською. Таблиця: шаблони текстів (text_template)'
       responses:
         200:
           description: returns update results
