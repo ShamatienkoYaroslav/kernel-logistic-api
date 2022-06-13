@@ -18,9 +18,9 @@ tags:
     description: Програмний інтерфейс для роботи з рейсами водія
   - name: Поклажодавці
     description: Поклажодавці профіля черги
-  - name: 'T001 - Подорожній лист'
+  - name: T001 - Подорожній лист
     description: Вузли для роботи водія із подорожніми листами
-  - name: 'T002 - Рейси'
+  - name: T002 - Рейси
     description: Вузли для роботи з рейсами
   - name: Т003 - ТТН
     description: Вузли для роботи з товарно-транспортними накладними
@@ -28,8 +28,429 @@ tags:
     description: Вузли для роботи з чергами та їх статистикою
   - name: Т005 - Верифікація
     description: Верифікація документів рейсу
+  - name: T006 - Водії
+    description: Вузли для роботи з водіями
+  - name: T007 - Аутентифікація
+    description: Вузли для роботи з аутентифікаціею користувачів системи
 
 paths:
+  /auth/check_pincode:
+    post:
+      tags: ['T007 - Аутентифікація']
+      summary: Перевірка пін-коду користувача при вході в систему
+      description:
+        Перевірка пін-коду користувача при вході в систему
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: phone
+          example: 380675559911
+          description: 'Номер телефону користувача'
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pincode
+          example: 6311
+          description: 'Пін-код для перевірки'
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          example: track-check-login
+          description: 'Джерело надходження запиту. За замовчуванням: th-login'
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: результат успішного виконання запиту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Результат виконання'
+                  access_token:
+                    type: string
+                    example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTY1NTA3ODQwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfaWQiOiAiNTA0MSJ9.clP40kCYGzmsyyFl5Q3Wlw3JEtMGpVrwXWNDm-gH9KQ
+                    description: 'Токен доступу користувача ТХ'
+                  user_is_new:
+                    type: boolean
+                    example: true
+                    description: 'Ознака створення нового користувача'
+                  language:
+                    type: string
+                    enum: [ua, ru]
+                    example: ua
+                    description: 'Мова інтерфейсу користувача'
+                  guid:
+                    type: string
+                    format: uuid
+                    maxLength: 50
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                    description: 'Ідентифікатор запису користувача ТХ, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
+                  phone:
+                    type: string
+                    example: 380675559911
+                    description: 'Номер телефону користувача (в байтах). Таблиця: ТХ користувачі(th_users)'
+                  msg:
+                    type: string
+                    example: Codes do not match
+                    description: 'Повідомлення користувачу. Константа'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /auth/send_pincode:
+    post:
+      tags: ['T007 - Аутентифікація']
+      summary: Надіслати пін-код користувача при вході в систему
+      description:
+        Надіслати пін-код користувача при вході в систему
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: phone
+          example: 380675559911
+          description: 'Номер телефону користувача'
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          example: track-check-login
+          description: 'Джерело надходження запиту. За замовчуванням: th-login'
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: результат успішного виконання запиту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Результат виконання'
+                  message_code:
+                    type: string
+                    example: 035
+                    description: 'Код повідомлення користувачу. Константа'
+                  message_ua:
+                    type: string
+                    example: Пін-код відправляється тільки в бот Telegram. https:\/\/telegra.ph\/YAk-zavantazhiti-Telegram-02-24 Як підключити?
+                    description: 'Повідомлення користувачу українською. Вказується в налаштуваннях адміна'
+                  message_ru:
+                    type: string
+                    example: Пин-код отправляется только в бот Telegram. https:\/\/telegra.ph\/YAk-zavantazhiti-Telegram-02-24 Как подключить?
+                    description: 'Повідомлення користувачу російською. Вказується в налаштуваннях адміна'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
+  /drivers:
+    post:
+      tags: ['T004 - Водії']
+      summary: Створення(реєстрація) нового водія в системі
+      description:
+        Точка реєстрації нового водія в системі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - middle_name
+                - last_name
+                - cert_serial_number
+                - phone
+                - workspace
+              properties:
+                first_name:
+                  type: string
+                  maxLength: 100
+                  example: Микола
+                  description: "Ім'я водія (в байтах). Таблиця: ТХ водії(th_drivers)"
+                middle_name:
+                  type: string
+                  maxLength: 100
+                  example: Володимирович
+                  description: 'По-батькові водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                last_name:
+                  type: string
+                  maxLength: 100
+                  example: Миколайчук
+                  description: 'Прізвище водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                workspace:
+                  type: string
+                  maxLength: 50
+                  example: kernel
+                  description: 'Воркспейс компанії ТХ (в байтах). Таблиця: ТХ компанії(th_companys)'
+                phone:
+                  type: string
+                  example: 380675559911
+                  description: 'Номер телефону водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                email:
+                  type: string
+                  maxLength: 200
+                  format: email
+                  example: mykola
+                  description: 'mykola@gmail.com (в байтах). Таблиця: ТХ водії(th_drivers)'
+                cert_serial_number:
+                  type: string
+                  maxLength: 50
+                  example: КВЕ415834
+                  description: 'Серія та номер посвідчення водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                external_user_id:
+                  type: string
+                  maxLength: 500
+                  example: telegra_3107762899
+                  description: 'Ідентифікатор користувача в клієнт-аплікації (в байтах). Таблиця: ТХ водії(th_drivers)'
+                person_docs_type:
+                  type: string
+                  enum:
+                    [
+                      passport,
+                      id_card
+                    ]
+                  example: passport
+                  description: 'Тип документу, що посвідчує особу водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                pass_serial:
+                  type: string
+                  maxLength: 20
+                  example: КР
+                  description: 'Серія паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                pass_number:
+                  type: string
+                  maxLength: 40
+                  example: КР
+                  description: 'Номер паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                pass_issued:
+                  type: string
+                  maxLength: 800
+                  example: Карлівським РВ УМВС України в Полтавській області
+                  description: 'Де і ким видано паспорт водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                pass_date:
+                  type: string
+                  format: dd.mm.yyyy hh:mm:ss
+                  example: 28.04.2021 00:00:00
+                  description: 'Дата видачі паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                id_card_number:
+                  type: string
+                  maxLength: 20
+                  example: 000009990
+                  description: 'Номер ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                id_card_date:
+                  type: string
+                  format: dd.mm.yyyy hh:mm:ss
+                  example: 28.04.2021 00:00:00
+                  description: 'Дата видачі ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                id_card_issued:
+                  type: string
+                  example: Карлівським РВ УМВС України в Полтавській області
+                  description: 'Де і ким видана ідентифікаційна картка водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                contact_info_type:
+                  type: string
+                  maxLength: 100
+                  example: TELEGRAM
+                  description: "Тип додаткової контактної інформації водія ТХ (в байтах). 
+                    Таблиця: ТХ водій/Контактна інформація(th_drivers_contact_info)"
+                contact_info_value:
+                  type: string
+                  maxLength: 500
+                  example: 1115075380
+                  description: "Значення додаткової контактної інформації водія ТХ (в байтах). 
+                    Таблиця: ТХ водій/Контактна інформація(th_drivers_contact_info)"
+                contact_info_description:
+                  type: string
+                  maxLength: 1000
+                  example: Чат id TELEGRAM каналу
+                  description: "Опис додаткової контактної інформації водія ТХ (в байтах). 
+                    Таблиця: ТХ водій/Контактна інформація(th_drivers_contact_info)"
+      responses:
+        200:
+          description: результат успішного виконання запиту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  guid:
+                    type: string
+                    format: uuid
+                    maxLength: 50
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                    description: 'Ідентифікатор запису Водія ТХ (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  driver_status:
+                    type: string
+                    enum:
+                      [
+                        ARCHIVED,
+                        ACTIVE
+                      ]
+                    example: ACTIVE
+                    description: 'Статус водія: активний, в архіві. Таблиця: ТХ водії(th_drivers)'
+                  first_name:
+                    type: string
+                    maxLength: 100
+                    example: Микола
+                    description: "Ім'я водія (в байтах). Таблиця: ТХ водії(th_drivers)"
+                  middle_name:
+                    type: string
+                    maxLength: 100
+                    example: Володимирович
+                    description: 'По-батькові водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  last_name:
+                    type: string
+                    maxLength: 100
+                    example: Миколайчук
+                    description: 'Прізвище водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  name:
+                    type: string
+                    maxLength: 150
+                    example: Миколайчук М. В.
+                    description: 'ПІБ водія скорочене (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  full_name:
+                    type: string
+                    maxLength: 150
+                    example: Миколайчук Микола Володимирович
+                    description: 'ПІБ водія повне (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  pass_serial:
+                    type: string
+                    maxLength: 20
+                    example: КР
+                    description: 'Серія паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  pass_number:
+                    type: string
+                    maxLength: 40
+                    example: КР
+                    description: 'Номер паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  pass_issued:
+                    type: string
+                    maxLength: 800
+                    example: Карлівським РВ УМВС України в Полтавській області
+                    description: 'Де і ким видано паспорт водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  pass_date:
+                    type: string
+                    format: dd.mm.yyyy hh:mm:ss
+                    example: 28.04.2021 00:00:00
+                    description: 'Дата видачі паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  id_card_number:
+                    type: string
+                    maxLength: 20
+                    example: 000009990
+                    description: 'Номер ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  id_card_date:
+                    type: string
+                    format: dd.mm.yyyy hh:mm:ss
+                    example: 28.04.2021 00:00:00
+                    description: 'Дата видачі ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  id_card_issued:
+                    type: string
+                    example: Карлівським РВ УМВС України в Полтавській області
+                    description: 'Де і ким видана ідентифікаційна картка водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  external_user_id:
+                    type: string
+                    maxLength: 500
+                    example: telegra_3107762899
+                    description: 'Ідентифікатор користувача в клієнт-аплікації (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  cert_serial_number:
+                    type: string
+                    maxLength: 50
+                    example: КВЕ415834
+                    description: 'Серія та номер посвідчення водія (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  cert_serial_number_slug:
+                    type: string
+                    maxLength: 50
+                    example: КВЕ415834
+                    description: 'Серія та номер посвідчення водія опрацьовані утилітою слаг (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  _state:
+                    type: string
+                    maxLength: 6
+                    example: created
+                    description: 'Застарів і не використовується (в байтах). Константа'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
   /driver/races/status:
     get:
       tags:
