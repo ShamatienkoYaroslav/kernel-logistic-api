@@ -3500,13 +3500,13 @@ paths:
           application/json:
             schema:
               type: object
-              required:
+              description: 'required:
                 - first_name
                 - middle_name
                 - last_name
                 - cert_serial_number
                 - phone
-                - company_guid
+                - company_guid'
               properties:
                 first_name:
                   type: string

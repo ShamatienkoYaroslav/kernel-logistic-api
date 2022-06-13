@@ -221,13 +221,6 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - first_name
-                - middle_name
-                - last_name
-                - cert_serial_number
-                - phone
-                - workspace
               properties:
                 first_name:
                   type: string
