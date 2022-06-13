@@ -210,7 +210,7 @@ paths:
       x-codegen-request-body-name: body
   /drivers:
     post:
-      tags: ['T004 - Водії']
+      tags: [T006 - Водії]
       summary: Створення(реєстрація) нового водія в системі
       description:
         Точка реєстрації нового водія в системі
