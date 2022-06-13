@@ -126,8 +126,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
         500:
-          description: server error
-          content: {}
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
       x-codegen-request-body-name: body
   /auth/send_pincode:
     post:
@@ -199,8 +202,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
         500:
-          description: server error
-          content: {}
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
       x-codegen-request-body-name: body
   /drivers:
     post:
@@ -448,8 +454,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
         500:
-          description: server error
-          content: {}
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
       x-codegen-request-body-name: body
   /driver/races/status:
     get:
