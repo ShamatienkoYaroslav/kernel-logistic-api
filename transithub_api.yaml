@@ -146,6 +146,71 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequest'
+  /transithub/departure_assistant:
+    get:
+      tags: ['T027 - Асистент направлень']
+      summary: Перевірка водія на признак наявності в чорному списку
+      operationId: departureAssistantGet
+      description: |
+        Перевірка водія на признак наявності в чорному списку по номеру посвідчення/телефону
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: driver_cert
+          description: Посвідчення водія (серія і номер)
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Телефон водія
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по приналежності до чорного списку
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  in_blacklist:
+                    type: boolean
+                    example: false
+                    description: 'Індикатор приналежності до чорного списку'
+                  created_at:
+                    type: string
+                    example: '17.03.2021 00:00:00'
+                    description: 'Дата внесення в чорний список'
+                  text_ua:
+                    type: string
+                    example: 'Водій перебуває в \"Чорному списку\'
+                    description: 'Текст повідомлення користувачу (українською)'
+                  text_ru:
+                    type: string
+                    example: 'Водитель находится в \"Чорном списке\'
+                    description: 'Текст повідомлення користувачу (російською)'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+  
   /contragent:
     post:
       tags:
