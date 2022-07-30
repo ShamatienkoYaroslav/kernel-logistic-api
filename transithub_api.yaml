@@ -7599,12 +7599,12 @@ components:
         trailer_load_rate:
           type: string
           enum: [standard, increased]
-          example: increased
+          example: 'increased'
           description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
         auto_train_load_rate:
           type: string
           enum: [standard, increased]
-          example: increased
+          example: 'increased'
           description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
         document_id:
           type: integer
@@ -7612,7 +7612,7 @@ components:
           description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
         request_customer_name:
           type: string
-          example: Кернел - Трейд ТОВ
+          example: 'Кернел - Трейд ТОВ'
           description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
         request_customer_code:
           type: string
@@ -7636,11 +7636,11 @@ components:
           description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
         container_1:
           type: string
-          example: Контейнер №1
+          example: 'Контейнер №1'
           description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
         container_2:
           type: string
-          example: Контейнер №2
+          example: 'Контейнер №2'
           description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
         auto_max_load:
           type: number
@@ -7661,11 +7661,11 @@ components:
         driver_status:
           type: string
           enum: [actual, accepted, rejected]
-          example: actual
+          example: 'actual'
           description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
         driver_comment:
           type: string
-          example: Некорректні дані
+          example: 'Некоректні дані'
           description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
     Vehicle:
       type: object
