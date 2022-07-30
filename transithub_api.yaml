@@ -7641,32 +7641,7 @@ components:
         container_2:
           type: string
           example: Контейнер №2
-          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
-        auto_max_load:
-          type: number
-          example: 30
-          description: 'Норма навантаження. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_axles_number:
-          type: number
-          example: 2
-          description: 'Кількість осей транспортного засобу. Таблиця: Наряди (request_vehicles_register)'
-        trailer_axles_number:
-          type: number
-          example: 2
-          description: 'Кількість осей причепа. Таблиця: Наряди (request_vehicles_register)'
-        driver_is_trackcheckbot:
-          type: number
-          example: 1
-          description: 'Ознака реєстрації водія в ТрекЧекБоті. Таблиця: Наряди (request_vehicles_register)'
-        driver_status:
-          type: string
-          enum: [actual, accepted, rejected]
-          example: actual
-          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
-        driver_comment:
-          type: string
-          example: Некорректні дані
-          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
+          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'     
     Vehicle:
       type: object
       properties:
