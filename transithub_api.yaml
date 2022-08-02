@@ -3302,12 +3302,14 @@ paths:
                     type: boolean
                     example: true
                     description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/Vehicle'
         '400':
           description: 'Поганий запит'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         '401':
           description: 'Клієнт не авторизований'
           content:
@@ -3320,7 +3322,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '500':
           description: server error
           content: {}
