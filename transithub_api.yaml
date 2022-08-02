@@ -1004,6 +1004,75 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /driver/vehicles_registers:
+    get:
+      tags: ['T002 - Наряди']
+      summary: Отримання всіх (або ж одного) нарядів водія
+      operationId: DrivervehiclesRegistersGet
+      description: |
+        Отримання всіх нарядів для водія або ж лише одного
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор наряду
+          schema:
+            type: string
+        - in: query
+          name: phone
+          description: Номер телефону водія
+          schema:
+            type: string
+        - in: query
+          name: driver_status
+          description: Статус водія
+          schema:
+            type: string
+            enum: [actual, accepted, rejected]
+      responses:
+        200:
+          description: Дані наряду
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/DriverVehicleRegister'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /driver/races/status:
     get:
       tags:
@@ -3061,7 +3130,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -3744,10 +3813,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /requests:
     get:
       tags: ['T007 - Заявки']
@@ -3807,10 +3872,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /requests.get_vr_counts:
     get:
       tags: ['T007 - Заявки', 'T005 - Заявки (к-сть нарядів)']
@@ -3855,10 +3916,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /favorites:
     get:
       tags: ['T009 - Закладки']
@@ -3913,10 +3970,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T009 - Закладки']
       summary: Створення закладки
@@ -3954,10 +4007,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     delete:
       tags: ['T009 - Закладки']
       summary: Видалення закладки
@@ -6369,6 +6418,66 @@ components:
           type: string
           example: 'КР'
           description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+    DriverVehicleRegister:
+      type: object
+      properties:
+        driver_status:
+          type: string
+          enum: [actual, accepted, rejected]
+          example: 'actual'
+          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
+        driver_comment:
+          type: string
+          example: 'Некоректні дані'
+          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_register_number:
+          type: string
+          example: "1069308"
+          description: 'Номер наряду. Таблиця: Наряди (request_vehicles_register)'
+        is_agro:
+          type: boolean
+          example: FALSE
+          description: 'Ознака приналежності наряду АГРО. Таблиця: Наряди (request_vehicles_register)'
+        points_to_description:
+          type: string
+          example: "ГЛОБИНСКИЙ, КОНОНОВСКО"
+          description: 'Перелік пунктів розвантаження. Таблиця: Наряди (request_vehicles_register)'
+        harvest_plan:
+          type: string
+          example: "HVPL-0004395"
+          description: 'План збирання врожаю. Таблиця: Наряди (request_vehicles_register)'
+        cluster_name:
+          type: string
+          example: "Придніпровський"
+          description: 'Назва кластера. Таблиця: Наряди (request_vehicles_register)'
+        regional_management_name:
+          type: string
+          example: "Пальміра"
+          description: 'Назва регіонального управління. Таблиця: Наряди (request_vehicles_register)'
+        accepted_count:
+          type: integer
+          example: 15
+          description: 'Кількість погоджених документів. Таблиця: Наряди (request_vehicles_register)'
+        rejected_count:
+          type: integer
+          example: 20
+          description: 'Кількість відхилених документів. Таблиця: Наряди (request_vehicles_register)'
+        distance:
+          type: integer
+          example: 120
+          description: 'Відстань. Таблиця: Наряди (request_vehicles_register)'
+        trips_quantity:
+          type: integer
+          example: 120
+          description: 'Планова кількість рейсів. Таблиця: Наряди (request_vehicles_register)'
+        comment:
+          type: string
+          example: "Менеджер Вася"
+          description: 'Коментар менеджера. Таблиця: Наряди (request_vehicles_register)'
+        comment_2:
+          type: string
+          example: "Логіст Петя"
+          description: 'Коментар логіста. Таблиця: Наряди (request_vehicles_register)'
     Departure_permission_direction:
       type: object
       properties:
