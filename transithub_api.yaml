@@ -3326,7 +3326,6 @@ paths:
         '500':
           description: server error
           content: {}
-        x-codegen-request-body-name: body
   /vehicles.change_status:
     put:
       tags: ['T011 - Статус ТЗ', 'T003 - Транспортні засоби']
