@@ -3075,9 +3075,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
     post:
       tags: ['T002 - Наряди']
       summary: Створення/оновлення наряду
@@ -3482,10 +3479,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T004 - Водії']
       summary: Створення(реєстрація) нового водія в системі
