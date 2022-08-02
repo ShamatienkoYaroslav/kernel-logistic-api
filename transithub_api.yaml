@@ -7092,6 +7092,181 @@ components:
           example: 76
           description: |
             Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
+    Vehicle:
+      type: object
+      properties:
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: "Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: "Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: "Сума довжин авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: "Сума повних мас авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: "Сума мас без навантаження авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+    VehicleRegister:
+      type: object
+      properties:
+        request_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
+        document_exchange_status:
+          type: string
+          enum: [draft, to_exchange, in_progress, confirmed, rejected]
+          example: in_progress
+          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        document_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_length:
+          type: number
+          example: 5
+          description: 'Довжина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_width:
+          type: number
+          example: 3
+          description: 'Ширина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_height:
+          type: number
+          example: 3
+          description: 'Висота транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_length:
+          type: number
+          example: 5
+          description: 'Довжина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_width:
+          type: number
+          example: 3
+          description: 'Ширина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_height:
+          type: number
+          example: 2.55
+          description: 'Висота причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: increased
+          description: 'Норма навантаження транспортного засобу. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        trailer_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: 'increased'
+          description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        auto_train_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: 'increased'
+          description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        document_id:
+          type: integer
+          example: 294562
+          description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_name:
+          type: string
+          example: 'Кернел - Трейд ТОВ'
+          description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_number:
+          type: string
+          example: "Z_069308"
+          description: 'Номер заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_name:
+          type: string
+          example: "Довгенко Анатолій Миколайович"
+          description: 'Назва перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_goods:
+          type: string
+          example: 'Пшениця'
+          description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
+        container_1:
+          type: string
+          example: 'Контейнер №1'
+          description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
+        container_2:
+          type: string
+          example: 'Контейнер №2'
+          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
+        auto_max_load:
+          type: number
+          example: 30
+          description: 'Норма навантаження. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_axles_number:
+          type: number
+          example: 2
+          description: 'Кількість осей транспортного засобу. Таблиця: Наряди (request_vehicles_register)'
+        trailer_axles_number:
+          type: number
+          example: 2
+          description: 'Кількість осей причепа. Таблиця: Наряди (request_vehicles_register)'
+        driver_is_trackcheckbot:
+          type: number
+          example: 1
+          description: 'Ознака реєстрації водія в ТрекЧекБоті. Таблиця: Наряди (request_vehicles_register)'
+        driver_status:
+          type: string
+          enum: [actual, accepted, rejected]
+          example: 'actual'
+          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
+        driver_comment:
+          type: string
+          example: 'Некоректні дані'
+          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
@@ -7515,178 +7690,3 @@ components:
             type: string
             example: '005_РОЗВ_ПРИДМЕЗ'
             description: 'Код напрямку направлення'
-    Vehicle:
-      type: object
-      properties:
-        max_vehicle_height:
-          type: number
-          example: 3
-          description: "Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
-        max_vehicle_width:
-          type: number
-          example: 3
-          description: "Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
-        sum_vehicle_length:
-          type: number
-          example: 3
-          description: "Сума довжин авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
-        sum_vehicle_gross_weight:
-          type: number
-          example: 3
-          description: "Сума повних мас авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
-        sum_vehicle_gross_weight_without_loading:
-          type: number
-          example: 3
-          description: "Сума мас без навантаження авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
-    VehicleRegister:
-      type: object
-      properties:
-        request_guid:
-          type: string
-          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
-          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
-        document_exchange_status:
-          type: string
-          enum: [draft, to_exchange, in_progress, confirmed, rejected]
-          example: in_progress
-          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
-        document_guid:
-          type: string
-          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
-          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_length:
-          type: number
-          example: 5
-          description: 'Довжина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_width:
-          type: number
-          example: 3
-          description: 'Ширина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_height:
-          type: number
-          example: 3
-          description: 'Висота транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_gross:
-          type: number
-          example: 3500
-          description: 'Повна маса транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_tara:
-          type: number
-          example: 3500
-          description: 'Маса без навантаження транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_length:
-          type: number
-          example: 5
-          description: 'Довжина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_width:
-          type: number
-          example: 3
-          description: 'Ширина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_height:
-          type: number
-          example: 2.55
-          description: 'Висота причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_gross:
-          type: number
-          example: 3500
-          description: 'Повна маса причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_tara:
-          type: number
-          example: 3500
-          description: 'Маса без навантаження причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        max_vehicle_height:
-          type: number
-          example: 3
-          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        max_vehicle_width:
-          type: number
-          example: 3
-          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_length:
-          type: number
-          example: 3
-          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight:
-          type: number
-          example: 3
-          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight_without_loading:
-          type: number
-          example: 3
-          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: increased
-          description: 'Норма навантаження транспортного засобу. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        trailer_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: 'increased'
-          description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        auto_train_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: 'increased'
-          description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        document_id:
-          type: integer
-          example: 294562
-          description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
-        request_customer_name:
-          type: string
-          example: 'Кернел - Трейд ТОВ'
-          description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_customer_code:
-          type: string
-          example: '55666000007'
-          description: 'Код ЕДРПОУ клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_number:
-          type: string
-          example: "Z_069308"
-          description: 'Номер заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_carrier_name:
-          type: string
-          example: "Довгенко Анатолій Миколайович"
-          description: 'Назва перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
-        request_carrier_code:
-          type: string
-          example: '55666000007'
-          description: 'Код ЕДРПОУ перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
-        request_goods:
-          type: string
-          example: 'Пшениця'
-          description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
-        container_1:
-          type: string
-          example: 'Контейнер №1'
-          description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
-        container_2:
-          type: string
-          example: 'Контейнер №2'
-          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
-        auto_max_load:
-          type: number
-          example: 30
-          description: 'Норма навантаження. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_axles_number:
-          type: number
-          example: 2
-          description: 'Кількість осей транспортного засобу. Таблиця: Наряди (request_vehicles_register)'
-        trailer_axles_number:
-          type: number
-          example: 2
-          description: 'Кількість осей причепа. Таблиця: Наряди (request_vehicles_register)'
-        driver_is_trackcheckbot:
-          type: number
-          example: 1
-          description: 'Ознака реєстрації водія в ТрекЧекБоті. Таблиця: Наряди (request_vehicles_register)'
-        driver_status:
-          type: string
-          enum: [actual, accepted, rejected]
-          example: 'actual'
-          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
-        driver_comment:
-          type: string
-          example: 'Некоректні дані'
-          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
