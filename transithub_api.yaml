@@ -3302,8 +3302,6 @@ paths:
                     type: boolean
                     example: true
                     description: 'Статус відповіді'
-                  items:
-                    $ref: '#/components/schemas/Vehicle'
         '400':
           description: 'Поганий запит'
           content:
