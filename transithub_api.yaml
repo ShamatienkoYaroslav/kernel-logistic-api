@@ -3322,9 +3322,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        '500':
-          description: server error
-          content: {}
   /vehicles.change_status:
     put:
       tags: ['T011 - Статус ТЗ', 'T003 - Транспортні засоби']
