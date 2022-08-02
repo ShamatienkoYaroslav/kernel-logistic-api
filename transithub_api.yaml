@@ -3043,7 +3043,7 @@ paths:
             type: string
             enum: [draft, to_exchange, in_progress, confirmed, rejected]
       responses:
-        '200':
+        200:
           description: Дані наряду
           content:
             application/json:
@@ -3291,7 +3291,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Дані ТЗ
           content:
             application/json:
@@ -3304,26 +3304,26 @@ paths:
                     description: 'Статус відповіді'
                   items:
                     $ref: '#/components/schemas/Vehicle'
-        400:
+        '400':
           description: 'Поганий запит'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequest'
-        401:
+        '401':
           description: 'Клієнт не авторизований'
           content:
             application/json:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
+        '403':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
+        '500':
           description: server error
           content: {}
         x-codegen-request-body-name: body
