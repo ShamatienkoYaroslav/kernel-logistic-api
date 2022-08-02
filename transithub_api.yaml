@@ -3043,7 +3043,7 @@ paths:
             type: string
             enum: [draft, to_exchange, in_progress, confirmed, rejected]
       responses:
-        200:
+        '200':
           description: Дані наряду
           content:
             application/json:
@@ -7673,20 +7673,20 @@ components:
         max_vehicle_height:
           type: number
           example: 3
-          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+          description: "Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
         max_vehicle_width:
           type: number
           example: 3
-          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+          description: "Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
         sum_vehicle_length:
           type: number
           example: 3
-          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+          description: "Сума довжин авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
         sum_vehicle_gross_weight:
           type: number
           example: 3
-          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+          description: "Сума повних мас авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
         sum_vehicle_gross_weight_without_loading:
           type: number
           example: 3
-          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+          description: "Сума мас без навантаження авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
