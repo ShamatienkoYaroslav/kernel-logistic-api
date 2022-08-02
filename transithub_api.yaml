@@ -3078,7 +3078,6 @@ paths:
         500:
           description: server error
           content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T002 - Наряди']
       summary: Створення/оновлення наряду
