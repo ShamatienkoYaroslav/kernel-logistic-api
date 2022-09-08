@@ -1918,6 +1918,22 @@ paths:
                     type: string
                     example: 23 дн 4 ч
                     description: 'Тривалість рейсу (рос.). Таблиця: рейси (races)'
+                  is_agro:
+                    type: boolean
+                    example: FALSE
+                    description: 'Ознака наряду Агро. Таблиця: наряди (request_vehicles_register)'
+                  points_to_description:
+                    type: string
+                    example: Баштанка, Снігурівка
+                    description: 'Назви пунктів розвантаження. Таблиця: наряди (request_vehicles_register)'
+                  request_number:
+                    type: string
+                    example: VO-23300000089
+                    description: 'Номер заявки/наряду. Таблиця: наряди (request_vehicles_register)'
+                  harvest_plan:
+                    type: string
+                    example: VO-ПРЕ_78
+                    description: 'План збирання врожаю. Таблиця: наряди (request_vehicles_register)'
     put:
       tags:
         - Інтерфейс водія
