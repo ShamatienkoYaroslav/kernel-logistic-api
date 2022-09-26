@@ -56,7 +56,7 @@ tags:
     description: Вузол для роботи з організаціями компанії
   - name: 'T016 - Акредитація (перелік акредитацій)'
     description: Вузол для роботи з акредитаціями (з переліком акредитацій)
-  - name: 'T017 - Акредитація (список пар перевізника та замовника для акредитацій)'
+  - name: 'T017 - Акредитація (перевізник/замовник)'
     description: Вузол для роботи з акредитаціями (з списком пар перевізника та замовника для акредитацій)
   - name: 'T018 - Акредитація (дії)'
     description: Вузол для роботи з акредитаціями (з діями)
@@ -1069,6 +1069,75 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /driver/vehicles_registers:
+    get:
+      tags: ['T002 - Наряди']
+      summary: Отримання всіх (або ж одного) нарядів водія
+      operationId: DrivervehiclesRegistersGet
+      description: |
+        Отримання всіх нарядів для водія або ж лише одного
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор наряду
+          schema:
+            type: string
+        - in: query
+          name: phone
+          description: Номер телефону водія
+          schema:
+            type: string
+        - in: query
+          name: driver_status
+          description: Статус водія
+          schema:
+            type: string
+            enum: [actual, accepted, rejected]
+      responses:
+        200:
+          description: Дані наряду
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  items:
+                    $ref: '#/components/schemas/DriverVehicleRegister'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /driver/races/status:
     get:
       tags:
@@ -1914,6 +1983,22 @@ paths:
                     type: string
                     example: 23 дн 4 ч
                     description: 'Тривалість рейсу (рос.). Таблиця: рейси (races)'
+                  is_agro:
+                    type: boolean
+                    example: FALSE
+                    description: 'Ознака наряду Агро. Таблиця: наряди (request_vehicles_register)'
+                  points_to_description:
+                    type: string
+                    example: Баштанка, Снігурівка
+                    description: 'Назви пунктів розвантаження. Таблиця: наряди (request_vehicles_register)'
+                  request_number:
+                    type: string
+                    example: VO-23300000089
+                    description: 'Номер заявки/наряду. Таблиця: наряди (request_vehicles_register)'
+                  harvest_plan:
+                    type: string
+                    example: VO-ПРЕ_78
+                    description: 'План збирання врожаю. Таблиця: наряди (request_vehicles_register)'
     put:
       tags:
         - Інтерфейс водія
@@ -3126,7 +3211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -3140,10 +3225,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T002 - Наряди']
       summary: Створення/оновлення наряду
@@ -3243,6 +3324,15 @@ paths:
                   type: string
                   example: Контейнер №2
                   description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
+                driver_status:
+                  type: string
+                  enum: [actual, accepted, rejected]
+                  example: actual
+                  description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
+                driver_comment:
+                  type: string
+                  example: Некорректні дані
+                  description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
       responses:
         '401':
           description: 'Клієнт не авторизований'
@@ -3347,7 +3437,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: Дані ТЗ
           content:
             application/json:
@@ -3359,33 +3449,29 @@ paths:
                     example: true
                     description: 'Статус відповіді'
                   items:
-                    $ref: '#/components/schemas/VehicleRegister'
-        400:
+                    $ref: '#/components/schemas/Vehicle'
+        '400':
           description: 'Поганий запит'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
-        401:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
           description: 'Клієнт не авторизований'
           content:
             application/json:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
+        '403':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /vehicles.change_status:
     put:
-      tags: ['T011 - Статус ТЗ', 'T004 - Транспортні засоби']
+      tags: ['T011 - Статус ТЗ', 'T003 - Транспортні засоби']
       summary: Оновлення статусу ТЗ
       operationId: vehiclesChangeStatusPut
       description: |
@@ -3543,10 +3629,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T004 - Водії']
       summary: Створення(реєстрація) нового водія в системі
@@ -3812,10 +3894,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /requests:
     get:
       tags: ['T007 - Заявки']
@@ -3875,10 +3953,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /requests.get_vr_counts:
     get:
       tags: ['T007 - Заявки', 'T005 - Заявки (к-сть нарядів)']
@@ -3923,10 +3997,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
   /favorites:
     get:
       tags: ['T009 - Закладки']
@@ -3981,10 +4051,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     post:
       tags: ['T009 - Закладки']
       summary: Створення закладки
@@ -4022,10 +4088,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
     delete:
       tags: ['T009 - Закладки']
       summary: Видалення закладки
@@ -6437,6 +6499,66 @@ components:
           type: string
           example: 'КР'
           description: 'Тип документу. Значення(passport, id_card, null). Інтерфейс водія. Таблиця: TransitHub/Водії (th_drivers)'
+    DriverVehicleRegister:
+      type: object
+      properties:
+        driver_status:
+          type: string
+          enum: [actual, accepted, rejected]
+          example: 'actual'
+          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
+        driver_comment:
+          type: string
+          example: 'Некоректні дані'
+          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_register_number:
+          type: string
+          example: "1069308"
+          description: 'Номер наряду. Таблиця: Наряди (request_vehicles_register)'
+        is_agro:
+          type: boolean
+          example: FALSE
+          description: 'Ознака приналежності наряду АГРО. Таблиця: Наряди (request_vehicles_register)'
+        points_to_description:
+          type: string
+          example: "ГЛОБИНСКИЙ, КОНОНОВСКО"
+          description: 'Перелік пунктів розвантаження. Таблиця: Наряди (request_vehicles_register)'
+        harvest_plan:
+          type: string
+          example: "HVPL-0004395"
+          description: 'План збирання врожаю. Таблиця: Наряди (request_vehicles_register)'
+        cluster_name:
+          type: string
+          example: "Придніпровський"
+          description: 'Назва кластера. Таблиця: Наряди (request_vehicles_register)'
+        regional_management_name:
+          type: string
+          example: "Пальміра"
+          description: 'Назва регіонального управління. Таблиця: Наряди (request_vehicles_register)'
+        accepted_count:
+          type: integer
+          example: 15
+          description: 'Кількість погоджених документів. Таблиця: Наряди (request_vehicles_register)'
+        rejected_count:
+          type: integer
+          example: 20
+          description: 'Кількість відхилених документів. Таблиця: Наряди (request_vehicles_register)'
+        distance:
+          type: integer
+          example: 120
+          description: 'Відстань. Таблиця: Наряди (request_vehicles_register)'
+        trips_quantity:
+          type: integer
+          example: 120
+          description: 'Планова кількість рейсів. Таблиця: Наряди (request_vehicles_register)'
+        comment:
+          type: string
+          example: "Менеджер Вася"
+          description: 'Коментар менеджера. Таблиця: Наряди (request_vehicles_register)'
+        comment_2:
+          type: string
+          example: "Логіст Петя"
+          description: 'Коментар логіста. Таблиця: Наряди (request_vehicles_register)'
     Departure_permission_direction:
       type: object
       properties:
@@ -7148,6 +7270,181 @@ components:
           example: 76
           description: |
             Числовий показник статистики черги. Таблиця: Статистика черги(pq_queue_statistics)
+    Vehicle:
+      type: object
+      properties:
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: "Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: "Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: "Сума довжин авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: "Сума повних мас авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: "Сума мас без навантаження авто та причепа, м. Таблиця: Наряди (request_vehicles_register)"
+    VehicleRegister:
+      type: object
+      properties:
+        request_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
+        document_exchange_status:
+          type: string
+          enum: [draft, to_exchange, in_progress, confirmed, rejected]
+          example: in_progress
+          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        document_guid:
+          type: string
+          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
+          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_length:
+          type: number
+          example: 5
+          description: 'Довжина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_width:
+          type: number
+          example: 3
+          description: 'Ширина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_height:
+          type: number
+          example: 3
+          description: 'Висота транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        vehicle_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_length:
+          type: number
+          example: 5
+          description: 'Довжина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_width:
+          type: number
+          example: 3
+          description: 'Ширина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_height:
+          type: number
+          example: 2.55
+          description: 'Висота причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_gross:
+          type: number
+          example: 3500
+          description: 'Повна маса причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        trailer_tara:
+          type: number
+          example: 3500
+          description: 'Маса без навантаження причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
+        max_vehicle_height:
+          type: number
+          example: 3
+          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        max_vehicle_width:
+          type: number
+          example: 3
+          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_length:
+          type: number
+          example: 3
+          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight:
+          type: number
+          example: 3
+          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        sum_vehicle_gross_weight_without_loading:
+          type: number
+          example: 3
+          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: increased
+          description: 'Норма навантаження транспортного засобу. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        trailer_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: 'increased'
+          description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        auto_train_load_rate:
+          type: string
+          enum: [standard, increased]
+          example: 'increased'
+          description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
+        document_id:
+          type: integer
+          example: 294562
+          description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_name:
+          type: string
+          example: 'Кернел - Трейд ТОВ'
+          description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_customer_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_number:
+          type: string
+          example: "Z_069308"
+          description: 'Номер заявки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_name:
+          type: string
+          example: "Довгенко Анатолій Миколайович"
+          description: 'Назва перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_carrier_code:
+          type: string
+          example: '55666000007'
+          description: 'Код ЕДРПОУ перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
+        request_goods:
+          type: string
+          example: 'Пшениця'
+          description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
+        container_1:
+          type: string
+          example: 'Контейнер №1'
+          description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
+        container_2:
+          type: string
+          example: 'Контейнер №2'
+          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
+        auto_max_load:
+          type: number
+          example: 30
+          description: 'Норма навантаження. Таблиця: Наряди (request_vehicles_register)'
+        vehicle_axles_number:
+          type: number
+          example: 2
+          description: 'Кількість осей транспортного засобу. Таблиця: Наряди (request_vehicles_register)'
+        trailer_axles_number:
+          type: number
+          example: 2
+          description: 'Кількість осей причепа. Таблиця: Наряди (request_vehicles_register)'
+        driver_is_trackcheckbot:
+          type: number
+          example: 1
+          description: 'Ознака реєстрації водія в ТрекЧекБоті. Таблиця: Наряди (request_vehicles_register)'
+        driver_status:
+          type: string
+          enum: [actual, accepted, rejected]
+          example: 'actual'
+          description: 'Cтатус водія. Таблиця: Наряди (request_vehicles_register)'
+        driver_comment:
+          type: string
+          example: 'Некоректні дані'
+          description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
@@ -7571,153 +7868,3 @@ components:
             type: string
             example: '005_РОЗВ_ПРИДМЕЗ'
             description: 'Код напрямку направлення'
-    VehicleRegister:
-      type: object
-      properties:
-        request_guid:
-          type: string
-          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
-          description: 'Унікальний ідентифікатор заявки. Таблиця: Заявки (requests)'
-        document_exchange_status:
-          type: string
-          enum: [draft, to_exchange, in_progress, confirmed, rejected]
-          example: in_progress
-          description: 'Статус обміну пакету документів. Таблиця: Наряди (request_vehicles_register)'
-        document_guid:
-          type: string
-          example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
-          description: 'Унікальний ідентифікатор пакету документів. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_length:
-          type: number
-          example: 5
-          description: 'Довжина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_width:
-          type: number
-          example: 3
-          description: 'Ширина транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_height:
-          type: number
-          example: 2.55
-          description: 'Висота транспортного засобу, м. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_gross:
-          type: number
-          example: 3500
-          description: 'Повна маса транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        vehicle_tara:
-          type: number
-          example: 3500
-          description: 'Маса без навантаження транспортного засобу, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_length:
-          type: number
-          example: 5
-          description: 'Довжина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_width:
-          type: number
-          example: 3
-          description: 'Ширина причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_height:
-          type: number
-          example: 2.55
-          description: 'Висота причепа, м. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_gross:
-          type: number
-          example: 3500
-          description: 'Повна маса причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        trailer_tara:
-          type: number
-          example: 3500
-          description: 'Маса без навантаження причепа, кг. Таблиця: Транспортні засоби (th_vehicles)'
-        max_vehicle_height:
-          type: number
-          example: 3
-          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        max_vehicle_width:
-          type: number
-          example: 3
-          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_length:
-          type: number
-          example: 3
-          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight:
-          type: number
-          example: 3
-          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight_without_loading:
-          type: number
-          example: 3
-          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        vehicle_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: increased
-          description: 'Норма навантаження транспортного засобу. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        trailer_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: increased
-          description: 'Норма навантаження причепа. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        auto_train_load_rate:
-          type: string
-          enum: [standard, increased]
-          example: increased
-          description: 'Норма навантаження автопоїзда. Значення: стандартна, підвищена. Таблиця: Наряди (request_vehicles_register)'
-        document_id:
-          type: integer
-          example: 294562
-          description: 'Номер документа. Таблиця: Наряди (request_vehicles_register)'
-        request_customer_name:
-          type: string
-          example: Кернел - Трейд ТОВ
-          description: 'Назва клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_customer_code:
-          type: string
-          example: '55666000007'
-          description: 'Код ЕДРПОУ клієнта з заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_number:
-          type: string
-          example: "Z_069308"
-          description: 'Номер заявки. Таблиця: Наряди (request_vehicles_register)'
-        request_carrier_name:
-          type: string
-          example: "Довгенко Анатолій Миколайович"
-          description: 'Назва перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
-        request_carrier_code:
-          type: string
-          example: '55666000007'
-          description: 'Код ЕДРПОУ перевізника з завки. Таблиця: Наряди (request_vehicles_register)'
-        request_goods:
-          type: string
-          example: 'Пшениця'
-          description: 'Назва вантажу. Таблиця: Наряди (request_vehicles_register)'
-        container_1:
-          type: string
-          example: Контейнер №1
-          description: 'Контейнер №1. Таблиця: Наряди (request_vehicles_register)'
-        container_2:
-          type: string
-          example: Контейнер №2
-          description: 'Контейнер №2. Таблиця: Наряди (request_vehicles_register)'
-    Vehicle:
-      type: object
-      properties:
-        max_vehicle_height:
-          type: number
-          example: 3
-          description: 'Максимальне значення висоти між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        max_vehicle_width:
-          type: number
-          example: 3
-          description: 'Максимальне значення ширини між авто/причепом, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_length:
-          type: number
-          example: 3
-          description: 'Сума довжин авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight:
-          type: number
-          example: 3
-          description: 'Сума повних мас авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
-        sum_vehicle_gross_weight_without_loading:
-          type: number
-          example: 3
-          description: 'Сума мас без навантаження авто і причепа, м. Таблиця: Наряди (request_vehicles_register)'
