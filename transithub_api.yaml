@@ -6312,19 +6312,19 @@ paths:
                     enum: [driver, company]
                     example: driver
                     description: 'Інтерфейс користувача'
-        401:
+        '401':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        403:
+        '403':
           description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorized'
-        500:
+        '500':
           description: server error
           content: {}
 
