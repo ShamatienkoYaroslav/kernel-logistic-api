@@ -6136,6 +6136,12 @@ paths:
                     type: string
                     example: Codes do not match
                     description: 'Повідомлення користувачу. Константа'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
         403:
           description: 'Клієнт не має прав доступу'
           content:
