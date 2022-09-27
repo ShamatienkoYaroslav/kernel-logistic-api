@@ -80,6 +80,8 @@ tags:
     description: 'Вузли для роботи з асистентом направлень'
   - name: 'T028 - Аутентифікація'
     description: 'Вузли для аутентифікації користувача'
+  - name: 'T029 - Користувач'
+    description: 'Вузол для отримання даних користувача'
 
 paths:
   /blacklist/check:
@@ -6144,6 +6146,50 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /users.find_by_guid:
+    get:
+      tags:
+        - 'T029 - Користувач'
+      summary: Точка для отримання даних користувача
+      operationId: usersFindByGuidGet
+      description: |
+        Точка для отримання всіх даних користувача за його гуідом.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор користувача
+          required: true
+          schema:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+      responses:
+        '200':
+          description: Дані користувача
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/UsersFindByGuid'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
 
 components:
   schemas:
@@ -7868,3 +7914,69 @@ components:
             type: string
             example: '005_РОЗВ_ПРИДМЕЗ'
             description: 'Код напрямку направлення'
+    UsersFindByGuid:
+      description: Дані користувача
+      type: array
+      items:
+        type: object
+        description: Дані користувача
+        properties:
+          status:
+            type: boolean
+            example: true
+            description: Http response status
+          user_exist:
+            type: boolean
+            example: true
+            description: 'Признак наявності користувача'
+          guid:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+            description: 'Унікальний ідентифікатор користувача'
+          firstname:
+            type: string
+            example: 'Валерій'
+            description: "Ім'я користувача"
+          lastname:
+            type: string
+            example: 'Залужний'
+            description: "Прізвище користувача"
+          language:
+            type: string
+            example: 'ua'
+            description: 'Мова користувача'
+          email_checked:
+            type: boolean
+            example: false
+            description: 'Признак перевірки ел. скриньки користувача'
+          email_confirmation_sended:
+            type: boolean
+            example: true
+            description: 'Признак, чи був надісланий лист для підтвердження ел. скриньки користувача'
+          phone:
+            type: string
+            example: '380673222858'
+            description: 'Номер телефону користувача'
+          phone_checked:
+            type: boolean
+            example: false
+            description: 'Признак перевірки телефону користувача'
+          is_driver:
+            type: integer
+            example: 0
+            description: 'Показник, чи є користувач водієм'
+          ui:
+            type: string
+            example: 'company'
+            description: 'Інтерфейс користувача'
+          global_settings:
+            type: object
+            properties:
+            block_vehicle_request_creation_for_not_accreditated:
+              type: boolean
+              example: false
+              description: Стан дозволу на створення заявок для неакредитованих
+          message_ua:
+            type: string
+            example: 'Текстове повідомлення'
+            description: 'Текстове повідомлення'
