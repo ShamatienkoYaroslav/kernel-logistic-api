@@ -6318,7 +6318,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        401:
+        403:
           description: 'Користувач не авторизований'
           content:
             application/json:
