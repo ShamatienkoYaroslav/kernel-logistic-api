@@ -6175,18 +6175,158 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersFindByGuid'
-        '403':
+        '401':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        '401':
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: server error
+          content: {}
+  /users:
+    put:
+      tags:
+        - 'T029 - Користувач'
+      summary: Точка для оновлення даних користувача
+      operationId: usersUpdateByGuidPut
+      description: |
+        Точка для оновлення всіх даних користувача за його гуідом.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор користувача
+          required: true
+          schema:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+      requestBody:
+        description: Дані для оновлення запису користувача
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: "Ім'я користувача"
+                  example: Микола
+                last_name:
+                  type: string
+                  description: 'Прізвище користувача'
+                  example: Зарульний
+                email:
+                  type: string
+                  description: 'Електронна скринька користувача'
+                  example: zarulny@gmail.com
+                language:
+                  type: string
+                  enum: [ua, ru]
+                  description: 'Мова користувача'
+                  example: ua
+                need_reg:
+                  type: integer
+                  description: 'Показник необхідності реєстрації'
+                  example: 0
+                phone:
+                  type: string
+                  description: 'Номер телефону користувача'
+                  example: '380967002030'
+                password:
+                  type: string
+                  description: 'Пароль користувача'
+                  example: '1'
+                is_driver:
+                  type: integer
+                  description: 'Показник, чи є користувач водієм'
+                  example: 0
+                phone_checked:
+                  type: integer
+                  description: 'Показник, чи підтверджено номер телефону користувача'
+                  example: 1
+                ui:
+                  type: string
+                  enum: [driver, company]
+                  description: 'Інтерфейс користувача'
+                  example: 'company'
+        required: true
+      responses:
+        200:
+          description: Повертає результат оновлення запису користувача
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  user_exist:
+                    type: boolean
+                    example: true
+                    description: 'Показник, що запис користувача існує'
+                  guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: 'Гуід користувача'
+                  firstname:
+                    type: string
+                    example: Микола
+                    description: "Ім'я користувача"
+                  lastname:
+                    type: string
+                    example: 'Зарульний'
+                    description: 'Прізвище користувача'
+                  email:
+                    type: string
+                    example: zarulny@gmail.com
+                    description: 'Електронна скринька користувача'
+                  phone:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону користувача'
+                  language:
+                    type: string
+                    enum: [ua, ru]
+                    example: ua
+                    description: 'Мова користувача'
+                  need_reg:
+                    type: integer
+                    example: 0
+                    description: 'Показник необхідності реєстрації'
+                  ui:
+                    type: string
+                    enum: [driver, company]
+                    example: driver
+                    description: 'Інтерфейс користувача'
+        401:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        401:
           description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        500:
+          description: server error
+          content: {}
 
 components:
   schemas:
