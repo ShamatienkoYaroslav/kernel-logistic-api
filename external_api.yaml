@@ -171,6 +171,14 @@ paths:
                     type: boolean
                     example: true
                     description: 'Результат виконання'
+                  pin_sent:
+                    type: boolean
+                    example: true
+                    description: 'Результат надсилання пін-коду (надіслано чи ні)'
+                  phone:
+                    type: string
+                    example: 380675559911
+                    description: 'Номер телефону користувача'
                   message_code:
                     type: string
                     example: 035
