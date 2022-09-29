@@ -6362,6 +6362,12 @@ paths:
           schema:
             type: string
             example: '6c2ce588-52c8-e338-2e7c-a0f5db2a4ba4'
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
       requestBody:
         description: Дані для оновлення запису водія
         content:
@@ -6395,10 +6401,6 @@ paths:
                   enum: [passport, id_card]
                   description: "Тип документу"
                   example: 'id_card'
-                is_driver:
-                  type: integer
-                  description: "Показник, що редагований користувач є водієм"
-                  example: 1
                 first_name:
                   type: string
                   description: "Ім'я водія"
