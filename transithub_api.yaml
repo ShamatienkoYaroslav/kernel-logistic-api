@@ -6529,7 +6529,6 @@ paths:
         '500':
           description: server error
           content: {}
-  /driver.create_by_user:
     post:
       tags:
         - 'T004 - Водії'
