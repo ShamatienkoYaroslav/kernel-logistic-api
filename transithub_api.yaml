@@ -6333,6 +6333,206 @@ paths:
         '500':
           description: server error
           content: {}
+  /driver.create_by_user:
+    put:
+      tags:
+        - 'T004 - Водії'
+      summary: Точка для оновлення даних водія користувачем
+      operationId: driverСreateByUserPut
+      description: |
+        Точка для оновлення всіх даних водія користувачем за його гуідом.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          required: true
+          schema:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        - in: query
+          name: driver_guid
+          description: Унікальний ідентифікатор водія
+          required: true
+          schema:
+            type: string
+            example: '6c2ce588-52c8-e338-2e7c-a0f5db2a4ba4'
+      requestBody:
+        description: Дані для оновлення запису водія
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                cert_serial_number:
+                  type: string
+                  description: "Серійний номер посвідчення водія"
+                  example: AAAA10001
+                pass_issued:
+                  type: string
+                  description: "Ким виданий паспорт"
+                  example: Полтавським МУРУ
+                pass_serial:
+                  type: string
+                  description: "Серія паспорта"
+                  example: АА
+                pass_number:
+                  type: string
+                  description: "Номер паспорта"
+                  example: '000351'
+                pass_date:
+                  type: string
+                  format: dd.mm.yyyy
+                  description: "Дата видачі паспорта"
+                  example: '01.01.2018'
+                person_docs_type:
+                  type: string
+                  enum: [passport, id_card]
+                  description: "Тип документу"
+                  example: 'id_card'
+                is_driver:
+                  type: integer
+                  description: "Показник, що редагований користувач є водієм"
+                  example: 1
+                first_name:
+                  type: string
+                  description: "Ім'я водія"
+                  example: Микола
+                last_name:
+                  type: string
+                  description: 'Прізвище водія'
+                  example: Зарульний
+                middle_name:
+                  type: string
+                  description: 'По батькові водія'
+                  example: Васильович
+                phone1:
+                  type: string
+                  description: 'Номер телефону водія'
+                  example: '380967002030'
+                id_card_issued:
+                  type: string
+                  description: "Ким видана ID-карта"
+                  example: Полтавським МУРУ
+                id_card_number:
+                  type: string
+                  description: "Номер ID-карти"
+                  example: '0008914351'
+                id_card_date:
+                  type: string
+                  format: dd.mm.yyyy
+                  description: "Дата видачі ID-карти"
+                  example: '01.01.2018'
+        required: true
+      responses:
+        200:
+          description: Повертає результат оновлення запису водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  driver_guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: 'Гуід водія'
+                  user_guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: 'Гуід користувача'
+                  last_name:
+                    type: string
+                    example: 'Зарульний'
+                    description: 'Прізвище водія'
+                  firs_tname:
+                    type: string
+                    example: Микола
+                    description: "Ім'я водія"
+                  middle_name:
+                    type: string
+                    description: 'По батькові водія'
+                    example: Васильович
+                  phone:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону водія'
+                  phone1:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону водія'
+                  email:
+                    type: string
+                    example: zarulny@gmail.com
+                    description: 'Електронна скринька водія'
+                  cert_serial_number:
+                    type: string
+                    description: "Серійний номер посвідчення водія"
+                    example: AAAA10001
+                  pass_issued:
+                    type: string
+                    description: "Ким виданий паспорт"
+                    example: Полтавським МУРУ
+                  pass_serial:
+                    type: string
+                    description: "Серія паспорта"
+                    example: АА
+                  pass_number:
+                    type: string
+                    description: "Номер паспорта"
+                    example: '000351'
+                  pass_date:
+                    type: date
+                    format: dd.mm.yyyy
+                    description: "Дата видачі паспорта"
+                    example: '01.01.2018'
+                  person_docs_type:
+                    type: string
+                    enum: [passport, id_card]
+                    description: "Тип документу"
+                    example: 'id_card'
+                  id_card_number:
+                    type: string
+                    description: "Номер ID-карти"
+                    example: '0008914351'
+                  id_card_date_utc:
+                    type: date
+                    format: dd.mm.yyyy
+                    description: "Дата видачі ID-карти"
+                    example: '01.01.2018'
+                  id_card_issued:
+                    type: string
+                    description: "Ким видана ID-карта"
+                    example: Полтавським МУРУ
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        '401':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '403':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
