@@ -6520,13 +6520,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequest'
-        '403':
+        403:
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        '500':
+        500:
           description: server error
           content: {}
     post:
@@ -6620,7 +6620,7 @@ paths:
                   example: '01.01.2018'
         required: true
       responses:
-        201:
+        '201':
           description: Повертає результат створення запису водія
           content:
             application/json:
@@ -6702,7 +6702,7 @@ paths:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
-        400:
+        '400':
           description: 'Поганий запит'
           content:
             application/json:
