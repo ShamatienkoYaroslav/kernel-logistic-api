@@ -6432,8 +6432,197 @@ paths:
                   example: '01.01.2018'
         required: true
       responses:
-        200:
+        201:
           description: Повертає результат оновлення запису водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  driver_guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: 'Гуід водія'
+                  user_guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: 'Гуід користувача'
+                  last_name:
+                    type: string
+                    example: 'Зарульний'
+                    description: 'Прізвище водія'
+                  firs_tname:
+                    type: string
+                    example: Микола
+                    description: "Ім'я водія"
+                  middle_name:
+                    type: string
+                    description: 'По батькові водія'
+                    example: Васильович
+                  phone:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону користувача'
+                  phone1:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону водія'
+                  email:
+                    type: string
+                    example: zarulny@gmail.com
+                    description: 'Електронна скринька водія'
+                  cert_serial_number:
+                    type: string
+                    description: "Серійний номер посвідчення водія"
+                    example: AAAA10001
+                  pass_issued:
+                    type: string
+                    description: "Ким виданий паспорт"
+                    example: Полтавським МУРУ
+                  pass_serial:
+                    type: string
+                    description: "Серія паспорта"
+                    example: АА
+                  pass_number:
+                    type: string
+                    description: "Номер паспорта"
+                    example: '000351'
+                  pass_date:
+                    type: date
+                    format: dd.mm.yyyy
+                    description: "Дата видачі паспорта"
+                    example: '01.01.2018'
+                  person_docs_type:
+                    type: string
+                    enum: [passport, id_card]
+                    description: "Тип документу"
+                    example: 'id_card'
+                  id_card_number:
+                    type: string
+                    description: "Номер ID-карти"
+                    example: '0008914351'
+                  id_card_date_utc:
+                    type: date
+                    format: dd.mm.yyyy
+                    description: "Дата видачі ID-карти"
+                    example: '01.01.2018'
+                  id_card_issued:
+                    type: string
+                    description: "Ким видана ID-карта"
+                    example: Полтавським МУРУ
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
+  /driver.create_by_user:
+    post:
+      tags:
+        - 'T004 - Водії'
+      summary: Точка для cтворення водія користувачем
+      operationId: driverСreateByUserPost
+      description: |
+        Точка для створення запису водія користувачем.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          required: true
+          schema:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення запису водія
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                cert_serial_number:
+                  type: string
+                  description: "Серійний номер посвідчення водія"
+                  example: AAAA10001
+                pass_issued:
+                  type: string
+                  description: "Ким виданий паспорт"
+                  example: Полтавським МУРУ
+                pass_serial:
+                  type: string
+                  description: "Серія паспорта"
+                  example: АА
+                pass_number:
+                  type: string
+                  description: "Номер паспорта"
+                  example: '000351'
+                pass_date:
+                  type: string
+                  format: dd.mm.yyyy
+                  description: "Дата видачі паспорта"
+                  example: '01.01.2018'
+                person_docs_type:
+                  type: string
+                  enum: [passport, id_card]
+                  description: "Тип документу"
+                  example: 'id_card'
+                first_name:
+                  type: string
+                  description: "Ім'я водія"
+                  example: Микола
+                last_name:
+                  type: string
+                  description: 'Прізвище водія'
+                  example: Зарульний
+                middle_name:
+                  type: string
+                  description: 'По батькові водія'
+                  example: Васильович
+                phone1:
+                  type: string
+                  description: 'Номер телефону водія'
+                  example: '380967002030'
+                id_card_issued:
+                  type: string
+                  description: "Ким видана ID-карта"
+                  example: Полтавським МУРУ
+                id_card_number:
+                  type: string
+                  description: "Номер ID-карти"
+                  example: '0008914351'
+                id_card_date:
+                  type: string
+                  format: dd.mm.yyyy
+                  description: "Дата видачі ID-карти"
+                  example: '01.01.2018'
+        required: true
+      responses:
+        201:
+          description: Повертає результат створення запису водія
           content:
             application/json:
               schema:
