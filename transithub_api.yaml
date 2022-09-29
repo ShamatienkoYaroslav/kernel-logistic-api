@@ -6464,7 +6464,7 @@ paths:
                   phone:
                     type: string
                     example: '380967002030'
-                    description: 'Номер телефону водія'
+                    description: 'Номер телефону користувача'
                   phone1:
                     type: string
                     example: '380967002030'
@@ -6518,18 +6518,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequest'
-        '401':
+        '403':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
-        '403':
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
         '500':
           description: server error
           content: {}
