@@ -1143,7 +1143,6 @@ paths:
   /driver/races/status:
     get:
       tags:
-        - Інтерфейс водія
         - Рейс
       summary: Пошук актуальний рейсу водія
       operationId: driverRacesStatusGet
@@ -2003,7 +2002,6 @@ paths:
                     description: 'План збирання врожаю. Таблиця: наряди (request_vehicles_register)'
     put:
       tags:
-        - Інтерфейс водія
         - Рейс
       summary: Прийняття в роботу актуального рейсу водія
       operationId: driverRacesStatusPut
