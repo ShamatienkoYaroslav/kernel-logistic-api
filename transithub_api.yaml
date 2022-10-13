@@ -82,6 +82,10 @@ tags:
     description: 'Вузли для аутентифікації користувача'
   - name: 'T029 - Користувач'
     description: 'Вузол для отримання даних користувача'
+  - name: 'T030 - Статистика ваги'
+    description: 'Вузол для отримання приблизної необхідної ваги вантажу за номером тз та гуідом вантажу.'
+  - name: 'T031 - Населені пункти'
+    description: 'Вузол для отримання повної інформвції про територіальну одиницю.'
 
 paths:
   /blacklist/check:
@@ -6837,6 +6841,309 @@ paths:
         500:
           description: server error
           content: {}
+  /driver/races/last:
+    get:
+      tags:
+        - Рейс
+      summary: 'Точка отримання певних даних по останньому рейсу водія за його номером телефону або гуідом'
+      operationId: driverRacesLastGet
+      description: |
+        'Точка отримання певних даних по останньому рейсу водія за його номером телефону (або гуідом), що можуть бути використані для створення нового рейсу (номер авто, причіпа).'
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Номер телефону водія
+          required: true
+          schema:
+            type: string
+            example: '380569009911'
+        - in: query
+          name: driver_guid
+          description: Унікальний ідентифікатор користувача
+          required: true
+          schema:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+      responses:
+        200:
+          description: Повертає дані останнього рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  vehicle:
+                    type: string
+                    description: 'Транспортний засіб (номер)'
+                    example: 'XX0011XX'
+                  trailer:
+                    type: string
+                    description: 'Причіп (номер)'
+                    example: 'XX0011XX'
+                  no_trailer:
+                    type: boolean
+                    description: 'Показник відсутності причепа'
+                    example: false
+                  driver_phone:
+                    type: string
+                    example: '380967002030'
+                    description: 'Номер телефону водія'
+                  driver_phone_additional:
+                    type: string
+                    example: '380967002030'
+                    description: 'Додатковий номер телефону водія'
+        '200':
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: server error
+          content: {}
+  /weight_statistic:
+    get:
+      tags:
+        - 'T030 - Статистика ваги'
+      summary: "Точка отримання приблизної необхідної ваги вантажу за номером тз, гуідом вантажу."
+      operationId: weightStatisticGet
+      description: |
+        "Точка отримання приблизної необхідної ваги вантажу за номером тз, гуідом вантажу."
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: goods_guid
+          description: 'Унікальний код-класифікатор вантажу'
+          required: true
+          schema:
+            type: string
+            example: 'СОНЯШНИК ВО'
+        - in: query
+          name: truck_number
+          description: 'Номер автомобіля'
+          required: true
+          schema:
+            type: string
+            example: 'XX0011XX'
+        - in: query
+          name: trailer_number
+          description: 'Номер причепа'
+          required: true
+          schema:
+            type: string
+            example: 'XX0011XX'
+      responses:
+        200:
+          description: Повертає приблизно необхідну вагу вантажу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weight:
+                    type: integer
+                    description: 'Вага вантажу'
+                    example: 10350
+        '200':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  weight:
+                    type: integer
+                    description: 'Вага вантажу'
+                    example: 0
+                  msg:
+                    type: string
+                    description: 'Повідомлення'
+                    example: 'No available data for this parameters.'
+        "200":
+          description: 'Неправильний або відсутній access token'
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                error:
+                  type: object
+                  properties:
+                  code:
+                    type: integer
+                    example: 20003
+                    description: 'Код помилки'
+                  message:
+                    type: string
+                    description: 'Повідомлення'
+                    example: 'Invalid access token'
+                  detail:
+                    type: string
+                    description: 'Детальний опис помилки'
+                    example: 'You need to specify correct values for access token. Please contact with API's admin.'
+        500:
+          description: server error
+          content: {}
+  /localities:
+    get:
+      tags:
+        - 'T031 - Населені пункти'
+      summary: "Точка для отримання повної інформвції про територіальну одиницю."
+      operationId: localitiesGet
+      description: "Отримання всіх областей/населених пунктів за певними параметрами:" |
+       "вид (наприклад, kind: 2 - область, kind: 4 - населений пункт), введене користувачем значенням (назва населеного пункта) тощо."
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: koatuu
+          description: 'КОАТУУ'
+          required: false
+          schema:
+            type: string
+            example: '0524583405'
+        - in: query
+          name: search
+          description: 'Назва населеного пункту тощо'
+          required: false
+          schema:
+            type: string
+            example: 'Вишгород'
+        - in: query
+          name: region_code
+          description: 'Код області'
+          required: false
+          schema:
+            type: string
+            example: '05'
+        - in: query
+          name: district_code
+          description: 'Код району'
+          required: false
+          schema:
+            type: string
+            example: '05245'
+        - in: query
+          name: country_code
+          description: 'Код країни'
+          required: false
+          schema:
+            type: string
+            example: 'UA'
+        - in: query
+          name: kind_
+          description: 'Тип територіальної одиниці'
+          required: false
+          schema:
+            type: string
+            example: 'Район'
+        - in: query
+          name: kind_id
+          description: 'Код типу територіальної одиниці'
+          required: false
+          schema:
+            type: integer
+            example: 4
+      responses:
+        200:
+          description: Дані по статусу документів при верифікації
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocalitiesGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '200':
+          description: 'Неправильний або відсутній access token/client token'
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                error:
+                  type: object
+                  properties:
+                  code:
+                    type: integer
+                    example: 20003
+                    description: 'Код помилки'
+                  message:
+                    type: string
+                    description: 'Повідомлення'
+                    example: 'Invalid access token'
+                  detail:
+                    type: string
+                    description: 'Детальний опис помилки'
+                    example: 'You need to specify correct values for access token. Please contact with API's admin.'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        500:
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -8624,3 +8931,95 @@ components:
           type: string
           example: 'Текстове повідомлення'
           description: 'Текстове повідомлення'
+    LocalitiesGet:
+      type: object
+      description: Дані териториальної одиниці
+      properties:
+        guid:
+          type: string
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          description: 'Унікальний ідентифікатор териториальної одиниці'
+        name_ua:
+          type: string
+          example: 'Вишгород'
+          description: "Назва териториальної одиниці"
+        name_ru:
+          type: string
+          example: 'Вишгород'
+          description: "Назва териториальної одиниці"
+        kind:
+          type: string
+          example: 'Населенный пункт'
+          description: "Назва типу териториальної одиниці"
+        kind_id:
+          type: integer
+          example: 4
+          description: "Код типу териториальної одиниці"
+        description_ua:
+          type: string
+          example: 'Україна, Київська обл., Вишгородський район, м. Вишгород'
+          description: 'Опис териториальної одиниці'
+        description_ru:
+          type: string
+          example: 'Україна, Київська обл., Вишгородський район, м. Вишгород'
+          description: 'Опис териториальної одиниці'
+        koatuu:
+          type: string
+          example: '3221810100'
+          description: 'КОАТУУ'
+        type:
+          type: string
+          example: 'М'
+          description: 'Тип териториальної одиниці'
+        region_code:
+          type: string
+          example: '32'
+          description: 'Код області'
+        region_name_ua:
+          type: string
+          example: 'Київська'
+          description: 'Назва області'
+        region_name_ru:
+          type: string
+          example: 'Киевская'
+          description: 'Назва області'
+        district_code:
+          type: string
+          example: '32218'
+          description: 'Код району'
+        district_name_ua:
+          type: string
+          example: 'Вишгородський район'
+          description: 'Назва району'
+        district_name_ru:
+          type: string
+          example: 'Вышгородский район'
+          description: 'Назва району'
+        country_code:
+          type: string
+          example: 'UA'
+          description: 'Код країни'
+        country_name_ua:
+          type: string
+          example: 'Україна'
+          description: 'Назва країни'
+        country_name_ru:
+          type: string
+          example: 'Украина'
+          description: 'Назва країни'
+        lat:
+          type: string
+          example: '50.5831258'
+          description: 'Широта'
+        lng:
+          type: string
+          example: '30.4856785'
+          description: 'Довгота'
+        locality_type_ua:
+          type: string
+          example: 'Місто'
+          description: 'Назва типу териториальної одиниці'
+        locality_type_ru:
+          type: string
+          example: 'Город'
+          description: 'Назва типу териториальної одиниці'
