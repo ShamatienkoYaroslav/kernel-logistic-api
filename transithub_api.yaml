@@ -7306,7 +7306,7 @@ paths:
           schema:
             type: string
             example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
-            - in: query
+        - in: query
           name: warehouse_in
           description: 'Унікальний ідентифікатор складу розвантаження'
           required: false
