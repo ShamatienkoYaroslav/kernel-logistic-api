@@ -88,6 +88,8 @@ tags:
     description: 'Вузол для отримання повної інформвції про територіальну одиницю.'
   - name: 'T032 - Склади'
     description: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+  - name: 'T033 - Вантаж'
+    description: Вузол для отримання всіх вантажів або ж для конкретних складів або профілів
 
 paths:
   /blacklist/check:
@@ -7248,6 +7250,131 @@ paths:
         500:
           description: server error
           content: {}
+  /goods:
+    get:
+      tags:
+        - 'T033 - Вантаж'
+      summary: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+      operationId: warehousesGet
+      description: |
+        Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: search_text
+          description: 'Назва або частина назви вантажу'
+          required: false
+          schema:
+            type: string
+            example: 'шрот'
+        - in: query
+          name: direction
+          description: 'Напрямок'
+          required: false
+          schema:
+            type: string
+            example: 'unloading'
+        - in: query
+          name: warehouse_guid
+          description: 'Унікальний ідентифікатор складу'
+          required: false
+          schema:
+            type: string
+            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
+            - in: query
+          name: warehouse_in
+          description: 'Унікальний ідентифікатор складу розвантаження'
+          required: false
+          schema:
+            type: string
+            example: 'fad19a4c-8c21-9394-77f1-5396c1750298'
+            - in: query
+          name: warehouse_out
+          description: 'Унікальний ідентифікатор складу навантаження'
+          required: false
+          schema:
+            type: string
+            example: 'a92ebf1e-14c5-cd3a-b8db-1b46da0fa01f'
+        - in: query
+          name: pq_queue_profile_guid
+          description: 'Унікальний ідентифікатор профіля черги'
+          required: false
+          schema:
+            type: string
+            example: '1791cbc7-8c05-4847-6f6e-de263785a21a'
+        - in: query
+          name: pq_queue_guid
+          description: 'Унікальний ідентифікатор черги'
+          required: false
+          schema:
+            type: string
+            example: '763d6c2d-75e5-8f88-e4bf-892d60b276cb'
+      responses:
+        200:
+          description: Знайдений вантаж
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GoodsGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        500:
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -9223,3 +9350,23 @@ components:
           type: string
           example: 'Село'
           description: 'Назва типу териториальної одиниці'
+    GoodsGet:
+      type: object
+      description: Інформація про вантаж
+      properties:
+        і:
+          type: integer
+          example: '3'
+          description: 'Номер рядка'
+        name_ua:
+          type: string
+          example: 'Шрот ріпаковий'
+          description: 'Назва вантажу'
+        name_ru:
+          type: string
+          example: 'Шрот рапсовый'
+          description: 'Назва вантажу'
+        guid:
+          type: string
+          example: 'ШРОТ_РІП'
+          description: 'Унікальний ідентифікатор вантажу'
