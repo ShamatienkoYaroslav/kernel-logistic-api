@@ -7160,6 +7160,27 @@ paths:
           schema:
             type: integer
             example: 4
+        - in: query
+          name: guid
+          description: 'Унікальний ідентифікатор територіальної одиниці'
+          required: false
+          schema:
+            type: string
+            example: '70D264A7-10C1-4D12-9B40-8E3961FFD7E2'
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів пошуку, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: Дані про територіальну одиницю
