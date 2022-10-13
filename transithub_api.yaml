@@ -86,6 +86,8 @@ tags:
     description: 'Вузол для отримання приблизної необхідної ваги вантажу за номером тз та гуідом вантажу.'
   - name: 'T031 - Населені пункти'
     description: 'Вузол для отримання повної інформвції про територіальну одиницю.'
+  - name: 'T032 - Склади'
+    description: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
 
 paths:
   /blacklist/check:
@@ -7094,7 +7096,7 @@ paths:
             example: 4
       responses:
         200:
-          description: Дані по статусу документів при верифікації
+          description: Дані про територіальну одиницю
           content:
             application/json:
               schema:
@@ -7140,6 +7142,109 @@ paths:
                     type: string
                     description: 'Детальний опис помилки'
                     example: "You need to specify correct values for access token. Please contact with APIs admin."
+        500:
+          description: server error
+          content: {}
+  /warehouses:
+    get:
+      tags:
+        - 'T032 - Склади'
+      summary: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+      operationId: warehousesGet
+      description: |
+        Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості складів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: code
+          description: 'Код складу'
+          required: false
+          schema:
+            type: string
+            example: '3523181601009'
+        - in: query
+          name: koatuu
+          description: 'КОАТУУ'
+          required: false
+          schema:
+            type: string
+            example: '6321610100'
+        - in: query
+          name: pq_queue_profile_guid
+          description: 'Унікальний ідентифікатор профіля черги'
+          required: false
+          schema:
+            type: string
+            example: 'a92ebf1e-14c5-cd3a-b8db-1b46da0fa01f'
+      responses:
+        200:
+          description: Дані складу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WarehousesGet'
+                  count:
+                    type: integer
+                    example: 14
+                    description: Кількість знайдених результатів
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
         500:
           description: server error
           content: {}
@@ -9021,4 +9126,100 @@ components:
         locality_type_ru:
           type: string
           example: 'Город'
+          description: 'Назва типу териториальної одиниці'
+    WarehousesGet:
+      type: object
+      description: Дані териториальної одиниці
+      properties:
+        і:
+          type: integer
+          example: '29'
+          description: 'Номер рядка'
+        name:
+          type: string
+          example: 'Бандурський ОЕЗ'
+          description: 'Назва складу'
+        guid:
+          type: string
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          description: 'Унікальний ідентифікатор териториальної одиниці'
+        lat:
+          type: string
+          example: '50.5831258'
+          description: 'Широта'
+        lng:
+          type: string
+          example: '30.4856785'
+          description: 'Довгота'
+        full_address:
+          type: string
+          example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
+          description: 'Повна адреса'
+        street_type:
+          type: string
+          example: 'вулиця'
+          description: 'Тип вулиці'
+        street_name:
+          type: string
+          example: 'Центральна'
+          description: 'Назва вулиці'
+        building_n:
+          type: string
+          example: '40'
+          description: 'Номер будинку'
+        koatuu:
+          type: string
+          example: '3221810100'
+          description: 'КОАТУУ'
+        classificator_code:
+          type: string
+          example: '4825487602001'
+          description: 'Код складу'
+        organisation:
+          type: string
+          example: 'Бандурський олійн.екс.з-д'
+          description: 'Організація'
+        kind:
+          type: string
+          example: 'Завод'
+          description: "Назва типу пункту"
+        country_name:
+          type: string
+          example: 'Україна'
+          description: 'Назва країни'
+        district_name:
+          type: string
+          example: 'Вишгородський район'
+          description: 'Назва району'
+        region_name:
+          type: string
+          example: 'Київська'
+          description: 'Назва області'
+        country_name_ru:
+          type: string
+          example: 'Украина'
+          description: 'Назва країни'
+        district_name_ru:
+          type: string
+          example: 'Вышгородский район'
+          description: 'Назва району'
+        region_name_ru:
+          type: string
+          example: 'Киевская'
+          description: 'Назва області'
+        loaction_name:
+          type: string
+          example: 'Бандурка'
+          description: 'Назва териториальної одиниці'
+        loaction_name_ru:
+          type: string
+          example: 'Бандурка'
+          description: 'Назва териториальної одиниці'
+        location_type:
+          type: string
+          example: 'Село'
+          description: 'Назва типу териториальної одиниці'
+        location_type_ru:
+          type: string
+          example: 'Село'
           description: 'Назва типу териториальної одиниці'
