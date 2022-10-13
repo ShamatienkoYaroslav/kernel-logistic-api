@@ -6908,12 +6908,6 @@ paths:
                     type: string
                     example: '380967002030'
                     description: 'Додатковий номер телефону водія'
-        '200':
-          description: 'Дані не знайдено'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFound'
         400:
           description: 'Поганий запит'
           content:
@@ -6926,6 +6920,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
         500:
           description: server error
           content: {}
