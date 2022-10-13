@@ -7019,7 +7019,7 @@ paths:
                   detail:
                     type: string
                     description: 'Детальний опис помилки'
-                    example: 'You need to specify correct values for access token. Please contact with API's admin.'
+                    example: "You need to specify correct values for access token. Please contact with API's admin."
         500:
           description: server error
           content: {}
@@ -7140,7 +7140,7 @@ paths:
                   detail:
                     type: string
                     description: 'Детальний опис помилки'
-                    example: 'You need to specify correct values for access token. Please contact with API's admin.'
+                    example: "You need to specify correct values for access token. Please contact with API's admin."
         500:
           description: server error
           content: {}
