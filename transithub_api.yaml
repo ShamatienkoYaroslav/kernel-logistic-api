@@ -6983,7 +6983,7 @@ paths:
                     type: integer
                     description: 'Вага вантажу'
                     example: 10350
-        '200':
+        400:
           description: Поганий запит
           content:
             application/json:
@@ -6998,7 +6998,7 @@ paths:
                     type: string
                     description: 'Повідомлення'
                     example: 'No available data for this parameters.'
-        "200":
+        403:
           description: 'Неправильний або відсутній access token'
           content:
             application/json:
@@ -7113,7 +7113,13 @@ paths:
                     type: integer
                     example: 1
                     description: Кількість знайдених результатів
-        '200':
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        403:
           description: 'Неправильний або відсутній access token/client token'
           content:
             application/json:
@@ -7135,12 +7141,6 @@ paths:
                     type: string
                     description: 'Детальний опис помилки'
                     example: 'You need to specify correct values for access token. Please contact with API's admin.'
-        400:
-          description: 'Поганий запит'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_BadRequest'
         500:
           description: server error
           content: {}
