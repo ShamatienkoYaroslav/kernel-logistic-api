@@ -317,6 +317,70 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_BadRequestNew'
       x-codegen-request-body-name: payload
+    get:
+      tags:
+        - 'Контрагенти'
+      summary: Вузол отримання всіх контрагентів (перевізників) по частині або повній назві
+      operationId: warehousesGet
+      description: |
+        Вузол отримання всіх контрагентів (перевізників) по частині або повній назві
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: search_text
+          description: 'Назва або частина назви контрагента'
+          required: false
+          schema:
+            type: string
+            example: 'Агро'
+      responses:
+        '200':
+          description: Знайдені контрагенти
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContragentsGet'
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    example: 2456
+                    description: Кількість знайдених результатів
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: server error
+          content: {}
   /driver/races:
     get:
       tags:
@@ -9370,3 +9434,27 @@ components:
           type: string
           example: 'ШРОТ_РІП'
           description: 'Унікальний ідентифікатор вантажу'
+    ContragentsGet:
+      type: object
+      description: Інформація про контрагента
+      properties:
+        code:
+          type: string
+          example: 'V00907'
+          description: 'Код контрагента'
+        name:
+          type: string
+          example: "ТОВ \"АГРОЗІРКОВА\""
+          description: 'Назва контрагента'
+        search_name:
+          type: string
+          example: 'ТОВ АГРОЗІРКОВА'
+          description: 
+        pattern_of_ownership:
+          type: string
+          example: 'ТОВ'
+          description: 'Тип власності'
+        vat_registration_no:
+          type: string
+          example: '424190415512'
+          description: 
