@@ -1164,10 +1164,19 @@ paths:
           schema:
             type: string
         - in: query
-          name: guid
-          description: Унікальний ідентифікатор наряду
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
           schema:
-            type: string
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів'
+          required: false
+          schema:
+            type: integer
+            example: 1
         - in: query
           name: phone
           description: Номер телефону водія
@@ -1212,6 +1221,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        500:
+          description: server error
+          content: {}
   /driver/races/status:
     get:
       tags:
