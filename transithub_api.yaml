@@ -1188,6 +1188,12 @@ paths:
           schema:
             type: string
             enum: [actual, accepted, rejected]
+        - in: query
+          name: only_current_date
+          description: 'Дата завантаження (заявка) = поточна дата'
+          schema:
+            type: number
+            enum: [1]
       responses:
         200:
           description: Дані наряду
