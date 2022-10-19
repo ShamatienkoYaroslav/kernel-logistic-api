@@ -7902,199 +7902,199 @@ components:
         guid:
           type: string
           example: "927c0e73-5dec-7f85-79a9-db71c5b23888"
-          description: '-'
+          description: 'Унікальний ідентифікатор наряду'
         date_from_utc:
           type: string
           example: "2022-09-30T00:00:00Z"
-          description: '-'
+          description: 'Дата навантаження (початок)'
         date_to_utc:
           type: string
           example: "2022-09-30T00:00:00Z"
-          description: '-'
+          description: 'Дата навантаження (закінчення)'
         status:
           type: string
           example: "New"
-          description: '-'
+          description: 'Статус наряду'
         phone:
           type: string
           example: "380679944455"
-          description: '-'
+          description: 'Номер телефона водія'
         request_guid:
           type: string
           example: "2d92556b-a896-45ed-06fa-5e1aa66e5051"
-          description: '-'
+          description: 'Унікальний ідентифікатор заявки'
         request_client_number:
           type: string
           example: "Z_069308"
-          description: '-'
+          description: 'Номер заявки кліента'
         request_schedule_date:
           type: string
           example: "17.10.2022"
-          description: '-'
+          description: 'Дата завантаження (заявка)'
         client_name:
           type: string
           example: "Кернел Трейд"
-          description: '-'
+          description: "Ім'я клієнта"
         carrier_guid:
           type: string
           example: "f357d066-c9b7-1222-78c3-fe65a0b96021"
-          description: '-'
+          description: 'Унікальний ідентифікатор'
         carrier_name:
           type: string
           example: "Кернел НАВ"
-          description: '-'
+          description: 'Назва перевізника'
         goods_guid:
           type: string
           example: "СОНЯШНИК ВО"
-          description: '-'
+          description: 'Унікальний ідентифікатор вантажу'
         r_vehicle_number:
           type: string
           example: "55555552"
-          description: '-'
+          description: 'Номер автомобіля (заявка)'
         r_vehicle_tech_pass:
           type: string
           example: "RRR555555"
-          description: '-'
+          description: 'Технічний паспорт автомобіля (заявка)'
         r_vehicle_brand:
           type: string
           example: "Volkswagen"
-          description: '-'
+          description: 'Бренд автомобіля (заявка)'
         r_vehicle_model:
           type: string
           example: "Crosss1"
-          description: '-'
+          description: 'Модель автомобіля (заявка)'
         r_driver_fullname:
           type: string
           example: "Зарульний Андрій Миколайович"
-          description: '-'
+          description: "Повне ім'я водія (заявка)"
         r_driver_phone:
           type: string
           example: "380679944455"
-          description: '-'
+          description: 'Номер телефона водія (заявка)'
         r_driver_cert:
           type: string
           example: "ВС22003311"
-          description: '-'
+          description: 'Посвідчення водія (заявка)'
         vehicle_guid:
           type: string
           example: "60a16b70-a597-3d90-b5ce-062a54a4484d"
-          description: '-'
+          description: 'Унікальний ідентифікатор автомобіля'
         vehicle_number:
           type: string
           example: "55555552"
-          description: '-'
+          description: 'Номер автомобіля'
         vehicle_brand:
           type: string
           example: "Volkswagen"
-          description: '-'
+          description: 'Бренд автомобіля'
         vehicle_tech_pass:
           type: string
           example: "RRR555555"
-          description: '-'
+          description: 'Технічний паспорт автомобіля'
         vehicle_model:
           type: string
           example: "Crosss1"
-          description: '-'
+          description: 'Модель автомобіля'
         driver_guid:
           type: string
           example: "fa410f45-bec0-b218-acbb-53df2722b51a"
-          description: '-'
+          description: 'Унікальний ідентифікатор водія'
         driver_fullname:
           type: string
           example: "Зарульний Андрій Миколайович"
-          description: '-'
+          description: "Повне ім'я водія"
         driver_phone:
           type: string
           example: "380679944455"
-          description: '-'
+          description: 'Номер телефона водія'
         driver_cert:
           type: string
           example: "ВС22003311"
-          description: '-'
+          description: 'Посвідчення водія'
         person_docs_type:
           type: string
           example: "passport"
-          description: '-'
+          description: 'Тип посвідчення особи'
         pass_serial:
           type: string
           example: "АВ"
-          description: '-'
+          description: 'Серія паспорта'
         pass_number:
           type: string
           example: "123131"
-          description: '-'
+          description: 'Номер паспорта'
         pass_date:
           type: string
           example: "2020-04-02T00:00:00Z"
-          description: '-'
+          description: 'Дата видачі паспорта'
         pass_issued:
           type: string
           example: "Сокирянським РВ УМВСУ"
-          description: '-'
+          description: 'Ким виданий паспорт'
         point_from_name:
           type: string
           example: "Покровське"
-          description: '-'
+          description: 'Назва пункту навантаження'
         point_from_region_ua:
           type: string
           example: "Полтавська"
-          description: '-'
+          description: 'Назва області пункту навантаження'
         point_from_region_ru:
           type: string
           example: "Полтавская"
-          description: '-'
+          description: 'Назва області пункту навантаження'
         point_from_koatuu:
           type: string
           example: "5324280901"
-          description: '-'
+          description: 'Код КОАТУУ пункту навантаження'
         point_from_description:
           type: string
           example: "Україна, Полтавська обл., Полтавський район, х. Покровське"
-          description: '-'
+          description: 'Опис пункту навантаження'
         point_to_name:
           type: string
           example: "Кропивницький"
-          description: '-'
+          description: 'Назва пункту розвантаження'
         point_to_region_ua:
           type: string
           example: "Кіровоградська"
-          description: '-'
+          description: 'Область пункту розвантаження'
         point_to_region_ru:
           type: string
           example: "Кировоградская"
-          description: '-'
+          description: 'Область пункту розвантаження'
         point_to_koatuu:
           type: string
           example: "3510100000"
-          description: '-'
+          description: 'Код КОАТУУ пункту розвантаження'
         point_to_description:
           type: string
           example: "Україна, Кіровоградська обл., Кропивницький район, м. Кропивницький"
-          description: '-'
+          description: 'Опис пункту навантаження'
         warehouse_from_code:
           type: string
           example: "5324280901002"
-          description: '-'
+          description: 'Код складу навантаження'
         warehouse_from_name:
           type: string
           example: "Решетилівська дільниця"
-          description: '-'
+          description: 'Назва складу навантаження'
         warehouse_from_address:
           type: string
           example: "Україна, Полтавська обл., Решетилівський район, сел. Покровське, вулиця Елеваторна 15"
-          description: '-'
+          description: 'Адреся складу навантаження'
         warehouse_to_code:
           type: string
           example: "3510100000010"
-          description: '-'
+          description: 'Код складу розвантаження'
         warehouse_to_name:
           type: string
           example: "Придніпровський ОЕЗ"
-          description: '-'
+          description: 'Назва складу розвантаження'
         warehouse_to_address:
           type: string
           example: "Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 53"
-          description: '-'
+          description: 'Адреса складу розвантаження'
         warehouse_from_bd_on:
           type: integer
           example: 1
@@ -8106,27 +8106,27 @@ components:
         profile_to_guid:
           type: string
           example: "e36aa43c-839f-482e-0dd8-4d668234a56e"
-          description: '-'
+          description: 'Унікальний ідентифікатор профіля розвантаження'
         profile_to_name:
           type: string
           example: "Кропивницький ХАБ"
-          description: '-'
+          description: 'Назва профіля розвантаження'
         carrier_organisation_guid:
           type: string
           example: "9d5997b5-fd78-fa38-7c99-e74d2b713fca"
-          description: '-'
+          description: 'Унікальний ідентифікатор організації перевізника'
         carrier_organisation_name:
           type: string
           example: "Довгенко Анатолій Миколайович"
-          description: '-'
+          description: 'Назва організації перевізника'
         goods_name_ua:
           type: string
           example: "Соняшник високоолеїновий"
-          description: '-'
+          description: 'Назва вантажу'
         goods_name_ru:
           type: string
           example: "Подсолнечник високоолеиновый"
-          description: '-'
+          description: 'Назва вантажу'
         outcome:
           type: integer
           example: 1
@@ -8134,7 +8134,7 @@ components:
         handle_status:
           type: string
           example: "ready"
-          description: '-'
+          description: 'Статус обробки наряду'
         row_index:
           type: integer
           example: 8
@@ -8154,27 +8154,27 @@ components:
         main_queue_to_name:
           type: string
           example: "Основна черга"
-          description: '-'
+          description: 'Назва основної черги'
         route:
           type: string
           example: "https:\/\/www.google.com.ua\/maps\/dir\/49.639141,34.142599\/48.51495,32.190519\/data=!3m1!4b1!4m14!4m13!1m10!3m4!1m2!1d33.224199!2d49.1853742!3s0x40d74a3362c48ae1:0xadd23f4c1d8d2938!3m4!1m2!1d33.3820324!2d48.988811!3s0x40d0abf5c0f9dd11:0xce3e18a32c09cd67!1m0!3e0"
-          description: '-'
+          description: 'Посилання на маршрут'
         request_number:
           type: string
           example: "Z_069308"
-          description: '-'
+          description: 'Номер заявки'
         manager_name:
           type: string
           example: "Колесникова Мария Витальевна"
-          description: '-'
+          description: 'Ім'я менеджера'
         manager_phone:
           type: string
           example: "380504107343"
-          description: '-'
+          description: 'Телефон менеджера'
         manager_email:
           type: string
           example: "m.kolesnikova@kernel.ua"
-          description: '-'
+          description: 'Електронна скринька менеджера'
         customer_kt:
           type: integer
           example: 1
@@ -8190,75 +8190,75 @@ components:
         warehouse_from_street:
           type: string
           example: "Елеваторна"
-          description: '-'
+          description: 'Назва вулиці складу навантаження'
         warehouse_from_street_type:
           type: string
           example: "вулиця"
-          description: '-'
+          description: 'Тип вулиці складу навантаження'
         warehouse_from_building:
           type: string
           example: "15"
-          description: '-'
+          description: 'Будинок (номер) складу навантаження'
         warehouse_to_street:
           type: string
           example: "Мурманська"
-          description: '-'
+          description: 'Назва вулиці складу розвантаження'
         warehouse_to_street_type:
           type: string
           example: "вулиця"
-          description: '-'
+          description: 'Тип вулиці складу розвантаження'
         warehouse_to_building:
           type: string
           example: "53"
-          description: '-'
+          description: 'Будинок (номер) складу розвантаження'
         sender_name:
           type: string
           example: "Вантажовідправник_1"
-          description: '-'
+          description: 'Назва вантажовідправника'
         request_carrier_name:
           type: string
           example: "Grisha"
-          description: '-'
+          description: 'Назва перевізника (заявка)'
         request_carrier_edrpou:
           type: string
           example: "3308479112"
-          description: '-'
+          description: 'ЕДРПОУ перевізника (заявка)'
         consignor_name:
           type: string
           example: "Вантажовідправник_1"
-          description: '-'
+          description: 'Назва вантажовідправника'
         consignor_edrpou:
           type: string
           example: "34334842"
-          description: '-'
+          description: 'ЕДРПОУ вантажовідправника'
         consignee_name:
           type: string
           example: "Вантаоодержувач_2"
-          description: '-'
+          description: 'Назва вантажоодержувача'
         consignee_edrpou:
           type: string
           example: "00373869"
-          description: '-'
+          description: 'ЕДРПОУ вантажоодержувача'
         max_vehicle_height:
           type: integer
           example: 2
-          description: '-'
+          description: 'Максимальна висота транспортного засобу'
         max_vehicle_width:
           type: integer
           example: 0
-          description: '-'
+          description: 'Максимальна ширина транспортного засобу'
         sum_vehicle_length:
           type: integer
           example: 5
-          description: '-'
+          description: 'Сумарна довжина транспортного засобу'
         sum_vehicle_gross_weight:
           type: integer
           example: 15000
-          description: '-'
+          description: 'Повна вага навантаженого транспортного засобу'
         sum_vehicle_gross_weight_without_loading:
           type: integer
           example: 3000
-          description: '-'
+          description: 'Повна вага транспортного засобу без завантаження'
     Departure_permission_direction:
       type: object
       properties:
