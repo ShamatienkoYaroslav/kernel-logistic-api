@@ -8166,7 +8166,7 @@ components:
         manager_name:
           type: string
           example: "Колесникова Мария Витальевна"
-          description: 'Ім'я менеджера'
+          description: "Ім'я менеджера"
         manager_phone:
           type: string
           example: "380504107343"
