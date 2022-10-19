@@ -7899,6 +7899,366 @@ components:
           type: string
           example: "Логіст Петя"
           description: 'Коментар логіста. Таблиця: Наряди (request_vehicles_register)'
+        guid:
+          type: string
+          example: "927c0e73-5dec-7f85-79a9-db71c5b23888"
+          description: '-'
+        date_from_utc:
+          type: string
+          example: "2022-09-30T00:00:00Z"
+          description: '-'
+        date_to_utc:
+          type: string
+          example: "2022-09-30T00:00:00Z"
+          description: '-'
+        status:
+          type: string
+          example: "New"
+          description: '-'
+        phone:
+          type: string
+          example: "380679944455"
+          description: '-'
+        request_guid:
+          type: string
+          example: "2d92556b-a896-45ed-06fa-5e1aa66e5051"
+          description: '-'
+        request_client_number:
+          type: string
+          example: "Z_069308"
+          description: '-'
+        request_schedule_date:
+          type: string
+          example: "17.10.2022"
+          description: '-'
+        client_name:
+          type: string
+          example: "Кернел Трейд"
+          description: '-'
+        carrier_guid:
+          type: string
+          example: "f357d066-c9b7-1222-78c3-fe65a0b96021"
+          description: '-'
+        carrier_name:
+          type: string
+          example: "Кернел НАВ"
+          description: '-'
+        goods_guid:
+          type: string
+          example: "СОНЯШНИК ВО"
+          description: '-'
+        r_vehicle_number:
+          type: string
+          example: "55555552"
+          description: '-'
+        r_vehicle_tech_pass:
+          type: string
+          example: "RRR555555"
+          description: '-'
+        r_vehicle_brand:
+          type: string
+          example: "Volkswagen"
+          description: '-'
+        r_vehicle_model:
+          type: string
+          example: "Crosss1"
+          description: '-'
+        r_driver_fullname:
+          type: string
+          example: "Зарульний Андрій Миколайович"
+          description: '-'
+        r_driver_phone:
+          type: string
+          example: "380679944455"
+          description: '-'
+        r_driver_cert:
+          type: string
+          example: "ВС22003311"
+          description: '-'
+        vehicle_guid:
+          type: string
+          example: "60a16b70-a597-3d90-b5ce-062a54a4484d"
+          description: '-'
+        vehicle_number:
+          type: string
+          example: "55555552"
+          description: '-'
+        vehicle_brand:
+          type: string
+          example: "Volkswagen"
+          description: '-'
+        vehicle_tech_pass:
+          type: string
+          example: "RRR555555"
+          description: '-'
+        vehicle_model:
+          type: string
+          example: "Crosss1"
+          description: '-'
+        driver_guid:
+          type: string
+          example: "fa410f45-bec0-b218-acbb-53df2722b51a"
+          description: '-'
+        driver_fullname:
+          type: string
+          example: "Зарульний Андрій Миколайович"
+          description: '-'
+        driver_phone:
+          type: string
+          example: "380679944455"
+          description: '-'
+        driver_cert:
+          type: string
+          example: "ВС22003311"
+          description: '-'
+        person_docs_type:
+          type: string
+          example: "passport"
+          description: '-'
+        pass_serial:
+          type: string
+          example: "АВ"
+          description: '-'
+        pass_number:
+          type: string
+          example: "123131"
+          description: '-'
+        pass_date:
+          type: string
+          example: "2020-04-02T00:00:00Z"
+          description: '-'
+        pass_issued:
+          type: string
+          example: "Сокирянським РВ УМВСУ"
+          description: '-'
+        point_from_name:
+          type: string
+          example: "Покровське"
+          description: '-'
+        point_from_region_ua:
+          type: string
+          example: "Полтавська"
+          description: '-'
+        point_from_region_ru:
+          type: string
+          example: "Полтавская"
+          description: '-'
+        point_from_koatuu:
+          type: string
+          example: "5324280901"
+          description: '-'
+        point_from_description:
+          type: string
+          example: "Україна, Полтавська обл., Полтавський район, х. Покровське"
+          description: '-'
+        point_to_name:
+          type: string
+          example: "Кропивницький"
+          description: '-'
+        point_to_region_ua:
+          type: string
+          example: "Кіровоградська"
+          description: '-'
+        point_to_region_ru:
+          type: string
+          example: "Кировоградская"
+          description: '-'
+        point_to_koatuu:
+          type: string
+          example: "3510100000"
+          description: '-'
+        point_to_description:
+          type: string
+          example: "Україна, Кіровоградська обл., Кропивницький район, м. Кропивницький"
+          description: '-'
+        warehouse_from_code:
+          type: string
+          example: "5324280901002"
+          description: '-'
+        warehouse_from_name:
+          type: string
+          example: "Решетилівська дільниця"
+          description: '-'
+        warehouse_from_address:
+          type: string
+          example: "Україна, Полтавська обл., Решетилівський район, сел. Покровське, вулиця Елеваторна 15"
+          description: '-'
+        warehouse_to_code:
+          type: string
+          example: "3510100000010"
+          description: '-'
+        warehouse_to_name:
+          type: string
+          example: "Придніпровський ОЕЗ"
+          description: '-'
+        warehouse_to_address:
+          type: string
+          example: "Україна, Кіровоградська обл., м. Кропивницький, вулиця Мурманська 53"
+          description: '-'
+        warehouse_from_bd_on:
+          type: integer
+          example: 1
+          description: '-'
+        warehouse_to_bd_on:
+          type: integer
+          example: 1
+          description: '-'
+        profile_to_guid:
+          type: string
+          example: "e36aa43c-839f-482e-0dd8-4d668234a56e"
+          description: '-'
+        profile_to_name:
+          type: string
+          example: "Кропивницький ХАБ"
+          description: '-'
+        carrier_organisation_guid:
+          type: string
+          example: "9d5997b5-fd78-fa38-7c99-e74d2b713fca"
+          description: '-'
+        carrier_organisation_name:
+          type: string
+          example: "Довгенко Анатолій Миколайович"
+          description: '-'
+        goods_name_ua:
+          type: string
+          example: "Соняшник високоолеїновий"
+          description: '-'
+        goods_name_ru:
+          type: string
+          example: "Подсолнечник високоолеиновый"
+          description: '-'
+        outcome:
+          type: integer
+          example: 1
+          description: '-'
+        handle_status:
+          type: string
+          example: "ready"
+          description: '-'
+        row_index:
+          type: integer
+          example: 8
+          description: '-'
+        ready_to_subscription:
+          type: integer
+          example: 1
+          description: '-'
+        sent_to_client:
+          type: integer
+          example: 1
+          description: '-'
+        changeable:
+          type: integer
+          example: 0
+          description: '-'
+        main_queue_to_name:
+          type: string
+          example: "Основна черга"
+          description: '-'
+        route:
+          type: string
+          example: "https:\/\/www.google.com.ua\/maps\/dir\/49.639141,34.142599\/48.51495,32.190519\/data=!3m1!4b1!4m14!4m13!1m10!3m4!1m2!1d33.224199!2d49.1853742!3s0x40d74a3362c48ae1:0xadd23f4c1d8d2938!3m4!1m2!1d33.3820324!2d48.988811!3s0x40d0abf5c0f9dd11:0xce3e18a32c09cd67!1m0!3e0"
+          description: '-'
+        request_number:
+          type: string
+          example: "Z_069308"
+          description: '-'
+        manager_name:
+          type: string
+          example: "Колесникова Мария Витальевна"
+          description: '-'
+        manager_phone:
+          type: string
+          example: "380504107343"
+          description: '-'
+        manager_email:
+          type: string
+          example: "m.kolesnikova@kernel.ua"
+          description: '-'
+        customer_kt:
+          type: integer
+          example: 1
+          description: '-'
+        customer_kt_ua:
+          type: string
+          example: "Так"
+          description: '-'
+        customer_kt_ru:
+          type: string
+          example: "Да"
+          description: '-'
+        warehouse_from_street:
+          type: string
+          example: "Елеваторна"
+          description: '-'
+        warehouse_from_street_type:
+          type: string
+          example: "вулиця"
+          description: '-'
+        warehouse_from_building:
+          type: string
+          example: "15"
+          description: '-'
+        warehouse_to_street:
+          type: string
+          example: "Мурманська"
+          description: '-'
+        warehouse_to_street_type:
+          type: string
+          example: "вулиця"
+          description: '-'
+        warehouse_to_building:
+          type: string
+          example: "53"
+          description: '-'
+        sender_name:
+          type: string
+          example: "Вантажовідправник_1"
+          description: '-'
+        request_carrier_name:
+          type: string
+          example: "Grisha"
+          description: '-'
+        request_carrier_edrpou:
+          type: string
+          example: "3308479112"
+          description: '-'
+        consignor_name:
+          type: string
+          example: "Вантажовідправник_1"
+          description: '-'
+        consignor_edrpou:
+          type: string
+          example: "34334842"
+          description: '-'
+        consignee_name:
+          type: string
+          example: "Вантаоодержувач_2"
+          description: '-'
+        consignee_edrpou:
+          type: string
+          example: "00373869"
+          description: '-'
+        max_vehicle_height:
+          type: integer
+          example: 2
+          description: '-'
+        max_vehicle_width:
+          type: integer
+          example: 0
+          description: '-'
+        sum_vehicle_length:
+          type: integer
+          example: 5
+          description: '-'
+        sum_vehicle_gross_weight:
+          type: integer
+          example: 15000
+          description: '-'
+        sum_vehicle_gross_weight_without_loading:
+          type: integer
+          example: 3000
+          description: '-'
     Departure_permission_direction:
       type: object
       properties:
