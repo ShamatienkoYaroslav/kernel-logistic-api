@@ -7500,13 +7500,6 @@ paths:
           schema:
             type: string
         - in: query
-          name: limit
-          description: 'Обмеження кількості результатів, що виводяться'
-          required: false
-          schema:
-            type: integer
-            example: 2
-        - in: query
           name: is_traffic_in_parking
           description: 'Вивовдити статистику по авто, що направляются на парковку'
           required: false
@@ -7529,7 +7522,7 @@ paths:
             example: '1791cbc7-8c05-4847-6f6e-de263785a21a'
       responses:
         200:
-          description: Знайдений вантаж
+          description: Результат запиту
           content:
             application/json:
               schema:
@@ -7551,12 +7544,12 @@ paths:
                     type: integer
                     example: 1
                     description: Кількість знайдених результатів
-        401:
-          description: 'Користувач не авторизований'
+        400:
+          description: 'Поганий запит'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
+                $ref: '#/components/schemas/_BadRequest'
         403:
           description: 'Клієнт не має прав доступу'
           content:
