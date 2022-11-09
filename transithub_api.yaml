@@ -7363,10 +7363,10 @@ paths:
     get:
       tags:
         - 'T033 - Вантаж'
-      summary: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
-      operationId: warehousesGet
+      summary: Вузол для отримання всіх вантажів або ж для конкретних складів за введеним користувачем значенням
+      operationId: goodsGet
       description: |
-        Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
+        Вузол для отримання всіх вантажів або ж для конкретних складів за введеним користувачем значенням
       parameters:
         - in: query
           name: client_token
@@ -7459,6 +7459,94 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/GoodsGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        500:
+          description: server error
+          content: {}
+  /departure_assistant/quota_statistics:
+    get:
+      tags:
+        - 'T027 - Асистент направлень'
+      summary: Вузол для отримання статистики асистента направлень
+      operationId: quota_statisticsGet
+      description: |
+        Вузол для отримання статистики асистента направлень
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: is_traffic_in_parking
+          description: 'Вивовдити статистику по авто, що направляются на парковку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: quota_date
+          description: 'Дата, за яку виводиться статистика'
+          required: false
+          schema:
+            type: string
+            example: '21.10.2022'
+        - in: query
+          name: pq_queue_profile_guid
+          description: 'Унікальний ідентифікатор профіля черги'
+          required: true
+          schema:
+            type: string
+            example: '1791cbc7-8c05-4847-6f6e-de263785a21a'
+      responses:
+        200:
+          description: Знайдений вантаж
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  restrictions_items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/restrictions_items'
+                  unloading_items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/unloading_items'
                   count:
                     type: integer
                     example: 1
@@ -8166,7 +8254,7 @@ components:
         manager_name:
           type: string
           example: "Колесникова Мария Витальевна"
-          description: "Ім'я менеджера"
+          description: "Iм'я менеджера"
         manager_phone:
           type: string
           example: "380504107343"
@@ -9863,3 +9951,495 @@ components:
           type: string
           example: '424190415512'
           description: 
+    restrictions_items:
+      type: object
+      description: Повертає значення для кількості авто
+      properties:
+        queue_profile_guid:
+          type: string
+          example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+          description: 'Унікальний ідентифікатор черги'
+        queue_profile_name:
+          type: string
+          example: "Кропивницький ХАБ"
+          description: 'Назва профіля черги'
+        waiting_for_registration:
+          type: string
+          example: 5
+          description: 'Очікують реєстрації'
+        move_to_parking:
+          type: string
+          example: 6
+          description: 'Кількість авто, переміщених на парковку'
+        in_parking:
+          type: string
+          example: 6
+          description: 'Кількість авто на парковці'
+        available_to_departure:
+          type: string
+          example: 5
+          description: 'Кількість авто доступних для направлення'
+        waiting_for_registration_weight:
+          type: string
+          example: 45
+          description: 'Вага, що очікує на реєстраацію'
+        move_to_parking_weight:
+          type: string
+          example: 45
+          description: 'Вага, що переміщується на парковку'
+        in_parking_weight:
+          type: string
+          example: 45
+          description: 'Вага на парковці'
+        available_to_departure_weight:
+          type: string
+          example: 45
+          description: 'Вага доступна для направлення'
+    unloading_items:
+          type: object
+          description: Повертає значення для кількості авто
+          properties:
+            quota_holder:
+              type: array
+              items:
+                type: object
+                description: Повертає значення для кількості авто
+                properties:
+                  queue_profile_guid:
+                    type: string
+                    example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+                    description: 'Унікальний ідентифікатор черги'
+                  queue_profile_name:
+                    type: string
+                    example: "Кропивницький ХАБ"
+                    description: 'Назва профіля черги'
+                  quota_ratio:
+                    type: integer
+                    example: 40
+                    description: 'Коефіцієнт квоти'
+                  daily_quota:
+                    type: integer
+                    example: 5
+                    description: 'Щоденна квота'
+                  quota_balance:
+                    type: integer
+                    example: 3
+                    description: 'Баланс квоти'
+                  done_quota:
+                    type: integer
+                    example: 6
+                    description: 'Виконана квота'
+                  move_for_unloading:
+                    type: integer
+                    example: 6
+                    description: 'Переміщення на розвантаження'
+                  on_warehouse_territory:
+                    type: integer
+                    example: 5
+                    description: 'На території складу'
+                  left:
+                    type: integer
+                    example: 45
+                    description: 'Покинуло територію'
+                  available_for_unloading:
+                    type: integer
+                    example: 45
+                    description: 'Доступно для розвантаження'
+                  in_queue:
+                    type: integer
+                    example: 45
+                    description: 'В черзі'
+                  daily_quota_weight:
+                    type: integer
+                    example: 5
+                    description: 'Квота щоденної ваги'
+                  quota_balance_weight:
+                    type: integer
+                    example: 3
+                    description: '-'
+                  done_quota_weight:
+                    type: integer
+                    example: 6
+                    description: '-'
+                  move_for_unloading_weight:
+                    type: integer
+                    example: 6
+                    description: '-'
+                  on_warehouse_territory_weight:
+                    type: integer
+                    example: 5
+                    description: 'Вага на території складу'
+                  left_weight:
+                    type: integer
+                    example: 45
+                    description: '-'
+                  available_for_unloading_weight:
+                    type: integer
+                    example: 45
+                    description: 'Вага доступна для розвантаження'
+                  in_queue_weight:
+                    type: integer
+                    example: 45
+                    description: 'Вага в черзі'
+                  goods:
+                    type: array
+                    items:
+                      type: object
+                      description: Повертає значення для кількості авто
+                      properties:
+                        goods_category_guid:
+                          type: string
+                          example: 'СОНЯШНИК'
+                          description: 'Унікальний ідентифікатор черги'
+                        goods_category_name:
+                          type: string
+                          example: "Соняшник"
+                          description: 'Назва профіля черги'
+                        quota_ratio:
+                          type: integer
+                          example: 40
+                          description: 'Коефіцієнт квоти'
+                        daily_quota:
+                          type: integer
+                          example: 5
+                          description: 'Щоденна квота'
+                        quota_balance:
+                          type: integer
+                          example: 3
+                          description: 'Баланс квоти'
+                        done_quota:
+                          type: integer
+                          example: 6
+                          description: 'Виконана квота'
+                        move_for_unloading:
+                          type: integer
+                          example: 6
+                          description: 'Переміщення на розвантаження'
+                        on_warehouse_territory:
+                          type: integer
+                          example: 5
+                          description: 'На території складу'
+                        left:
+                          type: integer
+                          example: 45
+                          description: 'Покинуло територію'
+                        available_for_unloading:
+                          type: integer
+                          example: 45
+                          description: 'Доступно для розвантаження'
+                        in_queue:
+                          type: integer
+                          example: 45
+                          description: 'В черзі'
+                        daily_quota_weight:
+                          type: integer
+                          example: 5
+                          description: 'Квота щоденної ваги'
+                        quota_balance_weight:
+                          type: integer
+                          example: 3
+                          description: '-'
+                        done_quota_weight:
+                          type: integer
+                          example: 6
+                          description: '-'
+                        move_for_unloading_weight:
+                          type: integer
+                          example: 6
+                          description: '-'
+                        on_warehouse_territory_weight:
+                          type: integer
+                          example: 5
+                          description: 'Вага на території складу'
+                        left_weight:
+                          type: integer
+                          example: 45
+                          description: '-'
+                        available_for_unloading_weight:
+                          type: integer
+                          example: 45
+                          description: 'Вага доступна для розвантаження'
+                        in_queue_weight:
+                          type: integer
+                          example: 45
+                          description: 'Вага в черзі'
+                        holders:
+                          type: array
+                          items:
+                            type: object
+                            description: Повертає значення для кількості авто
+                            properties:
+                              quota_holder_guid:
+                                type: string
+                                example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+                                description: '-'
+                              quota_holder_name:
+                                type: string
+                                example: "Закупка"
+                                description: '-'
+                              quota_ratio:
+                                type: integer
+                                example: 40
+                                description: 'Коефіцієнт квоти'
+                              daily_quota:
+                                type: integer
+                                example: 5
+                                description: 'Щоденна квота'
+                              quota_balance:
+                                type: integer
+                                example: 3
+                                description: 'Баланс квоти'
+                              done_quota:
+                                type: integer
+                                example: 6
+                                description: 'Виконана квота'
+                              move_for_unloading:
+                                type: integer
+                                example: 6
+                                description: 'Переміщення на розвантаження'
+                              on_warehouse_territory:
+                                type: integer
+                                example: 5
+                                description: 'На території складу'
+                              left:
+                                type: integer
+                                example: 45
+                                description: 'Покинуло територію'
+                              available_for_unloading:
+                                type: integer
+                                example: 45
+                                description: 'Доступно для розвантаження'
+                              in_queue:
+                                type: integer
+                                example: 45
+                                description: 'В черзі'
+                              daily_quota_weight:
+                                type: integer
+                                example: 5
+                                description: 'Квота щоденної ваги'
+                              quota_balance_weight:
+                                type: integer
+                                example: 3
+                                description: '-'
+                              done_quota_weight:
+                                type: integer
+                                example: 6
+                                description: '-'
+                              move_for_unloading_weight:
+                                type: integer
+                                example: 6
+                                description: '-'
+                              on_warehouse_territory_weight:
+                                type: integer
+                                example: 5
+                                description: 'Вага на території складу'
+                              left_weight:
+                                type: integer
+                                example: 45
+                                description: '-'
+                              available_for_unloading_weight:
+                                type: integer
+                                example: 45
+                                description: 'Вага доступна для розвантаження'
+                              in_queue_weight:
+                                type: integer
+                                example: 45
+                                description: 'Вага в черзі'
+            quota_warehouse:
+              type: array
+              items:
+                type: object
+                description: Повертає значення для кількості авто
+                properties:
+                  queue_profile_guid:
+                    type: string
+                    example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+                    description: 'Унікальний ідентифікатор черги'
+                  queue_profile_name:
+                    type: string
+                    example: "Кропивницький ХАБ"
+                    description: 'Назва профіля черги'
+                  quota_ratio:
+                    type: integer
+                    example: 40
+                    description: 'Коефіцієнт квоти'
+                  daily_quota:
+                    type: integer
+                    example: 5
+                    description: 'Щоденна квота'
+                  quota_balance:
+                    type: integer
+                    example: 3
+                    description: 'Баланс квоти'
+                  done_quota:
+                    type: integer
+                    example: 6
+                    description: 'Виконана квота'
+                  move_for_unloading:
+                    type: integer
+                    example: 6
+                    description: 'Переміщення на розвантаження'
+                  on_warehouse_territory:
+                    type: integer
+                    example: 5
+                    description: 'На території складу'
+                  left:
+                    type: integer
+                    example: 45
+                    description: 'Покинуло територію'
+                  daily_quota_weight:
+                    type: integer
+                    example: 5
+                    description: 'Квота щоденної ваги'
+                  quota_balance_weight:
+                    type: integer
+                    example: 3
+                    description: '-'
+                  done_quota_weight:
+                    type: integer
+                    example: 6
+                    description: '-'
+                  move_for_unloading_weight:
+                    type: integer
+                    example: 6
+                    description: '-'
+                  on_warehouse_territory_weight:
+                    type: integer
+                    example: 5
+                    description: 'Вага на території складу'
+                  left_weight:
+                    type: integer
+                    example: 45
+                    description: '-'
+                  goods:
+                    type: array
+                    items:
+                      type: object
+                      description: Повертає значення для кількості авто
+                      properties:
+                        goods_category_guid:
+                          type: string
+                          example: 'СОНЯШНИК'
+                          description: 'Унікальний ідентифікатор черги'
+                        goods_category_name:
+                          type: string
+                          example: "Соняшник"
+                          description: 'Назва профіля черги'
+                        quota_ratio:
+                          type: integer
+                          example: 40
+                          description: 'Коефіцієнт квоти'
+                        daily_quota:
+                          type: integer
+                          example: 5
+                          description: 'Щоденна квота'
+                        quota_balance:
+                          type: integer
+                          example: 3
+                          description: 'Баланс квоти'
+                        done_quota:
+                          type: integer
+                          example: 6
+                          description: 'Виконана квота'
+                        move_for_unloading:
+                          type: integer
+                          example: 6
+                          description: 'Переміщення на розвантаження'
+                        on_warehouse_territory:
+                          type: integer
+                          example: 5
+                          description: 'На території складу'
+                        left:
+                          type: integer
+                          example: 45
+                          description: 'Покинуло територію'
+                        daily_quota_weight:
+                          type: integer
+                          example: 5
+                          description: 'Квота щоденної ваги'
+                        quota_balance_weight:
+                          type: integer
+                          example: 3
+                          description: '-'
+                        done_quota_weight:
+                          type: integer
+                          example: 6
+                          description: '-'
+                        move_for_unloading_weight:
+                          type: integer
+                          example: 6
+                          description: '-'
+                        on_warehouse_territory_weight:
+                          type: integer
+                          example: 5
+                          description: 'Вага на території складу'
+                        left_weight:
+                          type: integer
+                          example: 45
+                          description: '-'
+                        warehouses:
+                          type: array
+                          items:
+                            type: object
+                            description: Повертає значення для кількості авто
+                            properties:
+                              warehouse_guid:
+                                type: string
+                                example: 'ba287fd9-22c8-5349-65e5-4030d54f9986'
+                                description: '-'
+                              warehouse_name:
+                                type: string
+                                example: "Кроп 1"
+                                description: '-'
+                              quota_ratio:
+                                type: integer
+                                example: 40
+                                description: 'Коефіцієнт квоти'
+                              daily_quota:
+                                type: integer
+                                example: 5
+                                description: 'Щоденна квота'
+                              quota_balance:
+                                type: integer
+                                example: 3
+                                description: 'Баланс квоти'
+                              done_quota:
+                                type: integer
+                                example: 6
+                                description: 'Виконана квота'
+                              move_for_unloading:
+                                type: integer
+                                example: 6
+                                description: 'Переміщення на розвантаження'
+                              on_warehouse_territory:
+                                type: integer
+                                example: 5
+                                description: 'На території складу'
+                              left:
+                                type: integer
+                                example: 45
+                                description: 'Покинуло територію'
+                              daily_quota_weight:
+                                type: integer
+                                example: 5
+                                description: 'Квота щоденної ваги'
+                              quota_balance_weight:
+                                type: integer
+                                example: 3
+                                description: '-'
+                              done_quota_weight:
+                                type: integer
+                                example: 6
+                                description: '-'
+                              move_for_unloading_weight:
+                                type: integer
+                                example: 6
+                                description: '-'
+                              on_warehouse_territory_weight:
+                                type: integer
+                                example: 5
+                                description: 'Вага на території складу'
+                              left_weight:
+                                type: integer
+                                example: 45
+                                description: '-'
