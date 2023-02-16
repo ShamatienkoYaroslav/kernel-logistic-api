@@ -2702,7 +2702,7 @@ paths:
   /verification_statistics/history:
     get:
       tags:
-        - Т025 - Верифікація
+        ['Т025 - Верифікація', 'Т034 - Статистика профіля/черги']
       summary: Отримати історію статистики верифікації.
       operationId: raceVerificationStatisticsHistoryGet
       description: |
