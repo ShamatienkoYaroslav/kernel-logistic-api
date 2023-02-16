@@ -90,6 +90,8 @@ tags:
     description: Вузол для отримання складу за його кодом або ж отримання складів за коатуу та гуідом профіля черг
   - name: 'T033 - Вантаж'
     description: Вузол для отримання всіх вантажів або ж для конкретних складів або профілів
+  - name: 'Т034 - Статистика профіля/черги'
+    description: Вузли для отримання статистики профіля/черги
 
 paths:
   /blacklist/check:
@@ -7565,6 +7567,109 @@ paths:
         500:
           description: server error
           content: {}
+  /pq_queues/flow/history:
+    get:
+      tags:
+        - Т034 - Статистика профіля/черги
+      summary: Звіт по статистиці профіля/черги
+      operationId: pq_queuesFlowHistoryGet
+      description: |
+        Історія руху в черзі.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: queue_profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані cтатистики профіля/черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  queue_name:
+                    type: string
+                    example: 'Приймання соняшника (EXW, FCA)'
+                    description: 'Назва черги'
+                  queue_guid:
+                    type: string
+                    example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
+                    description: 'Унікальний ідентифікатор черги'
+                  loading_type:
+                    type: string
+                    example: mound
+                    description: Тип навантаження
+                  direction:
+                    type: string
+                    example: unloading
+                    description: Напрямок
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  history:
+                    $ref: '#/components/schemas/QueuesFlowHistory'
+                  time:
+                    $ref: '#/components/schemas/QueuesFlowTime'
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  profile_name:
+                    type: string
+                    example: Трансбалктермінал
+                    description: 'Назва профіля черги'
+                  profile_guid:
+                    type: string
+                    example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+                    description: 'Унікальний ідентифікатор профіля черги'
+                  loading_type:
+                    type: string
+                    example: mound
+                    description: Тип навантаження
+                  direction:
+                    type: string
+                    example: unloading
+                    description: Напрямок
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  history:
+                    $ref: '#/components/schemas/QueuesFlowHistory'
+                  time:
+                    $ref: '#/components/schemas/QueuesFlowTime'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
 
 components:
   schemas:
@@ -10436,3 +10541,33 @@ components:
                                 type: integer
                                 example: 45
                                 description: '-'
+    QueuesFlowHistory:
+      description: Кількість транспортних засобів 
+      type: array
+      items:
+        type: object
+        description: Кількість транспортних засобів
+        properties:
+          date_time:
+            type: string
+            example: '15.02.2023 02:01:31'
+            description: 'Дата та час'
+          vehicle_count:
+            type: integer
+            example: 54
+            description: Кількість транспортних засобів
+    QueuesFlowTime:
+      description: Час очікування
+      type: array
+      items:
+        type: object
+        description: Час очікування
+        properties:
+          date_time:
+            type: string
+            example: '15.02.2023 02:01:31'
+            description: 'Дата та час'
+          waiting_time:
+            type: number
+            example: 76.6
+            description: Час очікування
