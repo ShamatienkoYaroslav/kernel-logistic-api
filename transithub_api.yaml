@@ -7584,13 +7584,24 @@ paths:
         - in: query
           name: queue_profile_guid
           description: Унікальний ідентифікатор профіля черги
+          required: true
           schema:
             type: string
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
         - in: query
           name: queue_guid
           description: Унікальний ідентифікатор черги
+          required: true
           schema:
             type: string
+            example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
+        - in: query
+          name: interval
+          description: 'Інтервал часу виборки в годинах'
+          required: true
+          schema:
+            type: integer
+            enum: [3, 6, 12, 24]
       responses:
         '200':
           description: Дані cтатистики профіля/черги
@@ -7627,18 +7638,18 @@ paths:
                     $ref: '#/components/schemas/QueuesFlowHistory'
                   time:
                     $ref: '#/components/schemas/QueuesFlowTime'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        '401':
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
 
 components:
   schemas:
