@@ -7594,7 +7594,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Дані cтатистики профіля/черги
+          description: Дані cтатистики черги
           content:
             application/json:
               schema:
@@ -7628,7 +7628,11 @@ paths:
                     $ref: '#/components/schemas/QueuesFlowHistory'
                   time:
                     $ref: '#/components/schemas/QueuesFlowTime'
-              'schema':
+        200:
+          description: Дані cтатистики профіля
+          content:
+            application/json:
+              schema:
                 type: object
                 properties:
                   status:
@@ -7638,11 +7642,11 @@ paths:
                   profile_name:
                     type: string
                     example: Трансбалктермінал
-                    description: 'Назва профіля черги'
+                    description: 'Назва профіля'
                   profile_guid:
                     type: string
                     example: 9de597bc-d84d-3499-c5da-935f8f638e4e
-                    description: 'Унікальний ідентифікатор профіля черги'
+                    description: 'Унікальний ідентифікатор профіля'
                   loading_type:
                     type: string
                     example: mound
