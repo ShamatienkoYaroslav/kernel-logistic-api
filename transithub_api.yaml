@@ -7594,7 +7594,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Дані cтатистики черги
+          description: Дані cтатистики профіля/черги
           content:
             application/json:
               schema:
@@ -7607,46 +7607,11 @@ paths:
                   queue_name:
                     type: string
                     example: 'Приймання соняшника (EXW, FCA)'
-                    description: 'Назва черги'
+                    description: 'Назва профіля/черги'
                   queue_guid:
                     type: string
                     example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
-                    description: 'Унікальний ідентифікатор черги'
-                  loading_type:
-                    type: string
-                    example: mound
-                    description: Тип навантаження
-                  direction:
-                    type: string
-                    example: unloading
-                    description: Напрямок
-                  count:
-                    type: integer
-                    example: 3
-                    description: 'Кількість записів'
-                  history:
-                    $ref: '#/components/schemas/QueuesFlowHistory'
-                  time:
-                    $ref: '#/components/schemas/QueuesFlowTime'
-        200:
-          description: Дані cтатистики профіля
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Статус відповіді'
-                  profile_name:
-                    type: string
-                    example: Трансбалктермінал
-                    description: 'Назва профіля'
-                  profile_guid:
-                    type: string
-                    example: 9de597bc-d84d-3499-c5da-935f8f638e4e
-                    description: 'Унікальний ідентифікатор профіля'
+                    description: 'Унікальний ідентифікатор профіля/черги'
                   loading_type:
                     type: string
                     example: mound
