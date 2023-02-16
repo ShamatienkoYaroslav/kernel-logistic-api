@@ -7638,6 +7638,12 @@ paths:
                     $ref: '#/components/schemas/QueuesFlowHistory'
                   time:
                     $ref: '#/components/schemas/QueuesFlowTime'
+        '204':
+          description: 'Дані не знайдено (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
         '400':
           description: 'Поганий запит'
           content:
@@ -7650,6 +7656,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
