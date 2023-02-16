@@ -7659,6 +7659,158 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_technical_downtime.last_actual:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Звіт про останній технічний простій
+      operationId: pq_technicalDowntimeLastActualGet
+      description: |
+        Інформація про останній актуальний технічний простій
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          required: true
+          schema:
+            type: string
+            example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
+        - in: query
+          name: company_guid
+          description: 'Ідентифікатор запису компанії ТХ. Таблиця: ТХ компанії(th_companys)'
+          required: false
+          schema:
+            format: uuid
+            type: string
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        - in: query
+          name: loading_type
+          description: Тип завантаження
+          required: false
+          schema:
+            type: string
+            example: mound
+        - in: query
+          name: direction
+          description: Напрямок
+          required: false
+          schema:
+            type: string
+            example: unloading
+      responses:
+        '200':
+          description: Дані cтатистики профіля/черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client_guid:
+                    type: string
+                    example: a1c0ffaf-2a91-7f35-ad34-bb9888d55e7a
+                    description: 'Унікальний ідентифікатор профіля/черги'
+                  guid:
+                    type: string
+                    example: a1c0ffaf-2a91-7f35-ad34-bb9888d55e7a
+                    description: 'Унікальний ідентифікатор технічного простою'
+                  doc_date:
+                    type: string
+                    example: '12.04.2020'
+                    description: 'Дата документа'
+                  doc_number:
+                    type: integer
+                    example: 202
+                    description: 'Номер документа'
+                  beginning_date:
+                    type: string
+                    example: '12.04.2020'
+                    description: 'Дата початку'
+                  ending_date:
+                    type: string
+                    example: '12.04.2020'
+                    description: 'Дата закінчення'
+                  ending_date_fact:
+                    type: string
+                    example: '12.04.2020'
+                    description: 'Фактична дата закінчення'
+                  duration:
+                    type: number
+                    example: 20,2
+                    description: 'Тривалість'
+                  duration_fact:
+                    type: number
+                    example: 20,2
+                    description: 'Фактична тривалість'
+                  source:
+                    type: string
+                    example: TH
+                    description: Джерело
+                  status:
+                    type: string
+                    enum: [done, actual]
+                    description: Статус
+                  loading_type:
+                    type: string
+                    example: mound
+                    description: Тип навантаження
+                  direction:
+                    type: string
+                    example: unloading
+                    description: Напрямок
+                  downtime_cause:
+                    type: string
+                    example: Планові технічні роботи
+                    description: Причина технічного простою
+                  bandwidth:
+                    type: integer
+                    example: 2
+                    description: Пропускна здатність
+                  goods_classifier_code:
+                    type: string
+                    example: СОНЯШНИК
+                    description: 'Унікальний ідентифікатор вантажу'
+                  goods_name:
+                    type: string
+                    example: Соняшник
+                    description: 'Назва вантажу'
+                  pq_queue_profile_guid:
+                    type: string
+                    example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+                    description: 'Унікальний ідентифікатор профіля'
+                  pq_queue_profile_name:
+                    type: string
+                    example: 'Трансбалктермінал'
+                    description: 'Назва профіля'
+                  queues:
+                    $ref: '#/components/schemas/QueuesTechnicalDowntime'
+        '204':
+          description: 'Дані не знайдено (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -10555,8 +10707,23 @@ components:
           date_time:
             type: string
             example: '15.02.2023 02:01:31'
-            description: 'Дата та час'
+            description: Дата та час
           waiting_time:
             type: number
             example: 76.6
             description: Час очікування
+    QueuesTechnicalDowntime:
+      description:
+      type: array
+      items:
+        type: object
+        description:
+        properties:
+          name:
+            type: string
+            example: 'Приймання соняшника (EXW, FCA)'
+            description: Назва черги
+          guid:
+            type: string
+            example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
+            description: Унікальний ідентифікатор черги
