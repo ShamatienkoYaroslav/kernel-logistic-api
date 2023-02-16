@@ -5588,8 +5588,7 @@ paths:
                 $ref: '#/components/schemas/_ComplexError'
   /pq_queues/statistics:
     get:
-      tags:
-        - Т023 - Статистика черги
+      tags: ['Т023 - Статистика черги', 'Т034 - Статистика профіля/черги']
       summary: Звіт по статистиці рейсів в черзі
       operationId: pq_queuesStatisticsGet
       description: |
