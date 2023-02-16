@@ -5610,6 +5610,12 @@ paths:
           description: Унікальний ідентифікатор черги
           schema:
             type: string
+        - in: query
+          name: hierarchy
+          description: Параметр, при застосуванні якого ієрархія звіту будується від локації
+          schema:
+            type: string
+            example: location_is_main
       responses:
         '200':
           description: Дані рейсу водія
