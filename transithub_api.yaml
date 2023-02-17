@@ -2722,7 +2722,7 @@ paths:
             type: string
         - in: query
           name: interval
-          description: Iнтервал в годинах, за який визначаэться статистика
+          description: Iнтервал в годинах, за який визначається статистика
           required: true
           schema:
             type: integer
@@ -7817,6 +7817,73 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_queue_profiles/locations:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Локації подій профіля черги
+      operationId: pq_queue_profilesLocationsGet
+      description: |
+        Інформація про локації подій профіля
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      responses:
+        '200':
+          description: Інформація про локації подій профіля
+          content:
+            application/json:
+              schema:
+                type: array
+                properties:
+                items:
+                  $ref: '#/components/schemas/QueueProfilesLocations'
+                example:
+                  - guid: ba287fd9-22c8-5349-65e5-4030d54f9986
+                    name_ua: У пункті призначення
+                    name_ru: В пункте назначения
+                  - guid: 5fa04733-9dfa-7511-9cbd-725c79ffcd2c
+                    name_ua: '-> На стоянку'
+                    name_ru: '-> На стоянку'
+                  - guid: 7fdc4ffb-6f35-f791-f1a1-30bb94070933
+                    name_ua: Стоянка на Мурманській
+                    name_ru: Стоянка на Мурманской
+                  - guid: 54f02a7a-8a5f-3f1a-ecc0-4f9266d2f6d5
+                    name_ua: Стоянка на Мурманській ->
+                    name_ru: Стоянка на Мурманской ->
+                  - guid: 3c54e0b8-2236-f616-3934-8802d3fd1298
+                    name_ua: '-> На розвантаження'
+                    name_ru: '-> На разгрузку'
+                  - guid: 15a0b996-f063-645f-03a6-20525ca545f4
+                    name_ua: Розвантаження
+                    name_ru: Разгрузка
+        '400':
+          description: 'Поганий запит (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '403':
+          description: 'Клієнт не має прав доступу (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -10733,3 +10800,18 @@ components:
             type: string
             example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
             description: Унікальний ідентифікатор черги
+    QueueProfilesLocations:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: ba287fd9-22c8-5349-65e5-4030d54f9986
+          description: Унікальний ідентифікатор черги
+        name_ua:
+          type: string
+          example: 'У пункті призначення'
+          description: Назва локації
+        name_ru:
+          type: string
+          example: 'В пункте назначения'
+          description: Назва локації
