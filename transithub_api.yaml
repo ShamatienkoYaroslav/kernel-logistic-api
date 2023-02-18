@@ -7962,7 +7962,7 @@ paths:
       tags:
         - 'Т034 - Статистика профіля/черги'
       summary: Інформація про рух в черзі за гуідом рейсу
-      operationId: raceEventsGet
+      operationId: pqRaceTrafficGet
       description: |
         Інформація про рух в черзі
       parameters:
