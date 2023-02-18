@@ -7947,7 +7947,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+                $ref: '#/components/schemas/_ClientHasNoRights'
         '404':
           description: 'Дані не знайдено'
           content:
