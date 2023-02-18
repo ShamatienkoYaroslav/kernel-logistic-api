@@ -7884,6 +7884,79 @@ paths:
         '500':
           description: server error
           content: {}
+  /race/events:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Історія подій рейсу
+      operationId: raceEventsGet
+      description: |
+        Інформація про події рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+        - in: query
+          name: registration_kind
+          description: Вид реєстрації
+          required: false
+          schema:
+            type: string
+            enum: [user, auto]
+      responses:
+        '200':
+          description: Інформація про події рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                      $ref: '#/components/schemas/RaceEventsArr'
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  race_guid:
+                      type: string
+                      example: '1fc1ffec-eaa8-949f-6fad-97e349cae354'
+                      description: 'Унікальний ідентифікатор рейсу'
+                  count:
+                      type: integer
+                      example: 7
+                      description: 'Кількість записів'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -10815,3 +10888,59 @@ components:
           type: string
           example: 'В пункте назначения'
           description: Назва локації
+    RaceEventsArr:
+      properties:
+      items:
+      example:
+        - event_date: 28.10.2022 15:24:32
+          event_name_ua: 'Верифікацію відхилено (Документ: ttn)'
+          event_name_ru: 'Верификацию отклонено (Документ: ttn)'
+          quantity: 0
+          comments: 'Документ: ttn'
+          registration_kind: auto
+          location_name_ua: У дорозі до пункту призначення
+          location_name_ru: В пути к пункту назначения
+          subordinate_race_guid: '-'
+          subordinate_race_number: '-'
+        - event_date: 28.10.2022 14:27:59
+          event_name_ua: Вирушив до пункту РОЗВАНТАЖЕННЯ
+          event_name_ru: Выехал в пункт РАЗГРУЗКИ
+          lat: '46.849081'
+          lon: '32.189487'
+          quantity: 0
+          registration_kind: user
+          location_name_ua: У дорозі до пункту призначення
+          location_name_ru: В пути к пункту назначения
+          subordinate_race_guid: '-'
+          subordinate_race_number: '-'
+        - event_date: 28.10.2022 14:28:00
+          event_name_ua: Задіяно ТОР на час в дорозі (До 28.10.2022 17:24:33)
+          event_name_ru: Задействован ТОР на время в пути (До 28.10.2022 17:24:33)
+          lat: '46.849081'
+          lon: '32.189487'
+          quantity: 0
+          comments: До 28.10.2022 17:24:33
+          registration_kind: auto
+          location_name_ua: У дорозі до пункту призначення
+          location_name_ru: В пути к пункту назначения
+          subordinate_race_guid: '-'
+          subordinate_race_number: '-'
+        - event_date: 28.10.2022 14:23:42
+          event_name_ua: Зареєстровано
+          event_name_ru: Зарегистрировано
+          quantity: 0
+          registration_kind: user
+          location_name_ua: '-'
+          location_name_ru: '-'
+          subordinate_race_guid: '-'
+          subordinate_race_number: '-'
+        - event_date: 28.10.2022 15:06:25
+          event_name_ua: 'Верифікацію розпочато (Документ: ttn)'
+          event_name_ru: 'Верификация начата (Документ: ttn)'
+          quantity: 0
+          comments: 'Документ: ttn'
+          registration_kind: auto
+          location_name_ua: У дорозі до пункту призначення
+          location_name_ru: В пути к пункту назначения
+          subordinate_race_guid: '-'
+          subordinate_race_number: '-'
