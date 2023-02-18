@@ -7957,6 +7957,68 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_race_traffic:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Інформація про рух в черзі за гуідом рейсу
+      operationId: raceEventsGet
+      description: |
+        Інформація про рух в черзі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+        - in: query
+          name: direction
+          description: Напрямок
+          required: false
+          schema:
+            type: string
+            enum: [loading, unloading]
+      responses:
+        '200':
+          description: Інформація про рух в черзі
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  loading: 
+                      $ref: '#/components/schemas/PqRaceTraffic'
+                  unloading:
+                      $ref: '#/components/schemas/PqRaceTraffic'
+
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -10944,3 +11006,49 @@ components:
           location_name_ru: В пути к пункту назначения
           subordinate_race_guid: '-'
           subordinate_race_number: '-'
+    PqRaceTraffic:
+      properties:
+      items:
+      example:
+        - race_guid: 97612096-be15-8b96-520c-ca74bc1d8e88
+          race_number: 230218-0013
+          pq_queue_guid: e3ea88a4-4d7b-bb94-54be-bff948b4c446
+          pq_queue_name: Приймання соняшника (DAP)
+          pq_queue_journal_guid: 5e6a09db-3f29-7752-ad91-b6dd9a14ebf2
+          operation: minus
+          kind: shift
+          created_at_utc: '2023-02-18T07:09:19Z'
+          created_at: 18.02.2023 07:09:19
+          current_number: 28
+          shift: 1
+          old_current_number: 29
+          is_service: 0
+          info_ua: ' '
+          info_ru: ' '
+        - race_guid: 97612096-be15-8b96-520c-ca74bc1d8e88
+          race_number: 230218-0013
+          pq_queue_guid: e3ea88a4-4d7b-bb94-54be-bff948b4c446
+          pq_queue_name: Приймання соняшника (DAP)
+          pq_queue_journal_guid: 5e6a09db-3f29-7752-ad91-b6dd9a14ebf2
+          operation: minus
+          kind: drop
+          created_at_utc: '2023-02-18T05:28:02Z'
+          created_at: 18.02.2023 05:28:02
+          current_number: 29
+          old_current_number: 29
+          is_service: 0
+          info_ua: ' '
+          info_ru: ' '
+        - race_guid: 97612096-be15-8b96-520c-ca74bc1d8e88
+          race_number: 230218-0013
+          pq_queue_guid: e3ea88a4-4d7b-bb94-54be-bff948b4c446
+          pq_queue_name: Приймання соняшника (DAP)
+          pq_queue_journal_guid: 5e6a09db-3f29-7752-ad91-b6dd9a14ebf2
+          operation: plus
+          kind: income
+          created_at_utc: '2023-02-18T05:17:19Z'
+          created_at: 18.02.2023 05:17:19
+          current_number: 29
+          is_service: 0
+          info_ua: ' '
+          info_ru: ' '
