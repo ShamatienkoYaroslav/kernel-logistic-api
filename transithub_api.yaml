@@ -8019,6 +8019,225 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_queue_registration_journal_v2/races:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Інформація про рейси для профіля/черги
+      operationId: pqQueueRegJournalRacesGet
+      description: |
+        Інформація про рейси для профіля/черги
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: list_type
+          description: Тип звіту
+          required: false
+          schema:
+            type: string
+            enum: [dispatcher, public]
+            example: dispatcher
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: b6c3dd51-0de0-244f-3bc4-0bab367fc751
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: ebe41a45-3e34-881f-f7c5-368144c42040
+        - in: query
+          name: limit
+          description: Обмеження кількості повернутих результатів
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується виведення результатів від початку списку
+          required: false
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          name: search_driver_phone
+          description: Пошук по номеру телефона водія
+          required: false
+          schema:
+            type: string
+            example: '380960001232'
+        - in: query
+          name: search_driver_fullname
+          description: Пошук по ПІБ водія
+          required: false
+          schema:
+            type: string
+            example: 'САЄНКО ОЛЕКСАНДР СЕРГІЙОВИЧ'
+        - in: query
+          name: search_driver_cert
+          description: Пошук по серії та номеру посвідчення водія
+          required: false
+          schema:
+            type: string
+            example: BXP110261
+        - in: query
+          name: search_vehicle_number
+          description: Пошук по номеру авто
+          required: false
+          schema:
+            type: string
+            example: ВЕ2398ЕТ
+        - in: query
+          name: search_trailer_number
+          description: Пошук по номеру причепа
+          required: false
+          schema:
+            type: string
+            example: ВЕ2398ЕТ
+        - in: query
+          name: filter_by_trucks
+          description: Фильтр по авто
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+        - in: query
+          name: only_in_registration
+          description: Фильтр тільки по зареєстрованим
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+        - in: query
+          name: only_races_on_teritory
+          description: Фильтр по авто на території
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+        - in: query
+          name: verification_status
+          description: Фильтр по статусу верифікації
+          required: false
+          schema:
+            type: integer
+            enum: [accepted, rejected, to_check]
+        - in: query
+          name: statuses
+          description: Фильтр по статусам черги
+          required: false
+          schema:
+            type: string
+            enum: [in_queue_all, all, drop_all, drop, dropped, waiting_for_registration]
+            example: in_queue_all;all;drop_all;drop;dropped;waiting_for_registration
+        - in: query
+          name: location_guid
+          description: Унікальний ідентифікатор локації
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 3b07ef65-7546-0b35-7630-1aa02f7408d1
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТХ
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: f032d8de-fb24-996c-95b5-ae912c72fa0d
+        - in: query
+          name: user_phone
+          description: Номер телефона користувача ТХ
+          required: false
+          schema:
+            type: string
+            example: 380960003322
+        - in: query
+          name: goods_category_guid
+          description: Унікальний ідентифікатор категорії вантажу
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 27000fe1-ce0e-0679-e140-86da0e1780e4
+        - in: query
+          name: goods_code
+          description: Унікальний ідентифікатор вантажу
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: СОНЯШНИК
+        - in: query
+          name: is_verification_journal
+          description: Журнал верифікації
+          required: false
+          schema:
+            type: string
+            enum: [0, 1]
+        - in: query
+          name: search_in_race
+          description: Пошук рейсу по номеру телефона, по ПІБ, або по посвідченню водія, по номеру авто, по номеру причепа
+          required: false
+          schema:
+            type: string
+            enum: BXP110261
+        - in: query
+          name: customer_kt
+          description: Признак фасованої продукції
+          required: false
+          schema:
+            type: string
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Інформація про рейси для профіля/черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  items:
+                      $ref: '#/components/schemas/QueueRegJournalRaces'
+                  count:
+                      type: integer
+                      example: 7
+                      description: 'Кількість записів'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -11052,3 +11271,89 @@ components:
           is_service: 0
           info_ua: ' '
           info_ru: ' '
+    QueueRegJournalRaces:
+      properties:
+      items:
+      example:
+        - race_guid: ea649af1-9722-758d-0a56-0eb194e11914
+          race_number: 230219-0112
+          queue_number: 1
+          multiqueue_number: 1
+          vehicle_number: ВЕ0009СА
+          trailer_number: ВЕ0004ХО
+          race_duration_ua: 15 год 23 хв
+          race_duration_ru: 15 ч 23 мин
+          vehicle_tech_passport: СХМ000202
+          trailer_tech_passport: СХМ000103
+          has_laboratory_test: 1
+          registration_date: 19.02.2023 22:23:51
+          wait_time_ua: 2 год 3 хв
+          wait_time_ru: 2 ч 3 мин
+          race_forecast_entry_date: 20.02.2023 00:53:46
+          quantity: '28'
+          source: bulkdata
+          registration_source: track_check
+          queue_status: drop
+          queue_status_ua: Направлено
+          queue_status_ru: Направлено
+          queue_in_process: false
+          driver_fullname: ЗАРУЛЬНИЙ ОЛЕГ МИКОЛАЙОВИЧ
+          driver_phone: '380900046998'
+          carrier_name: НС-Логітек Приватне підприємст
+          carrier_edrpou: '43387499'
+          request_number: RQ_0015705
+          waybill_number: 230219-0007
+          waybill_date: 19.02.2023
+          waybill_netto_out: 27970
+          sender_name: ФІЛІЯ ІНШИЙ ВІДОКРЕМЛЕНИЙ ПІДР
+          point_from_ua: Старокостянтинів, Хмельницька
+          point_from_ru: Староконстантинов, Хмельницкая
+          point_to_ua: Бандурка, Миколаївська
+          point_to_ru: Бандурка, Николаевская
+          point_from_full_desc_ua: Україна, Хмельницька обл., Хмельницький район, м. Старокостянтинів
+          point_from_full_desc_ru: Украина, Хмельницкая обл., Хмельницький район, г. Староконстантинов
+          point_to_full_desc_ua: Україна, Миколаївська обл., Первомайський район, с. Бандурка
+          point_to_full_desc_ru: Украина, Николаевская обл., Первомайський район, с. Бандурка
+          goods_ua: Соняшник
+          goods_ru: Подсолнечник
+          harvest_year: '2022'
+          departure_date: 19.02.2023 23:36:59
+          notice_date: 19.02.2023 23:41:28
+          sender_edrpou: '44050286'
+          consignee_edrpou: '32390305'
+          customer_name: Кернел - Трейд ТОВ
+          customer_edrpou: '31454383'
+          warhouse_from_full_adrress: Франка, 67
+          warhouse_to_full_adrress: Центральна, 40
+          driver_cert: ВХК072971
+          timing_out_1: 20.02.2023 00:23:02
+          timing_out_2: 20.02.2023 01:08:02
+          customer_kt: 1
+          verification_status: accepted
+          consignee_name: ТОВ БАНДУРСЬКИЙ ОЕЗ
+          waybill_gross: 43740
+          waybill_tara: 15770
+          regulation_name: Прибути на розвантаження
+          regulation_is_verificаtion: 0
+          regulation_zone: yellow
+          registration_sorting_dates_diff: 0
+          regulation_start_date: 19.02.2023 23:38:02
+          regulation_duration: 48 хв
+          regulation_finish_date: 20.02.2023 01:08:02
+          regulation_finish_duration: 41 хв
+          location_name_ua: В дорозі на розвантаження
+          location_name_ru: В пути на разгрузку
+          race_status: IN_PROGRESS
+          race_date: 19.02.2023 09:03:37
+          last_event_date: 19.02.2023 23:38:02
+          last_event_name_ua: Направлено на розвантаження диспетчером
+          last_event_name_ru: Направлено на разгрузку диспетчером
+          wait_time_to_wait_ua: 30 хв
+          wait_time_to_wait_ru: 30 мин
+          profile_name: Бандурський ОЕЗ
+          profile_guid: b6c3dd51-0de0-244f-3bc4-0bab367fc751
+          queue_name: Приймання соняшника/ріпаку (EXW, FCA)
+          queue_guid: ebe41a45-3e34-881f-f7c5-368144c42040
+          cargo_owner_accessible: 0
+          for_owner_name: Кернел-Трейд ТОВ
+          for_owner_code: '31454383'
