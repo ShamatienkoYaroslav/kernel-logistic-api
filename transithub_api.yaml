@@ -8238,6 +8238,172 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_queue_registration_journal_v2:
+    get:
+      tags:
+        - 'Т034 - Статистика профіля/черги'
+      summary: Інформація профіля черги
+      operationId: pqQueueRegJournalGet
+      description: |
+        Інформація профіля черги
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: list_type
+          description: Тип звіту
+          required: false
+          schema:
+            type: string
+            example: dispatcher
+            enum: [dispatcher, public]
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: b6c3dd51-0de0-244f-3bc4-0bab367fc751
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: ebe41a45-3e34-881f-f7c5-368144c42040
+        - in: query
+          name: direction
+          description: Напрямок
+          required: false
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: limit
+          description: Обмеження кількості повернутих результатів
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується виведення результатів від початку списку
+          required: false
+          schema:
+            type: integer
+            example: 5
+        - in: query
+          name: search_driver_phone
+          description: Пошук по номеру телефона водія
+          required: false
+          schema:
+            type: string
+            example: '380960001232'
+        - in: query
+          name: search_driver_fullname
+          description: Пошук по ПІБ водія
+          required: false
+          schema:
+            type: string
+            example: 'ОЛЕКСЕРГ ОЛЕКСАНДР СЕРГІЙОВИЧ'
+        - in: query
+          name: search_driver_cert
+          description: Пошук по серії та номеру посвідчення водія
+          required: false
+          schema:
+            type: string
+            example: BXP110261
+        - in: query
+          name: search_vehicle_number
+          description: Пошук по номеру авто
+          required: false
+          schema:
+            type: string
+            example: ВЕ2398ЕТ
+        - in: query
+          name: search_trailer_number
+          description: Пошук по номеру причепа
+          required: false
+          schema:
+            type: string
+            example: ВЕ2398ЕТ
+        - in: query
+          name: filter_by_trucks
+          description: Фильтр по авто
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+        - in: query
+          name: filter_by_company
+          description: Фильтр по компанії (організації)
+          required: false
+          schema:
+            type: integer
+            enum: [0, 1]
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: f032d8de-fb24-996c-95b5-ae912c72fa0d
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТХ
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: search_profile_name
+          description: Пошук по назві профіля
+          required: false
+          schema:
+            type: string
+            example: Трансбалктермінал
+        - in: query
+          name: warehouse_type
+          description: Тип складу
+          required: false
+          schema:
+            type: string
+            enum: [plant, port]
+      responses:
+        '200':
+          description: Інформація профіля черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  items:
+                      $ref: '#/components/schemas/QueueRegJournal'
+                  count:
+                      type: integer
+                      example: 2
+                      description: 'Кількість записів'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -11357,3 +11523,149 @@ components:
           cargo_owner_accessible: 0
           for_owner_name: Кернел-Трейд ТОВ
           for_owner_code: '31454383'
+    QueueRegJournal:
+      properties:
+      items:
+      example:
+        - name: ТрансБалкТермінал
+          guid: a28147f0-94d2-468c-a0e2-fc3e93841a2a
+          direction: unloading
+          loading_type: mound
+          remains: 1
+          multiqueue: 1
+          lat: 46.329429
+          lng: 30.653695
+          full_address: Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58
+          koatuu: '5110800000'
+          building_n: '58'
+          district_code: REC100012
+          district_name: Чорноморська міська рада
+          region_code: '51'
+          region_name: Одеська
+          street_name: вулиця Сухолиманська
+          registration_zone_radius: 50000
+          telegram_group: https://t.me/chergy_TBT
+          outcome_temp: 0
+          waiting_time: 0
+          load: not_change
+          state_ua: Не змінюється
+          state_ru: Не изменяется
+          is_verification_available: 1
+          cargo_owner_accessible: 1
+          harvest_year_in_use: 1
+          is_user_can_create_race: 0
+          is_user_can_create_departure_permission: 0
+          is_user_can_edit_output_ratio:
+            value: false
+            error_code: '067'
+            error_text_ua: Доступ до процесу зміни показника випуску ТЗ заборонено. Зверніться в підтримку.
+            error_text_ru: Допуск к процессу смены показателя выпуска ТС запрещен. Обратитесь в поддержку.
+          is_to_show_race_barcode_in_th: true
+          is_use_departure_assistant: false
+          is_several_warehouses: false
+          is_parking: true
+          queues:
+            - guid: 9ebb156c-bf91-3490-32f1-65a83937d1ac
+              name: Приймання вантажів (AGRO)
+              direction: unloading
+              loading_type: mound
+              remains: 0
+              priority: normal
+              output_ratio: 14
+              outcome_temp: 0
+              waiting_time: 0
+              load: not_change
+              state_ua: Не змінюється
+              state_ru: Не изменяется
+              enable_race_creation_by_dispatcher: 1
+              count: 0
+            - guid: 568ab7e4-5f65-5c98-89c5-eeda823c6cd3
+              name: Приймання вантажів (DAP/CPT)
+              direction: unloading
+              loading_type: mound
+              remains: 0
+              priority: normal
+              output_ratio: 4
+              outcome_temp: 0
+              waiting_time: 0
+              load: not_change
+              state_ua: Не змінюється
+              state_ru: Не изменяется
+              enable_race_creation_by_dispatcher: 1
+              count: 0
+            - guid: 6935d376-38a8-fa79-6d6f-c9cc19a563da
+              name: Приймання вантажів (EXW, FCA)
+              direction: unloading
+              loading_type: mound
+              remains: 0
+              priority: normal
+              output_ratio: 7
+              outcome_temp: 0
+              waiting_time: 0
+              load: not_change
+              state_ua: Не змінюється
+              state_ru: Не изменяется
+              enable_race_creation_by_dispatcher: 1
+              count: 0
+            - guid: faa6e62e-3a23-8f89-6af2-4cd35834631b
+              name: Приймання вантажів (АТП)
+              direction: unloading
+              loading_type: mound
+              remains: 0
+              priority: normal
+              output_ratio: 7
+              outcome_temp: 0
+              waiting_time: 0
+              load: not_change
+              state_ua: Не змінюється
+              state_ru: Не изменяется
+              enable_race_creation_by_dispatcher: 1
+              count: 0
+        - name: Трансбалктермінал (насип)
+          guid: 81ce1a19-2f8b-8437-849a-86ff9af4a605
+          direction: loading
+          loading_type: mound
+          multiqueue: 0
+          lat: 46.329429
+          lng: 30.653695
+          full_address: Україна, Одеська обл., Одеський район, м. Чорноморськ, вул. Сухолиманська, 58
+          koatuu: '5110800000'
+          building_n: '58'
+          district_code: REC100012
+          district_name: Одеський район
+          region_code: '51'
+          region_name: Одеська
+          street_name: вул. Сухолиманська
+          registration_zone_radius: 5000
+          telegram_group: https://t.me/chergy_TBT
+          load: not_change
+          state_ua: Не змінюється
+          state_ru: Не изменяется
+          is_verification_available: 1
+          cargo_owner_accessible: 0
+          harvest_year_in_use: 0
+          is_user_can_create_race: 0
+          is_user_can_create_departure_permission: 0
+          is_user_can_edit_output_ratio:
+            value: false
+            error_code: '067'
+            error_text_ua: Доступ до процесу зміни показника випуску ТЗ заборонено. Зверніться в підтримку.
+            error_text_ru: Допуск к процессу смены показателя выпуска ТС запрещен. Обратитесь в поддержку.
+          is_to_show_race_barcode_in_th: false
+          is_use_departure_assistant: false
+          is_several_warehouses: false
+          is_parking: false
+          queues:
+            - guid: bfc0306f-44e8-d7a3-8094-2e2960a2e02c
+              name: Відвантаження сипучих вантажів
+              direction: loading
+              loading_type: mound
+              remains: 0
+              priority: normal
+              output_ratio: 1
+              outcome_temp: 0
+              load: not_change
+              state_ua: Не змінюється
+              state_ru: Не изменяется
+              enable_race_creation_by_dispatcher: 1
+              count: 0
