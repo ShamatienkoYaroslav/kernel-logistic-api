@@ -5265,8 +5265,6 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                    type: array
-                    description: 'Дані журналу рейсів черги'
                     oneOf:
                       - $ref: '#/components/schemas/QueueRegJournalRacesPublic'
                       - $ref: '#/components/schemas/QueueRegJournalRacesDispatcher'
