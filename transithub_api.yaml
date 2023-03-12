@@ -11305,7 +11305,7 @@ components:
           type: string
           description: номер рейсу
     QueueRegJournalPQqueue:
-      type: object
+      type: array
       description: Дані виду черги в журналі черг
       properties:
         name:
@@ -11393,7 +11393,7 @@ components:
           description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
           example: 15
     QueueRegJournalProfile:
-      type: object
+      type: array
       description: Дані профіля черги в журналі черг
       properties:
         name:
