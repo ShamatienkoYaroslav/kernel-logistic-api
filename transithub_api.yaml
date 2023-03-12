@@ -92,6 +92,8 @@ tags:
     description: Вузол для отримання всіх вантажів або ж для конкретних складів або профілів
   - name: 'Т034 - Статистика профіля/черги'
     description: Вузли для отримання статистики профіля/черги
+  - name: 'Т035 - Журнал черг'
+    description: Вузли для отримання журналу черг
 
 paths:
   /accreditations:
@@ -5062,11 +5064,11 @@ paths:
   /pq_queue_registration_journal_v2/races:
     get:
       tags:
-        - 'Т034 - Статистика профіля/черги'
-      summary: Інформація про рейси для профіля/черги
+        - 'Т035 - Журнал черг'
+      summary: Інформація про рейси в журналі черг
       operationId: pqQueueRegJournalRacesGet
       description: |
-        Інформація про рейси для профіля/черги
+        Інформація про рейси в журналі черг
       parameters:
         - in: query
           name: client_token
@@ -5280,11 +5282,11 @@ paths:
   /pq_queue_registration_journal_v2:
     get:
       tags:
-        - 'Т034 - Статистика профіля/черги'
-      summary: Інформація профіля черги
+        - 'Т035 - Журнал черг'
+      summary: Інформація про черги
       operationId: pqQueueRegJournalGet
       description: |
-        Інформація профіля черги
+        Інформація про черги
       parameters:
         - in: query
           name: client_token
@@ -5429,7 +5431,9 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                      $ref: '#/components/schemas/QueueRegJournal'
+                      oneOf:
+                        - $ref: '#/components/schemas/QueueRegJournalPublic'
+                        - $ref: '#/components/schemas/QueueRegJournalDispatcher'
                   count:
                       type: integer
                       example: 2
@@ -11287,8 +11291,17 @@ components:
         race_number:
           type: string
           description: номер рейсу
-    QueueRegJournal:
-      type: object
+    QueueRegJournalPublic:
+      type: array
+      description: Публічний журнал черг
+      properties:
+        name:
+          type: string
+          description: Назва
+          example: ТрансБалкТермінал
+    QueueRegJournalDispatcher:
+      type: array
+      description: Диспетчерський журнал черг
       properties:
         name:
           type: string
