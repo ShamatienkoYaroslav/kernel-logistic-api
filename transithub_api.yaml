@@ -11306,282 +11306,286 @@ components:
           description: номер рейсу
     QueueRegJournalPQqueue:
       type: array
-      description: Дані виду черги в журналі черг
-      properties:
-        name:
-          type: string
-          description: "Назва виду черги. Таблиця: Види черг(pq_queue)"
-          example: Приймання Соняшнику
-        guid:
-          type: string
-          description: "Унікальний ідентифікатор виду черги. Таблиця: Види черг(pq_queue)"
-          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-        direction:
-          type: string
-          enum: [loading, unloading]
-          description: "Напрямок виду черги(навантаження, розвантаження). Таблиця: Види черг(pq_queue)"
-          example: loading
-        loading_type:
-          type: string
-          enum: [mound, pouring]
-          description: "Тип навантаження виду черги(насип, налив). Таблиця: Види черг(pq_queue)"
-          example: mound
-        remains:
-          type: integer
-          description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
-          example: 15
-        priority:
-          type: string
-          description: "Приорітет виду черг. Таблиця: Види черг(pq_queue)"
-          example: normal
-        output_ratio:
-          type: number
-          description: "Коефіцієнт вибуття з черги. Таблиця: Види черг(pq_queue)"
-          example: 1.5
-        comment:
-          type: string
-          description: "Коментар до виду черг. Таблиця: Види черг(pq_queue)"
-          example: Тут може бути ваша реклама
-        outcome_temp:
-          type: integer
-          description: "Темп вибуття авто з черги. Таблиця: Зведена статистика черги(pq_queue_temps)"
-          example: 5
-        waiting_time:
-          type: number
-          description: "Час очікування останнього авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
-          example: 5
-        load:
-          type: string
-          enum: [
-            decrease,
-            not_change
-            quickly_decrease
-            increase
-            quickly_increase
-          ]
-          description: "Cтан черги. Таблиця: Стани черги(pq_queue_state)"
-          example: increase
-        state_ua:
-          type: string
-          enum: [
-            Зменшується,
-            Не змінюється,
-            Швидко зменшується,
-            Збільшується,
-            Швидко збільшується
-          ]
-          description: "Cтан черги українською. Таблиця: Стани черги(pq_queue_state)"
-          example: Збільшується
-        state_ru:
-          type: string
-          enum: [
-            Уменьшается,
-            Не изменяется,
-            Быстро уменьшается,
-            Увеличивается,
-            Быстро увеличивается
-          ]
-          description: "Cтан черги російською. Таблиця: Стани черги(pq_queue_state)"
-          example: Увеличивается
-        enable_race_creation_by_dispatcher:
-          type: boolean
-          enum: [1, 0]
-          description: "Дозволити створення рейсу диспетчером. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        count:
-          type: integer
-          description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
-          example: 15
+      items:
+        type: object
+        description: Дані виду черги в журналі черг
+        properties:
+          name:
+            type: string
+            description: "Назва виду черги. Таблиця: Види черг(pq_queue)"
+            example: Приймання Соняшнику
+          guid:
+            type: string
+            description: "Унікальний ідентифікатор виду черги. Таблиця: Види черг(pq_queue)"
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          direction:
+            type: string
+            enum: [loading, unloading]
+            description: "Напрямок виду черги(навантаження, розвантаження). Таблиця: Види черг(pq_queue)"
+            example: loading
+          loading_type:
+            type: string
+            enum: [mound, pouring]
+            description: "Тип навантаження виду черги(насип, налив). Таблиця: Види черг(pq_queue)"
+            example: mound
+          remains:
+            type: integer
+            description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+            example: 15
+          priority:
+            type: string
+            description: "Приорітет виду черг. Таблиця: Види черг(pq_queue)"
+            example: normal
+          output_ratio:
+            type: number
+            description: "Коефіцієнт вибуття з черги. Таблиця: Види черг(pq_queue)"
+            example: 1.5
+          comment:
+            type: string
+            description: "Коментар до виду черг. Таблиця: Види черг(pq_queue)"
+            example: Тут може бути ваша реклама
+          outcome_temp:
+            type: integer
+            description: "Темп вибуття авто з черги. Таблиця: Зведена статистика черги(pq_queue_temps)"
+            example: 5
+          waiting_time:
+            type: number
+            description: "Час очікування останнього авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+            example: 5
+          load:
+            type: string
+            enum: [
+              decrease,
+              not_change
+              quickly_decrease
+              increase
+              quickly_increase
+            ]
+            description: "Cтан черги. Таблиця: Стани черги(pq_queue_state)"
+            example: increase
+          state_ua:
+            type: string
+            enum: [
+              Зменшується,
+              Не змінюється,
+              Швидко зменшується,
+              Збільшується,
+              Швидко збільшується
+            ]
+            description: "Cтан черги українською. Таблиця: Стани черги(pq_queue_state)"
+            example: Збільшується
+          state_ru:
+            type: string
+            enum: [
+              Уменьшается,
+              Не изменяется,
+              Быстро уменьшается,
+              Увеличивается,
+              Быстро увеличивается
+            ]
+            description: "Cтан черги російською. Таблиця: Стани черги(pq_queue_state)"
+            example: Увеличивается
+          enable_race_creation_by_dispatcher:
+            type: boolean
+            enum: [1, 0]
+            description: "Дозволити створення рейсу диспетчером. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          count:
+            type: integer
+            description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+            example: 15
     QueueRegJournalProfile:
       type: array
-      description: Дані профіля черги в журналі черг
-      properties:
-        name:
-          type: string
-          description: "Назва профіля. Таблиця: Профілі черги(pq_queue_profile)"
-          example: ТрансБалкТермінал
-        guid:
-          type: string
-          description: "Унікальний ідентифікатор профіля. Таблиця: Профілі черги(pq_queue_profile)"
-          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-        direction:
-          type: string
-          enum: [loading, unloading]
-          description: "Напрямок профіля(навантаження, розвантаження). Таблиця: Профілі черги(pq_queue_profile)"
-          example: loading
-        loading_type:
-          type: string
-          enum: [mound, pouring]
-          description: "Тип навантаження профіля(насип, налив). Таблиця: Профілі черги(pq_queue_profile)"
-          example: mound
-        remains:
-          type: integer
-          description: "Кількість авто в мультичерзі. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
-          example: 45
-        multiqueue:
-          type: boolean
-          enum: [1, 0]
-          description: "Ознака мультичерги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        lat:
-          type: number
-          description: "Довгота локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 46.329429
-        lng:
-          type: number
-          description: "Широта локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 46.329429
-        full_address:
-          type: string
-          description: "Повна адреса локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
-        koatuu:
-          type: string
-          description: "Код КОАТУУ локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: '5110800000'
-        building_n:
-          type: string
-          description: "Номер будівлі локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: '58'
-        district_code:
-          type: string
-          description: "Код району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'REC100012'
-        district_name:
-          type: string
-          description: "Назва району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'Чорноморська міська рада'
-        region_code:
-          type: string
-          description: "Код області профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: '51'
-        region_name:
-          type: string
-          description: "Назва області профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'Одеська'
-        locality_name:
-          type: string
-          description: "Назва населеного пункту профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'Чорноморськ'
-        street_name:
-          type: string
-          description: "Назва вулиці профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'вулиця Сухолиманська'
-        registration_zone_radius:
-          type: integer
-          description: "Радіус зони геолокації профіля черги, для реєстрації в черзі. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 4000000000
-        description:
-          type: string
-          description: "Опис профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 'Тут може бути ваша реклама'
-        telegram_group:
-          type: string
-          description: "Група телеграму?. Таблиця: Профілі черги(pq_queue_profile)"
-          example: '-'
-        outcome_temp:
-          type: integer
-          description: "Темп вибуття авто з черги. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
-          example: 0
-        waiting_time:
-          type: integer
-          description: "Час очікування в черзі останнього авто, год. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
-          example: 67.5
-        load:
-          type: string
-          enum: [
-            decrease,
-            not_change
-            quickly_decrease
-            increase
-            quickly_increase
-          ]
-          description: "Cтан мультичерги. Таблиця: Стани черги(pq_queue_state)"
-          example: increase
-        state_ua:
-          type: string
-          enum: [
-            Зменшується,
-            Не змінюється,
-            Швидко зменшується,
-            Збільшується,
-            Швидко збільшується
-          ]
-          description: "Cтан мультичерги українською. Таблиця: Стани черги(pq_queue_state)"
-          example: Збільшується
-        state_ru:
-          type: string
-          enum: [
-            Уменьшается,
-            Не изменяется,
-            Быстро уменьшается,
-            Увеличивается,
-            Быстро увеличивается
-          ]
-          description: "Cтан мультичерги російською. Таблиця: Стани черги(pq_queue_state)"
-          example: Увеличивается
-        is_verification_available:
-          type: boolean
-          enum: [1, 0]
-          description: "Ознака доступності верифікації. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        cargo_owner_accessible:
-          type: boolean
-          enum: [1, 0]
-          description: "Ознака доступності поклажодавця. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        harvest_year_in_use:
-          type: boolean
-          enum: [1, 0]
-          description: "Ознака використання року врожаю. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        is_user_can_create_race:
-          type: boolean
-          enum: [1, 0]
-          description: "Користувач має право створювати рейси. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        is_user_can_create_departure_permission:
-          type: boolean
-          enum: [1, 0]
-          description: "Користувач має право направляти рейси на в'їзд. Таблиця: Профілі черги(pq_queue_profile)"
-          example: 1
-        is_user_can_edit_output_ratio:
-          type: object
-          description: "Користувач має право редагувати коєфіцієнт вибуття з черги. Таблиця: Профілі черги(pq_queue_profile)"
-          properties:
-            value:
-              type: boolean
-              example: true
-            error_code:
-              type: string
-              example: '056'
-            error_text_ua:
-              type: string
-              example: 'Текст помилки'
-            error_text_ru:
-              type: string
-              example: 'Текст ошибки'
-        is_departure_permission_goods_select_required:
-          type: boolean
-          description: "Направляння рейсів на в'їзд з обов'язковим врахуванням вантажу. Таблиця: Профілі черги(pq_queue_profile)"
-          example: false
-        is_to_show_race_barcode_in_th:
-          type: boolean
-          description: "Показувати баркод. Таблиця: Профілі черги(pq_queue_profile)"
-          example: true
-        is_use_departure_assistant:
-          type: boolean
-          description: "Використання асистенту направлень. Таблиця: Профілі черги(pq_queue_profile)"
-          example: true
-        is_several_warehouses:
-          type: boolean
-          description: "Використання декількох складів. Таблиця: Профілі черги(pq_queue_profile)"
-          example: true
-        is_parking:
-          type: boolean
-          description: "Використання парковки. Таблиця: Профілі черги(pq_queue_profile)"
-          example: true
-        queues:
-          type: array
-          description: 'Дані видів черг'
-          $ref: '#/components/schemas/QueueRegJournalPQqueue'
+      items:
+        type: object
+        description: Дані профіля черги в журналі черг
+        properties:
+          name:
+            type: string
+            description: "Назва профіля. Таблиця: Профілі черги(pq_queue_profile)"
+            example: ТрансБалкТермінал
+          guid:
+            type: string
+            description: "Унікальний ідентифікатор профіля. Таблиця: Профілі черги(pq_queue_profile)"
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          direction:
+            type: string
+            enum: [loading, unloading]
+            description: "Напрямок профіля(навантаження, розвантаження). Таблиця: Профілі черги(pq_queue_profile)"
+            example: loading
+          loading_type:
+            type: string
+            enum: [mound, pouring]
+            description: "Тип навантаження профіля(насип, налив). Таблиця: Профілі черги(pq_queue_profile)"
+            example: mound
+          remains:
+            type: integer
+            description: "Кількість авто в мультичерзі. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
+            example: 45
+          multiqueue:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака мультичерги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          lat:
+            type: number
+            description: "Довгота локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 46.329429
+          lng:
+            type: number
+            description: "Широта локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 46.329429
+          full_address:
+            type: string
+            description: "Повна адреса локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
+          koatuu:
+            type: string
+            description: "Код КОАТУУ локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: '5110800000'
+          building_n:
+            type: string
+            description: "Номер будівлі локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: '58'
+          district_code:
+            type: string
+            description: "Код району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'REC100012'
+          district_name:
+            type: string
+            description: "Назва району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'Чорноморська міська рада'
+          region_code:
+            type: string
+            description: "Код області профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: '51'
+          region_name:
+            type: string
+            description: "Назва області профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'Одеська'
+          locality_name:
+            type: string
+            description: "Назва населеного пункту профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'Чорноморськ'
+          street_name:
+            type: string
+            description: "Назва вулиці профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'вулиця Сухолиманська'
+          registration_zone_radius:
+            type: integer
+            description: "Радіус зони геолокації профіля черги, для реєстрації в черзі. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 4000000000
+          description:
+            type: string
+            description: "Опис профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 'Тут може бути ваша реклама'
+          telegram_group:
+            type: string
+            description: "Група телеграму?. Таблиця: Профілі черги(pq_queue_profile)"
+            example: '-'
+          outcome_temp:
+            type: integer
+            description: "Темп вибуття авто з черги. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
+            example: 0
+          waiting_time:
+            type: integer
+            description: "Час очікування в черзі останнього авто, год. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
+            example: 67.5
+          load:
+            type: string
+            enum: [
+              decrease,
+              not_change
+              quickly_decrease
+              increase
+              quickly_increase
+            ]
+            description: "Cтан мультичерги. Таблиця: Стани черги(pq_queue_state)"
+            example: increase
+          state_ua:
+            type: string
+            enum: [
+              Зменшується,
+              Не змінюється,
+              Швидко зменшується,
+              Збільшується,
+              Швидко збільшується
+            ]
+            description: "Cтан мультичерги українською. Таблиця: Стани черги(pq_queue_state)"
+            example: Збільшується
+          state_ru:
+            type: string
+            enum: [
+              Уменьшается,
+              Не изменяется,
+              Быстро уменьшается,
+              Увеличивается,
+              Быстро увеличивается
+            ]
+            description: "Cтан мультичерги російською. Таблиця: Стани черги(pq_queue_state)"
+            example: Увеличивается
+          is_verification_available:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака доступності верифікації. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          cargo_owner_accessible:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака доступності поклажодавця. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          harvest_year_in_use:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака використання року врожаю. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          is_user_can_create_race:
+            type: boolean
+            enum: [1, 0]
+            description: "Користувач має право створювати рейси. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          is_user_can_create_departure_permission:
+            type: boolean
+            enum: [1, 0]
+            description: "Користувач має право направляти рейси на в'їзд. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          is_user_can_edit_output_ratio:
+            type: object
+            description: "Користувач має право редагувати коєфіцієнт вибуття з черги. Таблиця: Профілі черги(pq_queue_profile)"
+            properties:
+              value:
+                type: boolean
+                example: true
+              error_code:
+                type: string
+                example: '056'
+              error_text_ua:
+                type: string
+                example: 'Текст помилки'
+              error_text_ru:
+                type: string
+                example: 'Текст ошибки'
+          is_departure_permission_goods_select_required:
+            type: boolean
+            description: "Направляння рейсів на в'їзд з обов'язковим врахуванням вантажу. Таблиця: Профілі черги(pq_queue_profile)"
+            example: false
+          is_to_show_race_barcode_in_th:
+            type: boolean
+            description: "Показувати баркод. Таблиця: Профілі черги(pq_queue_profile)"
+            example: true
+          is_use_departure_assistant:
+            type: boolean
+            description: "Використання асистенту направлень. Таблиця: Профілі черги(pq_queue_profile)"
+            example: true
+          is_several_warehouses:
+            type: boolean
+            description: "Використання декількох складів. Таблиця: Профілі черги(pq_queue_profile)"
+            example: true
+          is_parking:
+            type: boolean
+            description: "Використання парковки. Таблиця: Профілі черги(pq_queue_profile)"
+            example: true
+          queues:
+            type: array
+            description: 'Дані видів черг'
+            $ref: '#/components/schemas/QueueRegJournalPQqueue'
