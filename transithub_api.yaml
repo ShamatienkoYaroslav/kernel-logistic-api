@@ -5265,7 +5265,9 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                      $ref: '#/components/schemas/QueueRegJournalRaces'
+                      oneOf:
+                        - $ref: '#/components/schemas/QueueRegJournalRacesPublic'
+                        - $ref: '#/components/schemas/QueueRegJournalRacesDispatcher'
                   count:
                       type: integer
                       example: 7
@@ -5431,9 +5433,7 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                      oneOf:
-                        - $ref: '#/components/schemas/QueueRegJournalPublic'
-                        - $ref: '#/components/schemas/QueueRegJournalDispatcher'
+                      $ref: '#/components/schemas/QueueRegJournalProfile'
                   count:
                       type: integer
                       example: 2
@@ -11282,8 +11282,9 @@ components:
         race_number:
           type: string
           description: номер рейсу
-    QueueRegJournalRaces:
-      type: object
+    QueueRegJournalRacesPublic:
+      type: array
+      description: Публічний журнал черг
       properties:
         race_guid:
           type: string
@@ -11291,19 +11292,72 @@ components:
         race_number:
           type: string
           description: номер рейсу
-    QueueRegJournalPublic:
+    QueueRegJournalRacesDispatcher:
+      type: array
+      description: Публічний журнал черг
+      properties:
+        race_guid:
+          type: string
+          description: Унікальний ідентифікатор запису
+        race_number:
+          type: string
+          description: номер рейсу
+    QueueRegJournalProfile:
       type: array
       description: Публічний журнал черг
       properties:
         name:
           type: string
-          description: Назва
+          description: "Назва профіля. Таблиця: Профілі черги(pq_queue_profile)"
           example: ТрансБалкТермінал
-    QueueRegJournalDispatcher:
-      type: array
-      description: Диспетчерський журнал черг
-      properties:
-        name:
+        guid:
           type: string
-          description: Назва
-          example: ТрансБалкТермінал
+          description: "Унікальний ідентифікатор профіля. Таблиця: Профілі черги(pq_queue_profile)"
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        direction:
+          type: string
+          enum: [loading, unloading]
+          description: "Напрямок профіля(навантаження, розвантаження). Таблиця: Профілі черги(pq_queue_profile)"
+          example: loading
+        loading_type:
+          type: string
+          enum: [mound, pouring]
+          description: "Тип навантаження профіля(насип, налив). Таблиця: Профілі черги(pq_queue_profile)"
+          example: mound
+        remains:
+          type: integer
+          description: "Кількість авто в мультичерзі. Таблиця: Зведена статистика профіля черги(pq_queue_profile_temps)"
+          example: 45
+        multiqueue:
+          type: boolean
+          enum: [1, 0]
+          description: "Кількість авто в мультичерзі. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 1
+        lat:
+          type: number
+          description: "Довгота локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 46.329429
+        lng:
+          type: number
+          description: "Широта локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 46.329429
+        full_address:
+          type: string
+          description: "Повна адреса локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
+        koatuu:
+          type: string
+          description: "Код КОАТУУ локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: '5110800000'
+        building_n:
+          type: string
+          description: "Номер будівлі локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: '58'
+        district_code:
+          type: string
+          description: "Код району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 'REC100012'
+        district_name:
+          type: string
+          description: "Назва району профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 'Чорноморська міська рада'
