@@ -11316,6 +11316,82 @@ components:
           type: string
           description: "Унікальний ідентифікатор виду черги. Таблиця: Види черг(pq_queue)"
           example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        direction:
+          type: string
+          enum: [loading, unloading]
+          description: "Напрямок виду черги(навантаження, розвантаження). Таблиця: Види черг(pq_queue)"
+          example: loading
+        loading_type:
+          type: string
+          enum: [mound, pouring]
+          description: "Тип навантаження виду черги(насип, налив). Таблиця: Види черг(pq_queue)"
+          example: mound
+        remains:
+          type: integer
+          description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+          example: 15
+        priority:
+          type: string
+          description: "Приорітет виду черг. Таблиця: Види черг(pq_queue)"
+          example: normal
+        output_ratio:
+          type: number
+          description: "Коефіцієнт вибуття з черги. Таблиця: Види черг(pq_queue)"
+          example: 1.5
+        comment:
+          type: string
+          description: "Коментар до виду черг. Таблиця: Види черг(pq_queue)"
+          example: Тут може бути ваша реклама
+        outcome_temp:
+          type: integer
+          description: "Темп вибуття авто з черги. Таблиця: Зведена статистика черги(pq_queue_temps)"
+          example: 5
+        waiting_time:
+          type: number
+          description: "Час очікування останнього авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+          example: 5
+        load:
+          type: string
+          enum: [
+            decrease,
+            not_change
+            quickly_decrease
+            increase
+            quickly_increase
+          ]
+          description: "Cтан черги. Таблиця: Стани черги(pq_queue_state)"
+          example: increase
+        state_ua:
+          type: string
+          enum: [
+            Зменшується,
+            Не змінюється,
+            Швидко зменшується,
+            Збільшується,
+            Швидко збільшується
+          ]
+          description: "Cтан черги українською. Таблиця: Стани черги(pq_queue_state)"
+          example: Збільшується
+        state_ru:
+          type: string
+          enum: [
+            Уменьшается,
+            Не изменяется,
+            Быстро уменьшается,
+            Увеличивается,
+            Быстро увеличивается
+          ]
+          description: "Cтан черги російською. Таблиця: Стани черги(pq_queue_state)"
+          example: Увеличивается
+        enable_race_creation_by_dispatcher:
+          type: boolean
+          enum: [1, 0]
+          description: "Дозволити створення рейсу диспетчером. Таблиця: Профілі черги(pq_queue_profile)"
+          example: 1
+        count:
+          type: integer
+          description: "Кількість авто в черзі. Таблиця: Зведена статистика черги(pq_queue_temps)"
+          example: 15
     QueueRegJournalProfile:
       type: object
       description: Дані профіля черги в журналі черг
@@ -11420,7 +11496,7 @@ components:
             increase
             quickly_increase
           ]
-          description: "Cтан черги. Таблиця: Стани черги(pq_queue_state)"
+          description: "Cтан мультичерги. Таблиця: Стани черги(pq_queue_state)"
           example: increase
         state_ua:
           type: string
@@ -11431,7 +11507,7 @@ components:
             Збільшується,
             Швидко збільшується
           ]
-          description: "Cтан черги українською. Таблиця: Стани черги(pq_queue_state)"
+          description: "Cтан мультичерги українською. Таблиця: Стани черги(pq_queue_state)"
           example: Збільшується
         state_ru:
           type: string
@@ -11442,7 +11518,7 @@ components:
             Увеличивается,
             Быстро увеличивается
           ]
-          description: "Cтан черги російською. Таблиця: Стани черги(pq_queue_state)"
+          description: "Cтан мультичерги російською. Таблиця: Стани черги(pq_queue_state)"
           example: Увеличивается
         is_verification_available:
           type: boolean
@@ -11505,7 +11581,7 @@ components:
           type: boolean
           description: "Використання парковки. Таблиця: Профілі черги(pq_queue_profile)"
           example: true
-        items:
+        queues:
           type: array
           description: 'Дані видів черг'
           $ref: '#/components/schemas/QueueRegJournalPQqueue'
