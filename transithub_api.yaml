@@ -5265,9 +5265,11 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                      oneOf:
-                        - $ref: '#/components/schemas/QueueRegJournalRacesPublic'
-                        - $ref: '#/components/schemas/QueueRegJournalRacesDispatcher'
+                    type: array
+                    description: 'Дані журналу рейсів черги'
+                    oneOf:
+                      - $ref: '#/components/schemas/QueueRegJournalRacesPublic'
+                      - $ref: '#/components/schemas/QueueRegJournalRacesDispatcher'
                   count:
                       type: integer
                       example: 7
@@ -11285,25 +11287,29 @@ components:
           type: string
           description: номер рейсу
     QueueRegJournalRacesPublic:
-      type: object
-      description: Публічний журнал черг
-      properties:
-        race_guid:
-          type: string
-          description: Унікальний ідентифікатор запису
-        race_number:
-          type: string
-          description: номер рейсу
+      type: array
+      items:
+        type: object
+        description: Публічний журнал черг
+        properties:
+          race_guid:
+            type: string
+            description: Унікальний ідентифікатор запису
+          race_number:
+            type: string
+            description: номер рейсу
     QueueRegJournalRacesDispatcher:
-      type: object
-      description: Публічний журнал черг
-      properties:
-        race_guid:
-          type: string
-          description: Унікальний ідентифікатор запису
-        race_number:
-          type: string
-          description: номер рейсу
+      type: array
+      items:
+        type: object
+        description: Диспетчерський журнал черг
+        properties:
+          race_guid:
+            type: string
+            description: Унікальний ідентифікатор запису
+          race_number:
+            type: string
+            description: номер рейсу
     QueueRegJournalPQqueue:
       type: array
       items:
