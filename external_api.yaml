@@ -216,6 +216,206 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
       x-codegen-request-body-name: body
+  
+  /departure_permission:
+    get:
+      tags:
+        - Електронна черга
+      summary: Отримання рейсів Направлення на в'їзд
+      description: |
+        Передавши відповідні параметри, ви отримаєте реси документу Дозвіл на в'їзд
+      operationId: departurePermissionGetRaces
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - name: client_guid
+          in: query
+          description: Унікальний ідентифікатор документа
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/departurePermissionRace'
+        400:
+          description: Неправильний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+    post:
+      tags:
+        - Електронна черга
+      summary: Створення Направлення на в'їзд
+      description: |
+        Передавши відповідні параметри, ви створите новий документ Дозвіл на в'їзд
+      operationId: departurePermission
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення документа
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  description:
+                    Напрямок ("loading", "unloading"). Для неперсоналізованих
+                    обов'язкове
+                  example: loading
+                loading_type:
+                  type: string
+                  description:
+                    Тип завантаження ("mound", "pouring"). Для неперсоналізованих
+                    обов'язкове
+                  example: mound
+                client_guid:
+                  type: string
+                  description: Унікальний ідентифікатор документа. Обов'язкове
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
+                author:
+                  type: string
+                  description: ПІБ автора
+                  example: Тоторо М. I.
+                goods_code:
+                  type: string
+                  description: Код товару
+                  example: ГРЕЧИХА
+                vehicle_count:
+                  type: number
+                  description:
+                    Кількість транспортний засобів. Для неперсоналізованих
+                    більше 0
+                  example: 3.0
+                warehouse_code:
+                  type: string
+                  description: Склад напрямку. Для неперсоналізованих обов'язкове
+                  example: КАТЕРИНІВВ
+                gate:
+                  type: string
+                  description: Ворота в'їзду
+                  example: GATES 123
+                personalized:
+                  type: integer
+                  description: Персоналізоване. Доступні значення 0, 1. Обов'язкове
+                  example: 1
+                races:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/departurePermissionRaceEntryTrackGuids'
+        required: true
+      responses:
+        200:
+          description: Запис створено з помилками
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  message:
+                    type: string
+                    description: Причина помилки
+                    example: Profile not found
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        409:
+          description: поле client_guid не унікальне
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  msg:
+                    type: string
+                    description: поле client_guid не унікальне
+                    example:
+                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.U_DEPARTURE_PERMISSION_1)
+                      violated'
+      x-codegen-request-body-name: payload
   /drivers:
     post:
       tags: 
@@ -1361,6 +1561,461 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  
+  /localities:
+    get:
+      tags:
+        - 'T031 - Населені пункти'
+      summary: "Точка для отримання повної інформвції про територіальну одиницю."
+      operationId: localitiesGet
+      description: "Отримання всіх областей чи населених пунктів за певними параметрами."
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: koatuu
+          description: 'КОАТУУ'
+          required: false
+          schema:
+            type: string
+            example: '0524583405'
+        - in: query
+          name: search
+          description: 'Назва населеного пункту тощо'
+          required: false
+          schema:
+            type: string
+            example: 'Вишгород'
+        - in: query
+          name: region_code
+          description: 'Код області'
+          required: false
+          schema:
+            type: string
+            example: '05'
+        - in: query
+          name: district_code
+          description: 'Код району'
+          required: false
+          schema:
+            type: string
+            example: '05245'
+        - in: query
+          name: country_code
+          description: 'Код країни'
+          required: false
+          schema:
+            type: string
+            example: 'UA'
+        - in: query
+          name: kind
+          description: 'Тип територіальної одиниці'
+          required: false
+          schema:
+            type: string
+            example: 'Район'
+        - in: query
+          name: kind_id
+          description: 'Код типу територіальної одиниці'
+          required: false
+          schema:
+            type: integer
+            example: 4
+        - in: query
+          name: guid
+          description: 'Унікальний ідентифікатор територіальної одиниці'
+          required: false
+          schema:
+            type: string
+            example: '70D264A7-10C1-4D12-9B40-8E3961FFD7E2'
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів пошуку, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Дані про територіальну одиницю
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocalitiesGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        403:
+          description: 'Неправильний або відсутній access token/client token'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 20003
+                        description: 'Код помилки'
+                      message:
+                        type: string
+                        description: 'Повідомлення'
+                        example: 'Invalid access token'
+                      detail:
+                        type: string
+                        description: 'Детальний опис помилки'
+                        example: "You need to specify correct values for access token. Please contact with APIs admin."
+        500:
+          description: server error
+          content: {}
+  
+  /pq_queues_request.create_by_race:
+    post:
+      tags:
+        - Електронна черга
+      summary: Реєстрація запиту на чергу
+      description: |
+        Передавши відповідні параметри, ви реєструєте запит на додавання чи вибуття з електронної черги
+      operationId: createPQQueueByRace
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для реєстрації запиту на чергу
+        content:
+          '*/*':
+            schema:
+              required:
+                - check_geo
+                - direction
+                - race_guid
+              type: object
+              properties:
+                race_guid:
+                  type: string
+                  description: Ідентифікатор рейсу
+                  format: uuid
+                  example: f3628624-da75-a99f-404d-4b47eac7db5f
+                direction:
+                  type: string
+                  description: Напрямок ("loading", "unloading")
+                  example: loading
+                check_geo:
+                  type: number
+                  description:
+                    Необхідність перевірки геокординат (1 - необхідна перевірка,
+                    0 - перевірка не потрібна)
+                  example: 1.0
+                geo_lat:
+                  type: number
+                  description: Широта (геокординати)
+                  example: 49.59776
+                geo_lng:
+                  type: number
+                  description: Довгота (геокординати)
+                  example: 34.51029
+        required: true
+      responses:
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  guid:
+                    type: string
+                    description: Ідентифікатор запиту на чергу
+                    format: uuid
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+      deprecated: true
+      x-codegen-request-body-name: payload
+  /pq_queue_profiles/cargo_owners:
+    get:
+      tags:
+        - Поклажодавці
+      summary: Отримати активних поклажодавців профіля черги
+      operationId: PQueueProfileCargoOwnersGET
+      description: |
+        Передавши відповідні параметри ви отримаєте усіх активних поклажодавців профіля черги
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по поклажодавцям профіля черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/PQueueProfileCargoOwner'
+        '403':
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+  /pq_technical_downtime:
+    post:
+      tags:
+        - Електронна черга
+      summary: Створення документу Технічний простой
+      description: |
+        Передавши відповідні параметри, ви створите новий документ Технічний простой
+      operationId: technicalDowntime
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення документа
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  description: Напрямок ("loading", "unloading")
+                  example: loading
+                loading_type:
+                  type: string
+                  description: Тип завантаження ("mound", "pouring")
+                  example: mound
+                client_guid:
+                  type: string
+                  description: Унікальний ідентифікатор документа
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
+                beginning_date:
+                  type: string
+                  description: Дата початку простоя
+                  example: 27.12.2019 12:46:44
+                ending_date:
+                  type: string
+                  description: Дата закінчення простоя
+                  example: 29.12.2019 12:46:44
+                acceptance_rate:
+                  type: number
+                  description: Темп приймання, транспортних засобів/год
+                  example: 5.0
+                downtime_cause:
+                  type: string
+                  description: Причина простоя
+                  example: Сніг пішов
+                warehouse_code:
+                  type: string
+                  description: Склад напрямку
+                  example: КАТЕРИНІВВ
+                goods_guid:
+                  type: string
+                  description: Код товару
+                  example: ОЛІЯ_СОН
+        required: true
+      responses:
+        200:
+          description: Запис створено з помилками
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  message:
+                    type: string
+                    description: Причина помилки
+                    example: No data found
+        201:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        403:
+          description: Клієнт-споживаач API не має прав
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+        409:
+          description: поле client_guid не унікальне
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: false
+                  msg:
+                    type: string
+                    description: поле client_guid не унікальне
+                    example:
+                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.UNQ_PQ_TECHNICAL_DOWNTIME_CLIENT_GUID)
+                      violated'
+      x-codegen-request-body-name: payload
+  /pq_queues.get_from_race_statistics:
+    get:
+      tags:
+        - Т004 - Статистика черги
+      summary: Статистика черги
+      operationId: PQueueGetFromRaceStatistics
+      description: |
+        Отримання даних по чергам доступним вказаному рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані по чергам доступним вказаному рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  race_guid:
+                    type: string
+                    example: "947250ab-ba47-6b99-d35d-7c7a6e4d6669"
+                    description: Унікальний ідентифікатор рейсу
+                  to:
+                    type: object
+                    description: Дані по черзі розвантаження вказаного рейсу
+                    $ref: '#/components/schemas/PQueueStatisticsObject'
+                  from:
+                    type: object
+                    description: Дані по черзі навантаження вказаного рейсу
+                    $ref: '#/components/schemas/PQueueStatisticsObject'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '400':
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+   
   /races:
     post:
       tags:
@@ -1833,6 +2488,98 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /race.set_travel_letter:
+    put:
+      tags: ['T001 - Подорожній лист']
+      summary: Зміна даних подорожнього листа
+      operationId: TravelLetterSet
+      description: |
+        Точка зміни даних подорожнього листа в рейсі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: GUID рейсу
+          schema:
+            type: string
+            example: '00014e20-b2b0-b68a-b3d6-a6cb2458e925'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                travel_letter_status:
+                  type: string
+                  example: 'draft'
+                  description: 'Статус подорожньго листа'
+                travel_letter_departure_datetime:
+                  type: string
+                  example: '17.06.2021 14:05:32'
+                  description: 'Дата та час виїзду'
+                travel_letter_departure_remains:
+                  type: number
+                  example: 120
+                  description: 'Залишок пальоного на момент виїзду'
+                travel_letter_return_datetime:
+                  type: string
+                  example: '18.06.2021 14:05:32'
+                  description: 'Дата та час повернення'
+                travel_letter_return_remains:
+                  type: number
+                  example: 60
+                  description: 'Залишок пальоного на момент повернення'
+                travel_letter_mileage_to_loading_point:
+                  type: number
+                  example: 70
+                  description: 'Пробіг до пункту навантаження, км'
+                travel_letter_mileage_with_cargo:
+                  type: number
+                  example: 70
+                  description: 'Пробіг з вантажем, км'
+                travel_letter_mileage_empty_to_apt:
+                  type: number
+                  example: 70
+                  description: 'Пробіг пустим до АТП, км'
+      responses:
+        200:
+          description: 'Вдалий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_StatusOnly'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        500:
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+   
   /verification:
     get:
       tags:
@@ -2463,466 +3210,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
-  /pq_queues_request.create_by_race:
-    post:
-      tags:
-        - Електронна черга
-      summary: Реєстрація запиту на чергу
-      description: |
-        Передавши відповідні параметри, ви реєструєте запит на додавання чи вибуття з електронної черги
-      operationId: createPQQueueByRace
-      parameters:
-        - name: client_token
-          in: query
-          description: Токен клієнта-споживача API Transithub
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Дані для реєстрації запиту на чергу
-        content:
-          '*/*':
-            schema:
-              required:
-                - check_geo
-                - direction
-                - race_guid
-              type: object
-              properties:
-                race_guid:
-                  type: string
-                  description: Ідентифікатор рейсу
-                  format: uuid
-                  example: f3628624-da75-a99f-404d-4b47eac7db5f
-                direction:
-                  type: string
-                  description: Напрямок ("loading", "unloading")
-                  example: loading
-                check_geo:
-                  type: number
-                  description:
-                    Необхідність перевірки геокординат (1 - необхідна перевірка,
-                    0 - перевірка не потрібна)
-                  example: 1.0
-                geo_lat:
-                  type: number
-                  description: Широта (геокординати)
-                  example: 49.59776
-                geo_lng:
-                  type: number
-                  description: Довгота (геокординати)
-                  example: 34.51029
-        required: true
-      responses:
-        201:
-          description: Запис створено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  guid:
-                    type: string
-                    description: Ідентифікатор запиту на чергу
-                    format: uuid
-                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-        403:
-          description: Клієнт-споживаач API не має прав
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-        404:
-          description: Дані не знайдено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-      deprecated: true
-      x-codegen-request-body-name: payload
-  /pq_queue_profiles/cargo_owners:
-    get:
-      tags:
-        - Поклажодавці
-      summary: Отримати активних поклажодавців профіля черги
-      operationId: PQueueProfileCargoOwnersGET
-      description: |
-        Передавши відповідні параметри ви отримаєте усіх активних поклажодавців профіля черги
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: Пагінація списку ліміт
-          schema:
-            type: integer
-        - in: query
-          name: offset
-          description: Пагінація списку оффсет
-          schema:
-            type: integer
-        - in: query
-          name: profile_guid
-          description: Унікальний ідентифікатор профіля черги
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Дані по поклажодавцям профіля черги
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Статус відповіді'
-                  count:
-                    type: integer
-                    example: 3
-                    description: 'Кількість записів'
-                  items:
-                    $ref: '#/components/schemas/PQueueProfileCargoOwner'
-        '403':
-          description: 'Клієнт немає прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-  /departure_permission:
-    get:
-      tags:
-        - Електронна черга
-      summary: Отримання рейсів Направлення на в'їзд
-      description: |
-        Передавши відповідні параметри, ви отримаєте реси документу Дозвіл на в'їзд
-      operationId: departurePermissionGetRaces
-      parameters:
-        - name: client_token
-          in: query
-          description: Токен клієнта-споживача API Transithub
-          required: true
-          schema:
-            type: string
-        - name: client_guid
-          in: query
-          description: Унікальний ідентифікатор документа
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Успіх
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-                  count:
-                    type: number
-                    description: Кількість елементів массиву
-                    example: 1.0
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/departurePermissionRace'
-        400:
-          description: Неправильний запит
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-        403:
-          description: Клієнт-споживаач API не має прав
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-    post:
-      tags:
-        - Електронна черга
-      summary: Створення Направлення на в'їзд
-      description: |
-        Передавши відповідні параметри, ви створите новий документ Дозвіл на в'їзд
-      operationId: departurePermission
-      parameters:
-        - name: client_token
-          in: query
-          description: Токен клієнта-споживача API Transithub
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Дані для створення документа
-        content:
-          '*/*':
-            schema:
-              type: object
-              properties:
-                direction:
-                  type: string
-                  description:
-                    Напрямок ("loading", "unloading"). Для неперсоналізованих
-                    обов'язкове
-                  example: loading
-                loading_type:
-                  type: string
-                  description:
-                    Тип завантаження ("mound", "pouring"). Для неперсоналізованих
-                    обов'язкове
-                  example: mound
-                client_guid:
-                  type: string
-                  description: Унікальний ідентифікатор документа. Обов'язкове
-                  format: uuid
-                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
-                author:
-                  type: string
-                  description: ПІБ автора
-                  example: Тоторо М. I.
-                goods_code:
-                  type: string
-                  description: Код товару
-                  example: ГРЕЧИХА
-                vehicle_count:
-                  type: number
-                  description:
-                    Кількість транспортний засобів. Для неперсоналізованих
-                    більше 0
-                  example: 3.0
-                warehouse_code:
-                  type: string
-                  description: Склад напрямку. Для неперсоналізованих обов'язкове
-                  example: КАТЕРИНІВВ
-                gate:
-                  type: string
-                  description: Ворота в'їзду
-                  example: GATES 123
-                personalized:
-                  type: integer
-                  description: Персоналізоване. Доступні значення 0, 1. Обов'язкове
-                  example: 1
-                races:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/departurePermissionRaceEntryTrackGuids'
-        required: true
-      responses:
-        200:
-          description: Запис створено з помилками
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-                  message:
-                    type: string
-                    description: Причина помилки
-                    example: Profile not found
-        201:
-          description: Запис створено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-        400:
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-        403:
-          description: Клієнт-споживаач API не має прав
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-        409:
-          description: поле client_guid не унікальне
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-                  msg:
-                    type: string
-                    description: поле client_guid не унікальне
-                    example:
-                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.U_DEPARTURE_PERMISSION_1)
-                      violated'
-      x-codegen-request-body-name: payload
-  /pq_technical_downtime:
-    post:
-      tags:
-        - Електронна черга
-      summary: Створення документу Технічний простой
-      description: |
-        Передавши відповідні параметри, ви створите новий документ Технічний простой
-      operationId: technicalDowntime
-      parameters:
-        - name: client_token
-          in: query
-          description: Токен клієнта-споживача API Transithub
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Дані для створення документа
-        content:
-          '*/*':
-            schema:
-              type: object
-              properties:
-                direction:
-                  type: string
-                  description: Напрямок ("loading", "unloading")
-                  example: loading
-                loading_type:
-                  type: string
-                  description: Тип завантаження ("mound", "pouring")
-                  example: mound
-                client_guid:
-                  type: string
-                  description: Унікальний ідентифікатор документа
-                  format: uuid
-                  example: f11747b0-f51e-a10e-cceb-fc9fa1caf800
-                beginning_date:
-                  type: string
-                  description: Дата початку простоя
-                  example: 27.12.2019 12:46:44
-                ending_date:
-                  type: string
-                  description: Дата закінчення простоя
-                  example: 29.12.2019 12:46:44
-                acceptance_rate:
-                  type: number
-                  description: Темп приймання, транспортних засобів/год
-                  example: 5.0
-                downtime_cause:
-                  type: string
-                  description: Причина простоя
-                  example: Сніг пішов
-                warehouse_code:
-                  type: string
-                  description: Склад напрямку
-                  example: КАТЕРИНІВВ
-                goods_guid:
-                  type: string
-                  description: Код товару
-                  example: ОЛІЯ_СОН
-        required: true
-      responses:
-        200:
-          description: Запис створено з помилками
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-                  message:
-                    type: string
-                    description: Причина помилки
-                    example: No data found
-        201:
-          description: Запис створено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-        403:
-          description: Клієнт-споживаач API не має прав
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-        409:
-          description: поле client_guid не унікальне
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: false
-                  msg:
-                    type: string
-                    description: поле client_guid не унікальне
-                    example:
-                      'ORA-00001: unique constraint (KERNEL_LOGISTIC_DEV.UNQ_PQ_TECHNICAL_DOWNTIME_CLIENT_GUID)
-                      violated'
-      x-codegen-request-body-name: payload
   /vehicles_register.subscription:
     get:
       tags:
@@ -3119,154 +3406,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
-  /race.set_travel_letter:
-    put:
-      tags: ['T001 - Подорожній лист']
-      summary: Зміна даних подорожнього листа
-      operationId: TravelLetterSet
-      description: |
-        Точка зміни даних подорожнього листа в рейсі
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: GUID рейсу
-          schema:
-            type: string
-            example: '00014e20-b2b0-b68a-b3d6-a6cb2458e925'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                travel_letter_status:
-                  type: string
-                  example: 'draft'
-                  description: 'Статус подорожньго листа'
-                travel_letter_departure_datetime:
-                  type: string
-                  example: '17.06.2021 14:05:32'
-                  description: 'Дата та час виїзду'
-                travel_letter_departure_remains:
-                  type: number
-                  example: 120
-                  description: 'Залишок пальоного на момент виїзду'
-                travel_letter_return_datetime:
-                  type: string
-                  example: '18.06.2021 14:05:32'
-                  description: 'Дата та час повернення'
-                travel_letter_return_remains:
-                  type: number
-                  example: 60
-                  description: 'Залишок пальоного на момент повернення'
-                travel_letter_mileage_to_loading_point:
-                  type: number
-                  example: 70
-                  description: 'Пробіг до пункту навантаження, км'
-                travel_letter_mileage_with_cargo:
-                  type: number
-                  example: 70
-                  description: 'Пробіг з вантажем, км'
-                travel_letter_mileage_empty_to_apt:
-                  type: number
-                  example: 70
-                  description: 'Пробіг пустим до АТП, км'
-      responses:
-        200:
-          description: 'Вдалий запит'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_StatusOnly'
-        400:
-          description: 'Поганий запит'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_BadRequest'
-        401:
-          description: 'Клієнт не авторизований'
-          content:
-            application/json:
-              schema:
-                name: error
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        500:
-          description: 'Інша помилка'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ComplexError'
-  /pq_queues.get_from_race_statistics:
-    get:
-      tags:
-        - Т004 - Статистика черги
-      summary: Статистика черги
-      operationId: PQueueGetFromRaceStatistics
-      description: |
-        Отримання даних по чергам доступним вказаному рейсу
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: Унікальний ідентифікатор рейсу
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Дані по чергам доступним вказаному рейсу
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Статус відповіді'
-                  race_guid:
-                    type: string
-                    example: "947250ab-ba47-6b99-d35d-7c7a6e4d6669"
-                    description: Унікальний ідентифікатор рейсу
-                  to:
-                    type: object
-                    description: Дані по черзі розвантаження вказаного рейсу
-                    $ref: '#/components/schemas/PQueueStatisticsObject'
-                  from:
-                    type: object
-                    description: Дані по черзі навантаження вказаного рейсу
-                    $ref: '#/components/schemas/PQueueStatisticsObject'
-        '403':
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        '400':
-          description: 'Поганий запит'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_BadRequest'
-    
+  
 components:
   schemas:
     _StatusOnly:
@@ -3462,74 +3602,6 @@ components:
         kind:
           type: string
           example: AUTOMOBILE
-    departurePermissionRace:
-      type: object
-      properties:
-        race_number:
-          type: string
-          example: 191203-0001
-        truck:
-          type: string
-          example: DF82323
-        trailer:
-          type: string
-          example: DF82323
-        entry_guid_truck:
-          type: string
-          example: ААА999999
-        driver_name:
-          type: string
-          example: Безштанько М. Р.
-        driver_phone:
-          type: string
-          example: '380674561234'
-        doc_number:
-          type: string
-          example: '381'
-        doc_processing_date:
-          type: string
-          description: Дата опрацювання документа
-          example: 04.12.2019 10:40:48
-        doc_status:
-          type: string
-          description:
-            Статус документа (done - виконано, error - виконано з помилками,
-            new - новий, draft - чорновик)
-          example: done
-        warehouse_code:
-          type: string
-          example: БАНДУР МЕЗ
-        goods_classifier_code:
-          type: string
-          example: СОНЯШНИК
-        goods_name:
-          type: string
-          example: Соняшник
-        goods_name_ru:
-          type: string
-          example: Подсолнечник
-    departurePermissionRaceEntryTrackGuids:
-      type: object
-      properties:
-        entry_track_guid:
-          type: string
-          format: uuid
-          example: 36f9532e-079c-11ea-5888-0242ac140003
-    PQueueProfileCargoOwner:
-      type: object
-      properties:
-        name:
-          type: string
-          example: 'ТОВ Дружба Нова'
-          description: 'Назва поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
-        code_edrpou:
-          type: string
-          example: '0003343431'
-          description: 'Код ЄДРПОУ поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
-        cargo_owner_guid:
-          type: string
-          example: 'cf5ac228-04d1-e530-e351-ead65b83f97c'
-          description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
     ArrayOfFiles:
       description: files
       type: array
@@ -3602,6 +3674,166 @@ components:
             type: string
             example: 'https:\/\/devkernel.apex.rest:8443\/ords\/kernel_logistic\/v1\/transithub\/sharepoint\/file?client_token=e0d22acfba67c35937f2e26c7b6344e6&url=https:\/\/kernelgroupua.sharepoint.com\/sites\/dynamics\/BulkData_Scan\/a00cd45a-fe37-69a6-6940-a7ca51290bbd.jpg'
             description: 'Посилання для перегляду файлу. Таблиця: Файли(race_ttn_files)'
+    departurePermissionRace:
+      type: object
+      properties:
+        race_number:
+          type: string
+          example: 191203-0001
+        truck:
+          type: string
+          example: DF82323
+        trailer:
+          type: string
+          example: DF82323
+        entry_guid_truck:
+          type: string
+          example: ААА999999
+        driver_name:
+          type: string
+          example: Безштанько М. Р.
+        driver_phone:
+          type: string
+          example: '380674561234'
+        doc_number:
+          type: string
+          example: '381'
+        doc_processing_date:
+          type: string
+          description: Дата опрацювання документа
+          example: 04.12.2019 10:40:48
+        doc_status:
+          type: string
+          description:
+            Статус документа (done - виконано, error - виконано з помилками,
+            new - новий, draft - чорновик)
+          example: done
+        warehouse_code:
+          type: string
+          example: БАНДУР МЕЗ
+        goods_classifier_code:
+          type: string
+          example: СОНЯШНИК
+        goods_name:
+          type: string
+          example: Соняшник
+        goods_name_ru:
+          type: string
+          example: Подсолнечник
+    departurePermissionRaceEntryTrackGuids:
+      type: object
+      properties:
+        entry_track_guid:
+          type: string
+          format: uuid
+          example: 36f9532e-079c-11ea-5888-0242ac140003
+    LocalitiesGet:
+      type: object
+      description: Дані териториальної одиниці
+      properties:
+        guid:
+          type: string
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          description: 'Унікальний ідентифікатор териториальної одиниці'
+        name_ua:
+          type: string
+          example: 'Вишгород'
+          description: "Назва териториальної одиниці"
+        name_ru:
+          type: string
+          example: 'Вишгород'
+          description: "Назва териториальної одиниці"
+        kind:
+          type: string
+          example: 'Населенный пункт'
+          description: "Назва типу териториальної одиниці"
+        kind_id:
+          type: integer
+          example: 4
+          description: "Код типу териториальної одиниці"
+        description_ua:
+          type: string
+          example: 'Україна, Київська обл., Вишгородський район, м. Вишгород'
+          description: 'Опис териториальної одиниці'
+        description_ru:
+          type: string
+          example: 'Україна, Київська обл., Вишгородський район, м. Вишгород'
+          description: 'Опис териториальної одиниці'
+        koatuu:
+          type: string
+          example: '3221810100'
+          description: 'КОАТУУ'
+        type:
+          type: string
+          example: 'М'
+          description: 'Тип териториальної одиниці'
+        region_code:
+          type: string
+          example: '32'
+          description: 'Код області'
+        region_name_ua:
+          type: string
+          example: 'Київська'
+          description: 'Назва області'
+        region_name_ru:
+          type: string
+          example: 'Киевская'
+          description: 'Назва області'
+        district_code:
+          type: string
+          example: '32218'
+          description: 'Код району'
+        district_name_ua:
+          type: string
+          example: 'Вишгородський район'
+          description: 'Назва району'
+        district_name_ru:
+          type: string
+          example: 'Вышгородский район'
+          description: 'Назва району'
+        country_code:
+          type: string
+          example: 'UA'
+          description: 'Код країни'
+        country_name_ua:
+          type: string
+          example: 'Україна'
+          description: 'Назва країни'
+        country_name_ru:
+          type: string
+          example: 'Украина'
+          description: 'Назва країни'
+        lat:
+          type: string
+          example: '50.5831258'
+          description: 'Широта'
+        lng:
+          type: string
+          example: '30.4856785'
+          description: 'Довгота'
+        locality_type_ua:
+          type: string
+          example: 'Місто'
+          description: 'Назва типу териториальної одиниці'
+        locality_type_ru:
+          type: string
+          example: 'Город'
+          description: 'Назва типу териториальної одиниці'
+    PQueueProfileCargoOwner:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'ТОВ Дружба Нова'
+          description: 'Назва поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
+        code_edrpou:
+          type: string
+          example: '0003343431'
+          description: 'Код ЄДРПОУ поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
+        cargo_owner_guid:
+          type: string
+          example: 'cf5ac228-04d1-e530-e351-ead65b83f97c'
+          description: 'Унікальний ідентифікатор поклажодавця. Таблиця: Поклажодавці (pq_cargo_owner)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
