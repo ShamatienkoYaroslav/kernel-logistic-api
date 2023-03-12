@@ -5429,15 +5429,17 @@ paths:
                 type: object
                 properties:
                   status:
-                      type: boolean
-                      example: true
-                      description: 'Статус відповіді'
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
                   items:
-                      $ref: '#/components/schemas/QueueRegJournalProfile'
+                    type: array
+                    description: 'Дані профілів черги'
+                    $ref: '#/components/schemas/QueueRegJournalProfile'
                   count:
-                      type: integer
-                      example: 2
-                      description: 'Кількість записів'
+                    type: integer
+                    example: 2
+                    description: 'Кількість записів'
         '403':
           description: 'Клієнт не має прав доступу'
           content:
