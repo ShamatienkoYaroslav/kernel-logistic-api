@@ -11305,8 +11305,8 @@ components:
           type: string
           description: номер рейсу
     QueueRegJournalProfile:
-      type: array
-      description: Публічний журнал черг
+      type: object
+      description: Дані профіля черги
       properties:
         name:
           type: string
