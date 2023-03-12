@@ -5265,7 +5265,7 @@ paths:
                       example: true
                       description: 'Статус відповіді'
                   items:
-                    type: object
+                    type: array
                     description: 'Дані журналу рейсів черги'
                     oneOf:
                       - $ref: '#/components/schemas/QueueRegJournalRacesPublic'
@@ -11287,87 +11287,83 @@ components:
           type: string
           description: номер рейсу
     QueueRegJournalRacesPublic:
-      type: array
-      items:
-        type: object
-        description: Публічний журнал черг
-        properties:
-          race_guid:
-            type: string
-            description: "Унікальний ідентифікатор запису. Таблиця: Рейси(races)"
-            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-          race_number:
-            type: string
-            description: "Номер рейсу. Таблиця: Рейси(races)"
-            example: "221202-114491"
-          queue_number:
-            type: integer
-            description: "Номер рейсу в черзі. Таблиця: Статистика рейсу(race_statistics)"
-            example: 7
-          multiqueue_number:
-            type: integer
-            description: "Номер рейсу в мультичерзі. Таблиця: Статистика рейсу(race_statistics)"
-            example: 8
-          race_duration_ua:
-            type: string
-            description: "Час очікування в черзі українською."
-            example: "18год"
-          race_duration_ru:
-            type: string
-            description: "Час очікування в черзі російською."
-            example: "18ч"
-          vehicle_number:
-            type: string
-            description: "Номер транспортного засобу. Таблиця: Рейси(races)"
-            example: "ВЕ9793ВА"
-          trailer_number:
-            type: string
-            description: "Номер причепу. Таблиця: Рейси(races)"
-            example: "ВЕ9793ВА"
-          race_forecast_entry_date:
-            type: string
-            description: "Прогнозована дата в'їзду. Таблиця: Статистика рейсу(race_statistics)"
-            example: "02.12.2022 22:36:08"
-          source:
-            type: string
-            enum: [track_check, bulkdata, th_disp, th]
-            description: "Джерело створення рейсу. Таблиця: Рейси(races)"
-            example: "track_check"
-          registration_source:
-            type: string
-            enum: [track_check, bulkdata, th_disp, th]
-            description: "Джерело реєстрації рейсу. Таблиця: Рейси(races)"
-            example: "track_check"
+      type: object
+      description: Публічний журнал черг
+      properties:
+        race_guid:
+          type: string
+          description: "Унікальний ідентифікатор запису. Таблиця: Рейси(races)"
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        race_number:
+          type: string
+          description: "Номер рейсу. Таблиця: Рейси(races)"
+          example: "221202-114491"
+        queue_number:
+          type: integer
+          description: "Номер рейсу в черзі. Таблиця: Статистика рейсу(race_statistics)"
+          example: 7
+        multiqueue_number:
+          type: integer
+          description: "Номер рейсу в мультичерзі. Таблиця: Статистика рейсу(race_statistics)"
+          example: 8
+        race_duration_ua:
+          type: string
+          description: "Час очікування в черзі українською."
+          example: "18год"
+        race_duration_ru:
+          type: string
+          description: "Час очікування в черзі російською."
+          example: "18ч"
+        vehicle_number:
+          type: string
+          description: "Номер транспортного засобу. Таблиця: Рейси(races)"
+          example: "ВЕ9793ВА"
+        trailer_number:
+          type: string
+          description: "Номер причепу. Таблиця: Рейси(races)"
+          example: "ВЕ9793ВА"
+        race_forecast_entry_date:
+          type: string
+          description: "Прогнозована дата в'їзду. Таблиця: Статистика рейсу(race_statistics)"
+          example: "02.12.2022 22:36:08"
+        source:
+          type: string
+          enum: [track_check, bulkdata, th_disp, th]
+          description: "Джерело створення рейсу. Таблиця: Рейси(races)"
+          example: "track_check"
+        registration_source:
+          type: string
+          enum: [track_check, bulkdata, th_disp, th]
+          description: "Джерело реєстрації рейсу. Таблиця: Рейси(races)"
+          example: "track_check"
     QueueRegJournalRacesDispatcher:
-      type: array
-      items:
-        type: object
-        description: Диспетчерський журнал черг
-        properties:
-          race_guid:
-            type: string
-            description: "Унікальний ідентифікатор запису. Таблиця: Рейси(races)"
-            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-          race_number:
-            type: string
-            description: "Номер рейсу. Таблиця: Рейси(races)"
-            example: "221202-114491"
-          queue_number:
-            type: integer
-            description: "Номер рейсу в черзі. Таблиця: Статистика рейсу(race_statistics)"
-            example: 7
-          multiqueue_number:
-            type: integer
-            description: "Номер рейсу в мультичерзі. Таблиця: Статистика рейсу(race_statistics)"
-            example: 8
-          vehicle_number:
-            type: string
-            description: "Номер транспортного засобу. Таблиця: Рейси(races)"
-            example: "ВЕ9793ВА"
-          trailer_number:
-            type: string
-            description: "Номер причепу. Таблиця: Рейси(races)"
-            example: "ВЕ9793ВА"
+      type: object
+      description: Диспетчерський журнал черг
+      properties:
+        race_guid:
+          type: string
+          description: "Унікальний ідентифікатор запису. Таблиця: Рейси(races)"
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+        race_number:
+          type: string
+          description: "Номер рейсу. Таблиця: Рейси(races)"
+          example: "221202-114491"
+        queue_number:
+          type: integer
+          description: "Номер рейсу в черзі. Таблиця: Статистика рейсу(race_statistics)"
+          example: 7
+        multiqueue_number:
+          type: integer
+          description: "Номер рейсу в мультичерзі. Таблиця: Статистика рейсу(race_statistics)"
+          example: 8
+        vehicle_number:
+          type: string
+          description: "Номер транспортного засобу. Таблиця: Рейси(races)"
+          example: "ВЕ9793ВА"
+        trailer_number:
+          type: string
+          description: "Номер причепу. Таблиця: Рейси(races)"
+          example: "ВЕ9793ВА"
     QueueRegJournalPQqueue:
       type: array
       items:
