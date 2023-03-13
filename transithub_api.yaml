@@ -11257,17 +11257,17 @@ components:
           guid:
             type: string
             example: ba287fd9-22c8-5349-65e5-4030d54f9986
-            description: Унікальний ідентифікатор запису
+            description: "Унікальний ідентифікатор запису. Таблиця: Місцезнаходження профіля черги(pq_queue_profile_to_event)"
           name_ua:
             type: string
             example: 'У пункті призначення'
-            description: Назва локації
+            description: "Назва локації українською. Таблиця: Місцезнаходження(location)"
           name_ru:
             type: string
             example: 'В пункте назначения'
-            description: Назва локації
+            description: "Назва локації російською. Таблиця: Місцезнаходження(location)"
     RaceEventsArr:
-      description: пп
+      description: Історія подій рейсу
       type: array
       items:
         type: object
@@ -11275,12 +11275,57 @@ components:
         properties:
           event_date: 
             type: string
+            description: "Дата та час події рейсу. Таблиця: Історія подій рейсу(race_events_history)"
             example: '15.02.2023 02:01:31'
-            description: Дата та час
-          event_name_ua: 
-            description: 'Верифікацію відхилено (Документ: ttn)'
-          event_name_ru: 
-            description: 'Верификацию отклонено (Документ: ttn)'
+          event_name_ua:
+            type: string 
+            description: 'Назва події українською. Таблиця: Події(events)'
+            example: "Верифікацію відхилено (Документ: ttn)"
+          event_name_ru:
+            type: string
+            description: 'Назва події російською. Таблиця: Події(events)'
+            example: 'Верификацию отклонено (Документ: ttn)'
+          lat:
+            type: string
+            description: 'Широта. Таблиця: Історія подій рейсу(race_events_history)'
+            example: '48.30469'
+          lon:
+            type: string
+            description: 'Довгота. Таблиця: Історія подій рейсу(race_events_history)'
+            example: '48.30469'
+          quantity:
+            type: number
+            description: 'Кількість вантажу, т. Таблиця: Історія подій рейсу(race_events_history)'
+            example: '7'
+          comments:
+            type: string
+            description: 'Коментар. Таблиця: Історія подій рейсу(race_events_history)'
+            example: 'Тут може бути ваша реклама'
+          registration_kind:
+            type: string
+            enum: ['auto', 'user']
+            description: 'Тип реєстрації. Таблиця: Історія подій рейсу(race_events_history)'
+            example: 'auto'
+          bulkdata_entry_guid:
+            type: string
+            description: 'Унікальний іденифікатор запису балкдати. Таблиця: Історія подій рейсу(race_events_history)'
+            example: '984f1b1c-a8cc-11ed-a2cf-005056b957f7'
+          location_name_ua:
+            type: string
+            example: 'У пункті призначення'
+            description: "Назва локації українською. Таблиця: Місцезнаходження(location)"
+          location_name_ru:
+            type: string
+            example: 'В пункте назначения'
+            description: "Назва локації російською. Таблиця: Місцезнаходження(location)"
+          subordinate_race_guid:
+            type: string
+            example: '984f1b1c-a8cc-11ed-a2cf-005056b957f7'
+            description: "Унікальний іденифікатор підпорядкованого рейсу. Таблиця: Рейси(races)"
+          subordinate_race_number:
+            type: string
+            example: '230312-00000123'
+            description: "Номер підпорядкованого рейсу. Таблиця: Рейси(races)"
     PqRaceTraffic:
       type: object
       properties:
