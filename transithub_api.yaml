@@ -4981,9 +4981,11 @@ paths:
           content:
             application/json:
               schema:
-                type: array
+                type: object
                 properties:
                   items:
+                    type: array
+                    description: 'Локації профіля черги'
                     $ref: '#/components/schemas/QueueProfilesLocations'
                 
         '400':
