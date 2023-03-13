@@ -5006,7 +5006,7 @@ paths:
   /pq_race_traffic:
     get:
       tags:
-        - 'Т034 - Статистика профіля/черги'
+        - 'Т038 - Рейс'
       summary: Інформація про рух в черзі за гуідом рейсу
       operationId: pqRaceTrafficGet
       description: |
@@ -11331,10 +11331,80 @@ components:
       properties:
         race_guid:
           type: string
-          description: Унікальний ідентифікатор запису
+          description: "Унікальний ідентифікатор запису. Таблиця: Рейси(races)"
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
         race_number:
           type: string
-          description: номер рейсу
+          description: "Номер рейсу. Таблиця: Рейси(races)"
+          example: "221202-114491"
+        pq_queue_name:
+          type: string
+          description: "Назва профіля черги. Таблиця: Види черг(pq_queue)"
+          example: "Трансбалктермінал"
+        pq_queue_guid:
+          type: string
+          description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Види черг(pq_queue)"
+          example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+        pq_queue_journal_guid:
+          type: string
+          description: "Унікальний ідентифікатор запису журналу черги. Таблиця: Журнал черг(pq_queue_journal)"
+          example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+        operation:
+          type: string
+          enum: [plus, minus]
+          description: "Операція трафіку. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)"
+          example: "minus"
+        kind:
+          type: string
+          enum: [income, outcome, shift, drop]
+          description: "Вид трафіку. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)"
+          example: "income"
+        created_at_utc:
+          type: string
+          description: "Дата і час створення запису. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)"
+          example: "2023-02-18T08:06:33Z"
+        created_at:
+          type: string
+          description: "Дата і час створення запису. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)"
+          example: "18.02.2023 08:06:33"
+        current_number:
+          type: integer
+          description: 'Поточний номер в черзі. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)'
+          example: 7
+        old_current_number:
+          type: integer
+          description: 'Попередній номер в черзі. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)'
+          example: 8
+        shift:
+          type: integer
+          description: 'Величина зміщення (old_current_number-current_number). Таблиця: Трафік рейсу в черзі(pq_queue_traffic)'
+          example: 1
+        is_service:
+          type: boolean
+          enum: [1, 0]
+          description: 'Ознака службового запису. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)'
+          example: 1
+        reason_to_move:
+          type: string
+          description: "Причина переміщення в черзі. Таблиця: Причини переміщення в черзі(pq_reasons_to_move_in_queue)"
+          example: "Не прибув вчасно"
+        note:
+          type: string
+          description: "Коментар до причина переміщення в черзі. Таблиця: Трафік рейсу в черзі(pq_queue_traffic)"
+          example: "Водій перебував в нетверезому стані"
+        move_to:
+          type: string
+          enum: [begin, end, null]
+          description: "Переміщення в початок або кінець черги. Таблиця: Причини переміщення в черзі(pq_reasons_to_move_in_queue)"
+          example: "begin"
+        info_ua:
+          type: string
+          description: "Причина переміщення в черзі + коментар українською. Таблиця: Причини переміщення в черзі(pq_reasons_to_move_in_queue)"
+          example: "Не прибув вчасно"
+        info_ru:
+          type: string
+          description: "Причина переміщення в черзі + коментар російською. Таблиця: Причини переміщення в черзі(pq_reasons_to_move_in_queue)"
+          example: "Не прибув вчасно"
     QueueRegJournalRacesPublic:
       type: array
       items:
