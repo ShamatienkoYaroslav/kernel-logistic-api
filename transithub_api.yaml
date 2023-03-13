@@ -11248,20 +11248,22 @@ components:
             example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
             description: Унікальний ідентифікатор черги
     QueueProfilesLocations:
-      type: object
-      properties:
-        guid:
-          type: string
-          example: ba287fd9-22c8-5349-65e5-4030d54f9986
-          description: Унікальний ідентифікатор черги
-        name_ua:
-          type: string
-          example: 'У пункті призначення'
-          description: Назва локації
-        name_ru:
-          type: string
-          example: 'В пункте назначения'
-          description: Назва локації
+      type: array
+      items:
+        type: object
+        properties:
+          guid:
+            type: string
+            example: ba287fd9-22c8-5349-65e5-4030d54f9986
+            description: Унікальний ідентифікатор запису
+          name_ua:
+            type: string
+            example: 'У пункті призначення'
+            description: Назва локації
+          name_ru:
+            type: string
+            example: 'В пункте назначения'
+            description: Назва локації
     RaceEventsArr:
       description: пп
       type: array
