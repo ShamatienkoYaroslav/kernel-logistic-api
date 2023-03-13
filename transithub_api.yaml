@@ -94,6 +94,8 @@ tags:
     description: Вузли для отримання статистики профіля/черги
   - name: 'Т035 - Журнал черг'
     description: Вузли для отримання журналу черг
+  - name: 'Т036 - Технічний простій'
+    description: Вузли для роботи з документами Технічний простій
 
 paths:
   /accreditations:
@@ -4801,7 +4803,7 @@ paths:
   /pq_technical_downtime.last_actual:
     get:
       tags:
-        - 'Т034 - Статистика профіля/черги'
+        - 'Т036 - Технічний простій'
       summary: Звіт про останній технічний простій
       operationId: pq_technicalDowntimeLastActualGet
       description: |
