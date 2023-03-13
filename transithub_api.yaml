@@ -11336,6 +11336,57 @@ components:
             enum: [track_check, bulkdata, th_disp, th]
             description: "Джерело реєстрації рейсу. Таблиця: Рейси(races)"
             example: "track_check"
+          carrier_name:
+            type: string
+            description: "Назва перевізника. Таблиця: Рейси(races)"
+            example: "ТОВ Файний Газда"
+          customer_kt:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака КТ. Таблиця: Рейси(races)"
+            example: 1
+          verification_status:
+            type: string
+            enum: [draft, to_check, accepted, rejected]
+            description: "Статус верифікації. Таблиця: Статистика рейсу(race_statistics)"
+            example: "rejected"
+          wait_time_to_wait_ua:
+            type: string
+            description: "Час очікування рейсу в черзі українською."
+            example: "2год 30хв"
+          wait_time_to_wait_ru:
+            type: string
+            description: "Час очікування рейсу в черзі російською."
+            example: "2ч 30мин"
+          registration_sorting_dates_diff:
+            type: integer
+            description: "ТОР, год. Таблиця: Вид черги/Визначення виду черг(pq_queue_source_settings)"
+            example: 8
+          race_status:
+            type: string
+            enum: [DONE, CANCELED, PAUSE, REGISTERED, IN_PROGRESS]
+            description: "Статус рейсу. Таблиця: Рейси(races)"
+            example: "IN_PROGRESS"
+          race_date:
+            type: string
+            description: "Дата створення рейсу. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          last_event_date:
+            type: string
+            description: "Дата останньої події рейсу. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          last_event_name_ua:
+            type: string
+            description: "Остання подія рейсу українською. Таблиця: Рейси(races)"
+            example: "Відібрано проби на стоянці ХАБ"
+          last_event_name_ru:
+            type: string
+            description: "Остання подія рейсу російською. Таблиця: Рейси(races)"
+            example: "Отобраны пробы на стоянке ХАБ"
+          has_request:
+            type: boolean
+            description: "Ознака наявності заявки. Таблиця: Рейси(races)"
+            example: true
     QueueRegJournalRacesDispatcher:
       type: array
       items:
@@ -11350,6 +11401,51 @@ components:
             type: string
             description: "Номер рейсу. Таблиця: Рейси(races)"
             example: "221202-114491"
+          race_date:
+            type: string
+            description: "Дата створення рейсу. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          race_status:
+            type: string
+            enum: [DONE, CANCELED, PAUSE, REGISTERED, IN_PROGRESS]
+            description: "Статус рейсу. Таблиця: Рейси(races)"
+            example: "IN_PROGRESS"
+          last_event_date:
+            type: string
+            description: "Дата останньої події рейсу. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          last_event_name_ua:
+            type: string
+            description: "Остання подія рейсу українською. Таблиця: Рейси(races)"
+            example: "Відібрано проби на стоянці ХАБ"
+          last_event_name_ru:
+            type: string
+            description: "Остання подія рейсу російською. Таблиця: Рейси(races)"
+            example: "Отобраны пробы на стоянке ХАБ"
+          wait_time_to_wait_ua:
+            type: string
+            description: "Час очікування рейсу в черзі українською."
+            example: "2год 30хв"
+          wait_time_to_wait_ru:
+            type: string
+            description: "Час очікування рейсу в черзі російською."
+            example: "2ч 30мин"
+          profile_name:
+            type: string
+            description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: "Трансбалктермінал"
+          profile_guid:
+            type: string
+            description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          queue_name:
+            type: string
+            description: "Назва профіля черги. Таблиця: Види черг(pq_queue)"
+            example: "Трансбалктермінал"
+          queue_guid:
+            type: string
+            description: "Унікальний ідентифікатор запису профіля черги. Таблиця: Види черг(pq_queue)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
           queue_number:
             type: integer
             description: "Номер рейсу в черзі. Таблиця: Статистика рейсу(race_statistics)"
@@ -11358,6 +11454,102 @@ components:
             type: integer
             description: "Номер рейсу в мультичерзі. Таблиця: Статистика рейсу(race_statistics)"
             example: 8
+          registration_date:
+            type: string
+            description: "Дата реєстрації. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          wait_time_ua:
+            type: string
+            description: "Час очікування рейсу в черзі українською. Таблиця: Статистика рейсу(race_statistics)"
+            example: "2год 30хв"
+          wait_time_ru:
+            type: string
+            description: "Час очікування рейсу в черзі російською. Таблиця: Статистика рейсу(race_statistics)"
+            example: "2ч 30мин"
+          race_forecast_entry_date:
+            type: string
+            description: "Прогнозована дата в'їзду. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          quantity:
+            type: integer
+            description: "Кількісний показник вантажу, т. Таблиця: Рейси(races)"
+            example: 10
+          source:
+            type: string
+            enum: [track_check, bulkdata, th_disp, th]
+            description: "Джерело створення рейсу. Таблиця: Рейси(races)"
+            example: "track_check"
+          registration_source:
+            type: string
+            enum: [track_check, bulkdata, th_disp, th]
+            description: "Джерело реєстрації рейсу. Таблиця: Рейси(races)"
+            example: "track_check"
+          queue_status:
+            type: string
+            enum: [
+              in_process,
+              rejected,
+              in_queue,
+              drop,
+              in_process_to_drop,
+              dropped,
+              in_process_shift,
+              in_process_move_to_entry,
+              waiting_for_registration
+            ]
+            description: "Статус рейсу в черзі. Таблиця: Рейси(races)"
+            example: "in_queue"
+          queue_status_ua:
+            type: string
+            enum: [
+              В процессі переміщення,
+              В процессі направлення,
+              В процессі вибуття,
+              Відхилено в реєстрації,
+              В черзі,
+              Направлено,
+              Вибув з черги,
+              Очікує реєстрації,
+              В процесі реєстрації
+            ]
+            description: "Статус рейсу в черзі. Джерело: функція, що повертає представлення статусів по ключу queue_status"
+            example: "В черзі"
+          queue_status_ru:
+            type: string
+            enum: [
+              В процессе перемещения,
+              В процессе направления,
+              В процессе выбытия,
+              Отказано в регистрации,
+              В очереди,
+              Направлено,
+              Выбыл из очереди,
+              Ожидает регистрации,
+              В процессе регистрации
+            ]
+            description: "Статус рейсу в черзі. Джерело: функція, що повертає представлення статусів по ключу queue_status"
+            example: "В очереди"
+          queue_in_process:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака наявності рейсу в черзі. Джерело: функція, що повертає представлення статусів по ключу queue_status"
+            example: 1
+          driver_fullname:
+            type: string
+            description: "ПІБ водія. Таблиця: Рейси(races)"
+            example: "МАЛИЙ О О"
+          driver_cert:
+            type: string
+            description: "Посвідчення водія (серія та номер). Таблиця: Рейси(races)"
+            example: "ВХТ357724"
+          driver_phone:
+            type: string
+            description: "Номер телефону водія. Таблиця: Рейси(races)"
+            example: "380971926377"
+          driver_phone_additional:
+            type: string
+            description: "Додатковий номер телефону водія. Таблиця: Рейси(races)"
+            example: "380971926377"
           vehicle_number:
             type: string
             description: "Номер транспортного засобу. Таблиця: Рейси(races)"
@@ -11366,6 +11558,228 @@ components:
             type: string
             description: "Номер причепу. Таблиця: Рейси(races)"
             example: "ВЕ9793ВА"
+          vehicle_tech_passport:
+            type: string
+            description: "Техпаспорт транспортного засобу (серія та номер). Таблиця: Транспортні засоби(th_vehicles)"
+            example: "СХО070039"
+          trailer_tech_passport:
+            type: string
+            description: "Техпаспорт причепу (серія та номер). Таблиця: Транспортні засоби(th_vehicles)"
+            example: "СХО070039"
+          has_laboratory_test:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака наявності лабораторного аналізу. Таблиця: Рейси(races)"
+            example: 1
+          request_number:
+            type: string
+            description: "Номер заявки. Таблиця: Заявки(requests)"
+            example: "221202-00000027"
+          waybill_number:
+            type: string
+            description: "Номер ТТН. Таблиця: Рейси(races)"
+            example: "221202-00000027"
+          waybill_date:
+            type: string
+            description: "Дата ТТН. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          waybill_netto_out:
+            type: integer
+            description: "Вага нетто вантажовідправника, кг. Таблиця: Рейси(races)"
+            example: 10
+          waybill_gross:
+            type: integer
+            description: "Вага брутто вантажовідправника, кг. Таблиця: Рейси(races)"
+            example: 13
+          waybill_tara:
+            type: integer
+            description: "Вага тари вантажовідправника, кг. Таблиця: Рейси(races)"
+            example: 3
+          point_from_ua:
+            type: string
+            description: "Назва пункту навантаження українською. Таблиця: Населені пункти(locality)"
+            example: "Чорноморськ, Одеська"
+          point_from_ru:
+            type: string
+            description: "Назва пункту навантаження російською. Таблиця: Населені пункти(locality)"
+            example: "Черноморск, Одесская"
+          point_to_ua:
+            type: string
+            description: "Назва пункту розвантаження українською. Таблиця: Населені пункти(locality)"
+            example: "Чорноморськ, Одеська"
+          point_to_ru:
+            type: string
+            description: "Назва пункту розвантаження російською. Таблиця: Населені пункти(locality)"
+            example: "Черноморск, Одесская" 
+          point_from_full_desc_ua:
+            type: string
+            description: "Повна адреса пункту навантаження українською. Таблиця: Населені пункти(locality)"
+            example: "Україна, Одеська обл., Одеський район, м. Чорноморськ"
+          point_from_full_desc_ru:
+            type: string
+            description: "Повна адреса пункту навантаження російською. Таблиця: Населені пункти(locality)"
+            example: "Украина, Одесская обл., Одеський район, г. Черноморск"
+          point_to_full_desc_ua:
+            type: string
+            description: "Повна адреса пункту розвантаження українською. Таблиця: Населені пункти(locality)"
+            example: "Україна, Одеська обл., Одеський район, м. Чорноморськ"
+          point_to_full_desc_ru:
+            type: string
+            description: "Повна адреса пункту розвантаження російською. Таблиця: Населені пункти(locality)"
+            example: "Украина, Одесская обл., Одеський район, г. Черноморск"
+          warhouse_from_full_adrress:
+            type: string
+            description: "Повна адреса складу навантаження українською. Таблиця: Населені пункти(locality)"
+            example: "Україна, Одеська обл., Одеський район, м. Чорноморськ"
+          warhouse_to_full_adrress:
+            type: string
+            description: "Повна адреса складу розвантаження російською. Таблиця: Населені пункти(locality)"
+            example: "Украина, Одесская обл., Одеський район, г. Черноморск"
+          goods_ua:
+            type: string
+            description: "Назва вантажу українською. Таблиця: Вантажі(goods)"
+            example: "Шрот соняшниковий гранульований"
+          goods_ru:
+            type: string
+            description: "Назва вантажу російською. Таблиця: Вантажі(goods)"
+            example: "Шрот подсолнечный гранулированный"
+          harvest_year:
+            type: string
+            description: "Рік врожаю. Таблиця: Вантажі(goods)"
+            example: "2021"
+          departure_date:
+            type: string
+            description: "Дата і час направлення на в'їзд. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          notice_date:
+            type: string
+            description: "Дата і час відправки сповіщення водію. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          consignee_name:
+            type: string
+            description: "Назва вантажоотримувача. Таблиця: Рейси(races)"
+            example: "ТОВ Кернел Трейд"
+          consignee_edrpou:
+            type: string
+            description: "Код ЕДРПОУ вантажоотримувача. Таблиця: Рейси(races)"
+            example: "33084791889898"
+          customer_name:
+            type: string
+            description: "Назва замовника. Таблиця: Рейси(races)"
+            example: "ТОВ Кернел Трейд"
+          customer_edrpou:
+            type: string
+            description: "Код ЕДРПОУ замовника. Таблиця: Рейси(races)"
+            example: "33084791889898"
+          customer_guid:
+            type: string
+            description: "Унікальний ідентифікатор замовника. Таблиця: Контрагенти(contragent)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          carrier_name:
+            type: string
+            description: "Назва перевізника. Таблиця: Рейси(races)"
+            example: "МИКОЛАЇВВТОРМЕТ ПП"
+          carrier_edrpou:
+            type: string
+            description: "Код ЕДРПОУ перевізника. Таблиця: Рейси(races)"
+            example: "33084791889898"
+          carrier_guid:
+            type: string
+            description: "Унікальний ідентифікатор перевізника. Таблиця: Контрагенти(contragent)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          sender_name:
+            type: string
+            description: "Назва вантажовідправника. Таблиця: Рейси(races)"
+            example: "ТОВ Кернел Трейд"
+          sender_edrpou:
+            type: string
+            description: "Код ЕДРПОУ вантажовідправника. Таблиця: Рейси(races)"
+            example: "33084791889898"
+          sender_guid:
+            type: string
+            description: "Унікальний ідентифікатор вантажовідправника. Таблиця: Контрагенти(contragent)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          cargo_owner_accessible:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака використання поклажодавця. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
+          for_owner_name:
+            type: string
+            description: "Назва поклажодавця. Таблиця: Рейси(races)"
+            example: "ТОВ Кернел-Трейд"
+          for_owner_code:
+            type: string
+            description: "Код ЕДРПОУ поклажодавця. Таблиця: Рейси(races)"
+            example: "100034343488"
+          for_owner_comments:
+            type: string
+            description: "Коментар поклажодавця. Таблиця: Рейси(races)"
+            example: "Тут може бути ваша реклама"
+          for_owner_guid:
+            type: string
+            description: "Унікальний ідентифікатор запису поклажодавця. Таблиця: Рейси(races)"
+            example: "9de597bc-d84d-3499-c5da-935f8f638e4e"
+          timing_out_1:
+            type: string
+            description: "Таймінг вибуття з черги. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          timing_out_2:
+            type: string
+            description: "Таймінг вибуття з черги. Таблиця: Статистика рейсу(race_statistics)"
+            example: "02.12.2022 22:36:08"
+          customer_kt:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака КТ. Таблиця: Рейси(races)"
+            example: 1
+          verification_status:
+            type: string
+            enum: [draft, to_check, accepted, rejected]
+            description: "Статус верифікації. Таблиця: Статистика рейсу(race_statistics)"
+            example: "rejected"
+          registration_sorting_dates_diff:
+            type: integer
+            description: "ТОР, год. Таблиця: Вид черги/Визначення виду черг(pq_queue_source_settings)"
+            example: 8
+          regulation_name:
+            type: string
+            description: "Назва регламенту. Таблиця: Регламенти(pq_queue_regulations)"
+            example: "Процес розвантаження"
+          regulation_is_verificаtion:
+            type: boolean
+            enum: [1, 0]
+            description: "Ознака регламенту-верифікації. Таблиця: Регламенти(pq_queue_regulations)"
+            example: 1
+          regulation_zone:
+            type: string
+            enum: [yellow, green, red]
+            description: "Зона регламенту. Джерело: Функція, що визначає зону регламенту"
+            example: "green"
+          regulation_start_date:
+            type: string
+            description: "Дата і час початку дії регламенту. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          regulation_duration:
+            type: string
+            description: "Тривалість регламенту планова. Джерело: Функція, що визначає тривалість регламенту"
+            example: "2год 30хв"
+          regulation_finish_date:
+            type: string
+            description: "Дата і час закінчення дії регламенту. Таблиця: Рейси(races)"
+            example: "02.12.2022 22:36:08"
+          regulation_finish_duration:
+            type: string
+            description: "Тривалість регламенту фактична. Джерело: Функція, що визначає тривалість регламенту"
+            example: "2год 30хв"
+          location_name_ua:
+            type: string
+            description: "Місцезнаходження українською. Таблиця: Місцезнаходження(location)"
+            example: "ВОЛЬВО"
+          location_name_ru:
+            type: string
+            description: "Місцезнаходження російською. Таблиця: Місцезнаходження(location)"
+            example: "ВОЛЬВО"
     QueueRegJournalPQqueue:
       type: array
       items:
