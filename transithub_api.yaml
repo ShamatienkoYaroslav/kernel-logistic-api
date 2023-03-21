@@ -5004,6 +5004,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '400':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
         '500':
           description: server error
           content:
