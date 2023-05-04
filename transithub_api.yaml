@@ -3717,6 +3717,150 @@ paths:
           description: server error
           content: {}
   /departure_permission:
+    get:
+      tags:
+        - "Т026 - Направлення на в'їзд"
+      summary: Отримання рейсів Направлення на в'їзд
+      description: |
+        Передавши відповідні параметри, ви отримаєте реси документу Дозвіл на в'їзд
+      operationId: departurePermissionGetRacesID
+      parameters:
+        - in: query
+          name: client_token          
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: loading_type
+          description: Тип навантаження (насип, налив)
+          schema:
+            type: string
+            enum: [pouring, mound]
+        - in: query
+          name: direction
+          description: Напрямок (навантаження, розвантаження)
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: doc_status
+          description: Статус документу (новий, опрацьований, опрацьований з помилками, чернетка)
+          schema:
+            type: string
+            enum: [new, done, error, draft]
+        - in: query
+          name: date_from
+          description: Початок періоду відбору по даті направлення
+          schema:
+            type: string
+            example: 28.04.2023 18:04:43
+        - in: query
+          name: date_to
+          description: Закінчення періоду відбору по даті направлення
+          schema:
+            type: string
+            example: 28.04.2023 18:04:43
+        - in: query
+          name: search_in
+          description: Фільтр пошуку по номеру авто або причепа
+          schema:
+            type: string
+            example: BI6647XM
+        - in: query
+          name: has_laboratory_test
+          description: Ознака наявності лабораторного аналізу (1,0)
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: is_coupler
+          description: Ознака автозчіпки транспортного засобу (1,0)
+          schema:
+            type: integer
+            example: 0
+        - in: query
+          name: is_dump_truck
+          description: Ознака самоскиду транспортного засобу (1,0)
+          schema:
+            type: integer
+            example: 0
+        - in: query
+          name: personalized
+          description: Ознака персоналізованого/неперсоналізованого направлення (1,0)
+          schema:
+            type: integer
+            example: 0
+        - in: query
+          name: goods_name
+          description: Фільтр по назві вантажу
+          schema:
+            type: string
+        - in: query
+          name: pq_queue_name
+          description: Фільтр по назві виду черги
+          schema:
+            type: string
+        - in: query
+          name: direction_name_ua
+          description: Фільтр по назві напрямку направлення
+          schema:
+            type: string
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DeparturePermissionRace'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
     post:
       tags:
         - "Т026 - Направлення на в'їзд"
@@ -3903,21 +4047,21 @@ paths:
                     type: integer
                     enum: [0, 1, null]
                     description: |
-                      Відбір для рейсів з/без лабораторним аналізом (ЛА). Якщо пусто(null) - відбір не використовується
+                      Ознака рейсів з/без лабораторним аналізом (ЛА).
                       Таблиця: Направлення на в'їзд (departure_permission)
                     example: 1
                   is_coupler:
                     type: integer
                     enum: [0, 1, null]
                     description: |
-                      Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується
+                      Рейси з ознакою ТЗ автозчіпка.
                       Таблиця: Направлення на в'їзд (departure_permission)
                     example: 1
                   is_dump_truck:
                     type: integer
                     enum: [0, 1, null]
                     description: |
-                      Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується
+                      Рейси з ознакою ТЗ самоскид.
                       Таблиця: Направлення на в'їзд (departure_permission)
                     example: 0
         400:
@@ -10783,6 +10927,72 @@ components:
             type: string
             example: '005_РОЗВ_ПРИДМЕЗ'
             description: 'Код напрямку направлення'
+    DeparturePermissionRace:
+      type: object
+      properties:
+        doc_number:
+          type: string
+          example: '381'
+          description: "Номер документа. Таблиця: Направлення на в'їзд (departure_permission)"
+        doc_date:
+          type: string
+          description: "Дата документа. Таблиця: Направлення на в'їзд (departure_permission)"
+          example: 04.12.2019 10:40:48
+        doc_status:
+          type: string
+          description: |
+            Статус документа (done - виконано, error - виконано з помилками,
+            new - новий, draft - чорновик). Таблиця: Направлення на в'їзд (departure_permission)
+          enum: [new, done, error, draft]
+          example: done
+        race_number:
+          type: string
+          example: 191203-0001
+          description: "Номер рейсу. Таблиця: Рейси направлення на в'їзд (departure_permission_races)"
+        vehicle_number:
+          type: string
+          example: DF82323
+          description: "Номер Авто. Таблиця: Рейси направлення на в'їзд (departure_permission_races)"
+        trailer_number:
+          type: string
+          example: DF82323
+          description: "Номер причепа. Таблиця: Рейси направлення на в'їзд (departure_permission_races)"
+        driver_name:
+          type: string
+          example: Безштанько М. Р.
+        driver_phone:
+          type: string
+          example: '380674561234'
+        goods_classifier_code:
+          type: string
+          example: СОНЯШНИК
+        goods_name:
+          type: string
+          example: Соняшник
+        goods_name_ru:
+          type: string
+          example: Подсолнечник
+        has_laboratory_test:
+          type: integer
+          enum: [0, 1, null]
+          description: |
+            Ознака рейсів з/без лабораторним аналізом (ЛА).
+            Таблиця: Направлення на в'їзд (departure_permission)
+          example: 1
+        is_coupler:
+          type: integer
+          enum: [0, 1, null]
+          description: |
+            Рейси з ознакою ТЗ автозчіпка.
+            Таблиця: Направлення на в'їзд (departure_permission)
+          example: 1
+        is_dump_truck:
+          type: integer
+          enum: [0, 1, null]
+          description: |
+            Рейси з ознакою ТЗ самоскид.
+            Таблиця: Направлення на в'їзд (departure_permission)
+          example: 0
     UsersFindByGuid:
       type: object
       description: Дані користувача
