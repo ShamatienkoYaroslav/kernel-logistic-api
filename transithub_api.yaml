@@ -3831,6 +3831,24 @@ paths:
                     Кількість авто, які потрібно направити. Використовується для неперсоналізованих
                     направлень. Таблиця: Направлення на в'їзд (departure_permission)"
                   example: 5
+                has_laboratory_test:
+                  type: integer
+                  enum: [0, 1, null]
+                  description: |
+                    Відбір для рейсів з/без лабораторним аналізом (ЛА). Якщо пусто(null) - відбір не використовується
+                    Таблиця: Направлення на в'їзд (departure_permission)
+                is_coupler:
+                  type: integer
+                  enum: [0, 1, null]
+                  description: |
+                    Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується
+                    Таблиця: Направлення на в'їзд (departure_permission)
+                is_dump_truck:
+                  type: integer
+                  enum: [0, 1, null]
+                  description: |
+                    Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується
+                    Таблиця: Направлення на в'їзд (departure_permission)
       responses:
         200:
           description: Запис створено
@@ -3881,6 +3899,27 @@ paths:
                     type: string
                     description: 'Код налаштування напрямку направлення. Таблиця: Напрямки направлення (pq_departure_permission_directions)'
                     example: 004_РОЗВ_ТБТ
+                  has_laboratory_test:
+                    type: integer
+                    enum: [0, 1, null]
+                    description: |
+                      Відбір для рейсів з/без лабораторним аналізом (ЛА). Якщо пусто(null) - відбір не використовується
+                      Таблиця: Направлення на в'їзд (departure_permission)
+                    example: 1
+                  is_coupler:
+                    type: integer
+                    enum: [0, 1, null]
+                    description: |
+                      Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується
+                      Таблиця: Направлення на в'їзд (departure_permission)
+                    example: 1
+                  is_dump_truck:
+                    type: integer
+                    enum: [0, 1, null]
+                    description: |
+                      Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується
+                      Таблиця: Направлення на в'їзд (departure_permission)
+                    example: 0
         400:
           description: Поганий запит
           content:
@@ -5471,8 +5510,26 @@ paths:
           description: Признак фасованої продукції
           required: false
           schema:
-            type: string
+            type: integer
             enum: [0, 1]
+        - in: query
+          name: has_laboratory_test
+          description: "Відбір для рейсів з/без лабораторним аналізом (ЛА). Якщо пусто(null) - відбір не використовується"
+          schema:
+            type: string
+            enum: [0, 1, null]
+        - in: query
+          name: is_coupler
+          description: "Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується"
+          schema:
+            type: string
+            enum: [0, 1, null]
+        - in: query
+          name: is_dump_truck
+          description: "Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується"
+          schema:
+            type: string
+            enum: [0, 1, null]
       responses:
         '200':
           description: Інформація про рейси для профіля/черги
@@ -12000,6 +12057,18 @@ components:
             enum: [1, 0]
             description: "Ознака наявності лабораторного аналізу. Таблиця: Рейси(races)"
             example: 1
+          is_coupler:
+            type: integer
+            enum: [0, 1, null]
+            description: |
+              Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується
+              Таблиця: Рейси(races)
+          is_dump_truck:
+            type: integer
+            enum: [0, 1, null]
+            description: |
+              Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується
+              Таблиця: Рейси(races)
           request_number:
             type: string
             description: "Номер заявки. Таблиця: Заявки(requests)"
