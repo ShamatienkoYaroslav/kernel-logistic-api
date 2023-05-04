@@ -12060,15 +12060,11 @@ components:
           is_coupler:
             type: integer
             enum: [0, 1, null]
-            description: |
-              Відбір для рейсів з ознакою автозчіпка. Якщо пусто(null) - відбір не використовується
-              Таблиця: Рейси(races)
+            description: "Ознака автозчіпка транспортних засобів. Таблиця: Рейси(races)"
           is_dump_truck:
             type: integer
             enum: [0, 1, null]
-            description: |
-              Відбір для рейсів з ознакою самоскид. Якщо пусто(null) - відбір не використовується
-              Таблиця: Рейси(races)
+            description: "Ознака транспортних засобів самоскид. Таблиця: Рейси(races)"
           request_number:
             type: string
             description: "Номер заявки. Таблиця: Заявки(requests)"
