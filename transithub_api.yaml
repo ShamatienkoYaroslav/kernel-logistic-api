@@ -178,9 +178,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/documents:
     get:
       tags: ['T012 - Акредитація (документи)']
@@ -256,9 +258,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/states:
     get:
       tags: ['T016 - Акредитація (перелік акредитацій)']
@@ -313,7 +317,72 @@ paths:
           description: Унікальний реєстраційний номер ТЗ
           schema:
             type: string
+        - in: query
+          name: accreditation_available
+          description: Доступність акредитації
+          schema:
+            type: integer
+            enum: [1, 0, null]
       responses:
+        200:
+          description: 'Тіло відповіді'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        status:
+                          type: boolean
+                          description: Статус обробки запиту
+                          example: true
+                        guid:
+                          type: string
+                          description: 'Ідентифікатор записи стану акредитації. Таблиця: Стани акредитації(accreditation_state)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        processing_status:
+                          type: string
+                          description: "Статус обробки стану акредитації (чорновик, в процесі, відхилено, підтверджено). Таблиця: Стани акредитації(accreditation_state)"
+                          enum:
+                            [
+                              draft,
+                              in_progress,
+                              cancelled,
+                              confirmed
+                            ]
+                          example: in_progress
+                        table_type:
+                          type: string
+                          description: "Тип таблиці (транспортні засоби, водії). Таблиця: Стани акредитації(accreditation_state)"
+                          enum:
+                            [
+                              th_vehicles,
+                              th_drivers
+                            ]
+                          example: th_vehicles
+                        vehicle_guid:
+                          type: string
+                          description: 'Ідентифікатор записy таблиці транспортних засобів. Таблиця: транспортні засоби(th_vehicles)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        vehicle_number:
+                          type: string
+                          description: 'Державний номер транспортного засобу. Таблиця: транспортні засоби(th_vehicles)'
+                          example: VASYA007
+                      
         400:
           description: 'Поганий запит'
           content:
@@ -334,9 +403,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
     post:
       tags: ['T016 - Акредитація (перелік акредитацій)']
       summary: Створення нового запису акредитації
@@ -375,9 +446,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
     put:
       tags: ['T016 - Акредитація (перелік акредитацій)']
       summary: Оновлення запису акредитації
@@ -422,9 +495,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
     delete:
       tags: ['T016 - Акредитація (перелік акредитацій)']
       summary: Видалення запису акредитації
@@ -470,9 +545,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/states/actions:
     get:
       tags: ['T018 - Акредитація (дії)']
@@ -518,9 +595,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/states/requests:
     get:
       tags: ['T019 - Акредитація (запити)']
@@ -606,9 +685,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
         500:
-          description: server error
-          content: {}
-        x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /authentication/check:
     post:
       tags: ['T028 - Аутентифікація']
@@ -686,9 +767,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
-          description: server error
-          content: {}
-      x-codegen-request-body-name: body
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   
   /blacklist/check:
     get:
