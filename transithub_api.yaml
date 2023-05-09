@@ -382,6 +382,54 @@ paths:
                           type: string
                           description: 'Державний номер транспортного засобу. Таблиця: транспортні засоби(th_vehicles)'
                           example: VASYA007
+                        company_name:
+                          type: string
+                          description: 'Назва компанії. Таблиця: Компанії(th_companys)'
+                          example: Черги КЕРНЕЛ
+                        organization_name:
+                          type: string
+                          description: 'Назва організації. Таблиця: Організації(th_organisations)'
+                          example: Черги КЕРНЕЛ
+                        organization_guid:
+                          type: string
+                          description: 'Ідентифікатор записy таблиці організацій. Таблиця: Організації(th_organisations)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        carrier_company_name:
+                          type: string
+                          description: 'Назва компанії перевізника. Таблиця: Компанії(th_companys)'
+                          example: Черги КЕРНЕЛ
+                        carrier_company_guid:
+                          type: string
+                          description: 'Ідентифікатор записy таблиці компанії перевізника. Таблиця: Організації(th_organisations)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        carrier_organization_name:
+                          type: string
+                          description: 'Назва організації перевізника. Таблиця: Організації(th_organisations)'
+                          example: Черги КЕРНЕЛ
+                        carrier_organization_guid:
+                          type: string
+                          description: 'Ідентифікатор записy таблиці організації перевізника. Таблиця: Організації(th_organisations)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        created_at:
+                          type: string
+                          description: 'Дата і час створення запису. Таблиця: Стани акредитації(accreditation_state)'
+                          example: 28.04.2021 18:41:52
+                        has_documents:
+                          type: boolean
+                          description: Наявність прикріплених документів
+                          example: true
+                        requests_count:
+                          type: integer
+                          example: 1
+                          description: Кількість запитів на акредитацію
+                        accreditation_available:
+                          type: integer
+                          example: 1
+                          enum: [1, 0]
+                          description: Доступність акредитації
                       
         400:
           description: 'Поганий запит'
