@@ -596,6 +596,14 @@ paths:
           schema:
             type: string
       responses:
+        200:
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/_StatusOnly'
+                  - $ref: '#/components/schemas/_UserError'
         400:
           description: 'Поганий запит'
           content:
