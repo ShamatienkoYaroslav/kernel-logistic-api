@@ -50,7 +50,7 @@ tags:
     description: Вузол для роботи з файлами документу/рейсу
   - name: 'T015 - Організації компанії'
     description: Вузол для роботи з організаціями компанії
-  - name: 'T016 - Акредитація (перелік акредитацій)'
+  - name: 'T016 - Акредитація'
     description: Вузол для роботи з акредитаціями (з переліком акредитацій)
   - name: 'T017 - Акредитація (перевізник/замовник)'
     description: Вузол для роботи з акредитаціями (з списком пар перевізника та замовника для акредитацій)
@@ -103,9 +103,7 @@ paths:
   /accreditations:
     get:
       tags:
-        [
-          'T017 - Акредитація (список пар перевізника та замовника для акредитацій)'
-        ]
+        - 'T016 - Акредитація'
       summary: Отримання списку пар перевізника та замовника для акредитацій
       operationId: accreditationsGet
       description: |
@@ -163,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -176,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
@@ -185,7 +183,7 @@ paths:
                 $ref: '#/components/schemas/_ComplexError'
   /accreditations/documents:
     get:
-      tags: ['T012 - Акредитація (документи)']
+      tags: ['T016 - Акредитація']
       summary: Отримання документів об'єкту для акредитації
       operationId: accreditationsDocumentsGet
       description: |
@@ -243,7 +241,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -256,7 +254,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
@@ -265,7 +263,7 @@ paths:
                 $ref: '#/components/schemas/_ComplexError'
   /accreditations/states:
     get:
-      tags: ['T016 - Акредитація (перелік акредитацій)']
+      tags: ['T016 - Акредитація']
       summary: Отримання списку акредитацій для конкретного перевізника та замовника
       operationId: accreditationsStatesGet
       description: |
@@ -456,7 +454,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
     post:
-      tags: ['T016 - Акредитація (перелік акредитацій)']
+      tags: ['T016 - Акредитація']
       summary: Створення нового запису акредитації
       operationId: accreditationsStatesPost
       description: Точка створення запису акредитації для конкретного перевізника та замовника
@@ -572,7 +570,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
     put:
-      tags: ['T016 - Акредитація (перелік акредитацій)']
+      tags: ['T016 - Акредитація']
       summary: Оновлення запису акредитації
       operationId: accreditationsStatesPut
       description: |
@@ -629,7 +627,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
     delete:
-      tags: ['T016 - Акредитація (перелік акредитацій)']
+      tags: ['T016 - Акредитація']
       summary: Видалення запису акредитації
       operationId: accreditationsStatesDelete
       description: |
@@ -680,7 +678,7 @@ paths:
                 $ref: '#/components/schemas/_ComplexError'
   /accreditations/states/actions:
     get:
-      tags: ['T018 - Акредитація (дії)']
+      tags: ['T016 - Акредитація']
       summary: Отримання списку дій для процесу акредитації
       operationId: accreditationsGet
       description: |
@@ -736,7 +734,7 @@ paths:
                         name_ua:
                           type: string
                           description: "Назва дії акредитації українською. Джерело: програмний код"
-                          example: Видалити чернетку
+                          example: Відправити на акредитацію
                         name_ru:
                           type: string
                           description: "Назва дії акредитації російською. Джерело: програмний код"
@@ -780,7 +778,7 @@ paths:
                 $ref: '#/components/schemas/_ComplexError'
   /accreditations/states/requests:
     get:
-      tags: ['T019 - Акредитація (запити)']
+      tags: ['T016 - Акредитація']
       summary: Отримання списку запитів для акредитації
       operationId: accreditationsGet
       description: |
@@ -848,7 +846,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -861,7 +859,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
