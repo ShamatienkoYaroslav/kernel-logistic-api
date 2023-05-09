@@ -430,7 +430,6 @@ paths:
                           example: 1
                           enum: [1, 0]
                           description: Доступність акредитації
-                      
         400:
           description: 'Поганий запит'
           content:
@@ -704,12 +703,62 @@ paths:
           schema:
             type: string
       responses:
+        200:
+          description: 'Тіло відповіді'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: "Код дії акредитації (Видалити чернетку, Відправити на акредитацію, Cкасувати акредитацію). Джерело: програмний код"
+                          enum:
+                            [
+                              remove_draft,
+                              get_accreditation,
+                              cancel_accreditation
+                            ]
+                          example: get_accreditation
+                        name_ua:
+                          type: string
+                          description: "Назва дії акредитації українською. Джерело: програмний код"
+                          example: Видалити чернетку
+                        name_ru:
+                          type: string
+                          description: "Назва дії акредитації російською. Джерело: програмний код"
+                          example: Отправить на аккредитацию
+                        disabled:
+                          type: boolean
+                          description: Доступність дії
+                          example: true
+                        disabled_text_ua:
+                          type: string
+                          description: "Причина недоступності дії українською. Таблиця: шаблони текстів (text_template)"
+                          example: "Увага! В ТЗ відсутні заповнені дати реєстрацій. Заповніть в довіднику та перевиберіть ТЗ в реєстрі."
+                        disabled_text_ru:
+                          type: string
+                          description: "Причина недоступності дії російською. Таблиця: шаблони текстів (text_template)"
+                          example: "Слава Україні!"
         400:
           description: 'Поганий запит'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -722,7 +771,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
