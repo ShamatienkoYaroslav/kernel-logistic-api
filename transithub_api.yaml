@@ -436,7 +436,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -449,7 +449,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
@@ -552,7 +552,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -565,7 +565,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
@@ -601,7 +601,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -614,7 +614,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
@@ -651,7 +651,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований'
           content:
@@ -664,7 +664,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         500:
           description: 'Серверна помилка'
           content:
