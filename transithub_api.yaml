@@ -531,7 +531,7 @@ paths:
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                 vehicles:
-                  type: array
+                  type: string
                   description: "Ідентифікатори записів таблиці транспортні засоби. Таблиця: транспортні засоби(th_vehicles)"
                   enum:
                     [
