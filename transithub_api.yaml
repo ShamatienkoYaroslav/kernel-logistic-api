@@ -672,7 +672,7 @@ paths:
     get:
       tags: ['T016 - Акредитація']
       summary: Отримання списку дій для процесу акредитації
-      operationId: accreditationsGet
+      operationId: accreditationsStatesActionsGet
       description: |
         Точка отримання списку дій для процесу акредитації
       parameters:
@@ -772,7 +772,7 @@ paths:
     get:
       tags: ['T016 - Акредитація']
       summary: Отримання списку запитів для акредитації
-      operationId: accreditationsGet
+      operationId: accreditationsStatesRequestsGet
       description: |
         Точка отримання списку запитів для акредитації
       parameters:
