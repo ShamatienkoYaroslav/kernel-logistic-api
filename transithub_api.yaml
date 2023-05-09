@@ -8983,21 +8983,22 @@ components:
     _UserError:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              example: "071"
-              description: Код шаблону сповіщення
-            error_text_ua:
-              type: string
-              example: "Увага! Перевізника не підключено до обміну даними. Зверніться до регіонального логіста для виконання підключення."
-              description: Текст сповіщення українською
-            error_text_ru:
-              type: string
-              example: "Cлава Україні! Вчи мову посіпако"
-              description: Текст сповіщення російською
+        status:
+          type: boolean
+          description: Статус обробки запиту
+          example: true
+        error_code:
+          type: string
+          example: "071"
+          description: Код шаблону сповіщення
+        error_text_ua:
+          type: string
+          example: "Увага! Перевізника не підключено до обміну даними. Зверніться до регіонального логіста для виконання підключення."
+          description: Текст сповіщення українською
+        error_text_ru:
+          type: string
+          example: "Cлава Україні! Вчи мову посіпако"
+          description: Текст сповіщення російською
     AccreditationPostResponse:
       type: object
       properties:
