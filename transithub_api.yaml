@@ -8970,15 +8970,15 @@ components:
           properties:
             code:
               type: number
-              example: 20000
-              description: Код помилки
+              example: -1476
+              description: SQL код для ідентифікації помилки.
             message:
               type: string
-              example: Invalid client_token
+              example: Internal server error
               description: Сповіщення помилки
             detail:
               type: string
-              example: You need to specify correct values for client token. Please contact with API''s admin.
+              example: 'ORA-01476: divisor is equal to zero\nORA-06512: at \"KERNEL_LOGISTIC.USERS_API\", line 372\nORA-06512: at \"KERNEL_LOGISTIC.USERS_API\", line 372\nORA-06512: at \"KERNEL_LOGISTIC.EXT_USERS_API\", line 21\n.'
               description: Деталі помилки
     _UserError:
       type: object
