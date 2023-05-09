@@ -473,7 +473,80 @@ paths:
           description: Токен доступу (сесії)
           schema:
             type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 'required:
+                - table_type
+                - th_organisation_guid
+                - th_carrier_organisation_guid
+                - vehicles'
+              properties:
+                table_type:
+                  type: string
+                  description: "Тип таблиці (транспортні засоби, водії). Таблиця: Стани акредитації(accreditation_state)"
+                  enum:
+                    [
+                      th_vehicles,
+                      th_drivers
+                    ]
+                  example: th_vehicles
+                processing_status:
+                  type: string
+                  description: "Статус обробки стану акредитації (чорновик, в процесі, відхилено, підтверджено). Таблиця: Стани акредитації(accreditation_state)"
+                  enum:
+                    [
+                      draft,
+                      in_progress,
+                      cancelled,
+                      confirmed
+                    ]
+                  example: in_progress
+                th_driver_guid:
+                  type: string
+                  description: 'Ідентифікатор записy таблиці водіїв. Таблиця: водії(th_drivers)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                th_company_guid:
+                  type: string
+                  description: 'Ідентифікатор записy таблиці компанії. Таблиця: Організації(th_organisations)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                th_user_guid:
+                  type: string
+                  description: 'Ідентифікатор записy таблиці користувачів. Таблиця: Користувачі(th_users)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                th_organization_guid:
+                  type: string
+                  description: 'Ідентифікатор записy таблиці організацій. Таблиця: Організації(th_organisations)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                th_carrier_organisation_guid:
+                  type: string
+                  description: 'Ідентифікатор записy таблиці організацій первізника. Таблиця: Організації(th_organisations)'
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                vehicles:
+                  type: array
+                  description: "Ідентифікатори записів таблиці транспортні засоби. Таблиця: транспортні засоби(th_vehicles)"
+                  enum:
+                    [
+                      f11747b0-f51e-a10e-cceb-7c9fa1caf800,
+                      f11747b0-f51e-a10e-cceb-7c9fa1caf878
+                    ]
       responses:
+        200:
+          description: Дані рейсу водія
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/AccreditationPostResponse'
+                  - $ref: '#/components/schemas/_UserError'
         400:
           description: 'Поганий запит'
           content:
@@ -8907,6 +8980,106 @@ components:
               type: string
               example: You need to specify correct values for client token. Please contact with API''s admin.
               description: Деталі помилки
+    _UserError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "071"
+              description: Код шаблону сповіщення
+            error_text_ua:
+              type: string
+              example: "Увага! Перевізника не підключено до обміну даними. Зверніться до регіонального логіста для виконання підключення."
+              description: Текст сповіщення українською
+            error_text_ru:
+              type: string
+              example: "Cлава Україні! Вчи мову посіпако"
+              description: Текст сповіщення російською
+    AccreditationPostResponse:
+      type: object
+      properties:
+        guid:
+          type: string
+          description: 'Ідентифікатор записy таблиці станів акредитації. Таблиця: стани акредитації(accreditation_state)'
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        driver_guid:
+          type: string
+          description: 'Ідентифікатор записy таблиці водіїв. Таблиця: водії(th_drivers)'
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        driver_name:
+          type: string
+          description: 'ПІБ водія. Таблиця: водії(th_drivers)'
+          example: Панікаров В. М.
+        company_guid:
+          type: string
+          description: 'Ідентифікатор записy таблиці компанії. Таблиця: Компанії(th_companys)'
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        company_name:
+          type: string
+          description: 'Назва компанії. Таблиця: Компанії(th_companys)'
+          example: Черги КЕРНЕЛ
+        organization_name:
+          type: string
+          description: 'Назва організації. Таблиця: Організації(th_organisations)'
+          example: Черги КЕРНЕЛ
+        organization_guid:
+          type: string
+          description: 'Ідентифікатор записy таблиці організації. Таблиця: Організації(th_organisations)'
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        carrier_organization_name:
+          type: string
+          description: 'Назва організації перевізника. Таблиця: Організації(th_organisations)'
+          example: Черги КЕРНЕЛ
+        carrier_organization_guid:
+          type: string
+          description: 'Ідентифікатор записy таблиці організації перевізника. Таблиця: Організації(th_organisations)'
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        created_at:
+          type: string
+          description: 'Дата і час створення запису. Таблиця: Стани акредитації(accreditation_state)'
+          example: 28.04.2021 18:41:52
+        table_type:
+          type: string
+          description: "Тип таблиці (транспортні засоби, водії). Таблиця: Стани акредитації(accreditation_state)"
+          enum:
+            [
+              th_vehicles,
+              th_drivers
+            ]
+          example: th_vehicles
+        processing_status:
+          type: string
+          description: "Статус обробки стану акредитації (чорновик, в процесі, відхилено, підтверджено). Таблиця: Стани акредитації(accreditation_state)"
+          enum:
+            [
+              draft,
+              in_progress,
+              cancelled,
+              confirmed
+            ]
+          example: in_progress
+        vehicles:
+          type: array
+          items:
+            type: object
+            properties:
+              vehicle_guid:
+                type: string
+                description: 'Ідентифікатор записy таблиці транспортні засоби. Таблиця: транспортні засоби(th_vehicles)'
+                format: uuid
+                example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+              vehicle_number:
+                type: string
+                description: 'Державний номер транспортного засобу. Таблиця: транспортні засоби(th_vehicles)'
+                example: BI5261EB
     DriverRace:
       type: object
       properties:
