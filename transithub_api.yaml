@@ -4066,17 +4066,17 @@ paths:
             example: 0
         - in: query
           name: goods_guid
-          description: Фільтр по назві вантажу
+          description: Фільтр по унікальному ідентифікатору(коду класифікатору) вантажу
           schema:
             type: string
         - in: query
           name: pq_queue_guid
-          description: Фільтр по назві виду черги
+          description: Фільтр по унікальному ідентифікатору виду черги
           schema:
             type: string
         - in: query
           name: departure_permission_direction_code
-          description: Фільтр по назві напрямку направлення
+          description: Фільтр по коду напрямку направлення
           schema:
             type: string
       responses:
