@@ -4042,40 +4042,40 @@ paths:
             example: BI6647XM
         - in: query
           name: has_laboratory_test
-          description: Ознака наявності лабораторного аналізу (1,0)
+          description: Ознака наявності лабораторного аналізу (1, 0, null)
           schema:
             type: integer
             example: 1
         - in: query
           name: is_coupler
-          description: Ознака автозчіпки транспортного засобу (1,0)
+          description: Ознака автозчіпки транспортного засобу (1, 0, null)
           schema:
             type: integer
             example: 0
         - in: query
           name: is_dump_truck
-          description: Ознака самоскиду транспортного засобу (1,0)
+          description: Ознака самоскиду транспортного засобу (1, 0, null)
           schema:
             type: integer
             example: 0
         - in: query
           name: personalized
-          description: Ознака персоналізованого/неперсоналізованого направлення (1,0)
+          description: Ознака персоналізованого/неперсоналізованого направлення (1, 0, null)
           schema:
             type: integer
             example: 0
         - in: query
-          name: goods_name
+          name: goods_guid
           description: Фільтр по назві вантажу
           schema:
             type: string
         - in: query
-          name: pq_queue_name
+          name: pq_queue_guid
           description: Фільтр по назві виду черги
           schema:
             type: string
         - in: query
-          name: direction_name_ua
+          name: departure_permission_direction_code
           description: Фільтр по назві напрямку направлення
           schema:
             type: string
