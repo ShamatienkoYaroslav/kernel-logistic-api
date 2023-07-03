@@ -43,10 +43,23 @@ paths:
       description:
         Перевірка пін-коду користувача при вході в систему
       parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
+        - in: header
+          name: status
+          description: HTTP response status code
+          schema:
+            type: integer
+        - in: header
+          name: source
+          example: TH
+          description: 'Джерело надходження запиту. Значення поточнити в адміністратора системи'
           required: true
+          schema:
+            type: string
+        - in: cookie
+          name: client_token
+          description: "Токен клієнта API. Встановлюється автоматично через хедер Set-Cookie"
+          example: "client_token=<токен клієнта>; Secure; HttpOnly"
+          required: false
           schema:
             type: string
         - in: query
@@ -63,13 +76,7 @@ paths:
           required: true
           schema:
             type: string
-        - in: query
-          name: source
-          example: track-check-login
-          description: 'Джерело надходження запиту. За замовчуванням: th-login'
-          required: false
-          schema:
-            type: string
+
       responses:
         200:
           description: результат успішного виконання запиту
@@ -141,9 +148,15 @@ paths:
       description:
         Надіслати пін-код користувача при вході в систему
       parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
+        - in: header
+          name: status
+          description: HTTP response status code
+          schema:
+            type: integer
+        - in: header
+          name: source
+          example: TH
+          description: 'Джерело надходження запиту. Значення поточнити в адміністратора системи'
           required: true
           schema:
             type: string
@@ -154,13 +167,7 @@ paths:
           required: true
           schema:
             type: string
-        - in: query
-          name: source
-          example: track-check-login
-          description: 'Джерело надходження запиту. За замовчуванням: th-login'
-          required: false
-          schema:
-            type: string
+
       responses:
         200:
           description: результат успішного виконання запиту
