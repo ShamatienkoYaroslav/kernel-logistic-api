@@ -93,6 +93,11 @@ paths:
                     type: string
                     example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTY1NTA3ODQwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfaWQiOiAiNTA0MSJ9.clP40kCYGzmsyyFl5Q3Wlw3JEtMGpVrwXWNDm-gH9KQ
                     description: 'Токен доступу користувача ТХ'
+                  ассеss_token_expiry:
+                    type: string
+                    format: dd.mm.yyyy hh:mm:ss
+                    example: 02.07.2023 21:18:43
+                    description: 'Дата і час терміну дії токену доступу. Таблиця: Журнал логування(users_otp)'
                   user_is_new:
                     type: boolean
                     example: true
