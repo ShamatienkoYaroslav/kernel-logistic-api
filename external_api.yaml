@@ -298,7 +298,7 @@ paths:
                     description: 'Результат виконання запиту. Якщо false - валідація старого токену доступу не пройшла успішно'
                   ассеss_token:
                     type: string
-                    example: true
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUUkFOU0lUSFVCIiwic3ViIjoiVEgiLCJhdWQiOiIzODA2ODg1OTIwNjEiLCJpYXQiOjE2ODkwODk0
                     description: 'Новий токен доступу користувача системи Транзитхаб'
                   ассеss_token_expiry:
                     type: string
