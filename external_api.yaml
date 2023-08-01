@@ -49,13 +49,6 @@ paths:
           schema:
             type: integer
         - in: header
-          name: source
-          example: TH
-          description: 'Джерело надходження запиту. Значення поточнити в адміністратора системи'
-          required: true
-          schema:
-            type: string
-        - in: header
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
           description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується для публічних точок АПІ і як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
@@ -90,44 +83,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Результат виконання'
-                  access_token:
-                    type: string
-                    example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTY1NTA3ODQwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfaWQiOiAiNTA0MSJ9.clP40kCYGzmsyyFl5Q3Wlw3JEtMGpVrwXWNDm-gH9KQ
-                    description: 'Токен доступу користувача ТХ'
-                  ассеss_token_expiry:
-                    type: string
-                    format: dd.mm.yyyy hh:mm:ss
-                    example: 02.07.2023 21:18:43
-                    description: 'Дата і час терміну дії токену доступу. Таблиця: Журнал логування(users_otp)'
-                  user_is_new:
-                    type: boolean
-                    example: true
-                    description: 'Ознака створення нового користувача'
-                  language:
-                    type: string
-                    enum: [ua, ru]
-                    example: ua
-                    description: 'Мова інтерфейсу користувача'
-                  guid:
-                    type: string
-                    format: uuid
-                    maxLength: 50
-                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                    description: 'Ідентифікатор запису користувача ТХ, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
-                  phone:
-                    type: string
-                    example: 380675559911
-                    description: 'Номер телефону користувача (в байтах). Таблиця: ТХ користувачі(th_users)'
-                  msg:
-                    type: string
-                    example: Codes do not match
-                    description: 'Повідомлення користувачу. Константа'
+                oneOf:
+                  - $ref: '#/components/schemas/authCheckPinTrue'
+                  - $ref: '#/components/schemas/authCheckPinFalse'
         400:
           description: 'Поганий запит'
           content:
@@ -165,13 +123,6 @@ paths:
           description: HTTP response status code
           schema:
             type: integer
-        - in: header
-          name: source
-          example: TH
-          description: 'Джерело надходження запиту. Значення поточнити в адміністратора системи'
-          required: true
-          schema:
-            type: string
         - in: header
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
@@ -290,20 +241,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Результат виконання запиту. Якщо false - валідація старого токену доступу не пройшла успішно'
-                  ассеss_token:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUUkFOU0lUSFVCIiwic3ViIjoiVEgiLCJhdWQiOiIzODA2ODg1OTIwNjEiLCJpYXQiOjE2ODkwODk0
-                    description: 'Новий токен доступу користувача системи Транзитхаб'
-                  ассеss_token_expiry:
-                    type: string
-                    example: 11.07.2023 19:35:06
-                    description: 'Термін дії токену доступу. Дата і час коли закінчується дія токену доступу'               
+                oneOf:
+                  - $ref: '#/components/schemas/authRefreshTokenTrue'
+                  - $ref: '#/components/schemas/authRefreshTokenFalse'               
         400:
           description: 'Поганий запит'
           content:
@@ -3561,6 +3501,91 @@ components:
           type: string
           example: "You need to specify correct values for access token. Please contact with API's admin."
           description: Деталі
+    authCheckPinTrue:
+      type: object
+      description: Перевірка пінкода. Пінкод пройшов перевірку
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: 'Результат виконання'
+        access_token:
+          type: string
+          example: eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTY1NTA3ODQwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfaWQiOiAiNTA0MSJ9.clP40kCYGzmsyyFl5Q3Wlw3JEtMGpVrwXWNDm-gH9KQ
+          description: 'Токен доступу користувача ТХ'
+        ассеss_token_expiry:
+          type: string
+          format: dd.mm.yyyy hh:mm:ss
+          example: 02.07.2023 21:18:43
+          description: 'Дата і час терміну дії токену доступу. Таблиця: Журнал логування(users_otp)'
+        user_is_new:
+          type: boolean
+          example: true
+          description: 'Ознака створення нового користувача'
+        language:
+          type: string
+          enum: [ua, ru]
+          example: ua
+          description: 'Мова інтерфейсу користувача'
+        guid:
+          type: string
+          format: uuid
+          maxLength: 50
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+          description: 'Ідентифікатор запису користувача ТХ, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
+        phone:
+          type: string
+          example: 380675559911
+          description: 'Номер телефону користувача (в байтах). Таблиця: ТХ користувачі(th_users)'
+    authCheckPinFalse:
+      type: object
+      description: Перевірка пінкода. Пінкод пройшов перевірку
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Результат виконання'
+        error_code:
+          type: string
+          example: "081"
+          description: 'Код сповіщення користувачу. Таблиця Шаблони сповіщень(text_template)'
+        error_text_ua:
+          type: string
+          example: "Пін код невалідний! Вам буде надіслано новий пінкод!"
+          description: 'Сповіщення користувачу українською. Таблиця Шаблони сповіщень(text_template)'
+        error_text_ru:
+          type: string
+          example: "Не використовується з політичних міркувань"
+          description: 'Сповіщення користувачу російською. Таблиця Шаблони сповіщень(text_template)'
+        attempts_left:
+          type: integer
+          example: 2
+          description: 'Кількість доступних спроб вводу пінкода. Таблиця Журнал логування(users_otp)'
+    authRefreshTokenTrue:
+      type: object
+      description: Перевірка пінкода. Пінкод пройшов перевірку
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: 'Результат виконання запиту. Якщо false - валідація старого токену доступу не пройшла успішно'
+        ассеss_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUUkFOU0lUSFVCIiwic3ViIjoiVEgiLCJhdWQiOiIzODA2ODg1OTIwNjEiLCJpYXQiOjE2ODkwODk0
+          description: 'Новий токен доступу користувача системи Транзитхаб'
+        ассеss_token_expiry:
+          type: string
+          example: 11.07.2023 19:35:06
+          description: 'Термін дії токену доступу. Дата і час коли закінчується дія токену доступу'
+    authRefreshTokenFalse:
+      type: object
+      description: Перевірка пінкода. Пінкод пройшов перевірку
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Результат виконання запиту. Якщо false - валідація старого токену доступу не пройшла успішно'
+       
     autoRequestVehicleRegister:
       type: object
       properties:
