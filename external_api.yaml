@@ -57,7 +57,7 @@ paths:
             type: string
         - in: cookie
           name: refresh_token
-          description: "Токен клієнта API. Встановлюється автоматично через хедер Set-Cookie, якщо цей функціонал включено з Адмінки для поточного клієнта АПІ"
+          description: "Токен клієнта API.  Використовується WEB-клієнтами. Встановлюється автоматично через хедер Set-Cookie, якщо цей функціонал включено з Адмінки для поточного клієнта АПІ"
           example: "refresh_token=<токен клієнта>; Secure; HttpOnly"
           required: false
           schema:
@@ -127,7 +127,7 @@ paths:
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
           description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
-          required: false
+          required: true
           schema:
             type: string
         - in: query
@@ -211,13 +211,13 @@ paths:
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
           description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
-          required: false
+          required: true
           schema:
             type: string
         - in: cookie
           name: refresh_token
           example: e0d22acfba67c35937f2e26c7b6344e6
-          description: 'Рефреш токен. Таблиця "Клієнти АРІ(api_clients)". Встановлюється з заголовком Set-Cookie при увімкненому налаштуванні в Адмінці'
+          description: 'Рефреш токен. Таблиця "Клієнти АРІ(api_clients)". Використовується WEB-клієнтами. Встановлюється з заголовком Set-Cookie при увімкненому налаштуванні в Адмінці'
           required: false
           schema:
             type: string
