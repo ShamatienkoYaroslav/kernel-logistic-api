@@ -8920,18 +8920,24 @@ components:
     _UserisNotAuthorizedNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20003
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid access token
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values for access token. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20003
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid access token
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values for access token. Please contact with API's admin."
+              description: Деталі
     _ClientHasNoRights:
       type: object
       properties:
