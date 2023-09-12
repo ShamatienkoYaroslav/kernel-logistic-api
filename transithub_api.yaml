@@ -3368,6 +3368,78 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_BadRequestNew'
       x-codegen-request-body-name: payload
+  /drivers.get_by_phone:
+    get:
+      tags: ['T004 - Водії']
+      summary: Отримання водіїв (записів водія) за номером телефону (для створення рейсу диспетчером)
+      operationId: driverGetByPhoneGet
+      description: |
+        Передавши номер телефону, ви отримаєте усі записи водія.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+            example: 'eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTUzMDU3NjAwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMzYxIn0.a_TvXjWMTzAJOuvH05qZJFMb4oBP7ADDzQUYq7Nhj2U'
+        - name: driver_phone
+          in: query
+          description: Номер телефону водія.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Обмеження кількості результатів
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується виведення результатів від початку списку
+          required: false
+          schema:
+            type: integer
+            example: 5
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/driverGetByPhone'
+        401:
+          description: 'Користувач не авторизований (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт немає прав доступу (фактично повертається з HTTP-кодом статусу 200)'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /driver.create_by_user:
     put:
       tags:
@@ -13128,3 +13200,34 @@ components:
             type: array
             description: 'Дані видів черг'
             $ref: '#/components/schemas/QueueRegJournalPQqueue'
+    driverGetByPhone:
+      type: object
+      properties:
+        full_name:
+          type: string
+          example: 'Зарульний Василь Васильович'
+          description: "ПІБ водія"
+        first_name:
+          type: string
+          description: "Ім'я водія"
+          example: Василь
+        middle_name:
+          type: string
+          description: "По-батькові водія"
+          example: Васильович
+        last_name:
+          type: string
+          example: Зарульний
+          description: "Прізвище водія"
+        cert_serial_number:
+          type: string
+          example: СС3456777
+          description: "Серія та номер посвідчення водія"
+        guid:
+          type: string
+          example: a0a717f1-a1c4-72c1-a3e4-72877f862a76
+          description: "Унікальний ідентифікатор запису водія"
+        number_id:
+          type: string
+          example: '2234567890'
+          description: "Ідентифікаційний номер водія"
