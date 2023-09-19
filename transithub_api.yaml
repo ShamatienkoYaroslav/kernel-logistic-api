@@ -2298,6 +2298,12 @@ paths:
           schema:
             type: number
             enum: [1]
+        - in: query
+          name: is_agro_active
+          description: 'Відбір АГРОнарядів по активності. Якщо передано 1 - відповідь повертає тільки активні АГРОнаряди + ВСІ звичайні наряди (НЕ агронаряди)'
+          schema:
+            type: number
+            enum: [1]
       responses:
         200:
           description: Дані наряду
@@ -2319,18 +2325,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
         401:
-          description: 'Клієнт не авторизований'
+          description: 'Клієнт не авторизований (фактично повертається HTTP status code 200)'
           content:
             application/json:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         403:
-          description: 'Клієнт не має прав доступу'
+          description: 'Клієнт не має прав доступу (фактично повертається HTTP status code 200)'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         404:
           description: 'Дані не знайдено'
           content:
@@ -9024,18 +9030,24 @@ components:
     _ClientHasNoRightsNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20000
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid client_token
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values for client token. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20000
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid client_token
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values for client token. Please contact with API's admin."
+              description: Деталі
     _NoDataFound:
       type: object
       properties:
@@ -9850,6 +9862,18 @@ components:
           type: integer
           example: 3000
           description: 'Повна вага транспортного засобу без завантаження'
+        is_coupler:
+          type: integer
+          example: 1
+          description: 'Признак, чи є ТЗ автозчіпкою: 1 - так, 0 - ні'
+        is_dump_truck:
+          type: integer
+          example: 1
+          description: 'Признак, чи є ТЗ самоскидом: 1 - так, 0 - ні'
+        driver_number_id:
+          type: string
+          example: '2531685246'
+          description: 'Ідентифікаційний номер водія'
     Departure_permission_direction:
       type: object
       properties:
