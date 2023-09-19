@@ -2318,12 +2318,6 @@ paths:
                     description: 'Статус відповіді'
                   items:
                     $ref: '#/components/schemas/DriverVehicleRegister'
-        400:
-          description: 'Поганий запит'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_BadRequestNew'
         401:
           description: 'Клієнт не авторизований (фактично повертається HTTP status code 200)'
           content:
@@ -2338,11 +2332,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
         404:
-          description: 'Дані не знайдено'
+          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_NoDataFound'
+                $ref: '#/components/schemas/_NoDataFoundNew'
         500:
           description: server error
           content: {}
@@ -9062,18 +9056,24 @@ components:
     _NoDataFoundNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20002
-          description: Код помилки
-        message:
-          type: string
-          example: Object not found by guid
-          description: Повідомлення
-        detail:
-          type: string
-          example: "Can't find object by given guid. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20002
+              description: Код помилки
+            message:
+              type: string
+              example: Object not found by guid
+              description: Повідомлення
+            detail:
+              type: string
+              example: "Can't find object by given guid. Please contact with API's admin."
+              description: Деталі
     _BadRequest:
       type: object
       properties:
