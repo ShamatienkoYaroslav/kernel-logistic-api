@@ -8968,6 +8968,94 @@ paths:
         '500':
           description: server error
           content: {}
+  /barcode:
+    get:
+      tags: [Інтерфейс водія]
+      summary: Отримання штрих-коду за гуідом актуального рейсу водія
+      operationId: barcodeGet
+      description: |
+        Точка отримання штрих-коду за гуідом актуального рейсу водія
+      parameters:
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 10a92200-2e1e-9a6c-d14b-7ece4253a643
+      responses:
+        200:
+          description: Відповідь, що містить згенерований штрихкод (числову інтерпретацію) (фактично повертається HTTP status code 200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  race_guid:
+                      type: string
+                      example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
+                      description: 'Унікальний ідентифікатор рейсу'
+                  race_number:
+                      type: string
+                      example: '230921-0004'
+                      description: 'Номер рейсу'
+                  barcode:
+                      type: string
+                      example: '149751723313202795269380779961794930243'
+                      description: 'Числова інтерпретація штрикоду'
+        201:
+          description: Відповідь, якщо штрихкод недоступний (фактично повертається HTTP status code 200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: false
+                      description: 'Статус відповіді'
+                  race_guid:
+                      type: string
+                      example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
+                      description: 'Унікальний ідентифікатор рейсу'
+                  race_number:
+                      type: string
+                      example: '230921-0004'
+                      description: 'Номер рейсу'
+                  message_ua:
+                      type: string
+                      example: 'Штрих-код доступний тільки зареєстрованим авто в черзі! Зареєструйтесь в черзі!'
+                      description: 'Повідомлення про причину неотримання штрихкоду'
+                  message_ru:
+                      type: string
+                      example: 'Штрих-код доступний тільки зареєстрованим авто в черзі! Зареєструйтесь в черзі!'
+                      description: 'Повідомлення про причину неотримання штрихкоду'
+        404:
+          description: 'Відповідь, якщо дані не знайдено (фактично повертається HTTP status code 200)'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                      type: boolean
+                      example: false
+                      description: 'Статус відповіді'
+                  msg:
+                      type: string
+                      example: 'ORA-01403: no data found\nORA-06512: at KERNEL_LOGISTIC.BARCODE_PKG, line 115\nORA-06512: at KERNEL_LOGISTIC.BARCODE_API, line 161'
+                      description: 'Повідомлення з описом помилки'
+        500:
+          description: 'Серверна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   
 components:
   schemas:
