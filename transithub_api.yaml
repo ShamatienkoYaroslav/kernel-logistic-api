@@ -9052,10 +9052,7 @@ paths:
                       description: 'Повідомлення з описом помилки'
         500:
           description: 'Серверна помилка'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ComplexError'
+          content: {}
   
 components:
   schemas:
