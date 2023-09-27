@@ -4979,7 +4979,268 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
-  
+    get:
+      tags: ['T013 - Документи']
+      summary: Отримання документів
+      operationId: DocumentsGet
+      description: |
+        Точка отримання документів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор документа
+          schema:
+            type: string
+            example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
+        - in: query
+          name: owner_type
+          description: Тип власника документу
+          schema:
+            type: string
+            example: waybill
+            enum: [waybill, request_vehicles_register, accreditation_requests, races, th_vehicles]
+        - in: query
+          name: get_files
+          description: 'Включити в результат перелік файлів'
+          schema:
+            type: number
+            enum: [1]
+        - in: query
+          name: is_archive
+          description: 'Включити в результат архівні документи'
+          schema:
+            type: number
+            enum: [1]
+      responses:
+        200:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        document_id:
+                          type: integer
+                          description: Статус обробки запиту
+                          example: 485962
+                        guid:
+                          type: string
+                          description: 'Унікальний Ідентифікатор документа. Таблиця: Документи(documents)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        exchange_status:
+                          type: string
+                          description: 'Статус обробки файлу(чорновик, до перевірки, на перевірці, відхилено, погоджено). Таблиця: Документи(documents)'
+                          enum: [draft, to_exchange, in_progress, rejected, confirmed]
+                        number:
+                          type: string
+                          description: 'Номер документу. Таблиця: Документи(documents)'
+                          example: ЭЛ06-201211-00201
+                        date_from:
+                          type: string
+                          description: 'Дата дії документу з. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        date_to:
+                          type: string
+                          description: 'Дата дії документу по. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        document_status:
+                          type: string
+                          description: 'Статус документу(дійсний, недійсний). Таблиця: Документи(documents)'
+                          enum: [valid, expired]
+                        created_at:
+                          type: string
+                          description: 'Дата створення документу. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        updated_at:
+                          type: string
+                          description: 'Дата останньої редакції документу. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        user_guid:
+                          type: string
+                          description: 'Унікальний ідентифікатор користувача ТХ. Таблиця: Документи(documents)'
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        user_name:
+                          type: string
+                          description: 'Ім''я користувача ТХ. Таблиця: Документи(documents)'
+                          example: 'Савченко Сергій'
+                        user_phone:
+                          type: string
+                          description: 'Номер телефону користувача ТХ. Таблиця: Документи(documents)'
+                          example: '380500101012'
+                        client_user_name:
+                          type: string
+                          description: 'Ім''я клієнта. Таблиця: Документи(documents)'
+                          example: 'Цуркан Сергій'
+                        client_user_phone:
+                          type: string
+                          description: 'Номер телефону клієнта. Таблиця: Документи(documents)'
+                          example: '380500101012'
+                        client_sent_date:
+                          type: string
+                          description: 'Дата відправки клієнту. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        client_check_date:
+                          type: string
+                          description: 'Дата перевірки клієнтом. Таблиця: Документи(documents)'
+                          example: 28.04.2021 18:41:52
+                        comments:
+                          type: string
+                          description: 'Текст користувача. Таблиця: Документи(documents)'
+                          example: Коментар
+                        is_archive:
+                          type: integer
+                          description: 'Ознака перебування документу в архіві. 1 - документ архівовано; 0 - документ не архівовано. Таблиця: Документи(documents)'
+                          example: 0
+                        belonging_type:
+                          type: string
+                          description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
+                          example: ownership
+                          enum:
+                            [
+                              ownership,
+                              rent
+                            ]
+                        document_kind_type:
+                          type: string
+                          description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
+                          example: ttn
+                        document_kind_name_ua:
+                          type: string
+                          description: 'Назва виду пакету документів українською. Таблиця: Види пакетів документів(document_types)'
+                          example: ТТН
+                        document_kind_name_ru:
+                          type: string
+                          description: 'Назва виду пакету документів російською. Таблиця: Види пакетів документів(document_types)'
+                          example: ТТН
+                        files:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              guid:
+                                type: string
+                                description: 'Ідентифікатор файла. Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                format: uuid
+                                example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                              handle_status:
+                                type: string
+                                description: "Статус обробки стану акредитації (чорновик, в процесі, відхилено, підтверджено). Таблиця: Файли ТТН рейсу (race_ttn_files)"
+                                enum:
+                                  [
+                                    accepted,
+                                    rejected,
+                                    draft,
+                                    to_check
+                                  ]
+                                example: accepted
+                              file_name:
+                                type: string
+                                description: 'Назва файла. Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                example: TTN_
+                              mime_type:
+                                type: string
+                                description: "Тип файла. Таблиця: Файли ТТН рейсу (race_ttn_files)"
+                                example: image/jpeg
+                              source:
+                                type: string
+                                description: "Джерело. Таблиця: Файли ТТН рейсу (race_ttn_files)"
+                                example: track_check
+                              created_at:
+                                type: string
+                                description: 'Дата створення. Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                example: 28.04.2021 18:41:52
+                              link:
+                                type: string
+                                description: 'Посилання на файл. Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                example: 'https://devth.xxxxx.ua:8443/ords/xxxxxxxxxx/v1/txxxx/race/verification/photo/url/'
+                              rejected:
+                                type: string
+                                description: 'Відхилено Ні(0)/Так(1). Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                enum: [0, 1]
+                                example: 0
+                              dispatcher_edited_at:
+                                type: string
+                                description: "Дата редагування диспетчером. Таблиця: Файли ТТН рейсу (race_ttn_files)"
+                                example: 28.04.2021 18:41:52
+                              reject_reason_ua:
+                                type: string
+                                description: 'Причина відхилення ТТН. Таблиця: Файли ТТН рейсу (pq_document_reasons)'
+                                example: 'Не вказано ПЕРЕВІЗНИКА або його код'
+                              reject_reason_ru:
+                                type: string
+                                description: 'Причина відхилення ТТН. Таблиця: Файли ТТН рейсу (pq_document_reasons)'
+                                example: 'Не вказано ПЕРЕВІЗНИКА або його код'
+                              reject_note:
+                                type: string
+                                description: 'Коментар до причини відхилення. Таблиця: Файли ТТН рейсу (race_ttn_files)'
+                                example: 'Не повністю вказано дані'
+                        files_count:
+                          type: integer
+                          description: 'Кількість записів'
+                          example: 2
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'            
+        401:
+          description: 'Клієнт не авторизований (фактично повертається HTTP status code 200)'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу (фактично повертається HTTP status code 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        400:
+          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        500:
+          description: server error
+          content: {}
   /pq_departure_permission_directions:
     get:
       tags:
