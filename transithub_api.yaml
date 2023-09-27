@@ -1455,23 +1455,26 @@ paths:
             type: string
         - in: query
           name: guid
-          type: string
           format: uuid
-          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
           description: 'Ідентифікатор водія ТХ (в байтах). ТХ водії (th_drivers)'
           required: true
+          schema:
+            type: string
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
         - in: query
           name: company_guid
-          type: string
           format: uuid
-          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
           description: 'Ідентифікатор запису компанії ТХ (в байтах). Таблиця: ТХ компанії(th_companys)'
+          schema:
+            type: string
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
         - in: query
           name: user_guid
-          type: string
           format: uuid
-          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
           description: 'Ідентифікатор запису користувача ТХ, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
+          schema:
+            type: string
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
       requestBody:
         description: тіло запиту
         content:
@@ -1511,7 +1514,7 @@ paths:
                   type: string
                   maxLength: 200
                   format: email
-                  example: mykola
+                  example: xxxxxx@gmail.com
                   description: 'xxxxxx@gmail.com (в байтах). Таблиця: ТХ водії(th_drivers)'
                 cert_serial_number:
                   type: string
