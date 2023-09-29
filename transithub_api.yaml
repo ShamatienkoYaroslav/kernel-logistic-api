@@ -9584,6 +9584,93 @@ paths:
         500:
           description: 'Серверна помилка'
           content: {}
+  /events:
+    get:
+      tags:
+        - 'Т038 - Рейс'
+      summary: Інформація про доступні події рейсу
+      operationId: eventsGet
+      description: |
+        Інформація про події рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+        - in: query
+          name: kind
+          description: Вид подій
+          required: false
+          schema:
+            type: string
+            enum: [STATUS, OTHER]
+            example: STATUS
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Інформація про доступні події рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/raceEvents1'
+                        - $ref: '#/components/schemas/raceEvents2'
+                        - $ref: '#/components/schemas/raceEvents3'
+                        - $ref: '#/components/schemas/raceEvents4'
+                        - $ref: '#/components/schemas/raceEvents5'
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  count:
+                      type: integer
+                      example: 5
+                      description: 'Кількість записів'
+        '401':
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
   
 components:
   schemas:
@@ -13871,3 +13958,397 @@ components:
           type: string
           example: '2234567890'
           description: "Ідентифікаційний номер водія"
+    raceEvents1:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 1
+        name_ua:
+          type: string
+          example: 'Прибув до пункту розвантаження'
+          description: "Назва події"
+        name_ru:
+          type: string
+          example: 'Прибув до пункту розвантаження'
+          description: "Назва події"
+        guid:
+          type: string
+          example: AT_UNLOADPOINT
+          description: "Ідентифікатор події"
+        type:
+          type: string
+          description: "Тип події"
+          example: IN_PROGRESS
+        kind:
+          type: string
+          example: STATUS
+          description: "Вид події"
+        status:
+          type: string
+          example: 'В черзі в пункті розвантаження'
+          description: "Статус (текст)"
+        status_ru:
+          type: string
+          example: 'В черзі в пункті розвантаження'
+          description: "Статус (текст)"
+        order_:
+          type: integer
+          example: 40
+          description: "Порядок"
+        need_geo:
+          type: integer
+          example: '1'
+          description: "Потребує визначення геокоординат: 0/1(ні/так)"
+        msg:
+          type: string
+          example: 'Повідомте, коли завершиться розвантаження.'
+          description: "Повідомлення водію"
+        msg_ru:
+          type: string
+          example: 'Сообщите, когда завершится разгрузка.'
+          description: "Повідомлення водію"
+        direction:
+          type: string
+          example: unloading
+          description: "Ідентифікатор події"
+        bd_on:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        new:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        waybill_registered:
+          type: string
+          example: '26.09.2023 00:22:42'
+          description: "Дата реєстрації ТТН"
+        error_text_ua:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        error_text_ru:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        registration_required:
+          type: integer
+          example: '1'
+          description: "Потребує реєстрації: 0/1(ні/так)"
+        is_blocked:
+          type: boolean
+          example: true
+          description: "Показник, чи заблокована подія"
+    raceEvents2:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 3
+        name_ua:
+          type: string
+          example: 'Виїхав розвантажений'
+          description: "Назва події"
+        name_ru:
+          type: string
+          example: 'Виїхав розвантажений'
+          description: "Назва події"
+        guid:
+          type: string
+          example: TRACK_FINISH
+          description: "Ідентифікатор події"
+        type:
+          type: string
+          description: "Тип події (стан рейсу)"
+          example: DONE
+        kind:
+          type: string
+          example: STATUS
+          description: "Вид події"
+        status:
+          type: string
+          example: 'Рейс завершено'
+          description: "Статус (текст)"
+        status_ru:
+          type: string
+          example: 'Рейс завершено'
+          description: "Статус (текст)"
+        order_:
+          type: integer
+          example: 60
+          description: "Порядок"
+        need_geo:
+          type: integer
+          example: '1'
+          description: "Потребує визначення геокоординат: 0/1(ні/так)"
+        msg:
+          type: string
+          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!.'
+          description: "Повідомлення водію"
+        msg_ru:
+          type: string
+          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
+          description: "Повідомлення водію"
+        direction:
+          type: string
+          example: unloading
+          description: "Напрямок"
+        bd_on:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        new:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        waybill_registered:
+          type: string
+          example: '26.09.2023 00:22:42'
+          description: "Дата реєстрації ТТН"
+        error_text_ua:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        error_text_ru:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        registration_required:
+          type: integer
+          example: '0'
+          description: "Потребує реєстрації: 0/1(ні/так)"
+        is_blocked:
+          type: boolean
+          example: true
+          description: "Показник, чи заблокована подія"
+    raceEvents3:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 2
+        name_ua:
+          type: string
+          example: 'ПОВЕРНЕННЯ. Виїхав з вантажем'
+          description: "Назва події"
+        name_ru:
+          type: string
+          example: 'ПОВЕРНЕННЯ. Виїхав з вантажем'
+          description: "Назва події"
+        guid:
+          type: string
+          example: RETURN
+          description: "Ідентифікатор події"
+        type:
+          type: string
+          description: "Тип події (стан рейсу)"
+          example: DONE
+        kind:
+          type: string
+          example: STATUS
+          description: "Вид події"
+        status:
+          type: string
+          example: 'Повернення'
+          description: "Статус (текст)"
+        status_ru:
+          type: string
+          example: 'Повернення'
+          description: "Статус (текст)"
+        order_:
+          type: integer
+          example: 61
+          description: "Порядок"
+        need_geo:
+          type: integer
+          example: '1'
+          description: "Потребує визначення геокоординат: 0/1(ні/так)"
+        msg:
+          type: string
+          example: 'Рейс завершено. Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
+          description: "Повідомлення водію"
+        msg_ru:
+          type: string
+          example: 'Рейс завершено. Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
+          description: "Повідомлення водію"
+        direction:
+          type: string
+          example: unloading
+          description: "Напрямок"
+        bd_on:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        new:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        waybill_registered:
+          type: string
+          example: '26.09.2023 00:22:42'
+          description: "Дата реєстрації ТТН"
+        error_text_ua:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        error_text_ru:
+          type: string
+          example: 'Цей статус встановлюється автоматично.'
+          description: "Повідомлення при неправильному виборі статусу"
+        registration_required:
+          type: integer
+          example: '0'
+          description: "Потребує реєстрації: 0/1(ні/так)"
+        is_blocked:
+          type: boolean
+          example: true
+          description: "Показник, чи заблокована подія"
+    raceEvents4:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 5
+        name_ua:
+          type: string
+          example: 'Рейс відмінено'
+          description: "Назва події"
+        name_ru:
+          type: string
+          example: 'Рейс відмінено'
+          description: "Назва події"
+        guid:
+          type: string
+          example: CANCELED
+          description: "Ідентифікатор події"
+        type:
+          type: string
+          description: "Тип події (стан рейсу)"
+          example: CANCELED
+        kind:
+          type: string
+          example: OTHER
+          description: "Вид події"
+        status:
+          type: string
+          example: 'Рейс відмінено'
+          description: "Статус (текст)"
+        status_ru:
+          type: string
+          example: 'Рейс відмінено'
+          description: "Статус (текст)"
+        order_:
+          type: integer
+          example: 98
+          description: "Порядок"
+        need_geo:
+          type: integer
+          example: 0
+          description: "Потребує визначення геокоординат: 0/1(ні/так)"
+        msg:
+          type: string
+          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
+          description: "Повідомлення водію"
+        msg_ru:
+          type: string
+          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
+          description: "Повідомлення водію"
+        direction:
+          type: string
+          example: '-'
+          description: "Напрямок"
+        bd_on:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        new:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        waybill_registered:
+          type: string
+          example: '26.09.2023 00:22:42'
+          description: "Дата реєстрації ТТН"
+        registration_required:
+          type: integer
+          example: '0'
+          description: "Потребує реєстрації: 0/1(ні/так)"
+        is_blocked:
+          type: boolean
+          example: false
+          description: "Показник, чи заблокована подія"
+    raceEvents5:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 4
+        name_ua:
+          type: string
+          example: 'Вирушив до пункту РОЗВАНТАЖЕННЯ'
+          description: "Назва події"
+        name_ru:
+          type: string
+          example: 'Вирушив до пункту РОЗВАНТАЖЕННЯ'
+          description: "Назва події"
+        guid:
+          type: string
+          example: GOTO_UNLOAD
+          description: "Ідентифікатор події"
+        type:
+          type: string
+          description: "Тип події (стан рейсу)"
+          example: IN_PROGRESS
+        kind:
+          type: string
+          example: STATUS
+          description: "Вид події"
+        status:
+          type: string
+          example: 'В дорозі до пункту розвантаження'
+          description: "Статус (текст)"
+        status_ru:
+          type: string
+          example: 'В дорозі до пункту розвантаження'
+          description: "Статус (текст)"
+        order_:
+          type: integer
+          example: 34
+          description: "Порядок"
+        need_geo:
+          type: integer
+          example: 1
+          description: "Потребує визначення геокоординат: 0/1(ні/так)"
+        msg:
+          type: string
+          example: 'Щасливої дороги!'
+          description: "Повідомлення водію"
+        msg_ru:
+          type: string
+          example: 'Щасливої дороги!'
+          description: "Повідомлення водію"
+        direction:
+          type: string
+          example: '-'
+          description: "Напрямок"
+        bd_on:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        new:
+          type: integer
+          description: "0/1(ні/так)"
+          example: 1
+        waybill_registered:
+          type: string
+          example: '26.09.2023 00:22:42'
+          description: "Дата реєстрації ТТН"
+        registration_required:
+          type: integer
+          example: 1
+          description: "Потребує реєстрації: 0/1(ні/так)"
+        is_blocked:
+          type: boolean
+          example: false
+          description: "Показник, чи заблокована подія"
