@@ -9657,7 +9657,7 @@ paths:
                       example: 5
                       description: 'Кількість записів'
         '401':
-          description: 'Дані не знайдено'
+          description: 'Користувач не авторизований'
           content:
             application/json:
               schema:
