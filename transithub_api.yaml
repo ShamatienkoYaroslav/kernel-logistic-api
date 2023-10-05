@@ -4119,7 +4119,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
-          required: false
+          required: true
           schema:
             type: string
       responses:
@@ -4146,7 +4146,7 @@ paths:
                     type: string
                     format: dd.mm.yyyy
                     description: "Дата видачі паспорта"
-                    example: '01.01.2018'
+                    example: '1997-12-12T00:00:00Z'
                   pass_issued:
                     type: string
                     description: "Ким виданий паспорт"
@@ -4196,23 +4196,38 @@ paths:
                     type: string
                     format: dd.mm.yyyy
                     description: "Дата видачі ID-карти"
-                    example: '01.01.2018'
+                    example: '1997-12-12T00:00:00Z'
                   id_card_issued:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
-        400:
-          description: 'Поганий запит'
+                  number_id:
+                    type: string
+                    description: "Ідентифікаційний номер водія"
+                    example: '2224568520'
+                  date_of_birth:
+                    type: string
+                    description: "Дата народження водія"
+                    example: '1997-12-12T00:00:00Z'
+        401:
+          description: 'Користувач не авторизований (фактично повертається HTTP status code 200)'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_BadRequest'
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         403:
-          description: 'Клієнт не має прав доступу'
+          description: 'Клієнт немає прав доступу (фактично повертається HTTP status code 200)'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Поганий запит (дані не знайдено)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
         500:
           description: server error
           content: {}
