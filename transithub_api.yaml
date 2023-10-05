@@ -4101,7 +4101,7 @@ paths:
       summary: Точка для отримання даних водія користувачем
       operationId: driverGetByUserGet
       description: |
-        Точка для отримання даних водія користувачем за його гуідом.
+        Точка для отримання даних водія користувачем за його гуідом. Оновлено 05.10.2023
       parameters:
         - in: query
           name: client_token
