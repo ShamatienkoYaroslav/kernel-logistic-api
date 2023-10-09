@@ -1760,7 +1760,7 @@ paths:
       tags:
         - 'Т038 - Рейс'
       summary: Пошук рейсів водія (історія)
-      operationId: driverRacesStatusGet
+      operationId: driverRacesGet
       description: |
         Пошук рейсів водія у статусах "Відмінено" та "Завершено" по номеру телефону
         та унікальному ідентифікатору (пошук одного рейсу).
@@ -9777,8 +9777,7 @@ paths:
           content: {}
   /races:
     delete:
-      tags:
-        - 'Т038 - Рейс'
+      tags: ['Т038 - Рейс']
       summary: Видалення рейсу
       operationId: racesDelete
       description: |
