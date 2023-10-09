@@ -9779,8 +9779,8 @@ paths:
     delete:
       tags:
         - 'Т038 - Рейс'
-      summary: Точка для видалення рейсу
-      operationId: registerEvent
+      summary: Видалення рейсу
+      operationId: racesDelete
       description: |
         Точка для видалення рейсу за його гуідом
       parameters:
