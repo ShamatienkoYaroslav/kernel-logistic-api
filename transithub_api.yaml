@@ -9847,6 +9847,78 @@ paths:
         500:
           description: server error
           content: {}
+  /race/messages:
+    get:
+      tags:
+        - 'Т038 - Рейс'
+      summary: Повідомлення, надіслані протягом рейсу
+      operationId: raceMessagesGet
+      description: |
+        Повідомлення, що надсилались водію протягом рейсу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      responses:
+        '200':
+          description: Повідомлення, що надсилались
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/raceMessage1'
+                        - $ref: '#/components/schemas/raceMessage2'
+                  status:
+                      type: boolean
+                      example: true
+                      description: 'Статус відповіді'
+                  count:
+                      type: integer
+                      example: 5
+                      description: 'Кількість записів'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: server error
+          content: {}
   
 components:
   schemas:
@@ -14528,3 +14600,61 @@ components:
           type: boolean
           example: false
           description: "Показник, чи заблокована подія"
+    raceMessage1:
+      type: object
+      properties:
+        created_at:
+          type: string
+          example: '01.03.2023 16:28:13'
+          description: "Дата та час створення"
+        task_name:
+          type: string
+          example: '015_Завершення ТОРа'
+          description: "Назва завдання/події"
+        channel_name:
+          type: string
+          example: 'ТрекЧек Бот'
+          description: "Назва (тип) каналу, в який надсилається повідомлення"
+        message_text:
+          type: string
+          description: "Текст повідомлення"
+          example: "\u0428\u0430\u043D\u043E\u0432\u043D\u0438\u0439 \u003Cb\u003E\u041C\u0415\u041B\u042C\u041D\u0418\u041A \u0412.\u041C.\u003C\\/b\u003E\r\n\u0422\u0435\u0440\u043C\u0456\u043D \u043E\u0431\u043C\u0435\u0436\u0435\u043D\u043D\u044F \u0432 \u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 (\u0422\u041E\u0420) \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E.\r\n\u0417\u0430\u043F\u0440\u043E\u0448\u0443\u0454\u043C\u043E \u0434\u043E \u043E\u043D\u043B\u0430\u0439\u043D-\u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 \u0432 \u0447\u0435\u0440\u0437\u0456.\r\n\u0422\u0438\u0441\u043D\u0456\u0442\u044C \u0432 \u0431\u043E\u0442\u0456 \u041C\u0456\u0439 \u0440\u0435\u0439\u0441 -\u003E \u041C\u043E\u044F \u0447\u0435\u0440\u0433\u0430 \u0442\u0430 \u0440\u0435\u0454\u0441\u0442\u0440\u0443\u0439\u0442\u0435\u0441\u044C \u0432 \u0447\u0435\u0440\u0433\u0443.\r\n\r\n\u0429\u0430\u0441\u043B\u0438\u0432\u043E\u0457 \u0434\u043E\u0440\u043E\u0433\u0438!"
+        message_status:
+          type: string
+          example: 'success'
+          description: "Статус (текст)"
+    raceMessage2:
+      type: object
+      properties:
+        created_at:
+          type: string
+          example: '01.03.2023 16:28:13'
+          description: "Дата та час створення"
+        task_name:
+          type: string
+          example: '015_Завершення ТОРа'
+          description: "Назва завдання/події"
+        channel_name:
+          type: string
+          example: 'Голосове повідомлення'
+          description: "Назва (тип) каналу, в який надсилається повідомлення"
+        message_text:
+          type: string
+          description: "Текст повідомлення"
+          example: "\u0428\u0430\u043D\u043E\u0432\u043D\u0438\u0439 \u003Cb\u003E\u041C\u0415\u041B\u042C\u041D\u0418\u041A \u0412.\u041C.\u003C\\/b\u003E\r\n\u0422\u0435\u0440\u043C\u0456\u043D \u043E\u0431\u043C\u0435\u0436\u0435\u043D\u043D\u044F \u0432 \u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 (\u0422\u041E\u0420) \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E.\r\n\u0417\u0430\u043F\u0440\u043E\u0448\u0443\u0454\u043C\u043E \u0434\u043E \u043E\u043D\u043B\u0430\u0439\u043D-\u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 \u0432 \u0447\u0435\u0440\u0437\u0456.\r\n\u0422\u0438\u0441\u043D\u0456\u0442\u044C \u0432 \u0431\u043E\u0442\u0456 \u041C\u0456\u0439 \u0440\u0435\u0439\u0441 -\u003E \u041C\u043E\u044F \u0447\u0435\u0440\u0433\u0430 \u0442\u0430 \u0440\u0435\u0454\u0441\u0442\u0440\u0443\u0439\u0442\u0435\u0441\u044C \u0432 \u0447\u0435\u0440\u0433\u0443.\r\n\r\n\u0429\u0430\u0441\u043B\u0438\u0432\u043E\u0457 \u0434\u043E\u0440\u043E\u0433\u0438!"
+        message_status:
+          type: string
+          example: 'success'
+          description: "Статус (текст)"
+        call_status:
+          type: string
+          example: 'done'
+          description: "Код статусу голосового повідомлення"
+        call_status_ua:
+          type: string
+          example: 'Виконано'
+          description: "Статус голосового повідомлення"
+        call_status_ru:
+          type: string
+          example: 'Виконано'
+          description: "Статус голосового повідомлення"
