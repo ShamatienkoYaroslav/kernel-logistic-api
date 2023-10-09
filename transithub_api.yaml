@@ -2614,7 +2614,7 @@ paths:
     get:
       tags:
         - 'Т038 - Рейс'
-      summary: Пошук актуальний рейсу водія
+      summary: Пошук актуального рейсу водія
       operationId: driverRacesStatusGet
       description: |
         Пошук актуального рейсу водія та додаткової інформації по номеру телефону водія або номеру транспортного засобу
@@ -9772,6 +9772,79 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFound'
+        500:
+          description: server error
+          content: {}
+  /races:
+    delete:
+      tags:
+        - 'Т038 - Рейс'
+      summary: Точка для видалення рейсу
+      operationId: registerEvent
+      description: |
+        Точка для видалення рейсу за його гуідом
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: 'Унікальний ідентифікатор рейсу'
+          required: false
+          schema:
+            type: string
+            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
+      responses:
+        200:
+          description: Успышне виконання запиту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
+                    description: 'Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)'
+                  error_text_ua:
+                    type: string
+                    example: null
+                    description: 'Текст помилки'
+                  error_text_ru:
+                    type: string
+                    example: null
+                    description: 'Текст помилки'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        404:
+          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
         500:
           description: server error
           content: {}
