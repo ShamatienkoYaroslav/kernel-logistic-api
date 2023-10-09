@@ -9744,7 +9744,7 @@ paths:
             example: '32.637055'
       responses:
         200:
-          description: Успышне виконання запиту
+          description: Успішне виконання запиту
           content:
             application/json:
               schema:
@@ -9805,7 +9805,7 @@ paths:
             example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
       responses:
         200:
-          description: Успышне виконання запиту
+          description: Успішне виконання запиту
           content:
             application/json:
               schema:
