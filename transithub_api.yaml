@@ -9690,10 +9690,10 @@ paths:
     post:
       tags:
         - 'Т038 - Рейс'
-      summary: Вузол для реєстрації події рейсу водієм
+      summary: Реєстрація подій рейсу
       operationId: registerEvent
       description: |
-        Вузол для реєстрації події рейсу водієм
+        Реєстрація подій рейсу водієм
       parameters:
         - in: query
           name: client_token
@@ -9896,8 +9896,8 @@ paths:
                       description: 'Статус відповіді'
                   count:
                       type: integer
-                      example: 5
-                      description: 'Кількість записів'
+                      example: 2
+                      description: 'Кількість знайдених записів'
         401:
           description: 'Користувач не авторизований'
           content:
