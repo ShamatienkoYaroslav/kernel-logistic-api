@@ -1181,6 +1181,11 @@ paths:
           schema:
             type: string
         - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
           name: limit
           description: Пагінація списку ліміт
           schema:
@@ -1441,276 +1446,6 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
-    put:
-      tags: ['T004 - Водії']
-      summary: Оновлення існуючого водія
-      description:
-        Точка оновлення існуючого водія
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: guid
-          format: uuid
-          description: 'Ідентифікатор водія ТХ (в байтах). ТХ водії (th_drivers)'
-          required: true
-          schema:
-            type: string
-            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-        - in: query
-          name: company_guid
-          format: uuid
-          description: 'Ідентифікатор запису компанії ТХ (в байтах). Таблиця: ТХ компанії(th_companys)'
-          schema:
-            type: string
-            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-        - in: query
-          name: user_guid
-          format: uuid
-          description: 'Ідентифікатор запису користувача ТХ, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
-          schema:
-            type: string
-            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-      requestBody:
-        description: тіло запиту
-        content:
-          application/json:
-            schema:
-              type: object
-              description:
-              properties:
-                first_name:
-                  type: string
-                  maxLength: 100
-                  example: Андрій
-                  description: "Ім'я водія (в байтах). Таблиця: ТХ водії(th_drivers)"
-                middle_name:
-                  type: string
-                  maxLength: 100
-                  example: Володимирович
-                  description: 'По-батькові водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                last_name:
-                  type: string
-                  maxLength: 100
-                  example: Астор
-                  description: 'Прізвище водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                phone:
-                  type: string
-                  example: 380967001515
-                  description: 'Номер телефону водія. Таблиця: ТХ водії(th_drivers)'
-                phone_1:
-                  type: string
-                  example: 380967001515
-                  description: 'Додатковий номер телефону водія. Таблиця: ТХ водії(th_drivers)'
-                phone_2:
-                  type: string
-                  example: 380967001515
-                  description: 'Додатковий номер телефону водія. Таблиця: ТХ водії(th_drivers)'
-                email:
-                  type: string
-                  maxLength: 200
-                  format: email
-                  example: xxxxxx@gmail.com
-                  description: 'xxxxxx@gmail.com (в байтах). Таблиця: ТХ водії(th_drivers)'
-                cert_serial_number:
-                  type: string
-                  maxLength: 50
-                  example: AAЕ415834
-                  description: 'Серія та номер посвідчення водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                person_docs_type:
-                  type: string
-                  enum:
-                    [
-                      passport,
-                      id_card
-                    ]
-                  example: passport
-                  description: 'Тип документу, що посвідчує особу водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                pass_serial:
-                  type: string
-                  maxLength: 20
-                  example: КР
-                  description: 'Серія паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                pass_number:
-                  type: string
-                  maxLength: 40
-                  example: '125652'
-                  description: 'Номер паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                pass_issued:
-                  type: string
-                  maxLength: 800
-                  example: 'Дунаєвецьким РВ УМВС'
-                  description: 'Де і ким видано паспорт водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                pass_date:
-                  type: string
-                  format: dd.mm.yyyy hh:mm:ss
-                  example: 28.04.2021 00:00:00
-                  description: 'Дата видачі паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                id_card_number:
-                  type: string
-                  maxLength: 20
-                  example: 000009990
-                  description: 'Номер ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                id_card_date:
-                  type: string
-                  format: dd.mm.yyyy hh:mm:ss
-                  example: 28.04.2021 00:00:00
-                  description: 'Дата видачі ідентифікаційної картки водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                id_card_issued:
-                  type: string
-                  format: dd.mm.yyyy hh:mm:ss
-                  example: 28.04.2021 00:00:00
-                  description: 'Де і ким видана ідентифікаційна картка водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                date_of_birth:
-                  type: string
-                  example: 28.04.2021 00:00:00
-                  description: "Дата народження водія. Таблиця: ТХ водії (th_drivers)"
-                number_id:
-                  type: string
-                  maxLength: 500
-                  example: 1111111111
-                  description: "Iдентифікаційний номер водія. Таблиця: ТХ водії (th_drivers)"
-      responses:
-        200:
-          description: результат успішного виконання запиту
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                  guid:
-                    type: string
-                    format: uuid
-                    maxLength: 50
-                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                    description: 'Ідентифікатор запису Водія ТХ (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  driver_status:
-                    type: string
-                    enum:
-                      [
-                        ARCHIVED,
-                        ACTIVE
-                      ]
-                    example: ACTIVE
-                    description: 'Статус водія: активний, в архіві. Таблиця: ТХ водії(th_drivers)'
-                  first_name:
-                    type: string
-                    maxLength: 100
-                    example: Андрій
-                    description: "Ім'я водія (в байтах). Таблиця: ТХ водії(th_drivers)"
-                  middle_name:
-                    type: string
-                    maxLength: 100
-                    example: Володимирович
-                    description: 'По-батькові водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  last_name:
-                    type: string
-                    maxLength: 100
-                    example: Астор
-                    description: 'Прізвище водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  name:
-                    type: string
-                    maxLength: 150
-                    example: Астор A. В.
-                    description: 'ПІБ водія скорочене (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  full_name:
-                    type: string
-                    maxLength: 150
-                    example: Астор Андрій Володимирович
-                    description: 'ПІБ водія повне (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  phone:
-                    type: string
-                    example: 380967001515
-                    description: 'Номер телефону водія. Таблиця: ТХ водії(th_drivers)'
-                  cert_serial_number:
-                    type: string
-                    maxLength: 50
-                    example: ААЕ415834
-                    description: 'Серія та номер посвідчення водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  company_guid:
-                    type: string
-                    format: uuid
-                    maxLength: 50
-                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                    description: 'Ідентифікатор запису компанії, що відповідає водію (в байтах). Таблиця: ТХ користувачі(th_users)'
-                  is_favorite:
-                    type: integer
-                    enum: [1,0]
-                    example: 0
-                    description: 'Інформація про те чи доданий водій в закладки'
-                  is_in_blacklist:
-                    type: integer
-                    enum: [1,0]
-                    example: 0
-                    description: 'Інформація про те, чи доданий водій у чорний список'
-                  is_trackcheckbot:
-                    type: integer
-                    enum: [1,0]
-                    example: 0
-                    description: 'Інформація про те, чи встановлений у водія ТрекЧекБот'
-                  person_docs_type:
-                    type: string
-                    enum:
-                      [
-                        passport,
-                        id_card
-                      ]
-                    example: passport
-                    description: 'Тип документа, що посвідчує особу водія. Таблиця: ТХ водії(th_drivers)'
-                  pass_serial:
-                    type: string
-                    maxLength: 20
-                    example: КР
-                    description: 'Серія паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  pass_number:
-                    type: string
-                    maxLength: 40
-                    example: '165289'
-                    description: 'Номер паспорта водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  pass_issued:
-                    type: string
-                    maxLength: 800
-                    example: 'Дунаєвецьким РВ УМВС'
-                    description: 'Де і ким видано паспорт водія (в байтах). Таблиця: ТХ водії(th_drivers)'
-                  pass_date_utc:
-                    type: string
-                    example: 1990-07-12T00:00:00Z
-                    description: "Дата видачі паспорта. Таблиця: ТХ водії (th_drivers)"
-                  id_card_date_utc:
-                    type: string
-                    example: 1990-07-12T00:00:00Z
-                    description: "Дата видачі id-карти. Таблиця: ТХ водії (th_drivers)"
-                  date_of_birth_utc:
-                    type: string
-                    example: 1990-07-12T00:00:00Z
-                    description: "Дата народження водія. Таблиця: ТХ водії (th_drivers)"
-                  number_id:
-                    type: string
-                    maxLength: 500
-                    example: 1111111111
-                    description: "Iдентифікаційний номер водія. Таблиця: ТХ водії (th_drivers)"
-        403:
-          description: 'Клієнт не має прав доступу (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        404:
-          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFoundNew'
-        500:
-          description: server error
-          content: {}
   /driver.change_status:
     put:
       tags: ['T008 - Статус водія', 'T004 - Водії']
@@ -1760,7 +1495,7 @@ paths:
       tags:
         - 'Т038 - Рейс'
       summary: Пошук рейсів водія (історія)
-      operationId: driverRacesGet
+      operationId: driverRacesStatusGet
       description: |
         Пошук рейсів водія у статусах "Відмінено" та "Завершено" по номеру телефону
         та унікальному ідентифікатору (пошук одного рейсу).
@@ -2568,12 +2303,6 @@ paths:
           schema:
             type: number
             enum: [1]
-        - in: query
-          name: is_agro_active
-          description: 'Відбір АГРОнарядів по активності. Якщо передано 1 - відповідь повертає тільки активні АГРОнаряди + ВСІ звичайні наряди (НЕ агронаряди)'
-          schema:
-            type: number
-            enum: [1]
       responses:
         200:
           description: Дані наряду
@@ -2588,25 +2317,31 @@ paths:
                     description: 'Статус відповіді'
                   items:
                     $ref: '#/components/schemas/DriverVehicleRegister'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
         401:
-          description: 'Клієнт не авторизований (фактично повертається HTTP status code 200)'
+          description: 'Клієнт не авторизований'
           content:
             application/json:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         403:
-          description: 'Клієнт не має прав доступу (фактично повертається HTTP status code 200)'
+          description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+                $ref: '#/components/schemas/_ClientHasNoRights'
         404:
-          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
+          description: 'Дані не знайдено'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_NoDataFoundNew'
+                $ref: '#/components/schemas/_NoDataFound'
         500:
           description: server error
           content: {}
@@ -2614,7 +2349,7 @@ paths:
     get:
       tags:
         - 'Т038 - Рейс'
-      summary: Пошук актуального рейсу водія
+      summary: Пошук актуальний рейсу водія
       operationId: driverRacesStatusGet
       description: |
         Пошук актуального рейсу водія та додаткової інформації по номеру телефону водія або номеру транспортного засобу
@@ -3638,78 +3373,6 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_BadRequestNew'
       x-codegen-request-body-name: payload
-  /drivers.get_by_phone:
-    get:
-      tags: ['T004 - Водії']
-      summary: Отримання водіїв (записів водія) за номером телефону (для створення рейсу диспетчером)
-      operationId: driverGetByPhoneGet
-      description: |
-        Передавши номер телефону, ви отримаєте усі записи водія.
-      parameters:
-        - name: client_token
-          in: query
-          description: Токен клієнта-споживача API Transithub
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          schema:
-            type: string
-            example: 'eyAiYWxnIjogIkhTMjU2IiwgInR5cCI6ICJKV1QiIH0.eyAiaWF0IjogMTUzMDU3NjAwMCwgImlzcyI6ICJUUkFOU0lUSFVCIiwgInVzZXJfZW1haWwiOiAic2hhbWF0aWVua28ueWFyb3NsYXZAZ21haWwuY29tIiwgInVzZXJfaWQiOiAiMzYxIn0.a_TvXjWMTzAJOuvH05qZJFMb4oBP7ADDzQUYq7Nhj2U'
-        - name: driver_phone
-          in: query
-          description: Номер телефону водія.
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: Обмеження кількості результатів
-          required: false
-          schema:
-            type: integer
-            example: 10
-        - in: query
-          name: offset
-          description: Величина, на яку зміщується виведення результатів від початку списку
-          required: false
-          schema:
-            type: integer
-            example: 5
-      responses:
-        200:
-          description: Успіх
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-                  count:
-                    type: number
-                    description: Кількість елементів массиву
-                    example: 1.0
-                  items:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/driverGetByPhone'
-        401:
-          description: 'Користувач не авторизований (фактично повертається з HTTP-кодом статусу 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
-          description: 'Клієнт немає прав доступу (фактично повертається з HTTP-кодом статусу 200)'
-          content:
-            application/json:
-              schema:
-                name: error
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /driver.create_by_user:
     put:
       tags:
@@ -4101,7 +3764,7 @@ paths:
       summary: Точка для отримання даних водія користувачем
       operationId: driverGetByUserGet
       description: |
-        Точка для отримання даних водія користувачем за його гуідом. Оновлено 05.10.2023
+        Точка для отримання даних водія користувачем за його гуідом.
       parameters:
         - in: query
           name: client_token
@@ -4119,7 +3782,7 @@ paths:
         - in: query
           name: access_token
           description: Токен доступу (сесії)
-          required: true
+          required: false
           schema:
             type: string
       responses:
@@ -4146,7 +3809,7 @@ paths:
                     type: string
                     format: dd.mm.yyyy
                     description: "Дата видачі паспорта"
-                    example: '1997-12-12T00:00:00Z'
+                    example: '01.01.2018'
                   pass_issued:
                     type: string
                     description: "Ким виданий паспорт"
@@ -4196,38 +3859,23 @@ paths:
                     type: string
                     format: dd.mm.yyyy
                     description: "Дата видачі ID-карти"
-                    example: '1997-12-12T00:00:00Z'
+                    example: '01.01.2018'
                   id_card_issued:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
-                  number_id:
-                    type: string
-                    description: "Ідентифікаційний номер водія"
-                    example: '2224568520'
-                  date_of_birth:
-                    type: string
-                    description: "Дата народження водія"
-                    example: '1997-12-12T00:00:00Z'
-        401:
-          description: 'Користувач не авторизований (фактично повертається HTTP status code 200)'
+        400:
+          description: 'Поганий запит'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+                $ref: '#/components/schemas/_BadRequest'
         403:
-          description: 'Клієнт немає прав доступу (фактично повертається HTTP status code 200)'
+          description: 'Клієнт не має прав доступу'
           content:
             application/json:
               schema:
-                name: error
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        404:
-          description: 'Поганий запит (дані не знайдено)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFound'
+                $ref: '#/components/schemas/_ClientHasNoRights'
         500:
           description: server error
           content: {}
@@ -5264,268 +4912,7 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
-    get:
-      tags: ['T013 - Документи']
-      summary: Отримання документів
-      operationId: DocumentsGet
-      description: |
-        Точка отримання документів
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: 'Обмеження кількості результатів, що виводяться'
-          required: false
-          schema:
-            type: integer
-            example: 2
-        - in: query
-          name: offset
-          description: 'Величина, на яку зміщується початок виведення результатів'
-          required: false
-          schema:
-            type: integer
-            example: 1
-        - in: query
-          name: guid
-          description: Унікальний ідентифікатор документа
-          schema:
-            type: string
-            example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
-        - in: query
-          name: owner_type
-          description: Тип власника документу
-          schema:
-            type: string
-            example: waybill
-            enum: [waybill, request_vehicles_register, accreditation_requests, races, th_vehicles]
-        - in: query
-          name: get_files
-          description: 'Включити в результат перелік файлів'
-          schema:
-            type: number
-            enum: [1]
-        - in: query
-          name: is_archive
-          description: 'Включити в результат архівні документи'
-          schema:
-            type: number
-            enum: [1]
-      responses:
-        200:
-          description: Запис створено
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        document_id:
-                          type: integer
-                          description: Статус обробки запиту
-                          example: 485962
-                        guid:
-                          type: string
-                          description: 'Унікальний Ідентифікатор документа. Таблиця: Документи(documents)'
-                          format: uuid
-                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                        exchange_status:
-                          type: string
-                          description: 'Статус обробки файлу(чорновик, до перевірки, на перевірці, відхилено, погоджено). Таблиця: Документи(documents)'
-                          enum: [draft, to_exchange, in_progress, rejected, confirmed]
-                        number:
-                          type: string
-                          description: 'Номер документу. Таблиця: Документи(documents)'
-                          example: ЭЛ06-201211-00201
-                        date_from:
-                          type: string
-                          description: 'Дата дії документу з. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        date_to:
-                          type: string
-                          description: 'Дата дії документу по. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        document_status:
-                          type: string
-                          description: 'Статус документу(дійсний, недійсний). Таблиця: Документи(documents)'
-                          enum: [valid, expired]
-                        created_at:
-                          type: string
-                          description: 'Дата створення документу. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        updated_at:
-                          type: string
-                          description: 'Дата останньої редакції документу. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        user_guid:
-                          type: string
-                          description: 'Унікальний ідентифікатор користувача ТХ. Таблиця: Документи(documents)'
-                          format: uuid
-                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                        user_name:
-                          type: string
-                          description: 'Ім''я користувача ТХ. Таблиця: Документи(documents)'
-                          example: 'Савченко Сергій'
-                        user_phone:
-                          type: string
-                          description: 'Номер телефону користувача ТХ. Таблиця: Документи(documents)'
-                          example: '380500101012'
-                        client_user_name:
-                          type: string
-                          description: 'Ім''я клієнта. Таблиця: Документи(documents)'
-                          example: 'Цуркан Сергій'
-                        client_user_phone:
-                          type: string
-                          description: 'Номер телефону клієнта. Таблиця: Документи(documents)'
-                          example: '380500101012'
-                        client_sent_date:
-                          type: string
-                          description: 'Дата відправки клієнту. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        client_check_date:
-                          type: string
-                          description: 'Дата перевірки клієнтом. Таблиця: Документи(documents)'
-                          example: 28.04.2021 18:41:52
-                        comments:
-                          type: string
-                          description: 'Текст користувача. Таблиця: Документи(documents)'
-                          example: Коментар
-                        is_archive:
-                          type: integer
-                          description: 'Ознака перебування документу в архіві. 1 - документ архівовано; 0 - документ не архівовано. Таблиця: Документи(documents)'
-                          example: 0
-                        belonging_type:
-                          type: string
-                          description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
-                          example: ownership
-                          enum:
-                            [
-                              ownership,
-                              rent
-                            ]
-                        document_kind_type:
-                          type: string
-                          description: 'Код виду пакету документів. Таблиця: Види пакетів документів(document_types)'
-                          example: ttn
-                        document_kind_name_ua:
-                          type: string
-                          description: 'Назва виду пакету документів українською. Таблиця: Види пакетів документів(document_types)'
-                          example: ТТН
-                        document_kind_name_ru:
-                          type: string
-                          description: 'Назва виду пакету документів російською. Таблиця: Види пакетів документів(document_types)'
-                          example: ТТН
-                        files:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              guid:
-                                type: string
-                                description: 'Ідентифікатор файла. Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                format: uuid
-                                example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
-                              handle_status:
-                                type: string
-                                description: "Статус обробки стану акредитації (чорновик, в процесі, відхилено, підтверджено). Таблиця: Файли ТТН рейсу (race_ttn_files)"
-                                enum:
-                                  [
-                                    accepted,
-                                    rejected,
-                                    draft,
-                                    to_check
-                                  ]
-                                example: accepted
-                              file_name:
-                                type: string
-                                description: 'Назва файла. Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                example: TTN_
-                              mime_type:
-                                type: string
-                                description: "Тип файла. Таблиця: Файли ТТН рейсу (race_ttn_files)"
-                                example: image/jpeg
-                              source:
-                                type: string
-                                description: "Джерело. Таблиця: Файли ТТН рейсу (race_ttn_files)"
-                                example: track_check
-                              created_at:
-                                type: string
-                                description: 'Дата створення. Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                example: 28.04.2021 18:41:52
-                              link:
-                                type: string
-                                description: 'Посилання на файл. Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                example: 'https://devth.xxxxx.ua:8443/ords/xxxxxxxxxx/v1/txxxx/race/verification/photo/url/'
-                              rejected:
-                                type: string
-                                description: 'Відхилено Ні(0)/Так(1). Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                enum: [0, 1]
-                                example: 0
-                              dispatcher_edited_at:
-                                type: string
-                                description: "Дата редагування диспетчером. Таблиця: Файли ТТН рейсу (race_ttn_files)"
-                                example: 28.04.2021 18:41:52
-                              reject_reason_ua:
-                                type: string
-                                description: 'Причина відхилення ТТН. Таблиця: Файли ТТН рейсу (pq_document_reasons)'
-                                example: 'Не вказано ПЕРЕВІЗНИКА або його код'
-                              reject_reason_ru:
-                                type: string
-                                description: 'Причина відхилення ТТН. Таблиця: Файли ТТН рейсу (pq_document_reasons)'
-                                example: 'Не вказано ПЕРЕВІЗНИКА або його код'
-                              reject_note:
-                                type: string
-                                description: 'Коментар до причини відхилення. Таблиця: Файли ТТН рейсу (race_ttn_files)'
-                                example: 'Не повністю вказано дані'
-                        files_count:
-                          type: integer
-                          description: 'Кількість записів'
-                          example: 2
-                  status:
-                    type: boolean
-                    example: true
-                    description: 'Статус відповіді'
-                  count:
-                    type: integer
-                    example: 3
-                    description: 'Кількість записів'            
-        401:
-          description: 'Клієнт не авторизований (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                name: error
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
-          description: 'Клієнт не має прав доступу (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        400:
-          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_BadRequestNew'
-        500:
-          description: server error
-          content: {}
+  
   /pq_departure_permission_directions:
     get:
       tags:
@@ -9514,411 +8901,6 @@ paths:
         '500':
           description: server error
           content: {}
-  /barcode:
-    get:
-      tags: [Інтерфейс водія]
-      summary: Отримання штрих-коду за гуідом актуального рейсу водія
-      operationId: barcodeGet
-      description: |
-        Точка отримання штрих-коду за гуідом актуального рейсу водія
-      parameters:
-        - in: query
-          name: race_guid
-          description: Унікальний ідентифікатор рейсу
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 10a92200-2e1e-9a6c-d14b-7ece4253a643
-      responses:
-        200:
-          description: Відповідь, що містить згенерований штрихкод (числову інтерпретацію) (фактично повертається HTTP status code 200)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                      type: boolean
-                      example: true
-                      description: 'Статус відповіді'
-                  race_guid:
-                      type: string
-                      example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
-                      description: 'Унікальний ідентифікатор рейсу'
-                  race_number:
-                      type: string
-                      example: '230921-0004'
-                      description: 'Номер рейсу'
-                  barcode:
-                      type: string
-                      example: '149751723313202795269380779961794930243'
-                      description: 'Числова інтерпретація штрикоду'
-        201:
-          description: Відповідь, якщо штрихкод недоступний (фактично повертається HTTP status code 200)
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                      type: boolean
-                      example: false
-                      description: 'Статус відповіді'
-                  race_guid:
-                      type: string
-                      example: '10a92200-2e1e-9a6c-d14b-7ece4253a643'
-                      description: 'Унікальний ідентифікатор рейсу'
-                  race_number:
-                      type: string
-                      example: '230921-0004'
-                      description: 'Номер рейсу'
-                  message_ua:
-                      type: string
-                      example: 'Штрих-код доступний тільки зареєстрованим авто в черзі! Зареєструйтесь в черзі!'
-                      description: 'Повідомлення про причину неотримання штрихкоду'
-                  message_ru:
-                      type: string
-                      example: 'Штрих-код доступний тільки зареєстрованим авто в черзі! Зареєструйтесь в черзі!'
-                      description: 'Повідомлення про причину неотримання штрихкоду'
-        404:
-          description: 'Відповідь, якщо дані не знайдено (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                      type: boolean
-                      example: false
-                      description: 'Статус відповіді'
-                  msg:
-                      type: string
-                      example: 'ORA-01403: no data found\nORA-06512: at KERNEL_LOGISTIC.BARCODE_PKG, line 115\nORA-06512: at KERNEL_LOGISTIC.BARCODE_API, line 161'
-                      description: 'Повідомлення з описом помилки'
-        500:
-          description: 'Серверна помилка'
-          content: {}
-  /events:
-    get:
-      tags:
-        - 'Т038 - Рейс'
-      summary: Інформація про доступні події рейсу
-      operationId: eventsGet
-      description: |
-        Інформація про події рейсу
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: Унікальний ідентифікатор рейсу
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
-        - in: query
-          name: kind
-          description: Вид подій
-          required: false
-          schema:
-            type: string
-            enum: [STATUS, OTHER]
-            example: STATUS
-        - in: query
-          name: limit
-          description: Пагінація (ліміт)
-          schema:
-            type: integer
-        - in: query
-          name: offset
-          description: Пагінація (oффсет)
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Інформація про доступні події рейсу
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      oneOf:
-                        - $ref: '#/components/schemas/raceEvents1'
-                        - $ref: '#/components/schemas/raceEvents2'
-                        - $ref: '#/components/schemas/raceEvents3'
-                        - $ref: '#/components/schemas/raceEvents4'
-                        - $ref: '#/components/schemas/raceEvents5'
-                  status:
-                      type: boolean
-                      example: true
-                      description: 'Статус відповіді'
-                  count:
-                      type: integer
-                      example: 5
-                      description: 'Кількість записів'
-        '401':
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
-        '403':
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        '500':
-          description: server error
-          content: {}
-  /race/registerevent:
-    post:
-      tags:
-        - 'Т038 - Рейс'
-      summary: Реєстрація подій рейсу
-      operationId: registerEvent
-      description: |
-        Реєстрація подій рейсу водієм
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: 'Унікальний ідентифікатор рейсу'
-          required: false
-          schema:
-            type: string
-            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
-        - in: query
-          name: event
-          description: 'Унікальний ідентифікатор події'
-          required: false
-          schema:
-            type: string
-            enum:
-              [
-                AT_LOADPOINT,
-                GOTO_LOAD,
-                GOTO_UNLOAD,
-                TRACK_FINISH
-              ]
-            example: 'GOTO_UNLOAD'
-        - in: query
-          name: lat
-          description: 'Широта'
-          required: false
-          schema:
-            type: string
-            example: '50.099238'
-        - in: query
-          name: lnd
-          description: 'Довгота'
-          required: false
-          schema:
-            type: string
-            example: '32.637055'
-      responses:
-        200:
-          description: Успішне виконання запиту
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-        401:
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
-        403:
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        404:
-          description: 'Дані не знайдено'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFound'
-        500:
-          description: server error
-          content: {}
-  /races:
-    delete:
-      tags: ['Т038 - Рейс']
-      summary: Видалення рейсу
-      operationId: racesDelete
-      description: |
-        Точка для видалення рейсу за його гуідом
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: 'Унікальний ідентифікатор рейсу'
-          required: false
-          schema:
-            type: string
-            example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
-      responses:
-        200:
-          description: Успішне виконання запиту
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    description: Статус обробки запиту
-                    example: true
-                  guid:
-                    type: string
-                    example: '6080b2c4-da31-64f7-b29f-e04e86d1c3f6'
-                    description: 'Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)'
-                  error_text_ua:
-                    type: string
-                    example: null
-                    description: 'Текст помилки'
-                  error_text_ru:
-                    type: string
-                    example: null
-                    description: 'Текст помилки'
-        401:
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
-        403:
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-        404:
-          description: 'Дані не знайдено (фактично повертається HTTP status code 200)'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFoundNew'
-        500:
-          description: server error
-          content: {}
-  /race/messages:
-    get:
-      tags:
-        - 'Т038 - Рейс'
-      summary: Повідомлення, надіслані протягом рейсу
-      operationId: raceMessagesGet
-      description: |
-        Повідомлення, що надсилались водію протягом рейсу
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: race_guid
-          description: Унікальний ідентифікатор рейсу
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
-      responses:
-        '200':
-          description: Повідомлення, що надсилались
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: array
-                    items:
-                      oneOf:
-                        - $ref: '#/components/schemas/raceMessage1'
-                        - $ref: '#/components/schemas/raceMessage2'
-                  status:
-                      type: boolean
-                      example: true
-                      description: 'Статус відповіді'
-                  count:
-                      type: integer
-                      example: 2
-                      description: 'Кількість знайдених записів'
-        401:
-          description: 'Користувач не авторизований'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        403:
-          description: 'Клієнт не має прав доступу'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
-        404:
-          description: 'Дані не знайдено'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_NoDataFoundNew'
-        500:
-          description: server error
-          content: {}
   
 components:
   schemas:
@@ -9943,24 +8925,18 @@ components:
     _UserisNotAuthorizedNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              example: 20003
-              description: Код помилки
-            message:
-              type: string
-              example: Invalid access token
-              description: Повідомлення
-            detail:
-              type: string
-              example: "You need to specify correct values for access token. Please contact with API's admin."
-              description: Деталі
+        code:
+          type: integer
+          example: 20003
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid access token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for access token. Please contact with API's admin."
+          description: Деталі
     _ClientHasNoRights:
       type: object
       properties:
@@ -9975,24 +8951,18 @@ components:
     _ClientHasNoRightsNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              example: 20000
-              description: Код помилки
-            message:
-              type: string
-              example: Invalid client_token
-              description: Повідомлення
-            detail:
-              type: string
-              example: "You need to specify correct values for client token. Please contact with API's admin."
-              description: Деталі
+        code:
+          type: integer
+          example: 20000
+          description: Код помилки
+        message:
+          type: string
+          example: Invalid client_token
+          description: Повідомлення
+        detail:
+          type: string
+          example: "You need to specify correct values for client token. Please contact with API's admin."
+          description: Деталі
     _NoDataFound:
       type: object
       properties:
@@ -10007,24 +8977,18 @@ components:
     _NoDataFoundNew:
       type: object
       properties:
-        status:
-          type: boolean
-          example: false
-        error:
-          type: object
-          properties:
-            code:
-              type: integer
-              example: 20002
-              description: Код помилки
-            message:
-              type: string
-              example: Object not found by guid
-              description: Повідомлення
-            detail:
-              type: string
-              example: "Can't find object by given guid. Please contact with API's admin."
-              description: Деталі
+        code:
+          type: integer
+          example: 20002
+          description: Код помилки
+        message:
+          type: string
+          example: Object not found by guid
+          description: Повідомлення
+        detail:
+          type: string
+          example: "Can't find object by given guid. Please contact with API's admin."
+          description: Деталі
     _BadRequest:
       type: object
       properties:
@@ -10813,18 +9777,6 @@ components:
           type: integer
           example: 3000
           description: 'Повна вага транспортного засобу без завантаження'
-        is_coupler:
-          type: integer
-          example: 1
-          description: 'Признак, чи є ТЗ автозчіпкою: 1 - так, 0 - ні'
-        is_dump_truck:
-          type: integer
-          example: 1
-          description: 'Признак, чи є ТЗ самоскидом: 1 - так, 0 - ні'
-        driver_number_id:
-          type: string
-          example: '2531685246'
-          description: 'Ідентифікаційний номер водія'
     Departure_permission_direction:
       type: object
       properties:
@@ -14017,7 +12969,7 @@ components:
             type: string
             enum: [quota, reg_date]
             description: "Тип мультичерги. Мультичерга формується за наступними принципами: по даті реєстрації в черзі; по налаштуванням випуску авто з підпорядкованих черг. Таблиця: Профілі черги(pq_queue_profile)"
-            example: 1
+            example: quota
           lat:
             type: number
             description: "Довгота локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
@@ -14180,486 +13132,3 @@ components:
             type: array
             description: 'Дані видів черг'
             $ref: '#/components/schemas/QueueRegJournalPQqueue'
-    driverGetByPhone:
-      type: object
-      properties:
-        full_name:
-          type: string
-          example: 'Зарульний Василь Васильович'
-          description: "ПІБ водія"
-        first_name:
-          type: string
-          description: "Ім'я водія"
-          example: Василь
-        middle_name:
-          type: string
-          description: "По-батькові водія"
-          example: Васильович
-        last_name:
-          type: string
-          example: Зарульний
-          description: "Прізвище водія"
-        cert_serial_number:
-          type: string
-          example: СС3456777
-          description: "Серія та номер посвідчення водія"
-        guid:
-          type: string
-          example: a0a717f1-a1c4-72c1-a3e4-72877f862a76
-          description: "Унікальний ідентифікатор запису водія"
-        number_id:
-          type: string
-          example: '2234567890'
-          description: "Ідентифікаційний номер водія"
-    raceEvents1:
-      type: object
-      properties:
-        i:
-          type: integer
-          example: 1
-        name_ua:
-          type: string
-          example: 'Прибув до пункту розвантаження'
-          description: "Назва події"
-        name_ru:
-          type: string
-          example: 'Прибув до пункту розвантаження'
-          description: "Назва події"
-        guid:
-          type: string
-          example: AT_UNLOADPOINT
-          description: "Ідентифікатор події"
-        type:
-          type: string
-          description: "Тип події"
-          example: IN_PROGRESS
-        kind:
-          type: string
-          example: STATUS
-          description: "Вид події"
-        status:
-          type: string
-          example: 'В черзі в пункті розвантаження'
-          description: "Статус (текст)"
-        status_ru:
-          type: string
-          example: 'В черзі в пункті розвантаження'
-          description: "Статус (текст)"
-        order_:
-          type: integer
-          example: 40
-          description: "Порядок"
-        need_geo:
-          type: integer
-          example: '1'
-          description: "Потребує визначення геокоординат: 0/1(ні/так)"
-        msg:
-          type: string
-          example: 'Повідомте, коли завершиться розвантаження.'
-          description: "Повідомлення водію"
-        msg_ru:
-          type: string
-          example: 'Сообщите, когда завершится разгрузка.'
-          description: "Повідомлення водію"
-        direction:
-          type: string
-          example: unloading
-          description: "Ідентифікатор події"
-        bd_on:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        new:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        waybill_registered:
-          type: string
-          example: '26.09.2023 00:22:42'
-          description: "Дата реєстрації ТТН"
-        error_text_ua:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        error_text_ru:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        registration_required:
-          type: integer
-          example: '1'
-          description: "Потребує реєстрації: 0/1(ні/так)"
-        is_blocked:
-          type: boolean
-          example: true
-          description: "Показник, чи заблокована подія"
-    raceEvents2:
-      type: object
-      properties:
-        i:
-          type: integer
-          example: 3
-        name_ua:
-          type: string
-          example: 'Виїхав розвантажений'
-          description: "Назва події"
-        name_ru:
-          type: string
-          example: 'Виїхав розвантажений'
-          description: "Назва події"
-        guid:
-          type: string
-          example: TRACK_FINISH
-          description: "Ідентифікатор події"
-        type:
-          type: string
-          description: "Тип події (стан рейсу)"
-          example: DONE
-        kind:
-          type: string
-          example: STATUS
-          description: "Вид події"
-        status:
-          type: string
-          example: 'Рейс завершено'
-          description: "Статус (текст)"
-        status_ru:
-          type: string
-          example: 'Рейс завершено'
-          description: "Статус (текст)"
-        order_:
-          type: integer
-          example: 60
-          description: "Порядок"
-        need_geo:
-          type: integer
-          example: '1'
-          description: "Потребує визначення геокоординат: 0/1(ні/так)"
-        msg:
-          type: string
-          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!.'
-          description: "Повідомлення водію"
-        msg_ru:
-          type: string
-          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
-          description: "Повідомлення водію"
-        direction:
-          type: string
-          example: unloading
-          description: "Напрямок"
-        bd_on:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        new:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        waybill_registered:
-          type: string
-          example: '26.09.2023 00:22:42'
-          description: "Дата реєстрації ТТН"
-        error_text_ua:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        error_text_ru:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        registration_required:
-          type: integer
-          example: '0'
-          description: "Потребує реєстрації: 0/1(ні/так)"
-        is_blocked:
-          type: boolean
-          example: true
-          description: "Показник, чи заблокована подія"
-    raceEvents3:
-      type: object
-      properties:
-        i:
-          type: integer
-          example: 2
-        name_ua:
-          type: string
-          example: 'ПОВЕРНЕННЯ. Виїхав з вантажем'
-          description: "Назва події"
-        name_ru:
-          type: string
-          example: 'ПОВЕРНЕННЯ. Виїхав з вантажем'
-          description: "Назва події"
-        guid:
-          type: string
-          example: RETURN
-          description: "Ідентифікатор події"
-        type:
-          type: string
-          description: "Тип події (стан рейсу)"
-          example: DONE
-        kind:
-          type: string
-          example: STATUS
-          description: "Вид події"
-        status:
-          type: string
-          example: 'Повернення'
-          description: "Статус (текст)"
-        status_ru:
-          type: string
-          example: 'Повернення'
-          description: "Статус (текст)"
-        order_:
-          type: integer
-          example: 61
-          description: "Порядок"
-        need_geo:
-          type: integer
-          example: '1'
-          description: "Потребує визначення геокоординат: 0/1(ні/так)"
-        msg:
-          type: string
-          example: 'Рейс завершено. Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
-          description: "Повідомлення водію"
-        msg_ru:
-          type: string
-          example: 'Рейс завершено. Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
-          description: "Повідомлення водію"
-        direction:
-          type: string
-          example: unloading
-          description: "Напрямок"
-        bd_on:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        new:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        waybill_registered:
-          type: string
-          example: '26.09.2023 00:22:42'
-          description: "Дата реєстрації ТТН"
-        error_text_ua:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        error_text_ru:
-          type: string
-          example: 'Цей статус встановлюється автоматично.'
-          description: "Повідомлення при неправильному виборі статусу"
-        registration_required:
-          type: integer
-          example: '0'
-          description: "Потребує реєстрації: 0/1(ні/так)"
-        is_blocked:
-          type: boolean
-          example: true
-          description: "Показник, чи заблокована подія"
-    raceEvents4:
-      type: object
-      properties:
-        i:
-          type: integer
-          example: 5
-        name_ua:
-          type: string
-          example: 'Рейс відмінено'
-          description: "Назва події"
-        name_ru:
-          type: string
-          example: 'Рейс відмінено'
-          description: "Назва події"
-        guid:
-          type: string
-          example: CANCELED
-          description: "Ідентифікатор події"
-        type:
-          type: string
-          description: "Тип події (стан рейсу)"
-          example: CANCELED
-        kind:
-          type: string
-          example: OTHER
-          description: "Вид події"
-        status:
-          type: string
-          example: 'Рейс відмінено'
-          description: "Статус (текст)"
-        status_ru:
-          type: string
-          example: 'Рейс відмінено'
-          description: "Статус (текст)"
-        order_:
-          type: integer
-          example: 98
-          description: "Порядок"
-        need_geo:
-          type: integer
-          example: 0
-          description: "Потребує визначення геокоординат: 0/1(ні/так)"
-        msg:
-          type: string
-          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
-          description: "Повідомлення водію"
-        msg_ru:
-          type: string
-          example: 'Дякуємо за співпрацю та реєстрацію подій.\r\n\r\nЩасливої дороги!'
-          description: "Повідомлення водію"
-        direction:
-          type: string
-          example: '-'
-          description: "Напрямок"
-        bd_on:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        new:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        waybill_registered:
-          type: string
-          example: '26.09.2023 00:22:42'
-          description: "Дата реєстрації ТТН"
-        registration_required:
-          type: integer
-          example: '0'
-          description: "Потребує реєстрації: 0/1(ні/так)"
-        is_blocked:
-          type: boolean
-          example: false
-          description: "Показник, чи заблокована подія"
-    raceEvents5:
-      type: object
-      properties:
-        i:
-          type: integer
-          example: 4
-        name_ua:
-          type: string
-          example: 'Вирушив до пункту РОЗВАНТАЖЕННЯ'
-          description: "Назва події"
-        name_ru:
-          type: string
-          example: 'Вирушив до пункту РОЗВАНТАЖЕННЯ'
-          description: "Назва події"
-        guid:
-          type: string
-          example: GOTO_UNLOAD
-          description: "Ідентифікатор події"
-        type:
-          type: string
-          description: "Тип події (стан рейсу)"
-          example: IN_PROGRESS
-        kind:
-          type: string
-          example: STATUS
-          description: "Вид події"
-        status:
-          type: string
-          example: 'В дорозі до пункту розвантаження'
-          description: "Статус (текст)"
-        status_ru:
-          type: string
-          example: 'В дорозі до пункту розвантаження'
-          description: "Статус (текст)"
-        order_:
-          type: integer
-          example: 34
-          description: "Порядок"
-        need_geo:
-          type: integer
-          example: 1
-          description: "Потребує визначення геокоординат: 0/1(ні/так)"
-        msg:
-          type: string
-          example: 'Щасливої дороги!'
-          description: "Повідомлення водію"
-        msg_ru:
-          type: string
-          example: 'Щасливої дороги!'
-          description: "Повідомлення водію"
-        direction:
-          type: string
-          example: '-'
-          description: "Напрямок"
-        bd_on:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        new:
-          type: integer
-          description: "0/1(ні/так)"
-          example: 1
-        waybill_registered:
-          type: string
-          example: '26.09.2023 00:22:42'
-          description: "Дата реєстрації ТТН"
-        registration_required:
-          type: integer
-          example: 1
-          description: "Потребує реєстрації: 0/1(ні/так)"
-        is_blocked:
-          type: boolean
-          example: false
-          description: "Показник, чи заблокована подія"
-    raceMessage1:
-      type: object
-      properties:
-        created_at:
-          type: string
-          example: '01.03.2023 16:28:13'
-          description: "Дата та час створення"
-        task_name:
-          type: string
-          example: '015_Завершення ТОРа'
-          description: "Назва завдання/події"
-        channel_name:
-          type: string
-          example: 'ТрекЧек Бот'
-          description: "Назва (тип) каналу, в який надсилається повідомлення"
-        message_text:
-          type: string
-          description: "Текст повідомлення"
-          example: "\u0428\u0430\u043D\u043E\u0432\u043D\u0438\u0439 \u003Cb\u003E\u041C\u0415\u041B\u042C\u041D\u0418\u041A \u0412.\u041C.\u003C\\/b\u003E\r\n\u0422\u0435\u0440\u043C\u0456\u043D \u043E\u0431\u043C\u0435\u0436\u0435\u043D\u043D\u044F \u0432 \u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 (\u0422\u041E\u0420) \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E.\r\n\u0417\u0430\u043F\u0440\u043E\u0448\u0443\u0454\u043C\u043E \u0434\u043E \u043E\u043D\u043B\u0430\u0439\u043D-\u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 \u0432 \u0447\u0435\u0440\u0437\u0456.\r\n\u0422\u0438\u0441\u043D\u0456\u0442\u044C \u0432 \u0431\u043E\u0442\u0456 \u041C\u0456\u0439 \u0440\u0435\u0439\u0441 -\u003E \u041C\u043E\u044F \u0447\u0435\u0440\u0433\u0430 \u0442\u0430 \u0440\u0435\u0454\u0441\u0442\u0440\u0443\u0439\u0442\u0435\u0441\u044C \u0432 \u0447\u0435\u0440\u0433\u0443.\r\n\r\n\u0429\u0430\u0441\u043B\u0438\u0432\u043E\u0457 \u0434\u043E\u0440\u043E\u0433\u0438!"
-        message_status:
-          type: string
-          example: 'success'
-          description: "Статус (текст)"
-    raceMessage2:
-      type: object
-      properties:
-        created_at:
-          type: string
-          example: '01.03.2023 16:28:13'
-          description: "Дата та час створення"
-        task_name:
-          type: string
-          example: '015_Завершення ТОРа'
-          description: "Назва завдання/події"
-        channel_name:
-          type: string
-          example: 'Голосове повідомлення'
-          description: "Назва (тип) каналу, в який надсилається повідомлення"
-        message_text:
-          type: string
-          description: "Текст повідомлення"
-          example: "\u0428\u0430\u043D\u043E\u0432\u043D\u0438\u0439 \u003Cb\u003E\u041C\u0415\u041B\u042C\u041D\u0418\u041A \u0412.\u041C.\u003C\\/b\u003E\r\n\u0422\u0435\u0440\u043C\u0456\u043D \u043E\u0431\u043C\u0435\u0436\u0435\u043D\u043D\u044F \u0432 \u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 (\u0422\u041E\u0420) \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E.\r\n\u0417\u0430\u043F\u0440\u043E\u0448\u0443\u0454\u043C\u043E \u0434\u043E \u043E\u043D\u043B\u0430\u0439\u043D-\u0440\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u0457 \u0432 \u0447\u0435\u0440\u0437\u0456.\r\n\u0422\u0438\u0441\u043D\u0456\u0442\u044C \u0432 \u0431\u043E\u0442\u0456 \u041C\u0456\u0439 \u0440\u0435\u0439\u0441 -\u003E \u041C\u043E\u044F \u0447\u0435\u0440\u0433\u0430 \u0442\u0430 \u0440\u0435\u0454\u0441\u0442\u0440\u0443\u0439\u0442\u0435\u0441\u044C \u0432 \u0447\u0435\u0440\u0433\u0443.\r\n\r\n\u0429\u0430\u0441\u043B\u0438\u0432\u043E\u0457 \u0434\u043E\u0440\u043E\u0433\u0438!"
-        message_status:
-          type: string
-          example: 'success'
-          description: "Статус (текст)"
-        call_status:
-          type: string
-          example: 'done'
-          description: "Код статусу голосового повідомлення"
-        call_status_ua:
-          type: string
-          example: 'Виконано'
-          description: "Статус голосового повідомлення"
-        call_status_ru:
-          type: string
-          example: 'Виконано'
-          description: "Статус голосового повідомлення"
