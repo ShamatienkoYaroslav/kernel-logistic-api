@@ -12965,6 +12965,11 @@ components:
             enum: [1, 0]
             description: "Ознака мультичерги. Таблиця: Профілі черги(pq_queue_profile)"
             example: 1
+          multiqueue_type:
+            type: string
+            enum: [quota, reg_date]
+            description: "Тип мультичерги. Мультичерга формується за наступними принципами: по даті реєстрації в черзі; по налаштуванням випуску авто з підпорядкованих черг. Таблиця: Профілі черги(pq_queue_profile)"
+            example: 1
           lat:
             type: number
             description: "Довгота локації профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
