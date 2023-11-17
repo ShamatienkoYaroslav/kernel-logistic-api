@@ -16,8 +16,6 @@ tags:
     description: Вузли для роботи з чорним списком
   - name: Поклажодавці
     description: Вузли для роботи з профілем черги
-  - name: ТТН
-    description: Вузли для роботи з товарно-транспортними накладними
   - name: Глобальні налаштування
     description: Глобальні налаштування для роботи Transithub
   - name: 'T002 - Наряди'
@@ -90,6 +88,8 @@ tags:
     description: Вузли для роботи з рейсами
   - name: 'Т039 - Запити на чергу'
     description: Вузли для роботи з запитами на чергу
+  - name: 'Т040 - ТТН'
+    description: Вузли для роботи з товарно-транспортними накладними
 
 paths:
   /accreditations:
@@ -2162,9 +2162,92 @@ paths:
           description: 'Помилка сервера'
       x-codegen-request-body-name: body
   /driver/waybills:
+    get:
+      tags: ['Т040 - ТТН']
+      summary: Отримання всіх (або одного) записів ТТН підпорядкованих певному рейсу
+      operationId: driversGet
+      description: |
+        Отримання всіх водіїв або ж лише одного
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          schema:
+            type: string
+        - in: query
+          name: waybill_guid
+          description: Унікальний ідентифікатор ТТН
+          schema:
+            type: string
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1.0
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WaybillByRace'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        401:
+          description: 'Клієнт не авторизований'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
     post:
       tags:
-        - ТТН
+        - 'Т040 - ТТН'
       summary: Створення/оновлення ТТН на підставі рейсу
       description:
         Точка створення/оновлення ТТН, що використовує процедуру оновлення таблиці рейсів
@@ -6802,7 +6885,7 @@ paths:
   /waybill_template:
     get:
       tags:
-        - ТТН
+        - 'Т040 - ТТН'
       summary: Макет ТТН
       operationId: waybillTemplate
       description: |
@@ -6858,7 +6941,7 @@ paths:
   /waybills/history:
     get:
       tags:
-        - ТТН
+        - 'Т040 - ТТН'
         - Інтерфейс водія
       summary: Пошук ТТН водія (історія)
       operationId: waybillsHistory
@@ -10101,6 +10184,238 @@ components:
           type: number
           example: 70
           description: 'Пробіг пустим до АТП, км'
+    WaybillCertificateOfQuality:
+      type: object
+      properties:
+        number:
+          type: string
+          example: 'ЭЛ42-0000200583'
+          description: 'Номер посвідчення якості. Таблиця: Посвідчення якості(laboratory_tests)'
+        guid:
+          type: string
+          example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+          description: 'Гуід посвідчення якості. Таблиця: Посвідчення якості(laboratory_tests)'
+        type:
+          type: string
+          example: 'INCOME'
+          enum: [INCOME, OUTCOME]
+          description: 'Тип посвідчення якості(вхідний/вихідний). Таблиця: Посвідчення якості(laboratory_tests)'
+        date:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: 'Дата і час посвідчення якості. Таблиця: Посвідчення якості(laboratory_tests)'
+        creation_datetime:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: 'Дата і час створення запису посвідчення якості. Таблиця: Посвідчення якості(laboratory_tests)'
+    WaybillByRace:
+      type: object
+      properties:
+        waybill_number:
+          type: string
+          example: 'ТТН00000012345'
+          description: 'Номер ТТН. Таблиця: ТТН (waybill)'
+        waybill_date:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: 'Дата ТТН. Таблиця: ТТН (waybill)'
+        waybill_guid:
+          type: string
+          example: '685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa'
+          description: 'Унікальний ідентифікатор TTH. Таблиця: ТТН (waybill)'
+        waybill_type:
+          type: string
+          enum: [COMPLEX, SUBORDINATE, COMMON]
+          example: 'COMMON'
+          description: 'Тип TTH: комплексна, підпорядкована, звичайна. Таблиця: ТТН (waybill)'
+        registered_at:
+          type: string
+          example: '22.02.2021 00:00:00'
+          description: 'Дата ТТН. Таблиця: ТТН (waybill)'
+        quantity:
+          type: string
+          example: '30'
+          description: 'Кількість по ТТН, т. Таблиця: ТТН (waybill)'
+        is_no_quantity:
+          type: integer
+          example: 0
+          description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: ТТН (waybill)'
+        consignor_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва вантажовідправника. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        consignor_edrpou:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ вантажовідправника. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        consignor_net:
+          type: integer
+          example: 0
+          description: 'Вага нетто вантажовідправника, кг. Таблиця: ТТН (waybill)'
+        consignor_gross:
+          type: integer
+          example: 0
+          description: 'Вага брутто вантажовідправника, кг. Таблиця: ТТН (waybill)'
+        consignor_tara:
+          type: integer
+          example: 0
+          description: 'Вага тари вантажовідправника, кг. Таблиця: ТТН (waybill)'
+        consignee_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва вантажоодержувача. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        consignee_edrpou:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ вантажоодержувача. Інтерфейс водія. Таблиця: ТТН (waybill)'
+        consigee_net:
+          type: integer
+          example: 0
+          description: 'Вага нетто вантажоодержувача, кг. Таблиця: ТТН (waybill)'
+        consignee_gross:
+          type: integer
+          example: 0
+          description: 'Вага брутто вантажоодержувача, кг. Таблиця: ТТН (waybill)'
+        consignee_tara:
+          type: integer
+          example: 0
+          description: 'Вага тари вантажоодержувача, кг. Таблиця: ТТН (waybill)'
+        driver_fullname:
+          type: string
+          example: 'Мельник Вячеславв Миколайович'
+          description: 'ПІБ водія. Інтерфейс водія. Таблиця: Рейси (races)'
+        driver_phone:
+          type: string
+          example: '380673222858'
+          description: 'Номер телефону водія. Інтерфейс водія. Таблиця: Рейси (races)'
+        driver_cert:
+          type: string
+          example: '380673222858'
+          description: 'Номер посвідчення водія. Таблиця: Рейси (races)'
+        race_number:
+          type: string
+          example: '210222-0357'
+          description: 'Номер рейсу. Таблиця: Рейси (races)'
+        race_guid:
+          type: string
+          example: '210222-0357'
+          description: 'Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)'
+        race_status:
+          type: string
+          example: 'DONE'
+          description: 'Статус рейсу водія. Значення(Завершено/DONE, Відмінено/CANCELED) Інтерфейс водія. Таблиця: Рейси (races)'
+        truck_number:
+          type: string
+          example: 'АА0001АА'
+          description: 'Державний номер авто. Таблиця: ТТН (waybill)'
+        truck_brand_name:
+          type: string
+          example: 'DAF'
+          description: 'Марка авто. Таблиця: ТТН (waybill)'
+        trailer_number:
+          type: string
+          example: 'АА0001АА'
+          description: 'Державний номер причепа. Таблиця: ТТН (waybill)'
+        trailer_brand_name:
+          type: string
+          example: 'DAF'
+          description: 'Марка причепа. Таблиця: ТТН (waybill)'
+        is_no_trailer:
+          type: string
+          example: 0
+          description: 'Ознака наявності причепа. Значення(1,0). Таблиця: ТТН (waybill)'
+        point_from_name_ua:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту навантаження. Таблиця: Населені пункти (locality)'
+        point_from_name_ru:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту навантаження. Таблиця: Населені пункти (locality)'
+        point_from_region_name_ua:
+          type: string
+          example: 'Дніпропетровська'
+          description: 'Назва регіону пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_region_name_ru:
+          type: string
+          example: 'Днепропетровская'
+          description: 'Назва регіону пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_description_ua:
+          type: string
+          example: 'Україна, Дніпропетровська обл., Софіївський район, с. Райполе'
+          description: 'Повна адреса населеного пункту навантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_from_description_ru:
+          type: string
+          example: 'Украина, Днепропетровская обл., Софиевский район, с. Райполе'
+          description: 'Повна адреса населеного пункту навантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_name_ua:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту розвантаження. Таблиця: Населені пункти (locality)'
+        point_to_name_ru:
+          type: string
+          example: 'Райполе'
+          description: 'Назва пункту розвантаження. Таблиця: Населені пункти (locality)'
+        point_to_region_name_ua:
+          type: string
+          example: 'Дніпропетровська'
+          description: 'Назва регіону пункту розвантаження українською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        point_to_region_name_ru:
+          type: string
+          example: 'Днепропетровская'
+          description: 'Назва регіону пункту розвантаження російською. Інтерфейс водія. Таблиця: Населені пункти (locality)'
+        warehouse_from_code:
+          type: string
+          example: '0523410100001'
+          description: 'Код класифікатору складу навантаження. Таблиця: ТТН (waybill)'
+        warehouse_to_code:
+          type: string
+          example: '0523410100001'
+          description: 'Код класифікатору складу poзвантаження. Таблиця: ТТН (waybill)'
+        goods_guid:
+          type: string
+          example: 'ПШЕНИЦЯ_НЕВИЗН'
+          description: 'Код класифікатора вантажу. Таблиця: Вантажі (goods)'
+        goods_name_ua:
+          type: string
+          example: 'Пшениця невизначена'
+          description: 'Назва вантажу. Таблиця: Вантажі (goods)'
+        goods_name_ru:
+          type: string
+          example: 'Пшениця невизначена'
+          description: 'Назва вантажу. Таблиця: Вантажі (goods)'
+        customer_name:
+          type: string
+          example: 'Кернел Трейд'
+          description: 'Назва замовника. Таблиця: Рейси (races)'
+        customer_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ замовника. Таблиця: Рейси (races)'
+        carrier_name:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ перевізника. Таблиця: Рейси (races)'
+        carrier_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ перевізника. Таблиця: Рейси (races)'
+        for_owner_name:
+          type: string
+          example: '3308479112'
+          description: 'Назва поклажодавця. Таблиця: Рейси (races)'
+        for_owner_code:
+          type: string
+          example: '3308479112'
+          description: 'Код ЄДРПОУ поклажодавця. Таблиця: Рейси (races)'
+        for_owner_comments:
+          type: string
+          example: '3308479112'
+          description: 'Коментар поклажодавця. Таблиця: Рейси (races)'
+        certificate_of_quality:
+            type: array
+            description: 'Дані видів черг'
+            $ref: '#/components/schemas/WaybillCertificateOfQuality'
     WaybillTemplate:
       type: object
       properties:
