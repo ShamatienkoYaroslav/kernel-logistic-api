@@ -5489,6 +5489,275 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+    put:
+      tags: ['Т037 - Профіль черги']
+      summary: Редагування існуючого профіля черги в системі
+      description:
+        Точка редагування існуючого профіля черги в системі
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису таблиці профілів черги
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 250
+                  example: Кропивницький ХАБ
+                  description: "Ім'я профіля черги (довжину вказано в байтах). Таблиця: профілі черги(pq_queue_profile)"
+                created_at:
+                  type: string
+                  format: dd.mm.yyyy hh:mm:ss
+                  example: 28.04.2021 00:00:00
+                  description: 'Дата і час створення запису. Таблиця: профілі черги(pq_queue_profile)'
+                th_author_user_guid:
+                  type: string
+                  format: uuid
+                  maxLength: 50
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  description: 'Ідентифікатор запису користувача ТХ, що створив запис. Таблиця: ТХ користувачі(th_users)'
+                description:
+                  type: string
+                  maxLength: 2000
+                  example: Профіль налаштувань черг на заводі Кропивницький ХАБ
+                  description: "Опис додаткової нформації профіля черг. Таблиця: профілі черги(pq_queue_profile)"
+                th_company_guid:
+                  type: string
+                  format: uuid
+                  maxLength: 50
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  description: 'Ідентифікатор запису компанії ТХ (в байтах). Таблиця: ТХ компанії(th_companys)'
+                lat:
+                  type: number
+                  example: 46.329429
+                  description: 'Широта по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+                lng:
+                  type: number
+                  example: 46.329429
+                  description: 'Довгота по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+                full_address:
+                  type: string
+                  maxLength: 250
+                  example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
+                  description: 'Повна адреса профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                koatuu:
+                  type: string
+                  example: '5110800000'
+                  description: 'Код КОАТУУ профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                building_n:
+                  type: string
+                  example: '58'
+                  description: 'Номер будинку профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                district_code:
+                  type: string
+                  example: 'REC100012'
+                  description: 'Код району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                district_name:
+                  type: string
+                  example: 'Чорноморська міська рада'
+                  description: 'Назва району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                region_code:
+                  type: string
+                  example: '51'
+                  description: 'Код області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                region_name:
+                  type: string
+                  example: 'Одеська'
+                  description: 'Назва області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                locality_name:
+                  type: string
+                  example: 'Чорноморськ'
+                  description: 'Назва населеного пункту профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                street_name:
+                  type: string
+                  example: 'вулиця Сухолиманська'
+                  description: 'Назва вулиці профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                registration_zone_radius:
+                  type: number
+                  example: 50000
+                  description: 'Радіус зони реєстрації в метрах. Таблиця: Профілі черги (pq_queue_profile)'
+                telegram_group:
+                  type: string
+                  example: '***'
+                  description: 'Група в телеграмі для профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                direction:
+                  type: string
+                  enum: [loading, unloading]
+                  description: 'Напрямок (навантаження/розвантаження). Таблиця: Профілі черги (pq_queue_profile)'
+                loading_type:
+                  type: string
+                  enum: [mound, pouring]
+                  description: 'Тип навантаження (насип/налив). Таблиця: Профілі черги (pq_queue_profile)'
+                multiqueue:
+                  type: integer
+                  enum: [0, 1]
+                  description: 'Ознака мультичерги: так/ні (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+                main_queue_guid:
+                  type: string
+                  example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+                  description: 'Унікальний ідентифікатор основної черги профіля. Таблиця: Черги (pq_queue)'
+      responses:
+        200:
+          description: результат успішного виконання запиту
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  guid:
+                    type: string
+                    format: uuid
+                    maxLength: 50
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                    description: 'Ідентифікатор запису Водія ТХ (в байтах). Таблиця: ТХ водії(th_drivers)'
+                  name:
+                    type: string
+                    maxLength: 250
+                    example: Кропивницький ХАБ
+                    description: "Ім'я профіля черги (довжину вказано в байтах). Таблиця: профілі черги(pq_queue_profile)"
+                  name_order_slug:
+                    type: string
+                    example: 'Transbalkterminal'
+                    description: 'Назва сортування по слагу профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  author_user_guid:
+                    type: string
+                    format: uuid
+                    maxLength: 50
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                    description: 'Ідентифікатор запису користувача ТХ, що створив запис. Таблиця: ТХ користувачі(th_users)'
+                  description:
+                    type: string
+                    maxLength: 2000
+                    example: Профіль налаштувань черг на заводі Кропивницький ХАБ
+                    description: "Опис додаткової нформації профіля черг. Таблиця: профілі черги(pq_queue_profile)"
+                  company_guid:
+                    type: string
+                    format: uuid
+                    maxLength: 50
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                    description: 'Ідентифікатор запису компанії ТХ (в байтах). Таблиця: ТХ компанії(th_companys)'
+                  lat:
+                    type: number
+                    example: 46.329429
+                    description: 'Широта по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+                  lng:
+                    type: number
+                    example: 46.329429
+                    description: 'Довгота по гелокації. Таблиця: Профілі черги (pq_queue_profile)'
+                  full_address:
+                    type: string
+                    maxLength: 250
+                    example: 'Україна, Одеська обл., м. Чорноморськ, вулиця Сухолиманська, 58'
+                    description: 'Повна адреса профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  koatuu:
+                    type: string
+                    example: '5110800000'
+                    description: 'Код КОАТУУ профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  building_n:
+                    type: string
+                    example: '58'
+                    description: 'Номер будинку профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  district_code:
+                    type: string
+                    example: 'REC100012'
+                    description: 'Код району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  district_name:
+                    type: string
+                    example: 'Чорноморська міська рада'
+                    description: 'Назва району профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  region_code:
+                    type: string
+                    example: '51'
+                    description: 'Код області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  region_name:
+                    type: string
+                    example: 'Одеська'
+                    description: 'Назва області профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  locality_name:
+                    type: string
+                    example: 'Чорноморськ'
+                    description: 'Назва населеного пункту профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  street_name:
+                    type: string
+                    example: 'вулиця Сухолиманська'
+                    description: 'Назва вулиці профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  registration_zone_radius:
+                    type: number
+                    example: 50000
+                    description: 'Радіус зони реєстрації в метрах. Таблиця: Профілі черги (pq_queue_profile)'
+                  telegram_group:
+                    type: string
+                    example: '***'
+                    description: 'Група в телеграмі для профіля черги. Таблиця: Профілі черги (pq_queue_profile)'
+                  direction:
+                    type: string
+                    enum: [loading, unloading]
+                    description: 'Напрямок (навантаження/розвантаження). Таблиця: Профілі черги (pq_queue_profile)'
+                  loading_type:
+                    type: string
+                    enum: [mound, pouring]
+                    description: 'Тип навантаження (насип/налив). Таблиця: Профілі черги (pq_queue_profile)'
+                  multiqueue:
+                    type: integer
+                    enum: [0, 1]
+                    description: 'Ознака мультичерги: так/ні (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+                  main_queue_guid:
+                    type: string
+                    example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+                    description: 'Унікальний ідентифікатор основної черги профіля. Таблиця: Черги (pq_queue)'
+                  main_queue_name:
+                    type: string
+                    example: 'Основна черга приймання соняшника'
+                    description: 'Назва основної черги профіля. Таблиця: Черги (pq_queue)'
+                  active:
+                    type: integer
+                    enum: [0, 1]
+                    description: 'Ознака використання профіля черги: так/ні (0/1). Таблиця: Профілі черги (pq_queue_profile)'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: server error
+          content: {}
+      x-codegen-request-body-name: body
   /pq_queues/flow/history:
     get:
       tags:
