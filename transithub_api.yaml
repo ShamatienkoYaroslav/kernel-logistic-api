@@ -3553,6 +3553,14 @@ paths:
                   format: dd.mm.yyyy
                   description: "Дата видачі ID-карти"
                   example: '01.01.2018'
+                number_id:
+                  type: string
+                  description: "Ідентифікаційний номер водія"
+                  example: '1234567809'
+                date_of_birth:
+                  type: string
+                  description: "Дата народження водія"
+                  example: '20.06.2000'
         required: true
       responses:
         201:
@@ -3616,9 +3624,8 @@ paths:
                     example: '000351'
                   pass_date:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі паспорта"
-                    example: '01.01.2018'
+                    example: '2019-08-20T00:00:00Z'
                   person_docs_type:
                     type: string
                     enum: [passport, id_card]
@@ -3630,13 +3637,25 @@ paths:
                     example: '0008914351'
                   id_card_date_utc:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі ID-карти"
-                    example: '01.01.2018'
+                    example: '2019-08-20T00:00:00Z'
                   id_card_issued:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
+                  number_id:
+                    type: string
+                    description: "Ідентифікаційний номер водія"
+                    example: '1234567809'
+                  date_of_birth:
+                    type: string
+                    description: "Дата народження водія"
+                    example: '2000-06-20T00:00:00Z'
+                  is_trackcheckbot:
+                    type: integer
+                    enum: [0, 1]
+                    example: 1
+                    description: 'Ознака реєстрації водія у Трекчекбот'
         400:
           description: 'Поганий запит'
           content:
@@ -3741,6 +3760,14 @@ paths:
                   format: dd.mm.yyyy
                   description: "Дата видачі ID-карти"
                   example: '01.01.2018'
+                number_id:
+                  type: string
+                  description: "Ідентифікаційний номер водія"
+                  example: '1234567809'
+                date_of_birth:
+                  type: string
+                  description: "Дата народження водія"
+                  example: '20.06.2000'
         required: true
       responses:
         '201':
@@ -3804,9 +3831,8 @@ paths:
                     example: '000351'
                   pass_date:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі паспорта"
-                    example: '01.01.2018'
+                    example: '2000-06-20T00:00:00Z'
                   person_docs_type:
                     type: string
                     enum: [passport, id_card]
@@ -3818,13 +3844,25 @@ paths:
                     example: '0008914351'
                   id_card_date_utc:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі ID-карти"
-                    example: '01.01.2018'
+                    example: '2000-06-20T00:00:00Z'
                   id_card_issued:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
+                  number_id:
+                    type: string
+                    description: "Ідентифікаційний номер водія"
+                    example: '1234567809'
+                  date_of_birth:
+                    type: string
+                    description: "Дата народження водія"
+                    example: '2000-06-20T00:00:00Z'
+                  is_trackcheckbot:
+                    type: integer
+                    enum: [0, 1]
+                    example: 1
+                    description: 'Ознака реєстрації водія у Трекчекбот'
         '400':
           description: 'Поганий запит'
           content:
@@ -3890,9 +3928,8 @@ paths:
                     example: '000351'
                   pass_date:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі паспорта"
-                    example: '01.01.2018'
+                    example: '1997-12-12T00:00:00Z'
                   pass_issued:
                     type: string
                     description: "Ким виданий паспорт"
@@ -3940,13 +3977,20 @@ paths:
                     example: '0008914351'
                   id_card_date_utc:
                     type: string
-                    format: dd.mm.yyyy
                     description: "Дата видачі ID-карти"
-                    example: '01.01.2018'
+                    example: '1997-12-12T00:00:00Z'
                   id_card_issued:
                     type: string
                     description: "Ким видана ID-карта"
                     example: Полтавським МУРУ
+                  number_id:
+                    type: string
+                    description: "Ідентифікаційний номер водія"
+                    example: '1234567809'
+                  date_of_birth:
+                    type: string
+                    description: "Дата народження водія"
+                    example: '1997-12-12T00:00:00Z'
         400:
           description: 'Поганий запит'
           content:
