@@ -34,6 +34,8 @@ tags:
     description: Вузли для роботи з аутентифікаціею користувачів системи
   - name: T008 - Населені пункти
     description: Вузли для роботи з населеними пунктами
+  - name: Т009 - Запити на чергу
+    description: Вузли для роботи з запитами в чергу
 
 paths:
   /auth/check_pincode:
@@ -2067,7 +2069,100 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequest'
-   
+  /pq_queue_requests:
+    post:
+      tags:
+        - 'Т009 - Запити на чергу'
+      summary: Створити запит в чергу
+      operationId: PQueueRequestsPost
+      description: |
+        Передавши відповідні параметри, ви створите новий 
+        запис таблиці запитів в чергу.
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                geo_lat:
+                  type: number
+                  description: "Широта геолокації. Таблиця: Запити на чергу(pq_queue_request)"
+                  example: 45.343553
+                geo_lng:
+                  type: number
+                  description: "Довгота геолокації. Таблиця: Запити на чергу(pq_queue_request)"
+                  example: 45.343553
+                queue_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор запису таблиці види черг. Таблиця: Види черг(pq_queue)"
+                  example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+                race_guid:
+                  type: string
+                  description: "Унікальний ідентифікатор запису таблиці види черг. Таблиця: Види черг(pq_queue)"
+                  example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+                direction:
+                  type: string
+                  enum: [loading, unloading]
+                  description: "Напрямок черги(навантаження, розвантаження). Таблиця: Запити на чергу(pq_queue_request)"
+                  example: loading
+                source:
+                  type: string
+                  enum: [th, th_disp, bulkdata, track_check, admin]
+                  description: "Джерело створення запиту на чергу. Таблиця: Запити на чергу(pq_queue_request)"
+                  example: th
+                check_geo:
+                  type: boolean
+                  enum: [1, 0]
+                  description: "Ознака необхідності перевірки знаходження в зоні геолокації. Таблиця: Запити на чергу(pq_queue_request)"
+                  example: 0
+                is_by_driver:
+                  type: boolean
+                  enum: [1, 0]
+                  description: "Ознака необхідності перевірки знаходження в зоні геолокації. Таблиця: Запити на чергу(pq_queue_request)"
+                  example: 1
+      responses:
+        200:
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+        400:
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+        403:
+          description: 'Клієнт немає прав доступу'
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_NoDataFoundNew'
+      x-codegen-request-body-name: payload
+  
   /races:
     post:
       tags:
