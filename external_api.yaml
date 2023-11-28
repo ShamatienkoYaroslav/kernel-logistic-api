@@ -3566,6 +3566,10 @@ components:
     _ComplexError:
       type: object
       properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
         error:
           type: object
           properties:
@@ -3584,18 +3588,25 @@ components:
     _UserisNotAuthorizedNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20003
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid access token
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values for access token. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20003
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid access token
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values for access token. Please contact with API's admin."
+              description: Деталі
     authCheckPinTrue:
       type: object
       description: Перевірка пінкода. Пінкод пройшов перевірку
@@ -4518,6 +4529,10 @@ components:
     _ClientHasNoRightsNew:
       type: object
       properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
         error:
           type: object
           properties:
@@ -4536,6 +4551,10 @@ components:
     _NoDataFoundNew:
       type: object
       properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
         error:
           type: object
           properties:
@@ -4554,6 +4573,10 @@ components:
     _BadRequestNew:
       type: object
       properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
         error:
           type: object
           properties:

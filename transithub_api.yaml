@@ -9688,18 +9688,25 @@ components:
     _UserisNotAuthorizedNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20003
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid access token
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values for access token. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20003
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid access token
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values for access token. Please contact with API's admin."
+              description: Деталі
     _ClientHasNoRights:
       type: object
       properties:
@@ -9714,18 +9721,25 @@ components:
     _ClientHasNoRightsNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20000
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid client_token
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values for client token. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20000
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid client_token
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values for client token. Please contact with API's admin."
+              description: Деталі
     _NoDataFound:
       type: object
       properties:
@@ -9740,18 +9754,25 @@ components:
     _NoDataFoundNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20002
-          description: Код помилки
-        message:
-          type: string
-          example: Object not found by guid
-          description: Повідомлення
-        detail:
-          type: string
-          example: "Can't find object by given guid. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20002
+              description: Код помилки
+            message:
+              type: string
+              example: Object not found by guid
+              description: Повідомлення
+            detail:
+              type: string
+              example: "Can't find object by given guid. Please contact with API's admin."
+              description: Деталі
     _BadRequest:
       type: object
       properties:
@@ -9766,21 +9787,32 @@ components:
     _BadRequestNew:
       type: object
       properties:
-        code:
-          type: integer
-          example: 20001
-          description: Код помилки
-        message:
-          type: string
-          example: Invalid income data
-          description: Повідомлення
-        detail:
-          type: string
-          example: "You need to specify correct values in params, headers and body payload. Please contact with API's admin."
-          description: Деталі
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+              example: 20001
+              description: Код помилки
+            message:
+              type: string
+              example: Invalid income data
+              description: Повідомлення
+            detail:
+              type: string
+              example: "You need to specify correct values in params, headers and body payload. Please contact with API's admin."
+              description: Деталі
     _ComplexError:
       type: object
       properties:
+        status:
+          type: boolean
+          example: false
+          description: 'Статус відповіді'
         error:
           type: object
           properties:
