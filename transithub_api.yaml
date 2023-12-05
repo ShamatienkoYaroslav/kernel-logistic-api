@@ -7488,8 +7488,13 @@ paths:
           schema:
             type: string
             enum: [track_check, th]
+        - name: order
+          in: query
+          description: Порядковий номер файла
+          schema:
+            type: integer
       requestBody:
-        description: Дані для реєстрації запиту на чергу
+        description: Файл, що передається
         content:
           '*/*':
             schema:
@@ -7505,7 +7510,7 @@ paths:
                 properties:
                   guid:
                     type: string
-                    description: Ідентифікатор запиту на чергу
+                    description: Ідентифікатор файлу
                     format: uuid
                     example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
                   status:
