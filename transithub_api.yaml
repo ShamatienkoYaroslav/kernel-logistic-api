@@ -4322,7 +4322,7 @@ paths:
                     Передаєм, якщо неможливо скористатися параметром pq_warehouse_guid
                     Таблиця: Склади (warehouse)"
                   example: ЗЕРНОГОР
-                warehouse_to_classificator_code:
+                warehouse_to_code:
                   type: string
                   description: |
                     Код класифікатора складу, який буде використано для відбору рейсів з таким же складом розвантаження
