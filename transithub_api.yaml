@@ -6900,6 +6900,175 @@ paths:
           description: server error
           content: {}
 
+  /races/localities:
+    get:
+      tags:
+        - 'T031 - Населені пункти'
+      summary: "Отримання всіх населених пунктів по профілю і напрямку"
+      operationId: raceLocalitiesGet
+      description: "Отримання всіх населених пунктів по профілю і напрямку(навантаження/розвантаження), які використані в рейсах, що зареєстровані в черзі."
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: 'Унікальний ідентифікатор профіля черги'
+          required: true
+          schema:
+            type: string
+            example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+        - in: query
+          name: direction
+          description: 'Напрямок черги (навантаження/розвантаження)'
+          required: true
+          schema:
+            type: string
+            example: loading
+            enum: [loading, unloading]
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів пошуку, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Дані про територіальну одиницю
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocalitiesGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        500:
+          description: server error
+          content: {}
+  /races/warehouses:
+    get:
+      tags:
+        - 'T032 - Склади'
+      summary: Вузол для отримання всіх складів по профілю і напрямку
+      operationId: raceWarehousesGet
+      description: |
+        Отримання всіх складів по профілю і напрямку(навантаження/розвантаження), які використані в рейсах, що зареєстровані в черзі.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: 'Унікальний ідентифікатор профіля черги'
+          required: true
+          schema:
+            type: string
+            example: '9de597bc-d84d-3499-c5da-935f8f638e4e'
+        - in: query
+          name: direction
+          description: 'Напрямок черги (навантаження/розвантаження)'
+          required: true
+          schema:
+            type: string
+            example: loading
+            enum: [loading, unloading]
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів пошуку, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Дані складу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RaceWarehousesGet'
+                  count:
+                    type: integer
+                    example: 14
+                    description: Кількість знайдених результатів
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        401:
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        500:
+          description: server error
+          content: {}
   /race/verification/photo:
     get:
       tags: ['T020 - Файли (вкладення)', 'T014 - Файли (вкладення)']
@@ -13309,6 +13478,64 @@ components:
             type: string
             example: '230312-00000123'
             description: "Номер підпорядкованого рейсу. Таблиця: Рейси(races)"
+    RaceWarehousesGet:
+      type: object
+      description: Дані териториальної одиниці
+      properties:
+        name_ua:
+          type: string
+          example: 'Бандурський ОЕЗ'
+          description: 'Назва складу'
+        name_ru:
+          type: string
+          example: 'Бандурський ОЕЗ'
+          description: 'Назва складу'
+        guid:
+          type: string
+          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+          description: 'Унікальний ідентифікатор териториальної одиниці'
+        lat:
+          type: string
+          example: '50.5831258'
+          description: 'Широта'
+        lng:
+          type: string
+          example: '30.4856785'
+          description: 'Довгота'
+        full_address:
+          type: string
+          example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
+          description: 'Повна адреса'
+        street_type:
+          type: string
+          example: 'вулиця'
+          description: 'Тип вулиці'
+        street_name:
+          type: string
+          example: 'Центральна'
+          description: 'Назва вулиці'
+        building_n:
+          type: string
+          example: '40'
+          description: 'Номер будинку'
+        koatuu:
+          type: string
+          example: '3221810100'
+          description: 'КОАТУУ'
+        classificator_code:
+          type: string
+          example: '4825487602001'
+          description: 'Код складу'
+        kt:
+          type: integer
+          enum: [0, 1]
+          example: 0
+          description: 'Ознака приналежності до КТ'
+        is_used:
+          type: integer
+          enum: [0, 1]
+          example: 1
+          description: 'Ознака використання складу'        
     PqRaceTraffic:
       type: object
       properties:
