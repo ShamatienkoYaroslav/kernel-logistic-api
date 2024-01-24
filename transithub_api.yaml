@@ -4206,6 +4206,20 @@ paths:
           description: Фільтр по коду напрямку направлення
           schema:
             type: string
+        - in: query
+          name: warehouse_to_code
+          description: Фільтр для відбору по складу розвантаження рейса (код класифікатора)
+          required: false
+          schema:
+            type: string
+            example: 5110800000001
+        - in: query
+          name: point_from_koatuu
+          description: Фільтр для відбору по пункту навантаження рейса (код КОАТУУ)
+          required: false
+          schema:
+            type: string
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
       responses:
         200:
           description: Успіх
@@ -6702,6 +6716,44 @@ paths:
           schema:
             type: string
             enum: [0, 1, null]
+        - in: query
+          name: customer_guid
+          description: Унікальний ідентифікатор для відбору по замовнику рейса
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: consignor_guid
+          description: Унікальний ідентифікатор для відбору по вантажовідправнику рейса
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: for_owner_guid
+          description: Унікальний ідентифікатор для відбору по поклажодавцю рейса
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: warehouse_to_code
+          description: Фільтр для відбору по складу розвантаження рейса (код класифікатора)
+          required: false
+          schema:
+            type: string
+            example: 5110800000001
+        - in: query
+          name: point_from_koatuu
+          description: Фільтр для відбору по пункту навантаження рейса (код КОАТУУ)
+          required: false
+          schema:
+            type: string
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
       responses:
         '200':
           description: Інформація про рейси для профіля/черги
@@ -14131,6 +14183,10 @@ components:
             type: string
             description: "Місцезнаходження російською. Таблиця: Місцезнаходження(location)"
             example: "ВОЛЬВО"
+          warehouse_to_name:
+            type: string
+            description: "Назва складу розвантаження. Таблиця: Склади(warehouse)"
+            example: "Трансбалктермінал"
     QueueRegJournalPQqueue:
       type: array
       items:
