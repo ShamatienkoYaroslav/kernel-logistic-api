@@ -12570,6 +12570,18 @@ components:
             Рейси з ознакою ТЗ самоскид.
             Таблиця: Направлення на в'їзд (departure_permission)
           example: 0
+        warehouse_to_name:
+          type: string
+          example: Полтавський ОЕЗ
+          description: |
+            Назва складу розвантаження
+            Таблиця: Склади (warehouse)
+        point_from_description_ua:
+          type: string
+          example: Україна, Вінницька обл., Вінницький район, с. Колюхів
+          description: |
+            Повна адреса населеного пункту
+            Таблиця: Населені пункти (locality)
     UsersFindByGuid:
       type: object
       description: Дані користувача
