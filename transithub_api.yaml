@@ -7041,7 +7041,7 @@ paths:
       tags:
         - 'T032 - Склади'
       summary: Вузол для отримання всіх складів по профілю і напрямку
-      operationId: raceWarehousesGet
+      operationId: raceWarehousesGetAPi
       description: |
         Отримання всіх складів по профілю і напрямку(навантаження/розвантаження), які використані в рейсах, що зареєстровані в черзі.
       parameters:
@@ -13482,6 +13482,66 @@ components:
             type: string
             example: 'В пункте назначения'
             description: "Назва локації російською. Таблиця: Місцезнаходження(location)"
+    RaceWarehousesGet:
+      type: array
+      items:
+        type: object
+        description: Дані териториальної одиниці
+        properties:
+          name_ua:
+            type: string
+            example: "Бандурський ОЕЗ"
+            description: 'Назва складу'
+          name_ru:
+            type: string
+            example: 'Бандурський ОЕЗ'
+            description: 'Назва складу'
+          guid:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+            description: 'Унікальний ідентифікатор териториальної одиниці'
+          lat:
+            type: string
+            example: '50.5831258'
+            description: 'Широта'
+          lng:
+            type: string
+            example: '30.4856785'
+            description: 'Довгота'
+          full_address:
+            type: string
+            example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
+            description: 'Повна адреса'
+          street_type:
+            type: string
+            example: 'вулиця'
+            description: 'Тип вулиці'
+          street_name:
+            type: string
+            example: 'Центральна'
+            description: Назва вулиці
+          building_n:
+            type: string
+            example: '40'
+            description: Номер будинку
+          koatuu:
+            type: string
+            example: '3221810100'
+            description: 'КОАТУУ'
+          classificator_code:
+            type: string
+            example: '4825487602001'
+            description: Код складу
+          kt:
+            type: integer
+            enum: [0, 1]
+            example: 0
+            description: Ознака приналежності до КТ
+          is_used:
+            type: integer
+            enum: [0, 1]
+            example: 1
+            description: Ознака використання складу
     RaceEventsArr:
       description: Історія подій рейсу
       type: array
@@ -13542,64 +13602,6 @@ components:
             type: string
             example: '230312-00000123'
             description: "Номер підпорядкованого рейсу. Таблиця: Рейси(races)"
-    RaceWarehousesGet:
-      type: object
-      description: Дані териториальної одиниці
-      properties:
-        name_ua:
-          type: string
-          example: 'Бандурський ОЕЗ'
-          description: 'Назва складу'
-        name_ru:
-          type: string
-          example: 'Бандурський ОЕЗ'
-          description: 'Назва складу'
-        guid:
-          type: string
-          example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-          description: 'Унікальний ідентифікатор териториальної одиниці'
-        lat:
-          type: string
-          example: '50.5831258'
-          description: 'Широта'
-        lng:
-          type: string
-          example: '30.4856785'
-          description: 'Довгота'
-        full_address:
-          type: string
-          example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
-          description: 'Повна адреса'
-        street_type:
-          type: string
-          example: 'вулиця'
-          description: 'Тип вулиці'
-        street_name:
-          type: string
-          example: 'Центральна'
-          description: 'Назва вулиці'
-        building_n:
-          type: string
-          example: '40'
-          description: 'Номер будинку'
-        koatuu:
-          type: string
-          example: '3221810100'
-          description: 'КОАТУУ'
-        classificator_code:
-          type: string
-          example: '4825487602001'
-          description: 'Код складу'
-        kt:
-          type: integer
-          enum: [0, 1]
-          example: 0
-          description: 'Ознака приналежності до КТ'
-        is_used:
-          type: integer
-          enum: [0, 1]
-          example: 1
-          description: 'Ознака використання складу'        
     PqRaceTraffic:
       type: object
       properties:
