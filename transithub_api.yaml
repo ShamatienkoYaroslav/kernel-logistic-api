@@ -14,8 +14,6 @@ tags:
     description: Вузли для інтерфейсу водія
   - name: 'Т001 - Чорний список'
     description: Вузли для роботи з чорним списком
-  - name: Поклажодавці
-    description: Вузли для роботи з профілем черги
   - name: Глобальні налаштування
     description: Глобальні налаштування для роботи Transithub
   - name: 'T002 - Наряди'
@@ -40,6 +38,8 @@ tags:
     description: Вузол для роботи із фільтрами користувача та їх наборами
   - name: 'T011 - Статус ТЗ'
     description: Вузол для роботи із зміною статусу ТЗ
+  - name: 'T012 - Поклажодавці'
+    description: Вузли для роботи з поклажодавцями профіля черги
   - name: 'T013 - Документи'
     description: Вузол для роботи з документами
   - name: 'T014 - Файли (вкладення)'
@@ -5159,7 +5159,7 @@ paths:
     get:
       tags:
         - 'Т037 - Профіль черги'
-        - 'Поклажодавці'
+        - 'T012 - Поклажодавці'
       summary: Поклажодавці профіля черги
       operationId: PQueueProfileCargoOwnersGET
       description: |
@@ -7101,7 +7101,7 @@ paths:
                   items:
                     type: array
                     items:
-                      $ref: '#/components/schemas/RaceWarehousesGet'
+                      $ref: '#/components/schemas/ActiveRaceWarehousesGet'
                   count:
                     type: integer
                     example: 14
@@ -7121,6 +7121,80 @@ paths:
         500:
           description: server error
           content: {}
+  /races/cargo_owners:
+    get:
+      tags:
+        - 'T012 - Поклажодавці'
+      summary: Поклажодавці профіля черги по активним рейсам
+      operationId: RaceCargoOwnersGET
+      description: |
+        Поклажодавці профіля черги по активним рейсам
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: direction
+          description: Напрямок черги
+          required: false
+          schema:
+            type: string
+            enum: [loading, unloading]
+      responses:
+        '200':
+          description: Поклажодавці активних рейсів
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: 'Статус відповіді'
+                  count:
+                    type: integer
+                    example: 3
+                    description: 'Кількість записів'
+                  items:
+                    $ref: '#/components/schemas/ActiveRaceCargoOwner'
+        '403':
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '401':
+          description: 'Користувач не авторизований'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
   /race/verification/photo:
     get:
       tags: ['T020 - Файли (вкладення)', 'T014 - Файли (вкладення)']
@@ -10169,6 +10243,81 @@ components:
                 type: string
                 description: 'Державний номер транспортного засобу. Таблиця: транспортні засоби(th_vehicles)'
                 example: BI5261EB
+    ActiveRaceCargoOwner:
+      type: object
+      properties:
+        name_ua:
+          type: string
+          example: 'ТОВ Дружба Нова'
+          description: 'Назва поклажодавця'
+        edrpou:
+          type: string
+          example: '0003343431'
+          description: 'Код ЄДРПОУ поклажодавця'
+        guid:
+          type: string
+          example: 'cf5ac228-04d1-e530-e351-ead65b83f97c'
+          description: 'Унікальний ідентифікатор поклажодавця'
+    ActiveRaceWarehousesGet:
+      type: array
+      items:
+        type: object
+        description: Дані териториальної одиниці
+        properties:
+          name_ua:
+            type: string
+            example: "Бандурський ОЕЗ"
+            description: 'Назва складу'
+          name_ru:
+            type: string
+            example: 'Бандурський ОЕЗ'
+            description: 'Назва складу'
+          guid:
+            type: string
+            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
+            description: 'Унікальний ідентифікатор териториальної одиниці'
+          lat:
+            type: string
+            example: '50.5831258'
+            description: 'Широта'
+          lng:
+            type: string
+            example: '30.4856785'
+            description: 'Довгота'
+          full_address:
+            type: string
+            example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
+            description: 'Повна адреса'
+          street_type:
+            type: string
+            example: 'вулиця'
+            description: 'Тип вулиці'
+          street_name:
+            type: string
+            example: 'Центральна'
+            description: Назва вулиці
+          building_n:
+            type: string
+            example: '40'
+            description: Номер будинку
+          koatuu:
+            type: string
+            example: '3221810100'
+            description: 'КОАТУУ'
+          classificator_code:
+            type: string
+            example: '4825487602001'
+            description: Код складу
+          kt:
+            type: integer
+            enum: [0, 1]
+            example: 0
+            description: Ознака приналежності до КТ
+          is_used:
+            type: integer
+            enum: [0, 1]
+            example: 1
+            description: Ознака використання складу
     DriverRace:
       type: object
       properties:
@@ -13451,6 +13600,23 @@ components:
             type: number
             example: 76.6
             description: Час очікування
+    QueueProfilesLocations:
+      type: array
+      items:
+        type: object
+        properties:
+          guid:
+            type: string
+            example: ba287fd9-22c8-5349-65e5-4030d54f9986
+            description: "Унікальний ідентифікатор запису. Таблиця: Місцезнаходження профіля черги(pq_queue_profile_to_event)"
+          name_ua:
+            type: string
+            example: У пункті призначення
+            description: "Назва локації українською. Таблиця: Місцезнаходження(location)"
+          name_ru:
+            type: string
+            example: В пункте назначения
+            description: "Назва локації російською. Таблиця: Місцезнаходження(location)"
     QueuesTechnicalDowntime:
       description: Опис точки
       type: array
@@ -13465,83 +13631,6 @@ components:
             type: string
             example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
             description: Унікальний ідентифікатор черги
-    QueueProfilesLocations:
-      type: array
-      items:
-        type: object
-        properties:
-          guid:
-            type: string
-            example: ba287fd9-22c8-5349-65e5-4030d54f9986
-            description: "Унікальний ідентифікатор запису. Таблиця: Місцезнаходження профіля черги(pq_queue_profile_to_event)"
-          name_ua:
-            type: string
-            example: 'У пункті призначення'
-            description: "Назва локації українською. Таблиця: Місцезнаходження(location)"
-          name_ru:
-            type: string
-            example: 'В пункте назначения'
-            description: "Назва локації російською. Таблиця: Місцезнаходження(location)"
-    RaceWarehousesGet:
-      type: array
-      items:
-        type: object
-        description: Дані териториальної одиниці
-        properties:
-          name_ua:
-            type: string
-            example: "Бандурський ОЕЗ"
-            description: 'Назва складу'
-          name_ru:
-            type: string
-            example: 'Бандурський ОЕЗ'
-            description: 'Назва складу'
-          guid:
-            type: string
-            example: '0e6972a5-dffd-2d72-0ba8-88e1bc19e12d'
-            description: 'Унікальний ідентифікатор териториальної одиниці'
-          lat:
-            type: string
-            example: '50.5831258'
-            description: 'Широта'
-          lng:
-            type: string
-            example: '30.4856785'
-            description: 'Довгота'
-          full_address:
-            type: string
-            example: 'Україна, Миколаївська обл., Первомайський район, с. Бандурка, вулиця Центральна 40'
-            description: 'Повна адреса'
-          street_type:
-            type: string
-            example: 'вулиця'
-            description: 'Тип вулиці'
-          street_name:
-            type: string
-            example: 'Центральна'
-            description: Назва вулиці
-          building_n:
-            type: string
-            example: '40'
-            description: Номер будинку
-          koatuu:
-            type: string
-            example: '3221810100'
-            description: 'КОАТУУ'
-          classificator_code:
-            type: string
-            example: '4825487602001'
-            description: Код складу
-          kt:
-            type: integer
-            enum: [0, 1]
-            example: 0
-            description: Ознака приналежності до КТ
-          is_used:
-            type: integer
-            enum: [0, 1]
-            example: 1
-            description: Ознака використання складу
     RaceEventsArr:
       description: Історія подій рейсу
       type: array
