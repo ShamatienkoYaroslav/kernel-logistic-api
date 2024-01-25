@@ -6725,7 +6725,7 @@ paths:
             format: uuid
             example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
         - in: query
-          name: consignor_guid
+          name: sender_guid
           description: Унікальний ідентифікатор для відбору по вантажовідправнику рейса
           required: false
           schema:
