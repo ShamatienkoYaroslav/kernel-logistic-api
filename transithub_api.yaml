@@ -11,22 +11,18 @@ tags:
     description: Вузли для інтерфейсу водія
   - name: Т001 - Чорний список
     description: Вузли для роботи з чорним списком
-  - name: Глобальні налаштування
-    description: Глобальні налаштування для роботи Transithub
   - name: T002 - Наряди
     description: Вузли для роботи з нарядами
-  - name: T006 - Наряди (підписка до відправки)
-    description: Вузли для роботи з підпискою реєстру нарядів до відправки
   - name: T003 - Транспортні засоби
     description: Вузли для роботи з транспортними засобами
   - name: T004 - Водії
     description: Вузли для роботи з водіями
-  - name: T007 - Заявки
-    description: Вузли для роботи із заявками
   - name: T005 - Заявки (к-сть нарядів)
     description: Вузли для роботи з к-стю нарядів для заявки
-  - name: Контрагенти
-    description: Вузли для роботи з таблицею контрагентів
+  - name: T006 - Наряди (підписка до відправки)
+    description: Вузли для роботи з підпискою реєстру нарядів до відправки
+  - name: T007 - Заявки
+    description: Вузли для роботи із заявками
   - name: T008 - Статус водія
     description: Вузол для роботи із зміною статусу водія
   - name: T009 - Закладки
@@ -45,6 +41,10 @@ tags:
     description: Вузол для роботи з організаціями компанії
   - name: T016 - Акредитація
     description: Вузол для роботи з точками АПІ підсистеми акредитації
+  - name: Т017 - Контрагенти
+    description: Вузли для роботи з таблицею контрагентів
+  - name: Т018 - Глобальні налаштування
+    description: Глобальні налаштування для роботи Transithub
   - name: T020 - Файли (вкладення)
     description: Вузол для роботи з файлами документу/рейсу
   - name: T021 - Подорожній лист (інтерфейс водія)
@@ -1077,7 +1077,7 @@ paths:
   /contragent:
     post:
       tags:
-        - Контрагенти
+        - Т017 - Контрагенти
       summary: Створити/оновити контрагента по коду ЕДРПОУ
       operationId: contragentPost
       description: |
@@ -1172,11 +1172,11 @@ paths:
       x-codegen-request-body-name: payload
     get:
       tags:
-        - Контрагенти
+        - Т017 - Контрагенти
       summary: >-
         Вузол отримання всіх контрагентів (перевізників) по частині або повній
         назві
-      operationId: warehousesGet
+      operationId: contragentGet
       description: >
         Вузол отримання всіх контрагентів (перевізників) по частині або повній
         назві
@@ -8299,7 +8299,159 @@ paths:
                     example: 3
                     description: Кількість записів
                   items:
-                    $ref: '#/components/schemas/ActiveRaceCargoOwner'
+                    $ref: '#/components/schemas/ActiveRaceContragent'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+  /races/customers:
+    get:
+      tags:
+        - Т017 - Контрагенти
+      summary: Замовники по активним рейсам
+      operationId: RaceCustomersGET
+      description: |
+        Замовники по активним рейсам
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: direction
+          description: Напрямок черги
+          required: false
+          schema:
+            type: string
+            enum:
+              - loading
+              - unloading
+      responses:
+        '200':
+          description: Замовники по активним рейсам
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/ActiveRaceContragent'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+  /races/consignors:
+    get:
+      tags:
+        - Т017 - Контрагенти
+      summary: Вантажовідправники по активним рейсам
+      operationId: RaceConsignorsGET
+      description: |
+        Вантажовідправники по активним рейсам
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: direction
+          description: Напрямок черги
+          required: false
+          schema:
+            type: string
+            enum:
+              - loading
+              - unloading
+      responses:
+        '200':
+          description: Вантажовідправники по активним рейсам
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/ActiveRaceContragent'
         '401':
           description: Користувач не авторизований
           content:
@@ -9244,7 +9396,7 @@ paths:
   /global_settings:
     get:
       tags:
-        - Глобальні налаштування
+        - Т018 - Глобальні налаштування
       summary: Гобальні налашатування для ТХ
       operationId: globalSettings
       description: |
@@ -11635,7 +11787,7 @@ components:
                   Державний номер транспортного засобу. Таблиця: транспортні
                   засоби(th_vehicles)
                 example: BI5261EB
-    ActiveRaceCargoOwner:
+    ActiveRaceContragent:
       type: object
       properties:
         name_ua:
