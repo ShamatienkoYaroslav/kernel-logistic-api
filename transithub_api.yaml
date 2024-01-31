@@ -7819,24 +7819,21 @@ paths:
           required: false
           schema:
             type: string
-            format: uuid
-            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+            example: 0012338456099
         - in: query
           name: sender_edrpou
           description: Код ЕДРПОУ для відбору по вантажовідправнику рейса
           required: false
           schema:
             type: string
-            format: uuid
-            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+            example: 0012338456099
         - in: query
           name: for_owner_edrpou
           description: Код ЕДРПОУ для відбору по поклажодавцю рейса
           required: false
           schema:
             type: string
-            format: uuid
-            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+            example: 0012338456099
         - in: query
           name: warehouse_to_code
           description: Фільтр для відбору по складу розвантаження рейса (код класифікатора)
