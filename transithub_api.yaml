@@ -7814,24 +7814,24 @@ paths:
               - 1
               - null
         - in: query
-          name: customer_guid
-          description: Унікальний ідентифікатор для відбору по замовнику рейса
+          name: customer_edrpou
+          description: Код ЕДРПОУ для відбору по замовнику рейса
           required: false
           schema:
             type: string
             format: uuid
             example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
         - in: query
-          name: sender_guid
-          description: Унікальний ідентифікатор для відбору по вантажовідправнику рейса
+          name: sender_edrpou
+          description: Код ЕДРПОУ для відбору по вантажовідправнику рейса
           required: false
           schema:
             type: string
             format: uuid
             example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
         - in: query
-          name: for_owner_guid
-          description: Унікальний ідентифікатор для відбору по поклажодавцю рейса
+          name: for_owner_edrpou
+          description: Код ЕДРПОУ для відбору по поклажодавцю рейса
           required: false
           schema:
             type: string
@@ -14814,9 +14814,15 @@ components:
             Таблиця: Склади (warehouse)
         point_from_description_ua:
           type: string
-          example: 'Україна, Вінницька обл., Вінницький район, с. Колюхів'
+          example: "Володимир-Волинський, Волинська"
           description: |
-            Повна адреса населеного пункту
+            Коротка адреса населеного пункту навантаження
+            Таблиця: Населені пункти (locality)
+        point_to_description_ua:
+          type: string
+          example: "Чорноморськ, Одеська"
+          description: |
+            Коротка адреса населеного пункту розвантаження
             Таблиця: Населені пункти (locality)
     UsersFindByGuid:
       type: object
@@ -16488,6 +16494,10 @@ components:
             type: string
             description: 'Місцезнаходження російською. Таблиця: Місцезнаходження(location)'
             example: ВОЛЬВО
+          warehouse_from_name:
+            type: string
+            description: 'Назва складу навантаження. Таблиця: Склади(warehouse)'
+            example: Трансбалктермінал
           warehouse_to_name:
             type: string
             description: 'Назва складу розвантаження. Таблиця: Склади(warehouse)'
