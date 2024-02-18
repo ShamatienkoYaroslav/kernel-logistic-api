@@ -5169,6 +5169,148 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
+  /departure_permission/localities:
+    get:
+      tags:
+        - Т026 - Направлення на в'їзд
+      summary: Отримання населених пунктів Направлення на в'їзд
+      description: >
+        Передавши відповідні параметри, ви отримаєте населені пункти документу Дозвіл на
+        в'їзд
+      operationId: departurePermissionGetLocalitiesID
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocalitiesGet'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт немає прав доступу
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+  /departure_permission/warehouses:
+    get:
+      tags:
+        - Т026 - Направлення на в'їзд
+      summary: Отримання складів Направлення на в'їзд
+      description: >
+        Передавши відповідні параметри, ви отримаєте склади документу Дозвіл на
+        в'їзд
+      operationId: departurePermissionGetWarehousesID
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: number
+                    description: Кількість елементів массиву
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ActiveRaceWarehousesGet'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт немає прав доступу
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /departure_assistant:
     get:
       tags:
@@ -8086,15 +8228,32 @@ paths:
             type: string
             example: 9de597bc-d84d-3499-c5da-935f8f638e4e
         - in: query
-          name: direction
-          description: Напрямок черги (навантаження/розвантаження)
-          required: true
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
+          required: false
           schema:
             type: string
-            example: loading
+            example: in_queue
             enum:
-              - loading
-              - unloading
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
         - in: query
           name: limit
           description: 'Обмеження кількості результатів пошуку, що виводяться'
@@ -8175,15 +8334,32 @@ paths:
             type: string
             example: 9de597bc-d84d-3499-c5da-935f8f638e4e
         - in: query
-          name: direction
-          description: Напрямок черги (навантаження/розвантаження)
-          required: true
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
+          required: false
           schema:
             type: string
-            example: loading
+            example: in_queue
             enum:
-              - loading
-              - unloading
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
         - in: query
           name: limit
           description: 'Обмеження кількості результатів пошуку, що виводяться'
@@ -8271,14 +8447,32 @@ paths:
           schema:
             type: string
         - in: query
-          name: direction
-          description: Напрямок черги
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
           required: false
           schema:
             type: string
+            example: in_queue
             enum:
-              - loading
-              - unloading
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
       responses:
         '200':
           description: Поклажодавці активних рейсів
@@ -8347,14 +8541,32 @@ paths:
           schema:
             type: string
         - in: query
-          name: direction
-          description: Напрямок черги
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
           required: false
           schema:
             type: string
+            example: in_queue
             enum:
-              - loading
-              - unloading
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
       responses:
         '200':
           description: Замовники по активним рейсам
@@ -8423,14 +8635,32 @@ paths:
           schema:
             type: string
         - in: query
-          name: direction
-          description: Напрямок черги
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
           required: false
           schema:
             type: string
+            example: in_queue
             enum:
-              - loading
-              - unloading
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
       responses:
         '200':
           description: Вантажовідправники по активним рейсам
