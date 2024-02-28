@@ -13031,6 +13031,14 @@ components:
           example: 0
           enum: [1, 0]
           description: "Потрібна реєстрація ТТН. Таблиця: Події(events)"
+        order_data_stop:
+          type: string
+          example: '28.02.2024'
+          description: "Дата завантаження заявки рейсу. Таблиця: Заявки(request)"
+        waybill_registered:
+          type: string
+          example: '28.02.2024 17:30:18'
+          description: "Дата реєстрації ТТН. Таблиця: Рейси(races)"
         new:
           type: integer
           example: 0
