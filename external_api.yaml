@@ -36,6 +36,8 @@ tags:
     description: Вузли для роботи з населеними пунктами
   - name: Т009 - Запити на чергу
     description: Вузли для роботи з запитами в чергу
+  - name: Т010 - Події
+    description: Вузли для роботи з подіями рейсу водія
 
 paths:
   /auth/check_pincode:
@@ -1615,6 +1617,90 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /events:
+    get:
+      tags:
+        - Т010 - Події
+      summary: Список подій рейсу водія
+      operationId: EventsGET
+      description: |
+        Список подій рейсу водія.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу водія
+          schema:
+            type: string
+        - in: query
+          name: kind
+          description: Вид події. За замовчуванням повертаються події з видом STATUS і OTHER
+          schema:
+            type: string
+            enum: [STATUS, OTHER]
+        - in: query
+          name: direction
+          description: Напрямок черги
+          schema:
+            type: string
+            enum: [unloading, loading]
+      responses:
+        '200':
+          description: Список подій рейсу водія
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/Event'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Системна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   
   /localities:
     get:
@@ -3970,6 +4056,92 @@ components:
           type: string
           format: uuid
           example: 36f9532e-079c-11ea-5888-0242ac140003
+    Event:
+      type: object
+      properties:
+        i:
+          type: integer
+          example: 10
+          description: "Порядковий номер запису массива"
+        name:
+          type: string
+          example: Навантаження. Переміщено в початок черги
+          description: "Назва події. Таблиця: Події(events)"
+        name_ru:
+          type: string
+          example: Навантаження. Переміщено в початок черги
+          description: "Назва події. Таблиця: Події(events)"
+        status:
+          type: string
+          example: Проведення аналізу
+          description: "Статус події: опис поточного стану рейсу, коли відбулася подія. Таблиця: Події(events)"
+        status_ru:
+          type: string
+          example: Проведення аналізу
+          description: "Статус події: опис поточного стану рейсу, коли відбулася подія. Таблиця: Події(events)"
+        msg:
+          type: string
+          example: "Повідомте про результати погодження, коли вони стануть відомі: Розвантаження дозволено; Розвантаження заборонено (Халепа)"
+          description: "Додаткова інформація для події водія. Таблиця: Події(events)"
+        msg_ru:
+          type: string
+          example: "Повідомте про результати погодження, коли вони стануть відомі: Розвантаження дозволено; Розвантаження заборонено (Халепа)"
+          description: "Додаткова інформація для події водія. Таблиця: Події(events)"
+        error_text_ua:
+          type: string
+          example: "Зареєструйте ТТН та повторіть спробу"
+          description: "Тест сповіщення користувачу про причину блокування події. Таблиця: Шаблони текстів(text_template)"
+        error_text_ru:
+          type: string
+          example: "Зарегистрируйте ТТН и повторите попытку"
+          description: "Тест сповіщення користувачу про причину блокування події. Таблиця: Шаблони текстів(text_template)"
+        guid:
+          type: string
+          example: '4ERGA_MOVE_BEGIN_LOAD'
+          description: "Унікальний ідентифікатор події. Таблиця: Події(events)"
+        type:
+          type: string
+          example: IN_PROGRESS
+          description: "Тип події. Значення статусу рейсу. Таблиця: Події(events)"
+          enum: [REGISTERED, DONE, PAUSE, CANCELED, IN_PROGRESS]
+        kind:
+          type: string
+          example: STATUS
+          description: "Вид події. Використовуються події з видом STATUS та OTHER. GEO - виключно для геолокації. Таблиця: Події(events)"
+          enum: [STATUS, OTHER, GEO]
+        order_:
+          type: integer
+          example: 33
+          description: "Порядковий номер події. Таблиця: Події(events)"
+        need_geo:
+          type: integer
+          example: 0
+          enum: [1, 0]
+          description: "Потрібні геомітки (так/ні). Таблиця: Події(events)"
+        direction:
+          type: string
+          example: loading
+          description: "Напрямок черги. Таблиця: Події(events)"
+          enum: ['unloading', 'loading', '-']
+        bd_on:
+          type: integer
+          example: 0
+          enum: [1, 0]
+          description: "Ознака складу BDon. Таблиця: Склади, Налаштування складів(warehouse, warehouse_settings)"
+        registration_required:
+          type: integer
+          example: 0
+          enum: [1, 0]
+          description: "Потрібна реєстрація ТТН. Таблиця: Події(events)"
+        new:
+          type: integer
+          example: 0
+          enum: [1, 0]
+          description: "Рудимент. Завжди має значення 1"
+        is_blocked:
+          type: boolean
+          example: false
+          description: "Подію заблоковано"
     LocalitiesGet:
       type: object
       description: Дані териториальної одиниці
