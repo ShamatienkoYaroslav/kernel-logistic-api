@@ -16645,6 +16645,14 @@ components:
             type: string
             description: 'Номер заявки. Таблиця: Заявки(requests)'
             example: 221202-00000027
+          request_date:
+            type: string
+            description: 'Дата завантаження заявки. Таблиця: Заявки(requests)'
+            example: '02.12.2022'
+          request_loading_date:
+            type: string
+            description: 'Дата завантаження рейсу. Таблиця: Рейси(races)'
+            example: '02.12.2022'
           waybill_number:
             type: string
             description: 'Номер ТТН. Таблиця: Рейси(races)'
