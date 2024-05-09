@@ -4881,6 +4881,11 @@ paths:
                     Коментар користувача. Таблиця: Направлення на в'їзд
                     (departure_permission)
                   example: Коментар користувача
+                humidity_code:
+                  type: string
+                  description: >-
+                    Код ступеня волоості. Таблиця: Ступені якості(quality_indicator_category)
+                  example: Коментар користувача
                 goods_guid:
                   type: string
                   description: 'Код вантажу. Таблиця: Вантажі (goods)'
@@ -8875,11 +8880,11 @@ paths:
                         name_ua:
                           type: string
                           example: Сухе
-                          description: Назва ступеня показника якості
+                          description: "Назва ступеня показника якості. Таблиця: Ступені якості/рейси(quality_indicator_category/races)"
                         code:
                           type: string
                           example: 'CУX'
-                          description: Код ступеня показника якості
+                          description: "Код ступеня показника якості. Таблиця: Ступені якості/рейси(quality_indicator_category/races)"
         '401':
           description: Користувач не авторизований
           content:
@@ -16734,6 +16739,14 @@ components:
               - 0
             description: 'Ознака наявності лабораторного аналізу. Таблиця: Рейси(races)'
             example: 1
+          humidity_name:
+            type: string
+            description: 'Назва ступеня вологості. Таблиця: Рейси(races)'
+            example: Вологе
+          humidity:
+            type: number
+            description: 'Значення вологості. Таблиця: Рейси(races)'
+            example: 0,5
           is_coupler:
             type: integer
             enum:
