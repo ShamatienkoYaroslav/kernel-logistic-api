@@ -7,7 +7,7 @@ servers:
   - description: Development Server
     url: 'https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub'
 tags:
-  - name: Інтерфейс водія
+  - name: Т000 - Інтерфейс водія
     description: Вузли для інтерфейсу водія
   - name: Т001 - Чорний список
     description: Вузли для роботи з чорним списком
@@ -9733,7 +9733,7 @@ paths:
     get:
       tags:
         - Т040 - ТТН
-        - Інтерфейс водія
+        - Т000 - Інтерфейс водія
       summary: Пошук ТТН водія (історія)
       operationId: waybillsHistory
       description: >
@@ -10796,7 +10796,7 @@ paths:
     put:
       tags:
         - T021 - Подорожній лист (інтерфейс водія)
-        - Інтерфейс водія
+        - Т000 - Інтерфейс водія
       summary: Зміна даних подорожнього листа
       operationId: TravelLetterSet
       description: |
