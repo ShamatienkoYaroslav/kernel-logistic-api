@@ -8869,15 +8869,17 @@ paths:
                     description: Кількість записів
                   items:
                     type: array
-                    properties:
-                      name_ua:
-                        type: string
-                        example: Сухе
-                        description: Назва ступеня показника якості
-                      code:
-                        type: string
-                        example: 'CУX'
-                        description: Код ступеня показника якості
+                    items:
+                      type: object
+                      properties:
+                        name_ua:
+                          type: string
+                          example: Сухе
+                          description: Назва ступеня показника якості
+                        code:
+                          type: string
+                          example: 'CУX'
+                          description: Код ступеня показника якості
         '401':
           description: Користувач не авторизований
           content:
