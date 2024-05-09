@@ -45,6 +45,8 @@ tags:
     description: Вузли для роботи з таблицею контрагентів
   - name: Т018 - Глобальні налаштування
     description: Глобальні налаштування для роботи Transithub
+  - name: Т019 - Показники якості
+    description: Вузли для роботи з показниками якості
   - name: T020 - Файли (вкладення)
     description: Вузол для роботи з файлами документу/рейсу
   - name: T021 - Подорожній лист (інтерфейс водія)
@@ -8773,6 +8775,109 @@ paths:
                     description: Кількість записів
                   items:
                     $ref: '#/components/schemas/ActiveRaceContragent'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+  /races/humidity:
+    get:
+      tags:
+        - Т019 - Показники якості
+      summary: Ступені вологості по активним рейсам
+      operationId: RaceHumidityGET
+      description: |
+        Ступені вологості по активним рейсам
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: queue_statuses
+          description: >-
+            "Статуси черги(можна передати як один, так і массив статусів розділених знаком ;):
+            1. Обробляється на чергу - in_process
+            2. Відхилено - rejected	
+            3. В черзі - in_queue
+            4. Направлено на в'їзд - drop
+            5. Обробляється вибуття - in_process_to_drop
+            6. Вибув з черги - dropped	
+            7. Обробляється переміщення - in_process_shift
+            8. Обробляється направлення на в'їзд - in_process_move_to_entry
+            9. Очікує реєстрації - waiting_for_registration" 
+          required: false
+          schema:
+            type: string
+            example: in_queue
+            enum:
+              - in_process
+              - rejected
+              - in_queue
+              - drop
+              - in_process_to_drop
+              - dropped
+              - in_process_shift
+              - in_process_move_to_entry
+              - waiting_for_registration
+      responses:
+        '200':
+          description: Вантажовідправники по активним рейсам
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    type: array
+                    properties:
+                      name_ua:
+                        type: string
+                        example: Сухе
+                        description: Назва ступеня показника якості
+                      code:
+                        type: string
+                        example: 'CУX'
+                        description: Код ступеня показника якості
         '401':
           description: Користувач не авторизований
           content:
