@@ -4796,6 +4796,13 @@ paths:
           schema:
             type: string
             example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: humidity_code
+          description: Фільтр для відбору по ступеню вологості (Ступені вологості/quality_indicator_category)
+          required: false
+          schema:
+            type: string
+            example: ВОЛ
       responses:
         '200':
           description: Успіх
@@ -8091,6 +8098,13 @@ paths:
           schema:
             type: string
             example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+        - in: query
+          name: humidity_code
+          description: Фільтр для відбору по ступеню вологості (Ступені вологості/quality_indicator_category)
+          required: false
+          schema:
+            type: string
+            example: ВОЛ
       responses:
         '200':
           description: Інформація про рейси для профіля/черги
@@ -15261,7 +15275,6 @@ components:
           type: string
           description: >
             Статус документа (done - виконано, error - виконано з помилками,
-
             new - новий, draft - чорновик). Таблиця: Направлення на в'їзд
             (departure_permission)
           enum:
@@ -15351,6 +15364,14 @@ components:
           description: |
             Коротка адреса населеного пункту розвантаження
             Таблиця: Населені пункти (locality)
+        humidity_code:
+          type: string
+          example: СУХ
+          description: "Код ступеню вологості. Таблиця: Ступені вологості(quality_indicator_category)"
+        humidity_name:
+          type: string
+          example: Суха
+          description: "Назва ступеню вологості. Таблиця: Ступені вологості(quality_indicator_category)"
     UsersFindByGuid:
       type: object
       description: Дані користувача
