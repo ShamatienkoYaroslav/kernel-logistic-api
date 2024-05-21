@@ -10086,6 +10086,26 @@ paths:
                   type: string
                   example: Некорректні дані
                   description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
+                is_driver_changed:
+                  type: number
+                  example: 0
+                  enum: [0, 1]
+                  description: 'Ознака зміни водія в наряді. Таблиця: Наряди (request_vehicles_register)'
+                is_vehicle_changed:
+                  type: number
+                  example: 0
+                  enum: [0, 1]
+                  description: 'Ознака зміни ТЗ в наряді. Таблиця: Наряди (request_vehicles_register)'
+                is_trailer_changed:
+                  type: number
+                  example: 0
+                  enum: [0, 1]
+                  description: 'Ознака зміни причепа в наряді. Таблиця: Наряди (request_vehicles_register)'
+                is_autotrain_changed:
+                  type: number
+                  example: 0
+                  enum: [0, 1]
+                  description: 'Ознака зміни автопотягу в наряді. Таблиця: Наряди (request_vehicles_register)'
       responses:
         '401':
           description: Клієнт не авторизований
@@ -14765,6 +14785,26 @@ components:
           type: string
           example: Некоректні дані
           description: 'Коментар водія. Таблиця: Наряди (request_vehicles_register)'
+        is_driver_changed:
+          type: number
+          example: 0
+          enum: [0, 1]
+          description: 'Ознака зміни водія в наряді. Таблиця: Наряди (request_vehicles_register)'
+        is_vehicle_changed:
+          type: number
+          example: 0
+          enum: [0, 1]
+          description: 'Ознака зміни ТЗ в наряді. Таблиця: Наряди (request_vehicles_register)'
+        is_trailer_changed:
+          type: number
+          example: 0
+          enum: [0, 1]
+          description: 'Ознака зміни причепа в наряді. Таблиця: Наряди (request_vehicles_register)'
+        is_autotrain_changed:
+          type: number
+          example: 0
+          enum: [0, 1]
+          description: 'Ознака зміни автопотягу в наряді. Таблиця: Наряди (request_vehicles_register)'
     VerificationFilesGetDocumentTypeLaORttn:
       type: object
       description: Дані по верифікації файлів (document_type = la/ttn)
