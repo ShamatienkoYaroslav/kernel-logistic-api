@@ -9759,9 +9759,7 @@ paths:
       operationId: waybillsHistory
       description: >
         Пошук ТТН водія з рейсом у статусах "Відмінено" та "Завершено" по номеру
-        телефону
-
-        та унікальному ідентифікатору (пошук одної ТТН).
+        телефону та унікальному ідентифікатору (пошук одної ТТН).
       parameters:
         - in: query
           name: client_token
@@ -9797,6 +9795,11 @@ paths:
         - in: query
           name: is_driver_interface
           description: 'Значення(1,0). Ознака інтерфейса водія'
+          schema:
+            type: integer
+        - in: query
+          name: is_electronic_waybill
+          description: 'Значення(1,0). Ознака Є-ТТН'
           schema:
             type: integer
         - in: query
@@ -13283,6 +13286,11 @@ components:
     Waybill:
       type: object
       properties:
+        is_electronic_waybill:
+          type: number
+          example: 1
+          description: 'Ознака Є-ТТН (так/ні). Таблиця: ТТН (waybill)'
+          enum: [0,1]
         waybill_number:
           type: string
           example: ТТН00000012345
