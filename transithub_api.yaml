@@ -2597,6 +2597,13 @@ paths:
               - accepted
               - rejected
         - in: query
+          name: is_agro_active
+          description: 'Це відбір АГРОнарядів по активності: якщо передано 1 - точка повинна для водія повернути тільки активні АГРОнаряди + ВСІ звичайні наряди (тобто НЕагронаряди).'
+          schema:
+            type: number
+            enum:
+              - 1
+        - in: query
           name: only_current_date
           description: Дата завантаження (заявка) = поточна дата
           schema:
