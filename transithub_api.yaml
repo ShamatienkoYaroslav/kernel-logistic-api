@@ -2402,6 +2402,11 @@ paths:
           description: Унікальний ідентифікатор ТТН
           schema:
             type: string
+        - in: query
+          name: phone
+          description: Номер телефону водія в ТТН
+          schema:
+            type: string
       responses:
         '200':
           description: Успіх
@@ -13895,6 +13900,14 @@ components:
           type: array
           description: Дані видів черг
           $ref: '#/components/schemas/WaybillCertificateOfQuality'
+        subordinate_waybills:
+          type: array
+          description: Дані видів черг
+          $ref: '#/components/schemas/WaybillByRace'
+        subordinate_waybills_count:
+          type: number
+          example: 3
+          description: 'Кількість записів масиву "subordinate_waybills"'
     WaybillTemplate:
       type: object
       properties:
