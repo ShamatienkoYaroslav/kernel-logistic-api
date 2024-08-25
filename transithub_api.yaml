@@ -2550,6 +2550,24 @@ paths:
                     type: string
                     example: '2020'
                     description: Рік врожаю
+                  has_laboratory_test:
+                    type: integer
+                    example: 1
+                    enum:
+                      - 0
+                      - 1
+                    description: Ознака наявності лабораторного аналіза
+                  no_waybill_weight:
+                    type: integer
+                    example: 0
+                    enum:
+                      - 0
+                      - 1
+                    description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: ТТН (waybill)'
+                  good_humidity:
+                    type: number
+                    example: 0
+                    description: 'Вологість %. Таблиця: рейси/ТТН (races/waybill)'
         '401':
           description: User is not authorized
           content: {}
