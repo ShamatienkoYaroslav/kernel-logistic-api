@@ -2503,6 +2503,17 @@ paths:
                     - 0
                     - 1
                   description: Ознака наявності лабораторного аналіза
+                no_waybill_weight:
+                  type: integer
+                  example: 0
+                  enum:
+                    - 0
+                    - 1
+                  description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: ТТН (waybill)'
+                good_humidity:
+                  type: number
+                  example: 0
+                  description: 'Вологість %. Таблиця: рейси/ТТН (races/waybill)'
                 error_text_code:
                   type: string
                   example: '060'
@@ -13704,10 +13715,18 @@ components:
             type: string
             example: '30'
             description: 'Кількість по ТТН, т. Таблиця: ТТН (waybill)'
-          is_no_quantity:
+          no_waybill_weight:
             type: integer
             example: 0
             description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: ТТН (waybill)'
+          has_laboratory_test:
+            type: integer
+            example: 0
+            description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: рейси (races)'
+          good_humidity:
+            type: number
+            example: 0
+            description: 'Вологість %. Таблиця: рейси/ТТН (races/waybill)'
           consignor_name:
             type: string
             example: Кернел Трейд
@@ -13932,10 +13951,18 @@ components:
           type: string
           example: '30'
           description: 'Кількість по ТТН, т. Таблиця: ТТН (waybill)'
-        is_no_quantity:
+        no_waybill_weight:
           type: integer
           example: 0
           description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: ТТН (waybill)'
+        has_laboratory_test:
+          type: integer
+          example: 0
+          description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: рейси (races)'
+        good_humidity:
+          type: number
+          example: 0
+          description: 'Вологість %. Таблиця: рейси/ТТН (races/waybill)'
         consignor_name:
           type: string
           example: Кернел Трейд
