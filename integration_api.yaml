@@ -304,7 +304,10 @@ paths:
                     items:
                       oneOf:
                         - $ref: '#/components/schemas/QueueJournal'
-
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість елементів у відповіді
 components:
   schemas:
     Patch:
