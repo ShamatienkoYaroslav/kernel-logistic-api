@@ -273,7 +273,6 @@ paths:
         - in: query
           name: profile_guid
           description: Гуід профіля - використовується, якщо в системі не налаштовано відбір по складу
-          required: true
           schema:
             type: string
         - in: query
