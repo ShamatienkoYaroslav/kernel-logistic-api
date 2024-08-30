@@ -13741,6 +13741,10 @@ components:
             type: integer
             example: 0
             description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: рейси (races)'
+          consignor_editable:
+            type: integer
+            example: 0
+            description: 'Доступне редагування вантажовідправника. Значення(1,0)'
           good_humidity:
             type: number
             example: 0
@@ -13977,6 +13981,10 @@ components:
           type: integer
           example: 0
           description: 'Не вказано вагу по ТТН. Значення(1,0).Таблиця: рейси (races)'
+        consignor_editable:
+            type: integer
+            example: 0
+            description: 'Доступне редагування вантажовідправника. Значення(1,0)'
         good_humidity:
           type: number
           example: 0
