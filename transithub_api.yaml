@@ -9884,6 +9884,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+  /waybills/signatures_history:
+    get:
+      tags:
+        - Т040 - ТТН
+      summary: Iсторія підписів Є-ТТН
+      operationId: ewaybillsSignaturesHistory
+      description: Iсторія підписів Є-ТТН.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису ТТН
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані історії підписів Є-ТТН
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/EwaybillSignatureHistory'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /global_settings:
     get:
       tags:
@@ -13658,6 +13722,36 @@ components:
           type: number
           example: 70
           description: 'Пробіг пустим до АТП, км'
+    EwaybillSignatureHistory:
+      type: array
+      items:
+        type: object
+        description: Історія підписів єттн
+        properties:
+          date_time:
+            type: string
+            example: 17.09.2024 05:08:00
+            description: >-
+              Дата і час створення запису. Таблиця: Є-ТТН/Історія підписів(обмін)
+              (e_waybill_signature_status_history)
+          status_ua:
+            type: string
+            example: Підписання завершено
+            description: >-
+              Статус підпису українською. Таблиця: Є-ТТН/Історія підписів(обмін)
+              (e_waybill_signature_status_history)
+          status_uk:
+            type: string
+            example: Signing complete
+            description: >-
+              Статус підпису англійською. Таблиця: Є-ТТН/Історія підписів(обмін)
+              (e_waybill_signature_status_history)
+          author:
+            type: string
+            example: Дядько Мавродій і посіпаки
+            description: >-
+              Автор. Таблиця: Є-ТТН/Історія підписів(обмін)
+              (e_waybill_signature_status_history)
     WaybillCertificateOfQuality:
       type: array
       items:
