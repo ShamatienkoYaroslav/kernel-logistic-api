@@ -2581,6 +2581,70 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /driver/waybills/signatures_history:
+    get:
+      tags:
+        - Т040 - ТТН
+      summary: Iсторія підписів Є-ТТН
+      operationId: ewaybillsSignaturesHistory
+      description: Iсторія підписів Є-ТТН.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису ТТН
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані історії підписів Є-ТТН
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/EwaybillSignatureHistory'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
   /driver/vehicles_registers:
     get:
       tags:
@@ -9872,70 +9936,6 @@ paths:
                     description: Кількість записів
                   items:
                     $ref: '#/components/schemas/Waybill'
-        '401':
-          description: Користувач не авторизований
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
-        '403':
-          description: Клієнт не має прав доступу
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
-  /waybills/signatures_history:
-    get:
-      tags:
-        - Т040 - ТТН
-      summary: Iсторія підписів Є-ТТН
-      operationId: ewaybillsSignaturesHistory
-      description: Iсторія підписів Є-ТТН.
-      parameters:
-        - in: query
-          name: client_token
-          description: Токен клієнта API
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: access_token
-          description: Токен доступу (сесії)
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: Пагінація (ліміт)
-          schema:
-            type: integer
-        - in: query
-          name: offset
-          description: Пагінація (oффсет)
-          schema:
-            type: integer
-        - in: query
-          name: guid
-          description: Унікальний ідентифікатор запису ТТН
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Дані історії підписів Є-ТТН
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: boolean
-                    example: true
-                    description: Статус відповіді
-                  count:
-                    type: integer
-                    example: 3
-                    description: Кількість записів
-                  items:
-                    $ref: '#/components/schemas/EwaybillSignatureHistory'
         '401':
           description: Користувач не авторизований
           content:
