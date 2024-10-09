@@ -97,6 +97,8 @@ tags:
     description: Вузли для роботи з товарно-транспортними накладними
   - name: Т041 - Події
     description: Вузли для роботи з подіями рейсу водія
+  - name: Т042 - Диспетчеризація
+    description: Вузли для диспетчеризації
 paths:
   /accreditations:
     get:
@@ -1241,6 +1243,143 @@ paths:
         '500':
           description: server error
           content: {}
+  /dispatching:
+    get:
+      tags:
+        - Т042 - Диспетчеризація
+      summary: Отримання журналу диспетчиризації
+      operationId: dispatchingGet
+      description: |
+        Журнал заявок, рейсів і нарядів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація списку ліміт
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація списку оффсет
+          schema:
+            type: integer
+        - in: query
+          name: grouping_type
+          description: Тип групування
+          required: true
+          schema:
+            type: string
+            enum: [request_race, vehicle_race]
+            default: request_race
+        - in: query
+          name: carrier_guid
+          description: Унікальний ідентифікатор компанії перевізника
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: request_number
+          description: Номер заявки
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: vehicle_number
+          description: Номер авто
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: point_from
+          description: Пункт навантаження(код КОАТУУ)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: point_to
+          description: Пункт розвантаження(код КОАТУУ)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: goods_guid
+          description: Код вантажу
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: period_from
+          description: Дата початку періоду (дата завантаження)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: period_to
+          description: Дата закінчення періоду (дата завантаження)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: vehicles_register_statuses
+          description: Cтатус наряду (можлива передача декількох значень, розділених ";")
+          required: false
+          schema:
+            type: string
+            enum: [NEW, IN_PROGRESS, CANCELED, DONE]
+        - in: query
+          name: race_statuses
+          description: Cтатус рейсу (можлива передача декількох значень, розділених ";")
+          required: false
+          schema:
+            type: string
+            enum: [CANCELED, DONE, PAUSE, IN_PROGRESS, REGISTERED]
+      responses:
+        '200':
+          description: Журнал дисптчиризації
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+                  items:
+                    $ref: '#/components/schemas/DispatchingRequest'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /drivers:
     get:
       tags:
@@ -12798,6 +12937,18 @@ components:
           description: >-
             Тип документу. Значення(passport, id_card, null). Інтерфейс водія.
             Таблиця: TransitHub/Водії (th_drivers)
+    DispatchingRequest:
+      type: object
+      properties:
+        guid:
+          type: string
+          example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
+          description: Унікальний ідентифікатор cлужбовий. Використовується веб-клієнтом для побудови таблиці
+        request_number:
+          type: string
+          example: Z_059160
+          description: >-
+            Номер заявки. Таблиця: заявки(requests)
     DriverVehicleRegister:
       type: object
       properties:
