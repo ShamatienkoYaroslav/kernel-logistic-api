@@ -13060,143 +13060,147 @@ components:
             example: "Трансбалктермінал"
             description: "Назва профіля черги розвантаження. Таблиця: профілі черги(pq_queue_profile)"
     DispatchingRequest:
-      type: object
-      properties:
-        guid:
-          type: string
-          example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
-          description: Унікальний ідентифікатор cлужбовий. Використовується веб-клієнтом
-            для побудови таблиці
-        request_number:
-          type: string
-          example: Z_059160
-          description: "Номер заявки. Таблиця: заявки(requests)"
-        request_guid:
-          type: string
-          example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
-          description: "Унікальний ідентифікатор заявки. Таблиця: заявки(requests)"
-        vr_exchange_status:
-          type: string
-          enum:
-            - no_registers
-            - not_sent
-            - sent
-          example: no_registers
-          description: "Статус нарядів по конкретній заявці. Таблиця: заявки(requests)"
-        goods_cost:
-          type: number
-          example: 12000
-          description: "Вартість вантажу, грн/т. Таблиця: заявки(requests)"
-        goods_rate:
-          type: number
-          example: 12000
-          description: "Тариф, грн/т. Таблиця: заявки(requests)"
-        goods_name:
-          type: string
-          example: Соняшник
-          description: "Назва вантажу. Таблиця: заявки(requests)"
-        goods_code:
-          type: string
-          example: СОНЯШНИК
-          description: "Код вантажу. Таблиця: заявки(requests)"
-        carrier_name:
-          type: string
-          example: ТОВ Машини
-          description: "Назва перевізника. Таблиця: заявки(requests)"
-        carrier_edrpou:
-          type: string
-          example: ТОВ Машини
-          description: "Код ЕДРПОУ перевізника. Таблиця: заявки(requests)"
-        consignor_name:
-          type: string
-          example: ТОВ Машини
-          description: "Назва відправника. Таблиця: заявки(requests)"
-        consignor_edrpou:
-          type: string
-          example: ТОВ Багаті села
-          description: "Код ЕДРПОУ відправника. Таблиця: заявки(requests)"
-        goods_quantity:
-          type: number
-          example: 10
-          description: "Кількість вантажу, т. Таблиця: заявки(requests)"
-        vehicle_quantity:
-          type: number
-          example: 5
-          description: "Кількість транспортних засобів, т. Таблиця: заявки(requests)"
-        warehouse_from_name:
-          type: string
-          example: Кропивницький ХАБ
-          description: "Назва складу навантаження. Таблиця: склади(warehouse)"
-        warehouse_from_code:
-          type: string
-          example: "5122584801"
-          description: "Код класифікатора складу навантаження. Таблиця: заявки(requests)"
-        warehouse_to_name:
-          type: string
-          example: Кропивницький ХАБ
-          description: "Назва складу poзвантаження. Таблиця: склади(warehouse)"
-        warehouse_to_code:
-          type: string
-          example: "5122584801"
-          description: "Код класифікатора складу poзвантаження. Таблиця: заявки(requests)"
-        point_from_name:
-          type: string
-          example: Кропивницький
-          description: "Назва пункту навантаження. Таблиця: населені пункти(locality)"
-        point_from_koatuu:
-          type: string
-          example: "3510100000"
-          description: "Код КОФТУУ пункту навантаження. Таблиця: заявки(requests)"
-        point_to_name:
-          type: string
-          example: Кропивницький
-          description: "Назва пункту poзвантаження. Таблиця: населені пункти(locality)"
-        point_to_koatuu:
-          type: string
-          example: "3510100000"
-          description: "Код КОФТУУ пункту розвантаження. Таблиця: заявки(requests)"
-        distance:
-          type: number
-          example: 120
-          description: "Відстань, км. Таблиця: заявки(requests)"
-        contract_number:
-          type: string
-          example: ДО-09343434
-          description: "Номер договору. Таблиця: заявки(requests)"
-        contract_date:
-          type: string
-          example: "06.10.2024"
-          description: "Дата договору. Таблиця: заявки(requests)"
-        contract_type:
-          type: string
-          example: АВС
-          description: "Тип договору. Таблиця: заявки(requests)"
-        logist_name:
-          type: string
-          example: Жук М. В.
-          description: "ПІБ логіста. Таблиця: заявки(requests)"
-        logist_phone:
-          type: string
-          example: "380688592065"
-          description: "Телефон логіста. Таблиця: заявки(requests)"
-        logist_comment:
-          type: string
-          example: Водій знаходиться в стані алкогольного сп'яніння
-          description: "Коментар логіста. Таблиця: заявки(requests)"
-        manager_comment:
-          type: string
-          example: Нам не треба такого водія. Гнати його в шию
-          description: "Коментар менеджера. Таблиця: заявки(requests)"
-        vr_items_count:
-          type: number
-          example: 10
-          description: Кількість елементів масиву vr_items
-        vr_items:
-          type: array
-          description: Масив нарядів і рейсів
-          $ref: '#/components/schemas/DispatchingVehiclesRegister'
+      type: array
+      items:
+        type: object
+        description: Об'єкт масива заявок
+        properties:
+          guid:
+            type: string
+            example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
+            description: Унікальний ідентифікатор cлужбовий. Використовується веб-клієнтом
+              для побудови таблиці
+          request_number:
+            type: string
+            example: Z_059160
+            description: "Номер заявки. Таблиця: заявки(requests)"
+          request_guid:
+            type: string
+            example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
+            description: "Унікальний ідентифікатор заявки. Таблиця: заявки(requests)"
+          vr_exchange_status:
+            type: string
+            enum:
+              - no_registers
+              - not_sent
+              - sent
+            example: no_registers
+            description: "Статус нарядів по конкретній заявці. Таблиця: заявки(requests)"
+          goods_cost:
+            type: number
+            example: 12000
+            description: "Вартість вантажу, грн/т. Таблиця: заявки(requests)"
+          goods_rate:
+            type: number
+            example: 12000
+            description: "Тариф, грн/т. Таблиця: заявки(requests)"
+          goods_name:
+            type: string
+            example: Соняшник
+            description: "Назва вантажу. Таблиця: заявки(requests)"
+          goods_code:
+            type: string
+            example: СОНЯШНИК
+            description: "Код вантажу. Таблиця: заявки(requests)"
+          carrier_name:
+            type: string
+            example: ТОВ Машини
+            description: "Назва перевізника. Таблиця: заявки(requests)"
+          carrier_edrpou:
+            type: string
+            example: ТОВ Машини
+            description: "Код ЕДРПОУ перевізника. Таблиця: заявки(requests)"
+          consignor_name:
+            type: string
+            example: ТОВ Машини
+            description: "Назва відправника. Таблиця: заявки(requests)"
+          consignor_edrpou:
+            type: string
+            example: ТОВ Багаті села
+            description: "Код ЕДРПОУ відправника. Таблиця: заявки(requests)"
+          goods_quantity:
+            type: number
+            example: 10
+            description: "Кількість вантажу, т. Таблиця: заявки(requests)"
+          vehicle_quantity:
+            type: number
+            example: 5
+            description: "Кількість транспортних засобів, т. Таблиця: заявки(requests)"
+          warehouse_from_name:
+            type: string
+            example: Кропивницький ХАБ
+            description: "Назва складу навантаження. Таблиця: склади(warehouse)"
+          warehouse_from_code:
+            type: string
+            example: "5122584801"
+            description: "Код класифікатора складу навантаження. Таблиця: заявки(requests)"
+          warehouse_to_name:
+            type: string
+            example: Кропивницький ХАБ
+            description: "Назва складу poзвантаження. Таблиця: склади(warehouse)"
+          warehouse_to_code:
+            type: string
+            example: "5122584801"
+            description: "Код класифікатора складу poзвантаження. Таблиця: заявки(requests)"
+          point_from_name:
+            type: string
+            example: Кропивницький
+            description: "Назва пункту навантаження. Таблиця: населені пункти(locality)"
+          point_from_koatuu:
+            type: string
+            example: "3510100000"
+            description: "Код КОФТУУ пункту навантаження. Таблиця: заявки(requests)"
+          point_to_name:
+            type: string
+            example: Кропивницький
+            description: "Назва пункту poзвантаження. Таблиця: населені пункти(locality)"
+          point_to_koatuu:
+            type: string
+            example: "3510100000"
+            description: "Код КОФТУУ пункту розвантаження. Таблиця: заявки(requests)"
+          distance:
+            type: number
+            example: 120
+            description: "Відстань, км. Таблиця: заявки(requests)"
+          contract_number:
+            type: string
+            example: ДО-09343434
+            description: "Номер договору. Таблиця: заявки(requests)"
+          contract_date:
+            type: string
+            example: "06.10.2024"
+            description: "Дата договору. Таблиця: заявки(requests)"
+          contract_type:
+            type: string
+            example: АВС
+            description: "Тип договору. Таблиця: заявки(requests)"
+          logist_name:
+            type: string
+            example: Жук М. В.
+            description: "ПІБ логіста. Таблиця: заявки(requests)"
+          logist_phone:
+            type: string
+            example: "380688592065"
+            description: "Телефон логіста. Таблиця: заявки(requests)"
+          logist_comment:
+            type: string
+            example: Водій знаходиться в стані алкогольного сп'яніння
+            description: "Коментар логіста. Таблиця: заявки(requests)"
+          manager_comment:
+            type: string
+            example: Нам не треба такого водія. Гнати його в шию
+            description: "Коментар менеджера. Таблиця: заявки(requests)"
+          vr_items_count:
+            type: number
+            example: 10
+            description: Кількість елементів масиву vr_items
+          vr_items:
+            type: array
+            description: Масив нарядів і рейсів
+            $ref: '#/components/schemas/DispatchingVehiclesRegister'
     DispatchingScheduleDate:
       type: array
+      description: Групування Дата завантаження/Заявка/Наряд+рейс(request_race)
       items:
         type: object
         description: Об'єкт масива дат завантаження
@@ -13233,6 +13237,7 @@ components:
             $ref: '#/components/schemas/DispatchingRequest'
     DispatchingNoGrouping:
       type: array
+      description: Групування список даних Заявка+наряд+рейс(no_grouping)
       items:
         type: object
         description: Об'єкт масива дат завантаження
