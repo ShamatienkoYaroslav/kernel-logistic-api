@@ -99,6 +99,8 @@ tags:
     description: Вузли для роботи з подіями рейсу водія
   - name: Т042 - Диспетчеризація
     description: Вузли для диспетчеризації
+  - name: Т043 - Місцезнаходження
+    description: Вузли для отримання місцезнаходження рейсу
 paths:
   /accreditations:
     get:
@@ -1331,6 +1333,18 @@ paths:
           schema:
             type: string
         - in: query
+          name: race_number
+          description: Номер рейса
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: vehicles_register_number
+          description: Номер наряда
+          required: false
+          schema:
+            type: string
+        - in: query
           name: vehicles_register_statuses
           description: Cтатус наряду (можлива передача декількох значень, розділених ";")
           required: false
@@ -1344,6 +1358,27 @@ paths:
           schema:
             type: string
             enum: [CANCELED, DONE, PAUSE, IN_PROGRESS, REGISTERED]
+        - in: query
+          name: location_type
+          description: Тип місцезнаходження
+          required: false
+          schema:
+            type: string
+            enum: [AT_DIRECTION_POINT, ON_WAY_TO_PARKING, IN_PARKING, ON_WAY_TO_UNLOADING, ON_WAY_TO_UNLOADING_POINT, ON_TERITORY, LOADING, LEFT_AFTER_UNLOADING, RETURNING]
+        - in: query
+          name: loading_type
+          description: Тип навантаження
+          required: false
+          schema:
+            type: string
+            enum: [mound, pouring]
+        - in: query
+          name: direction
+          description: Напрамок
+          required: false
+          schema:
+            type: string
+            enum: [loading, unloading]
       responses:
         '200':
           description: Журнал дисптчиризації
@@ -11987,6 +12022,62 @@ paths:
         '500':
           description: server error
           content: {}
+  /location_type:
+    get:
+      tags:
+        - Т043 - Місцезнаходження
+      summary: Точка для отримання списку типів місцезнаходжень рейсу.
+      operationId: locationTypeGet
+      description: Отримання списку типів місцезнаходжень рейсу.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список типів місцезнаходжень рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocationType'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '401':
+          description: Клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: server error
+          content: {}  
   /warehouses:
     get:
       tags:
@@ -12951,6 +13042,45 @@ components:
             example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
             description: Унікальний ідентифікатор cлужбовий. Використовується веб-клієнтом
               для побудови таблиці
+          race_guid:
+            description: "Унікальний ідентифікатор рейса. Таблиця рейси(races)"
+            type: string
+            example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
+          race_location_type:
+            description: "Тип місцезнаходження (код). Таблиця рейси(races)"
+            type: string
+            enum: [AT_DIRECTION_POINT, ON_WAY_TO_PARKING, IN_PARKING, ON_WAY_TO_UNLOADING, ON_WAY_TO_UNLOADING_POINT, ON_TERITORY, LOADING, LEFT_AFTER_UNLOADING, RETURNING]
+            example: IN_PARKING
+          race_location_type_name:
+            description: "Тип місцезнаходження. Таблиця рейси(races)"
+            type: string
+            example: В дорозі в пункт розвантаження
+          loading_type:
+            description: "Тип навантаження. Таблиця рейси(races)"
+            type: string
+            enum: [mound, pouring]
+            example: pouring
+          direction:
+            description: "Напрамок. Таблиця рейси(races)"
+            type: string
+            enum: [loading, unloading]
+            example: unloading
+          queue_from_waiting_time:
+            description: "Час очікування в черзі навантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "1год 15хв"
+          queue_to_waiting_time:
+            description: "Час очікування в черзі розвантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "1год 15хв"
+          queue_from_forecast_entry_datetime:
+            description: "Прогнозована дата і час вибуття з черги навантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "08.09.2024 20:57:05"
+          queue_to_forecast_entry_datetime:
+            description: "Прогнозована дата і час вибуття з черги розвантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "08.09.2024 20:57:05"
           vr_number:
             type: number
             example: 59160
@@ -13247,6 +13377,45 @@ components:
             example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
             description: Унікальний ідентифікатор cлужбовий. Використовується веб-клієнтом
               для побудови таблиці
+          race_guid:
+            description: "Унікальний ідентифікатор рейса. Таблиця рейси(races)"
+            type: string
+            example: 2d92556b-a896-45ed-06fa-5e1aa66e5051
+          race_location_type:
+            description: "Тип місцезнаходження (код). Таблиця рейси(races)"
+            type: string
+            enum: [AT_DIRECTION_POINT, ON_WAY_TO_PARKING, IN_PARKING, ON_WAY_TO_UNLOADING, ON_WAY_TO_UNLOADING_POINT, ON_TERITORY, LOADING, LEFT_AFTER_UNLOADING, RETURNING]
+            example: IN_PARKING
+          race_location_type_name:
+            description: "Тип місцезнаходження. Таблиця рейси(races)"
+            type: string
+            example: В дорозі в пункт розвантаження
+          loading_type:
+            description: "Тип навантаження. Таблиця рейси(races)"
+            type: string
+            enum: [mound, pouring]
+            example: pouring
+          direction:
+            description: "Напрамок. Таблиця рейси(races)"
+            type: string
+            enum: [loading, unloading]
+            example: unloading
+          queue_from_waiting_time:
+            description: "Час очікування в черзі навантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "1год 15хв"
+          queue_to_waiting_time:
+            description: "Час очікування в черзі розвантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "1год 15хв"
+          queue_from_forecast_entry_datetime:
+            description: "Прогнозована дата і час вибуття з черги навантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "08.09.2024 20:57:05"
+          queue_to_forecast_entry_datetime:
+            description: "Прогнозована дата і час вибуття з черги розвантаження. Таблиця статистика рейса(race_statistics)"
+            type: string
+            example: "08.09.2024 20:57:05"
           request_number:
             type: string
             example: Z_059160
@@ -16644,6 +16813,25 @@ components:
               type: string
               example: Текстове повідомлення
               description: Текстове повідомлення
+    LocationType:
+      description: Записи типу місцезнаходження рейсу
+      type: array
+      items:
+        type: object
+        description: Категорія вантажу (Звіт статистики черги)
+        properties:
+          code:
+            type: string
+            example: ON_WAY_TO_UNLOADING_POINT
+            description: Код типу місцезнаходження
+          name_ua:
+            type: string
+            example: В дорозі в пункт розвантаження
+            description: Назва типу місцезнаходження українською
+          name_uk:
+            type: string
+            example: On the way to the unloading point
+            description: Назва типу місцезнаходження англійською
     LocalitiesGet:
       type: object
       description: Дані териториальної одиниці
