@@ -280,13 +280,15 @@ paths:
           description: Oбмеження кількості елементів масиву
           required: false
           schema:
-            type: string
+            type: integer
+            example: 5
         - in: query
           name: offset
           description: Відступ по кількості елементів масиву
           required: false
           schema:
-            type: string
+            type: integer
+            example: 5
       responses:
         '200':
           description: Успіх
