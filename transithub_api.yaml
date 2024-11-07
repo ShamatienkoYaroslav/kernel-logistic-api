@@ -14660,7 +14660,7 @@ components:
               - COMPLEX
               - SUBORDINATE
               - COMMON
-            example: COMMON
+            example: SUBORDINATE
             description: >-
               Тип TTH: комплексна, підпорядкована, звичайна. Таблиця: ТТН
               (waybill)
@@ -14900,7 +14900,7 @@ components:
             - COMPLEX
             - SUBORDINATE
             - COMMON
-          example: COMMON
+          example: COMPLEX
           description: >-
             Тип TTH: комплексна, підпорядкована, звичайна. Таблиця: ТТН
             (waybill)
