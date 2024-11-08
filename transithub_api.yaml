@@ -1366,6 +1366,13 @@ paths:
             type: string
             enum: [AT_DIRECTION_POINT, ON_WAY_TO_PARKING, IN_PARKING, ON_WAY_TO_UNLOADING, ON_WAY_TO_UNLOADING_POINT, ON_TERITORY, LOADING, LEFT_AFTER_UNLOADING, RETURNING]
         - in: query
+          name: location_kind
+          description: Вид місцезнаходження
+          required: false
+          schema:
+            type: string
+            enum: [loading, unloading, on_way]
+        - in: query
           name: loading_type
           description: Тип навантаження
           required: false
@@ -13055,6 +13062,15 @@ components:
             description: "Тип місцезнаходження. Таблиця рейси(races)"
             type: string
             example: В дорозі в пункт розвантаження
+          race_location_kind:
+            description: "Вид місцезнаходження (код). Таблиця рейси(races)"
+            type: string
+            enum: [loading, unloading, on_way]
+            example: on_way
+          race_location_kind_name:
+            description: "Вид місцезнаходження. Таблиця рейси(races)"
+            type: string
+            example: В дорозі
           loading_type:
             description: "Тип навантаження. Таблиця рейси(races)"
             type: string
@@ -13390,6 +13406,15 @@ components:
             description: "Тип місцезнаходження. Таблиця рейси(races)"
             type: string
             example: В дорозі в пункт розвантаження
+          race_location_kind:
+            description: "Вид місцезнаходження (код). Таблиця рейси(races)"
+            type: string
+            enum: [loading, unloading, on_way]
+            example: on_way
+          race_location_kind_name:
+            description: "Вид місцезнаходження. Таблиця рейси(races)"
+            type: string
+            example: В дорозі
           loading_type:
             description: "Тип навантаження. Таблиця рейси(races)"
             type: string
