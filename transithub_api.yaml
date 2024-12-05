@@ -13197,6 +13197,34 @@ components:
             type: string
             example: "08.09.2024 20:57:05"
             description: "Дата ТТН рейсу. Таблиця: рейси(races)"
+          race_waybill_quantity:
+            type: number
+            example: 10
+            description: "Орієнтована вага вантажу, т. Таблиця: рейси(races)"
+          race_waybill_consignor_gross:
+            type: number
+            example: 9000
+            description: "Вага брутто вантажу відправника, кг. Таблиця: рейси(races)"
+          race_waybill_consignor_net:
+            type: number
+            example: 8000
+            description: "Вага нетто вантажу відправника, кг. Таблиця: рейси(races)"
+          race_waybill_consignor_tare:
+            type: number
+            example: 1000
+            description: "Вага тари вантажу відправника, кг. Таблиця: рейси(races)"
+          race_waybill_consignee_gross:
+            type: number
+            example: 9000
+            description: "Вага брутто вантажу отримувача, кг. Таблиця: рейси(races)"
+          race_waybill_consignee_net:
+            type: number
+            example: 8000
+            description: "Вага нетто вантажу отримувача, кг. Таблиця: рейси(races)"
+          race_waybill_consignee_tare:
+            type: number
+            example: 1000
+            description: "Вага тари вантажу отримувача, кг. Таблиця: рейси(races)"
           race_profile_from_name:
             type: string
             example: "Кропивницький (насип)"
