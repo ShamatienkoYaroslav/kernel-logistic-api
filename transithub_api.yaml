@@ -8394,6 +8394,19 @@ paths:
           schema:
             type: string
             example: ВОЛ
+        - in: query
+          name: registration_in_system_client_status
+          description: Фільтр для відбору по статусу реєстрації в системі клієнта (Рейси/races)
+          required: false
+          schema:
+            type: string
+            enum:
+              - required
+              - not_required
+              - in_progress
+              - done
+              - empty
+            example: in_progress
       responses:
         '200':
           description: Інформація про рейси для профіля/черги
@@ -18514,6 +18527,55 @@ components:
             type: string
             description: 'Назва складу розвантаження. Таблиця: Склади(warehouse)'
             example: Трансбалктермінал
+          registration_in_system_client_status:
+            type: string
+            enum:
+              - required
+              - not_required
+              - in_progress
+              - done
+              - empty
+            example: in_progress
+            description: >-
+              Статус реєстрації ТЗ в системі клієнта. Таблиця: Рейси(races)
+          registration_in_system_client_status_ua:
+            type: string
+            enum:
+              - Потребує
+              - Не потрібно
+              - Виконується
+              - Виконано
+              - Не визначено
+            example: Виконується
+            description: >-
+              Статус реєстрації ТЗ в системі клієнта українською
+          is_vehicle_registered_in_system_client:
+            type: boolean
+            enum:
+              - 1
+              - 0
+            description: >-
+              Ознака реєстрації ТЗ в системі клієнта. Таблиця:
+              Зовнішня інтеграція(external_integration)
+            example: 1
+          is_trailer_registered_in_system_client:
+            type: boolean
+            enum:
+              - 1
+              - 0
+            description: >-
+              Ознака реєстрації причепа в системі клієнта. Таблиця:
+              Зовнішня інтеграція(external_integration)
+            example: 0
+          is_driver_registered_in_system_client:
+            type: boolean
+            enum:
+              - 1
+              - 0
+            description: >-
+              Ознака реєстрації водія в системі клієнта. Таблиця:
+              Зовнішня інтеграція(external_integration)
+            example: 1
     QueueRegJournalPQqueue:
       type: array
       items:
