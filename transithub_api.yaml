@@ -8407,6 +8407,19 @@ paths:
               - done
               - empty
             example: in_progress
+        - in: query
+          name: permit_in_system_client_status
+          description: Фільтр для відбору по статусу пропуску в системі клієнта (Рейси/races)
+          required: false
+          schema:
+            type: string
+            enum:
+              - required
+              - not_required
+              - in_progress
+              - done
+              - empty
+            example: in_progress
       responses:
         '200':
           description: Інформація про рейси для профіля/черги
@@ -18527,6 +18540,28 @@ components:
             type: string
             description: 'Назва складу розвантаження. Таблиця: Склади(warehouse)'
             example: Трансбалктермінал
+          permit_in_system_client_status:
+            type: string
+            enum:
+              - required
+              - not_required
+              - in_progress
+              - done
+              - empty
+            example: in_progress
+            description: >-
+              Статус пропуску рейсу в системі клієнта. Таблиця: Рейси(races)
+          permit_in_system_client_status_ua:
+            type: string
+            enum:
+              - Потребує
+              - Не потрібно
+              - Виконується
+              - Виконано
+              - Не визначено
+            example: Виконується
+            description: >-
+              Статус пропуску рейсу в системі клієнта українською
           registration_in_system_client_status:
             type: string
             enum:
