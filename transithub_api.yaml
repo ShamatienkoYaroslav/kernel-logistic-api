@@ -101,6 +101,8 @@ tags:
     description: Вузли для диспетчеризації
   - name: Т043 - Місцезнаходження
     description: Вузли для отримання місцезнаходження рейсу
+  - name: Т044 - Переадресація
+    description: Вузли для роботи з документами Переадресація
 paths:
   /accreditations:
     get:
@@ -8624,6 +8626,151 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
+  /redirection:
+    get:
+      tags:
+        - Т044 - Переадресація
+      summary: Історія документу Переадресація
+      operationId: redirectionGet
+      description: |
+        Інформація про документи(документ) переадресація
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор запису
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+        - in: query
+          name: document_status 
+          description: Статус документа
+          required: false
+          schema:
+            type: string
+            enum:
+              - new
+              - canceled
+              - done
+        - in: query
+          name: carrier_guid 
+          description: Унікальний ідентифікатор запису компанії перевізника
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      responses:
+        '200':
+          description: Інформація про документи(документ) переадресація
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/RedirectionArr'
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 7
+                    description: Кількість записів
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '500':
+          description: server error
+          content: {}
+    post:
+      tags:
+        - Т044 - Переадресація
+      summary: Переадресація рейсів по існуючому документу
+      operationId: redirectionPost
+      description: |
+        Переадресація рейсів по існуючому документу
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: document_guid
+          description: Унікальний ідентифікатор запису
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  items:
+                    type: string
+                    example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      responses:
+        '200':
+          description: Інформація про документи(документ) переадресація
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: 'Статус виконання запиту'
+                    example: true
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         '500':
           description: server error
           content: {}
@@ -17770,6 +17917,74 @@ components:
             type: string
             example: 230312-00000123
             description: 'Номер підпорядкованого рейсу. Таблиця: Рейси(races)'
+    RedirectionArr:
+      description: Переадресація
+      type: array
+      items:
+        type: object
+        description: Час очікування
+        properties:
+          guid:
+            type: string
+            description: 'Унікальний ідентифікатор запису. Таблиця: Переадресація(redirections)'
+            example: 0e6972a5-dffd-2d72-0ba8-88e1bc19e12d
+          document_status:
+            type: string
+            enum:
+              - new
+              - canceled
+              - done
+            description: 'Статус документа (в розробці)'
+            example: new
+          document_nr:
+            type: string
+            description: 'Номер документа. Таблиця: Переадресація(redirection)'
+            example: ADR00003
+          document_date:
+            type: string
+            description: >-
+              'Дата і час створення документа. Таблиця: Переадресація(redirection)'
+            example: '15.02.2023 02:01:31'
+          good_name:
+            type: string
+            example: ОЛ_СОН_НЕРАФ
+            description: 'Назва вантажу. Таблиця: Переадресація(redirection)'
+          warehouse_from_name:
+            type: string
+            example: Кропивницький
+            description: 'Назва сладу до переадресації. Таблиця: Переадресація(redirection)'
+          location_from_name:
+            type: string
+            example: Кропивницький
+            description: 'Назва населеного пункта до переадресації. Таблиця: Переадресація(redirection)'
+          request_from_nr:
+            type: string
+            example: RQ_0048647
+            description: 'Номер заявки до переадресації. Таблиця: Переадресація(redirection)'
+          warehouse_to_name:
+            type: string
+            example: Кропивницький
+            description: 'Назва сладу після переадресації. Таблиця: Переадресація(redirection)'
+          location_to_name:
+            type: string
+            example: Кропивницький
+            description: 'Назва населеного пункта після переадресації. Таблиця: Переадресація(redirection)'
+          request_to_nr:
+            type: string
+            example: RQ_0048647
+            description: 'Номер заявки після переадресації. Таблиця: Переадресація(redirection)'
+          redirected_vehicles_registers_count:
+            type: integer
+            example: 2
+            description: 'К-сть переадесованих нарядів'
+          need_to_redirect_vehicles_registers_count:
+            type: integer
+            example: 3
+            description: 'Загальна к-сть необхідних до переадесації нарядів'
+          remain_to_redirect_vehicles_registers_count:
+            type: integer
+            example: 1
+            description: 'К-сть, що залишилась до переадесації нарядів'
     PqRaceTraffic:
       type: object
       properties:
