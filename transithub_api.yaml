@@ -12597,19 +12597,18 @@ paths:
             schema:
               type: object
               properties:
-                  items:
-                    fcm_token:
-                      type: string
-                      example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
-                      description: Унікальний ідентифікатор користувача додатку
-                    phone:
-                      type: string
-                      example: 380964002090
-                      description: Номер телефона користувача додатку
-                    app_env:
-                      type: string
-                      example: android
-                      description: Оточення додатку
+                fcm_token:
+                  type: string
+                  example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
+                  description: Унікальний ідентифікатор користувача додатку
+                phone:
+                  type: string
+                  example: 380964002090
+                  description: Номер телефона користувача додатку
+                app_env:
+                  type: string
+                  example: android
+                  description: Оточення додатку
       responses:
         '201':
           description: Статус виконання запиту
