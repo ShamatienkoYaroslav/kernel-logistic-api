@@ -12569,74 +12569,74 @@ paths:
         '500':
           description: server error
           content: {}
-    /fcm_token:
-      post:
-        tags:
-          - Т045 - Push-повідомлення
-        summary: Надсилання токену FCM у бекенд
-        operationId: fcmTokenPost
-        description: |
-          Надсилання токену FCM у бекенд
-        parameters:
-          - in: query
-            name: client_token
-            description: Токен клієнта API
-            required: true
+  /fcm_token:
+    post:
+      tags:
+        - Т045 - Push-повідомлення
+      summary: Надсилання токену FCM у бекенд
+      operationId: fcmTokenPost
+      description: |
+        Надсилання токену FCM у бекенд
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        content:
+          application/json:
             schema:
-              type: string
-          - in: query
-            name: access_token
-            description: Токен доступу (сесії)
-            required: true
-            schema:
-              type: string
-        requestBody:
-          description: тіло запиту
+              type: object
+              properties:
+                  items:
+                    fcm_token:
+                      type: string
+                      example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
+                      description: Унікальний ідентифікатор користувача додатку
+                    phone:
+                      type: string
+                      example: 380964002090
+                      description: Номер телефона користувача додатку
+                    app_env:
+                      type: string
+                      example: android
+                      description: Оточення додатку
+      responses:
+        '201':
+          description: Статус виконання запиту
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                    items:
-                      fcm_token:
-                        type: string
-                        example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
-                        description: Унікальний ідентифікатор користувача додатку
-                      phone:
-                        type: string
-                        example: 380964002090
-                        description: Номер телефона користувача додатку
-                      app_env:
-                        type: string
-                        example: android
-                        description: Оточення додатку
-        responses:
-          '201':
-            description: Статус виконання запиту
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    status:
-                      type: boolean
-                      description: 'Статус виконання запиту'
-                      example: true
-          '403':
-            description: Клієнт не має прав доступу
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/_ClientHasNoRightsNew'
-          '401':
-            description: Користувач не авторизований
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-          '500':
-            description: server error
-            content: {}
+                  status:
+                    type: boolean
+                    description: 'Статус виконання запиту'
+                    example: true
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '500':
+          description: server error
+          content: {}
 
           
 components:
