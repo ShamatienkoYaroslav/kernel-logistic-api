@@ -103,7 +103,7 @@ tags:
     description: Вузли для отримання місцезнаходження рейсу
   - name: Т044 - Переадресація
     description: Вузли для роботи з документами Переадресація
-  - name: Т045 - Пуш-повідомлення
+  - name: T045 - Пуш-повідомлення
     description: Вузли для роботи з пуш-повідомленнями
 paths:
   /accreditations:
@@ -12572,7 +12572,7 @@ paths:
   /fcm_token:
     post:
       tags:
-        - Т045 - Push-повідомлення
+        - T045 - Push-повідомлення
       summary: Надсилання токену FCM у бекенд
       operationId: fcmTokenPost
       description: |
