@@ -12572,7 +12572,7 @@ paths:
   /fcm_token:
     post:
       tags:
-        - T045 - Push-повідомлення
+        - T045 - Пуш-повідомлення
       summary: Надсилання токену FCM у бекенд
       operationId: fcmTokenPost
       description: |
