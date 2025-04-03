@@ -12693,7 +12693,7 @@ paths:
         '500':
           description: server error
           content: {}
-  /messages:
+
     put:
       tags:
         - T045 - Пуш-повідомлення
