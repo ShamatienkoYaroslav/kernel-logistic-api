@@ -12775,28 +12775,32 @@ paths:
         - in: query
           name: guid
           description: Унікальний ідентифікатор рейса
+          schema:
             type: string
         - in: query
           name: phone
           description: Номер телефона користувача
-          example: 380964002090
+          schema:
             type: string
+            example: 380964002090
         - in: query
           name: message_type
           description: Тип даних сповіщення
-          example: races
+          schema:
             type: string
+            example: races
         - in: query
           name: message_id
           description: Ідентифікатор сповіщення
-          example: 102090
+          schema:
             type: integer
+            example: 102090
         - in: query
           name: ref_id
           description: Ідентифікатор типу даних сповіщення
-          example: 702090
+          schema:
             type: integer
-
+            example: 702090
       responses:
         '200':
           description: Успішний запит
