@@ -12569,14 +12569,14 @@ paths:
         '500':
           description: server error
           content: {}
-  /fcm_token:
+  /messages:
     post:
       tags:
         - T045 - Пуш-повідомлення
-      summary: Надсилання токену FCM у бекенд
-      operationId: fcmTokenPost
+      summary: Отримання історії сповіщень
+      operationId: messagesPost
       description: |
-        Надсилання токену FCM у бекенд
+        Отримання історії сповіщень
       parameters:
         - in: query
           name: client_token
@@ -12597,30 +12597,87 @@ paths:
             schema:
               type: object
               properties:
-                fcm_token:
+                guid:
                   type: string
-                  example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
-                  description: Унікальний ідентифікатор користувача додатку
+                  example: 21d9ec91-4e1b-df88-2fc5-f9ab00a54f7d
+                  description: Унікальний ідентифікатор рейса
                 phone:
                   type: string
                   example: 380964002090
-                  description: Номер телефона користувача додатку
-                app_env:
+                  description: Номер телефона користувача
+                message_type:
                   type: string
-                  example: android
-                  description: Оточення додатку
+                  example: races
+                  description: Тип даних сповіщення
+                message_id:
+                  type: integer
+                  example: 102090
+                  description: Ідентифікатор сповіщення
+                ref_id:
+                  type: integer
+                  example: 702090
+                  description: Ідентифікатор типу даних сповіщення
       responses:
-        '201':
-          description: Статус виконання запиту
+        '200':
+          description: Успішний запит
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        created_at:
+                          type: string
+                          example: '24.03.2025 18:40:31'
+                          description: Дата і час створення
+                        task_name:
+                          type: string
+                          example: '005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН'
+                          description: Назва завдання
+                        channel_name:
+                          type: string
+                          example: 'Пуш у мобільний застосунок'
+                          description: Канал відправки повідомлення
+                        message_text:
+                          type: string
+                          example: 'Привіт! Ти в черзі'
+                          description: Текст повідомлення
+                        message_status:
+                          type: string
+                          example: 'success'
+                          description: Статус повідомлення
+                        contact:
+                          type: string
+                          example: '0967401590'
+                          description: Контактний номер
+                        ref_id:
+                          type: integer
+                          example: 1913594
+                          description: Ідентифікатор посилання
+                        message_id:
+                          type: integer
+                          example: 17054402
+                          description: Ідентифікатор повідомлення
+                        message_type:
+                          type: string
+                          example: 'races'
+                          description: Тип повідомлення
+                        read_by_user:
+                          type: integer
+                          example: 1
+                          description: Ознака прочитання користувачем
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість елементів
                   status:
                     type: boolean
-                    description: 'Статус виконання запиту'
                     example: true
+                    description: Статус відповіді
         '403':
           description: Клієнт не має прав доступу
           content:
@@ -12636,6 +12693,73 @@ paths:
         '500':
           description: server error
           content: {}
+          /fcm_token:
+            post:
+              tags:
+                - T045 - Пуш-повідомлення
+              summary: Надсилання токену FCM у бекенд
+              operationId: fcmTokenPost
+              description: |
+                Надсилання токену FCM у бекенд
+              parameters:
+                - in: query
+                  name: client_token
+                  description: Токен клієнта API
+                  required: true
+                  schema:
+                    type: string
+                - in: query
+                  name: access_token
+                  description: Токен доступу (сесії)
+                  required: true
+                  schema:
+                    type: string
+              requestBody:
+                description: тіло запиту
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        fcm_token:
+                          type: string
+                          example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1
+                          description: Унікальний ідентифікатор користувача додатку
+                        phone:
+                          type: string
+                          example: 380964002090
+                          description: Номер телефона користувача додатку
+                        app_env:
+                          type: string
+                          example: android
+                          description: Оточення додатку
+              responses:
+                '201':
+                  description: Статус виконання запиту
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          status:
+                            type: boolean
+                            description: 'Статус виконання запиту'
+                            example: true
+                '403':
+                  description: Клієнт не має прав доступу
+                  content:
+                    application/json:
+                      schema:
+                        $ref: '#/components/schemas/_ClientHasNoRightsNew'
+                '401':
+                  description: Користувач не авторизований
+                  content:
+                    application/json:
+                      schema:
+                        $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+                '500':
+                  description: server error
+                  content: {}
 
           
 components:
