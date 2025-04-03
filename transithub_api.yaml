@@ -12752,6 +12752,127 @@ paths:
         '500':
           description: server error
           content: {}
+    get:
+      tags:
+        - T045 - Пуш-повідомлення
+      summary: Отримання історії сповіщень
+      operationId: messagesGet
+      description: |
+        Отримання історії сповіщень
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор рейса
+            type: string
+        - in: query
+          name: phone
+          description: Номер телефона користувача
+          example: 380964002090
+            type: string
+        - in: query
+          name: message_type
+          description: Тип даних сповіщення
+          example: races
+            type: string
+        - in: query
+          name: message_id
+          description: Ідентифікатор сповіщення
+          example: 102090
+            type: integer
+        - in: query
+          name: ref_id
+          description: Ідентифікатор типу даних сповіщення
+          example: 702090
+            type: integer
+
+      responses:
+        '200':
+          description: Успішний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        created_at:
+                          type: string
+                          example: '24.03.2025 18:40:31'
+                          description: Дата і час створення
+                        task_name:
+                          type: string
+                          example: '005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН'
+                          description: Назва завдання
+                        channel_name:
+                          type: string
+                          example: 'Пуш у мобільний застосунок'
+                          description: Канал відправки повідомлення
+                        message_text:
+                          type: string
+                          example: 'Привіт! Ти в черзі'
+                          description: Текст повідомлення
+                        message_status:
+                          type: string
+                          example: 'success'
+                          description: Статус повідомлення
+                        contact:
+                          type: string
+                          example: '0967401590'
+                          description: Контактний номер
+                        ref_id:
+                          type: integer
+                          example: 1913594
+                          description: Ідентифікатор посилання
+                        message_id:
+                          type: integer
+                          example: 17054402
+                          description: Ідентифікатор повідомлення
+                        message_type:
+                          type: string
+                          example: 'races'
+                          description: Тип повідомлення
+                        read_by_user:
+                          type: integer
+                          example: 1
+                          description: Ознака прочитання користувачем
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість елементів
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '500':
+          description: server error
+          content: {}
   /fcm_token:
     post:
       tags:
