@@ -12677,7 +12677,7 @@ paths:
                   status:
                     type: boolean
                     example: true
-                    description: Статус відповіді
+                    description: Статус відповіді, який вказує, чи був запит до API успішним
         '403':
           description: Клієнт не має прав доступу
           content:
@@ -12812,8 +12812,8 @@ paths:
             items:
               type: object
               properties:
-                request_vehicles_register:
-            type: array
+            request_vehicles_register:
+              type: array
             items:
               type: object
               description: Дані про реєстрацію транспортних засобів
@@ -12831,10 +12831,10 @@ paths:
                   type: integer
                   example: 1913932
                   description: Унікальний ідентифікатор посилання
-                messages:
-                  type: array
-                  items:
-              type: object
+              messages:
+                type: array
+                items:
+                  type: object
               properties:
                 message_id:
                   type: integer
