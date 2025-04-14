@@ -12617,6 +12617,10 @@ paths:
                   type: integer
                   example: 702090
                   description: Ідентифікатор типу даних сповіщення
+                date_from:
+                  type: string
+                  example: 2025-04-09T14:33:57Z
+                  description: Дата і час, від яких потрібно зробити відбір
       responses:
         '200':
           description: Успішний запит
@@ -12626,58 +12630,80 @@ paths:
                 type: object
                 properties:
                   items:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        created_at:
-                          type: string
-                          example: '24.03.2025 18:40:31'
-                          description: Дата і час створення
-                        task_name:
-                          type: string
-                          example: '005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН'
-                          description: Назва завдання
-                        channel_name:
-                          type: string
-                          example: 'Пуш у мобільний застосунок'
-                          description: Канал відправки повідомлення
-                        message_text:
-                          type: string
-                          example: 'Привіт! Ти в черзі'
-                          description: Текст повідомлення
-                        message_status:
-                          type: string
-                          example: 'success'
-                          description: Статус повідомлення
-                        contact:
-                          type: string
-                          example: '0967401590'
-                          description: Контактний номер
-                        ref_id:
-                          type: integer
-                          example: 1913594
-                          description: Ідентифікатор посилання
-                        message_id:
-                          type: integer
-                          example: 17054402
-                          description: Ідентифікатор повідомлення
-                        message_type:
-                          type: string
-                          example: 'races'
-                          description: Тип повідомлення
-                        read_by_user:
-                          type: integer
-                          example: 1
-                          description: Ознака прочитання користувачем
-                  count:
-                    type: integer
-                    example: 1
-                    description: Кількість елементів
+                    type: object
+                    properties:
+                      request_vehicles_register:
+                        type: array
+                        items: {} # Може бути визначено конкретний тип, якщо відома структура
+                        description: Масив даних сповіщень для нарядів
+                      service_messages:
+                        type: array
+                        items: {} # Може бути визначено конкретний тип, якщо відома структура
+                        description: Масив даних сповіщень для сервісних повідомлень
+                      races:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ref_id:
+                              type: integer
+                              example: 1913932
+                              description: ID рейса, наряда або іншого документа для підпорядкованих сповіщень
+                            messages:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  message_id:
+                                    type: integer
+                                    example: 17054761
+                                    description: Унікальний ідентифікатор повідомлення
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    example: "2025-04-08T16:39:16Z"
+                                    description: Дата і час створення повідомлення
+                                  task_name:
+                                    type: string
+                                    example: "005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН"
+                                    description: Назва завдання
+                                  channel_name:
+                                    type: string
+                                    example: "Пуш у мобільний застосунок"
+                                    description: Канал відправки повідомлення
+                                  title:
+                                    type: string
+                                    example: "Привіт! Ти в черзі"
+                                    description: Заголовок повідомлення
+                                  description:
+                                    type: string
+                                    example: "Привіт! Ти в черзі"
+                                    description: Опис повідомлення
+                                  message_text:
+                                    type: string
+                                    example: "\r\n\u0422\u0435\u043F\u0435\u0440 \u0447\u0435\u043A\u0430\u0439)"
+                                    description: Текст повідомлення
+                                  message_status:
+                                    type: string
+                                    example: "success"
+                                    description: Статус повідомлення
+                                  contact:
+                                    type: string
+                                    example: "0967401590"
+                                    description: Контактний номер
+                                  type:
+                                    type: string
+                                    example: "races"
+                                    description: Тип повідомлення
+                                  read_by_user:
+                                    type: boolean
+                                    example: false
+                                    description: Ознака прочитання повідомлення користувачем
+                        description: Масив даних сповіщень для рейсів
                   status:
                     type: boolean
                     example: true
-                    description: Статус відповіді, який вказує, чи був запит до API успішним
+                    description: Статус відповіді
         '403':
           description: Клієнт не має прав доступу
           content:
@@ -12801,6 +12827,12 @@ paths:
           schema:
             type: integer
             example: 702090
+        - in: query
+          name: date_from
+          description: Дата і час, від яких потрібно зробити відбір
+          schema:
+            type: string
+            example: 2025-04-09T14:33:57Z
       responses:
         '200':
           description: Успішний запит
@@ -12815,11 +12847,11 @@ paths:
                       request_vehicles_register:
                         type: array
                         items: {} # Може бути визначено конкретний тип, якщо відома структура
-                        description: Масив даних реєстрації транспортних засобів
+                        description: Масив даних сповіщень для нарядів
                       service_messages:
                         type: array
                         items: {} # Може бути визначено конкретний тип, якщо відома структура
-                        description: Масив сервісних повідомлень
+                        description: Масив даних сповіщень для сервісних повідомлень
                       races:
                         type: array
                         items:
@@ -12828,7 +12860,7 @@ paths:
                             ref_id:
                               type: integer
                               example: 1913932
-                              description: Унікальний ідентифікатор посилання
+                              description: ID рейса, наряда або іншого документа для підпорядкованих сповіщень
                             messages:
                               type: array
                               items:
@@ -12879,7 +12911,7 @@ paths:
                                     type: boolean
                                     example: false
                                     description: Ознака прочитання повідомлення користувачем
-                        description: Масив даних про заїзди
+                        description: Масив даних сповіщень для рейсів
                   status:
                     type: boolean
                     example: true
