@@ -12803,84 +12803,87 @@ paths:
             example: 702090
       responses:
         '200':
-          description: Успішний запит
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  items:
-                    type: object
-                    properties:
-                      request_vehicles_register:
-                        type: array
-                        items:
-                          type: object
-                          description: Дані про реєстрацію транспортних засобів
-                          service_messages:
-                        type: array
-                        items:
-                          type: object
-                          description: Сервісні повідомлення
-                          races:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            ref_id:
-                              type: integer
-                              example: 1913932
-                              description: Унікальний ідентифікатор посилання
-                          messages:
-                            type: array
-                            items:
-                              type: object
-                          properties:
-                            message_id:
-                              type: integer
-                              example: 17054761
-                              description: Унікальний ідентифікатор повідомлення
-                            created_at:
-                              type: string
-                              format: date-time
-                              example: "2025-04-08T16:39:16Z"
-                              description: Дата і час створення повідомлення
-                            task_name:
-                              type: string
-                              example: "005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН"
-                              description: Назва завдання
-                            channel_name:
-                              type: string
-                              example: "Пуш у мобільний застосунок"
-                              description: Канал відправки повідомлення
-                            title:
-                              type: string
-                              example: "Привіт! Ти в черзі"
-                              description: Заголовок повідомлення
-                            message_text:
-                              type: string
-                              example: "\r\n\u0422\u0435\u043F\u0435\u0440 \u0447\u0435\u043A\u0430\u0439)"
-                              description: Текст повідомлення
-                            message_status:
-                              type: string
-                              example: "success"
-                              description: Статус повідомлення
-                            contact:
-                              type: string
-                              example: "0967401590"
-                              description: Контактний номер
-                            type:
-                              type: string
-                              example: "races"
-                              description: Тип повідомлення
-                            read_by_user:
-                              type: boolean
-                              example: false
-                              description: Ознака прочитання повідомлення користувачем
-                        status:
-                          type: boolean
-                          example: true
-                          description: Статус відповіді
+          description: Успішний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: object
+                    properties:
+                      request_vehicles_register:
+                        type: array
+                        items: {} # Може бути визначено конкретний тип, якщо відома структура
+                        description: Масив даних реєстрації транспортних засобів
+                      service_messages:
+                        type: array
+                        items: {} # Може бути визначено конкретний тип, якщо відома структура
+                        description: Масив сервісних повідомлень
+                      races:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ref_id:
+                              type: integer
+                              example: 1913932
+                              description: Унікальний ідентифікатор посилання
+                            messages:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  message_id:
+                                    type: integer
+                                    example: 17054761
+                                    description: Унікальний ідентифікатор повідомлення
+                                  created_at:
+                                    type: string
+                                    format: date-time
+                                    example: "2025-04-08T16:39:16Z"
+                                    description: Дата і час створення повідомлення
+                                  task_name:
+                                    type: string
+                                    example: "005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН"
+                                    description: Назва завдання
+                                  channel_name:
+                                    type: string
+                                    example: "Пуш у мобільний застосунок"
+                                    description: Канал відправки повідомлення
+                                  title:
+                                    type: string
+                                    example: "Привіт! Ти в черзі"
+                                    description: Заголовок повідомлення
+                                  description:
+                                    type: string
+                                    example: "Привіт! Ти в черзі"
+                                    description: Опис повідомлення
+                                  message_text:
+                                    type: string
+                                    example: "\r\n\u0422\u0435\u043F\u0435\u0440 \u0447\u0435\u043A\u0430\u0439)"
+                                    description: Текст повідомлення
+                                  message_status:
+                                    type: string
+                                    example: "success"
+                                    description: Статус повідомлення
+                                  contact:
+                                    type: string
+                                    example: "0967401590"
+                                    description: Контактний номер
+                                  type:
+                                    type: string
+                                    example: "races"
+                                    description: Тип повідомлення
+                                  read_by_user:
+                                    type: boolean
+                                    example: false
+                                    description: Ознака прочитання повідомлення користувачем
+                        description: Масив даних про заїзди
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
         '403':
           description: Клієнт не має прав доступу
           content:
