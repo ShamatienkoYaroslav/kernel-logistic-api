@@ -12590,6 +12590,20 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
       requestBody:
         description: тіло запиту
         content:
@@ -12597,7 +12611,7 @@ paths:
             schema:
               type: object
               properties:
-                guid:
+                race_guid:
                   type: string
                   example: 21d9ec91-4e1b-df88-2fc5-f9ab00a54f7d
                   description: Унікальний ідентифікатор рейса
@@ -12714,7 +12728,7 @@ paths:
                     example: true
                     description: Статус відповіді
         '400':
-          description: Поганий запит
+          description: Неправильний запит
           content:
             application/json:
               schema:
@@ -12955,7 +12969,7 @@ paths:
                     example: true
                     description: Статус відповіді
         '400':
-          description: Поганий запит
+          description: Неправильний запит
           content:
             application/json:
               schema:
