@@ -5,7 +5,7 @@ info:
   version: 1.0.2
 servers:
   - description: Development Server
-    url: 'https://devkernel.apex.rest:8443/ords/kernel_logistic/v1/transithub'
+    url: 'https://test-api-transithub.kernel.ua/ords/kernel_logistic/v1/transithub'
 tags:
   - name: Т000 - Інтерфейс водія
     description: Вузли для інтерфейсу водія
