@@ -12834,97 +12834,97 @@ paths:
             type: string
             example: 2025-04-09T14:33:57Z
       responses:
-          '200':
-            description: Успішний запит
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
+        '200':
+          description: Успішний запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
                     items:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          message_id:
-                            type: integer
-                            example: 17054763
-                            description: Унікальний ідентифікатор повідомлення
-                          created_at:
-                            type: string
-                            format: date-time
-                            example: "2025-04-08T16:45:35Z"
-                            description: Дата і час створення повідомлення
-                          task_name:
-                            type: string
-                            example: "005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН"
-                            description: Назва завдання
-                          channel_name:
-                            type: string
-                            example: "Пуш у мобільний застосунок"
-                            description: Канал відправки повідомлення
-                          title:
-                            type: string
-                            example: "Привіт! Ти в черзі"
-                            description: Заголовок повідомлення
-                          description:
-                            type: string
-                            example: "Привіт! Ти в черзі"
-                            description: Опис повідомлення
-                          message_text:
-                            type: string
-                            example: "\r\n\u0422\u0435\u043F\u0435\u0440 \u0447\u0435\u043A\u0430\u0439)"
-                            description: Текст повідомлення
-                          message_status:
-                            type: string
-                            example: "success"
-                            description: Статус повідомлення
-                          contact:
-                            type: string
-                            example: "0967401590"
-                            description: Контактний номер
-                          type:
-                            type: string
-                            example: "races"
-                            description: Тип повідомлення
-                          read_by_user:
-                            type: boolean
-                            example: true
-                            description: Ознака прочитання повідомлення користувачем
-                          read_date:
-                            type: string
-                            format: date-time
-                            example: "2025-04-10T14:32:05Z"
-                            description: Дата і час прочитання повідомлення користувачем
-                          race_number:
-                            type: string
-                            example: "250407-0621"
-                            description: Номер заїзду
-                          race_date:
-                            type: string
-                            format: date-time
-                            example: "2025-04-07T14:39:07Z"
-                            description: Дата заїзду
-                    race_unread_messages_count:
-                      type: integer
-                      example: 26
-                      description: Кількість непрочитаних повідомлень про заїзди
-                    vehicle_register_unread_messages_count:
-                      type: integer
-                      example: 2
-                      description: Кількість непрочитаних повідомлень про реєстрацію транспортних засобів
-                    service_unread_messages_count:
-                      type: integer
-                      example: 0
-                      description: Кількість непрочитаних сервісних повідомлень
-                    all_unread_messages_count:
-                      type: integer
-                      example: 28
-                      description: Загальна кількість непрочитаних повідомлень
-                    status:
-                      type: boolean
-                      example: true
-                      description: Статус відповіді
+                      type: object
+                      properties:
+                        message_id:
+                          type: integer
+                          example: 17054763
+                          description: Унікальний ідентифікатор повідомлення
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-04-08T16:45:35Z"
+                          description: Дата і час створення повідомлення
+                        task_name:
+                          type: string
+                          example: "005_РЕЄСТР_ЧЕРГА_ТБТ ОНЛАЙН"
+                          description: Назва завдання
+                        channel_name:
+                          type: string
+                          example: "Пуш у мобільний застосунок"
+                          description: Канал відправки повідомлення
+                        title:
+                          type: string
+                          example: "Привіт! Ти в черзі"
+                          description: Заголовок повідомлення
+                        description:
+                          type: string
+                          example: "Привіт! Ти в черзі"
+                          description: Опис повідомлення
+                        message_text:
+                          type: string
+                          example: "\r\n\u0422\u0435\u043F\u0435\u0440 \u0447\u0435\u043A\u0430\u0439)"
+                          description: Текст повідомлення
+                        message_status:
+                          type: string
+                          example: "success"
+                          description: Статус повідомлення
+                        contact:
+                          type: string
+                          example: "0967401590"
+                          description: Контактний номер
+                        type:
+                          type: string
+                          example: "races"
+                          description: Тип повідомлення
+                        read_by_user:
+                          type: boolean
+                          example: true
+                          description: Ознака прочитання повідомлення користувачем
+                        read_date:
+                          type: string
+                          format: date-time
+                          example: "2025-04-10T14:32:05Z"
+                          description: Дата і час прочитання повідомлення користувачем
+                        race_number:
+                          type: string
+                          example: "250407-0621"
+                          description: Номер заїзду
+                        race_date:
+                          type: string
+                          format: date-time
+                          example: "2025-04-07T14:39:07Z"
+                          description: Дата заїзду
+                  race_unread_messages_count:
+                    type: integer
+                    example: 26
+                    description: Кількість непрочитаних повідомлень про заїзди
+                  vehicle_register_unread_messages_count:
+                    type: integer
+                    example: 2
+                    description: Кількість непрочитаних повідомлень про реєстрацію транспортних засобів
+                  service_unread_messages_count:
+                    type: integer
+                    example: 0
+                    description: Кількість непрочитаних сервісних повідомлень
+                  all_unread_messages_count:
+                    type: integer
+                    example: 28
+                    description: Загальна кількість непрочитаних повідомлень
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
         '403':
           description: Клієнт не має прав доступу
           content:
