@@ -12621,7 +12621,11 @@ paths:
                   description: Номер телефона користувача
                 message_type:
                   type: string
-                  example: races
+                  enum:
+                    - race
+                    - vehicle_register
+                    - service
+                  example: race
                   description: Тип даних сповіщення
                 message_id:
                   type: integer
@@ -12630,7 +12634,7 @@ paths:
                 ref_id:
                   type: integer
                   example: 702090
-                  description: Ідентифікатор типу даних сповіщення
+                  description: ID рейса або наряду
                 date_from:
                   type: string
                   example: 2025-04-09T14:33:57Z
@@ -12843,7 +12847,10 @@ paths:
           description: Тип даних сповіщення
           schema:
             type: string
-            example: race
+            enum:
+              - race
+              - vehicle_register
+              - service
         - in: query
           name: message_id
           description: Ідентифікатор сповіщення
@@ -12852,7 +12859,7 @@ paths:
             example: 102090
         - in: query
           name: ref_id
-          description: Ідентифікатор типу даних сповіщення
+          description: ІD рейса або наряду
           schema:
             type: integer
             example: 702090
@@ -12876,6 +12883,17 @@ paths:
           schema:
             type: integer
             example: 1
+
+
+            - in: query
+            name: registration_kind
+            description: Вид реєстрації
+            required: false
+            schema:
+              type: string
+              enum:
+                - user
+                - auto
       responses:
         '200':
           description: Успішний запит
