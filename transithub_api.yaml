@@ -12784,6 +12784,18 @@ paths:
                   type: integer
                   example: 17054402
                   description: Ідентифікатор повідомлення
+                message_type:
+                  type: string
+                  enum:
+                    - race
+                    - vehicle_register
+                    - service
+                  example: race
+                  description: Тип даних сповіщення
+                phone:
+                  type: string
+                  example: 380964002090
+                  description: Номер телефона
       responses:
         '201':
           description: Статус виконання запиту
@@ -12796,18 +12808,24 @@ paths:
                     type: boolean
                     description: 'Статус виконання запиту'
                     example: true
-        '403':
-          description: Клієнт не має прав доступу
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '401':
           description: Користувач не авторизований
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
         '500':
           description: server error
           content: {}
