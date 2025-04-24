@@ -12713,6 +12713,12 @@ paths:
                     type: boolean
                     example: true
                     description: Статус відповіді
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
         '403':
           description: Клієнт не має прав доступу
           content:
@@ -12948,6 +12954,12 @@ paths:
                     type: boolean
                     example: true
                     description: Статус відповіді
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
         '403':
           description: Клієнт не має прав доступу
           content:
