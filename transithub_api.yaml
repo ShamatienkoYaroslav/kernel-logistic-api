@@ -12727,6 +12727,10 @@ paths:
                     type: integer
                     example: 28
                     description: Загальна кількість непрочитаних повідомлень
+                  has_more:
+                    type: boolean
+                    example: false
+                    description: Чи є ще невиведені об'єкти
                   status:
                     type: boolean
                     example: true
