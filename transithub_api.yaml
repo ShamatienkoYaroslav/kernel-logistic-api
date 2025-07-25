@@ -2991,6 +2991,10 @@ paths:
                     type: string
                     example: 685cda6e-ed6f-0537-d32d-b9aa9ce1b7aa
                     description: 'Гуід рейсу. Таблиця: Рейси (races)'
+                  race_id:
+                    type: integer
+                    example: 1914593
+                    description: 'ID рейсу. Таблиця: Рейси (races)'
                   number:
                     type: string
                     example: 200827-0192
@@ -12858,6 +12862,12 @@ paths:
           description: Унікальний ідентифікатор рейса
           schema:
             type: string
+        - in: query
+          name: race_id
+          description: ID рейсу
+          schema:
+            type: integer
+            example: 1294560
         - in: query
           name: phone
           description: Номер телефона користувача
