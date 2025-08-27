@@ -4192,19 +4192,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorized'
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         '403':
           description: Клієнт не має прав доступу
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRights'
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '404':
           description: Клієнт не має прав доступу
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_NoDataFound'
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Системна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /drivers.update_by_dispatcher:
     put:
       tags:
