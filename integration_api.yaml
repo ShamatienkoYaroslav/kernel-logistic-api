@@ -276,6 +276,11 @@ paths:
           schema:
             type: string
         - in: query
+          name: queue_guid
+          description: Гуід черги
+          schema:
+            type: string
+        - in: query
           name: limit
           description: Oбмеження кількості елементів масиву
           required: false
@@ -289,6 +294,55 @@ paths:
           schema:
             type: integer
             example: 5
+        - in: query
+          name: statuses
+          description: Статус реєстрації в черзі (in_queue, waiting_for_registration, in_process_move_to_entry, in_process, rejected, dropped, drop)
+          required: false
+          schema:
+            type: string
+            example: 'in_queue_all'
+        - in: query
+          name: only_in_registration
+          description: Тільки в процесі реєстрації (1/0)
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: only_races_on_teritory
+          description: Тільки рейси на території (1/0)
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: verification_status
+          description: Статус верифікації (to_check, accepted, rejected)
+          required: false
+          schema:
+            type: string
+            example: 'to_check'
+        - in: query
+          name: direction
+          description: Напрямок (loading, unloading)
+          required: false
+          schema:
+            type: string
+            example: 'unloading'
+        - in: query
+          name: goods_category_guid
+          description: Гуід категорії вантажу
+          required: false
+          schema:
+            type: string
+            example: '985a2184-956e-5d02-f226-5b0e4b315303'
+        - in: query
+          name: warehouse_to_code
+          description: Код складу розвантаження
+          required: false
+          schema:
+            type: string
+            example: '3222910100002'
       responses:
         '200':
           description: Успіх
