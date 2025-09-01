@@ -364,6 +364,15 @@ paths:
                     type: integer
                     example: 1
                     description: Кількість елементів у відповіді
+        '403':
+          description: Клієнт не має прав доступу (фактично повертається з HTTP-кодом статусу 200)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
 components:
   schemas:
     Patch:
