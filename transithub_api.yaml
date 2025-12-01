@@ -13038,7 +13038,7 @@ paths:
     get:
       tags:
         - T045 - Пуш-повідомлення
-      summary: Отримання історії сповіщень
+      summary: Отримання лічильників сповіщень
       operationId: messagesCountersGet
       description: |
         Отримання лічильників сповіщень
