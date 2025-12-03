@@ -12864,11 +12864,6 @@ paths:
           schema:
             type: string
         - in: query
-          name: race_guid
-          description: Унікальний ідентифікатор рейса
-          schema:
-            type: string
-        - in: query
           name: race_id
           description: ID рейсу
           schema:
@@ -12896,11 +12891,12 @@ paths:
             type: integer
             example: 102090
         - in: query
-          name: ref_id
-          description: ІD рейса або наряду
+          name: use_short_notifications
+          description: Використовувати текст повідомлення(ключ message_text) для елементів масиву items
+          required: false
           schema:
-            type: integer
-            example: 702090
+            type: boolean
+            example: true
         - in: query
           name: date_from
           description: Дата і час, від яких потрібно зробити відбір
