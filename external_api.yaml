@@ -199,6 +199,109 @@ paths:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
       x-codegen-request-body-name: body
+  /auth/logout:
+    post:
+      tags: ['T007 - Аутентифікація']
+      summary: Деактивувати токен доступу користувача системи Транзитхаб
+      description:
+        Деактивувати токен доступу, після виходу користувача системи Транзитхаб з додатку
+      parameters:
+        - in: header
+          name: status
+          description: HTTP response status code
+          schema:
+            type: integer
+        - in: header
+          name: client_token
+          example: e0d22acfba67c35937f2e26c7b6344e6
+          description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: access_token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJUUkFOU0lUSFVCIiwic3ViIjoiVEgiLCJhdWQiOiIzODA2ODg1OTIwNjEiLCJpYXQiOjE2ODkwODk0
+          description: 'Токен доступу, що видається на певний проміжок часу та використовується для авторизації на сторінках системи Транзитхаб'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для створення документа
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: Номер телефону користувача системи
+                  example: 380687567077
+                source:
+                  type: string
+                  description: Джерело створення запиту
+                  enum: [web, mobile]
+                  example: web
+                fcm_token:
+                  type: string
+                  description: Firebase Cloud Messaging token
+                  example: bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...
+                device_id:
+                  type: string
+                  description: Ключ для ідентифікації пристрою. Генерується раз при встановленні додатку
+                  example: 550e8400-e29b-41d4-a716-446655440000
+        required: true
+      responses:
+        200:
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  msg_code:
+                    type: string
+                    description: Код шаблону сповіщення
+                    example: '104'
+                  msg_txt:
+                    type: string
+                    description: Текст шаблону сповіщення
+                    example: 'Деактивація токену працює в тестовому режимі. Для Прод середовища встановіть налаштування: Адміністрування/Клієнти АПІ/Картка клієнта АПІ(закладка: Токен Доступа/JWT) "Вик. блекліст токена доступа" = Так.'
+        400:
+          description: 'Поганий запит'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        401:
+          description: Клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        403:
+          description: 'Клієнт не має прав доступу'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        404:
+          description: 'Дані не знайдено'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        500:
+          description: 'Інша помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+      x-codegen-request-body-name: body
   /auth/refresh_token:
     get:
       tags: ['T007 - Аутентифікація']

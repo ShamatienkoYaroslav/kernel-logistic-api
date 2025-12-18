@@ -13109,7 +13109,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
-
   /fcm_token:
     post:
       tags:
@@ -13178,7 +13177,6 @@ paths:
           description: server error
           content: {}
 
-          
 components:
   schemas:
     _StatusOnly:
