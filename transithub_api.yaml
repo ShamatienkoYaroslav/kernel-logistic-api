@@ -6641,6 +6641,146 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /files:
+    post:
+      tags:
+        - T014 - Файли (вкладення)
+        - T020 - Файли (вкладення)
+      summary: Створити нове вкладення документу/рейсу
+      operationId: filesPost
+      description: >
+        Передавши відповідні параметри, ви створите новий запис для
+        документу/рейсу рейсу з вкладеним файлом(фалами).
+      parameters:
+        - name: client_token
+          in: query
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - name: document_type
+          in: query
+          description: |
+            Тип документу. "document" - підсистема пакетів документів.
+            la, ttn - верифікація документів.
+          required: true
+          schema:
+            type: string
+            enum:
+              - la
+              - ttn
+              - document
+        - name: type
+          in: query
+          description: |
+            Тип приналежності
+            Для верифікації документів рейсу використовуємо type="race"
+          required: true
+          schema:
+            type: string
+            enum:
+              - race
+              - accreditation
+        - name: direction
+          in: query
+          description: |
+            Напрямок черги (навантаження/розвантаження). 
+            Використовується для визначення поточної черги рейсу
+          required: true
+          schema:
+            type: string
+            enum:
+              - loading
+              - unloading
+        - name: race_guid
+          in: query
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+        - name: source
+          in: query
+          description: Джерело створення
+          schema:
+            type: string
+            enum:
+              - track_check
+              - th
+      requestBody:
+        description: 'Массив файлів, що потрібно зберегти'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FilesBody'
+      responses:
+        '201':
+          description: Запис створено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  guid:
+                    type: string
+                    format: uuid
+                    description: Ідентифікатор файлу
+                    example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  handle_status:
+                    type: string
+                    description: Статус обробки файлу
+                    enum: [draft, to_check, rejected, accepted]
+                  source:
+                    type: string
+                    description: Джерело створення
+                    enum: [track_check, th]
+                    example: track_check
+                  items:
+                    type: array
+                    description: масив посилань на створені файли
+                    items:
+                      $ref: '#/components/schemas/FilesResponse'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_NoDataFoundNew'
+      x-codegen-request-body-name: payload
   /pq_departure_permission_directions:
     get:
       tags:
@@ -16960,6 +17100,40 @@ components:
           description: >-
             Признак чи потрібно застосовувати алготирм приховування номерів ТС в
             публічному журналі черг
+    FilesResponse:
+      description: files
+      type: object
+      properties:
+        name:
+          type: string
+          example: waybill 01
+          description: 'Назва файлу. Таблиця: Файли(race_ttn_files)'
+        link:
+          type: string
+          example: https:\/\/dev-api-transithub.kernel.ua\/ords\/kernel_logistic\/v2\/th_public\/race\/verification\/photo\/url\/1389221?client_token=a6573d3f8ec85c553f3d08b2f2e9cae7
+          description: 'Посилання на файл локальна база. Таблиця: Файли(race_ttn_files)'
+        file_link:
+          type: string
+          example: https:\/\/dev-api-transithub.kernel.ua\/ords\/kernel_logistic\/v2\/th_public\/race\/verification\/photo\/url\/1389221?client_token=a6573d3f8ec85c553f3d08b2f2e9cae7
+          description: 'Посилання на файл локальна база або Шерпоінт. Таблиця: Файли(race_ttn_files)'
+    FilesBody:
+      description: files
+      type: object
+      properties:
+        file_name:
+          type: string
+          example: waybill 01
+          description: 'Назва файлу. Таблиця: Файли(race_ttn_files)'
+        file_type:
+          type: string
+          example: image/jpg
+          description: >
+            Медіа тип файлу (mimetype). Таблиця:
+            Файли(race_ttn_files)
+        file_body:
+          type: string
+          example: AADD82cmxkmcxAA...
+          description: 'Значення самого файлу в форматі Base64. Таблиця: Файли(race_ttn_files)'
     ArrayOfFiles:
       description: files
       type: array
