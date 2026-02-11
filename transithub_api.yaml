@@ -6693,7 +6693,7 @@ paths:
           description: |
             Напрямок черги (навантаження/розвантаження). 
             Використовується для визначення поточної черги рейсу
-          required: true
+          required: false
           schema:
             type: string
             enum:
@@ -6702,7 +6702,7 @@ paths:
         - name: race_guid
           in: query
           description: Унікальний ідентифікатор рейсу
-          required: true
+          required: false
           schema:
             type: string
         - name: owner_guid
@@ -6721,9 +6721,14 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/FilesBody'
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FilesBody'
+                  required:
+                    - files
       responses:
         '201':
           description: Запис створено
