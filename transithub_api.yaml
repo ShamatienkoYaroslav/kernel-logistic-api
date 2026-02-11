@@ -17116,6 +17116,10 @@ components:
           type: string
           example: waybill 01
           description: 'Назва файлу. Таблиця: Файли(race_ttn_files)'
+        guid:
+          type: string
+          example: 0e6972a5-dffd-2d72-0ba8-88e1bc19e12d
+          description: 'Унікальний ідентифікатор запису файлу. Таблиця: Файли(race_ttn_files)'
         link:
           type: string
           example: https:\/\/dev-api-transithub.kernel.ua\/ords\/kernel_logistic\/v2\/th_public\/race\/verification\/photo\/url\/1389221?client_token=a6573d3f8ec85c553f3d08b2f2e9cae7
