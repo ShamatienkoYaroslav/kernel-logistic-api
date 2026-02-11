@@ -6687,6 +6687,7 @@ paths:
             enum:
               - race
               - accreditation
+              - waybill
         - name: direction
           in: query
           description: |
@@ -6704,14 +6705,16 @@ paths:
           required: true
           schema:
             type: string
+        - name: owner_guid
+          in: query
+          description: Унікальний ідентифікатор запису пакету документів. Передається при document_type = document
+          schema:
+            type: string
         - name: source
           in: query
           description: Джерело створення
           schema:
             type: string
-            enum:
-              - track_check
-              - th
       requestBody:
         description: 'Массив файлів, що потрібно зберегти'
         required: true
