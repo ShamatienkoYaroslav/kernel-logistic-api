@@ -13777,6 +13777,81 @@ paths:
         '500':
           description: server error
           content: {}
+  /fuels/brands:
+    get:
+      tags:
+        - T021 - Подорожній лист (інтерфейс водія)
+      summary: Отримання брендів пального
+      operationId: fuelBrandsGet
+      description: >
+        Вузол для отримання списку брендів пального. Дозволяє фільтрувати
+        результати за кодом бренду або пошуковим рядком за назвою.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: code
+          description: Код бренду пального
+          required: false
+          schema:
+            type: string
+            example: OKKO
+        - in: query
+          name: search
+          description: Назва бренду або її частина
+          required: false
+          schema:
+            type: string
+            example: ok
+        - in: query
+          name: limit
+          description: Обмеження кількості результатів, що виводяться
+          required: false
+          schema:
+            type: integer
+            default: 100
+            example: 100
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується початок виведення результатів пошуку
+          required: false
+          schema:
+            type: integer
+            default: 0
+            example: 0
+      responses:
+        '200':
+          description: Знайдені бренди пального
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FuelBrandsGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
 
 components:
   schemas:
@@ -18581,6 +18656,18 @@ components:
           type: string
           example: Село
           description: Назва типу териториальної одиниці
+    FuelBrandsGet:
+      type: object
+      description: Інформація про бренд пального
+      properties:
+        name:
+          type: string
+          example: OKKO
+          description: Назва бренду пального
+        code:
+          type: string
+          example: OKKO
+          description: Код бренду пального
     DocumentsGet:
       type: object
       description: Інформація про документ
