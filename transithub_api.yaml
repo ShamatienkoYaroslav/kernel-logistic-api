@@ -6172,6 +6172,134 @@ paths:
           description: server error
           content: {}
   /documents:
+    get:
+      tags:
+        - T013 - Документи
+      summary: Отримання списку документів
+      operationId: documentsGet
+      description: >
+        Вузол для отримання документів за власником або за унікальним
+        ідентифікатором документа. Для пошуку потрібно передати або пару
+        `owner_guid` + `owner_type`, або `guid`. За замовчуванням у відповідь
+        включаються вкладені файли документа.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Обмеження кількості результатів, що виводяться
+          required: false
+          schema:
+            type: integer
+            example: 50
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується початок виведення результатів пошуку
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - in: query
+          name: owner_guid
+          description: Унікальний ідентифікатор власника документа
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        - in: query
+          name: owner_type
+          description: Тип власника документа
+          required: false
+          schema:
+            type: string
+            enum:
+              - th_vehicles
+              - races
+              - waybill
+              - request_vehicles_register
+            example: th_vehicles
+        - in: query
+          name: is_archive
+          description: Ознака архівного документа
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+            default: 0
+            example: 0
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор документа
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+        - in: query
+          name: get_files
+          description: Ознака необхідності повертати вкладені файли документа
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+            default: 1
+            example: 1
+      responses:
+        '200':
+          description: Знайдені документи
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentsGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
     post:
       tags:
         - T013 - Документи
@@ -18453,6 +18581,115 @@ components:
           type: string
           example: Село
           description: Назва типу териториальної одиниці
+    DocumentsGet:
+      type: object
+      description: Інформація про документ
+      properties:
+        document_id:
+          type: integer
+          example: 12345
+          description: Внутрішній ідентифікатор документа
+        guid:
+          type: string
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+          description: Унікальний ідентифікатор документа
+        owner_type:
+          type: string
+          example: th_vehicles
+          description: Тип власника документа
+        owner_guid:
+          type: string
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+          description: Унікальний ідентифікатор власника документа
+        created_by:
+          type: string
+          example: company
+          description: Джерело створення документа
+        number:
+          type: string
+          example: EL06-201211-00201
+          description: Номер документа
+        date_from:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата початку дії документа
+        date_to:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата завершення дії документа
+        created_at:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата створення документа
+        updated_at:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата оновлення документа
+        user_guid:
+          type: string
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+          description: Унікальний ідентифікатор користувача ТХ
+        user_name:
+          type: string
+          example: Іван Іваненко
+          description: ПІБ користувача ТХ
+        user_phone:
+          type: string
+          example: '380675559911'
+          description: Номер телефону користувача ТХ
+        client_user_phone:
+          type: string
+          example: '380675559911'
+          description: Номер телефону користувача клієнта
+        client_user_name:
+          type: string
+          example: Петро Петренко
+          description: ПІБ користувача клієнта
+        client_sent_date:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата відправлення документа клієнтом
+        client_check_date:
+          type: string
+          example: '28.04.2021 18:41:52'
+          description: Дата перевірки документа клієнта
+        document_status:
+          type: string
+          example: valid
+          description: Статус документа
+        exchange_status:
+          type: string
+          example: draft
+          description: Статус обміну документа
+        belonging_type:
+          type: string
+          example: ownership
+          description: Тип приналежності документа
+        document_kind_name_ua:
+          type: string
+          example: ТТН
+          description: Назва виду документа українською
+        document_kind_name_ru:
+          type: string
+          example: ТТН
+          description: Назва виду документа російською
+        document_kind_type:
+          type: string
+          example: ttn
+          description: Код виду документа
+        comments:
+          type: string
+          example: Коментар
+          description: Коментар до документа
+        files:
+          $ref: '#/components/schemas/ArrayOfFiles'
+        files_count:
+          type: integer
+          example: 2
+          description: Кількість вкладених файлів документа
     DriversByPhoneGet:
       type: object
       description: Інформація про водія
