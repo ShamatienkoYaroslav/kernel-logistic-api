@@ -1994,6 +1994,88 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /drivers.by_phone:
+    get:
+      tags:
+        - T004 - Водії
+      summary: Пошук водіїв за номером телефону
+      operationId: driversByPhoneGet
+      description: >
+        Вузол для отримання списку водіїв або пошуку водія за номером телефону.
+        Якщо передано параметр `phone`, повертаються лише водії, у яких номер
+        телефону містить вказане значення. Для однакових комбінацій номера
+        посвідчення та ПІБ повертається найновіший запис.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Обмеження кількості результатів, що виводяться
+          required: false
+          schema:
+            type: integer
+            default: 50
+            example: 50
+        - in: query
+          name: offset
+          description: Величина, на яку зміщується початок виведення результатів пошуку
+          required: false
+          schema:
+            type: integer
+            default: 0
+            example: 0
+        - in: query
+          name: phone
+          description: Номер телефону або його частина для пошуку водія
+          required: false
+          schema:
+            type: string
+            example: '380675559911'
+      responses:
+        '200':
+          description: Знайдені водії
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DriversByPhoneGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
   /driver.change_status:
     put:
       tags:
@@ -18371,6 +18453,39 @@ components:
           type: string
           example: Село
           description: Назва типу териториальної одиниці
+    DriversByPhoneGet:
+      type: object
+      description: Інформація про водія
+      properties:
+        full_name:
+          type: string
+          example: Іваненко Іван Іванович
+          description: Повне ПІБ водія
+        first_name:
+          type: string
+          example: Іван
+          description: Ім'я водія
+        middle_name:
+          type: string
+          example: Іванович
+          description: По батькові водія
+        last_name:
+          type: string
+          example: Іваненко
+          description: Прізвище водія
+        cert_serial_number:
+          type: string
+          example: ААА123456
+          description: Серія та номер посвідчення водія
+        guid:
+          type: string
+          format: uuid
+          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+          description: Унікальний ідентифікатор водія
+        number_id:
+          type: string
+          example: '1234567890'
+          description: Ідентифікаційний номер водія
     GoodsGet:
       type: object
       description: Інформація про вантаж
