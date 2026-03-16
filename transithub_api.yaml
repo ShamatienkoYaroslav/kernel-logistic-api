@@ -13180,6 +13180,65 @@ paths:
         '500':
           description: server error
           content: {}
+  /localities/regions:
+    get:
+      tags:
+        - T031 - Населені пункти
+      summary: Отримання списку областей
+      operationId: localitiesRegionsGet
+      description: >
+        Вузол для отримання списку областей із довідника населених пунктів.
+        Повертає унікальні пари коду та назви області.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список областей
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LocalityRegionsGet'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '500':
+          description: server error
+          content: {}
   /messages:
     post:
       tags:
@@ -18656,6 +18715,18 @@ components:
           type: string
           example: Село
           description: Назва типу териториальної одиниці
+    LocalityRegionsGet:
+      type: object
+      description: Інформація про область
+      properties:
+        code:
+          type: string
+          example: '32'
+          description: Код області
+        name:
+          type: string
+          example: Київська
+          description: Назва області
     FuelBrandsGet:
       type: object
       description: Інформація про бренд пального
