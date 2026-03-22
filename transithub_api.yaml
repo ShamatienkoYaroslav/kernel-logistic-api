@@ -6673,6 +6673,10 @@ paths:
                     type: boolean
                     description: Статус обробки запиту
                     example: true
+                  count:
+                    type: integer
+                    description: Кількість знайдених результатів
+                    example: 1
                   items:
                     type: array
                     items:
@@ -6681,12 +6685,12 @@ paths:
                         document_type:
                           type: string
                           description: Код типу документа
-                          example: driver_license
+                          example: 'driver_license'
                         owner_type:
                           type: string
                           nullable: true
                           description: Тип власника документа
-                          example: th_vehicles
+                          example: 'th_vehicles'
                         name_ru:
                           type: string
                           nullable: true
@@ -6697,10 +6701,6 @@ paths:
                           nullable: true
                           description: Назва типу документа українською мовою
                           example: 'Посвідчення водія'
-                  count:
-                    type: integer
-                    description: Кількість знайдених результатів
-                    example: 1
         '400':
           description: Поганий запит
           content:
@@ -12584,7 +12584,7 @@ paths:
                           type: string
                           nullable: true
                           description: Назва компанії українською мовою
-                          example: ТОВ Кернел-Трейд
+                          example: 'ТОВ Кернел-Трейд'
                         name_ru:
                           type: string
                           nullable: true
@@ -12858,7 +12858,7 @@ paths:
                     type: string
                     nullable: true
                     description: Назва компанії
-                    example: ТОВ Кернел-Трейд
+                    example: 'ТОВ Кернел-Трейд'
                   fullname:
                     type: string
                     nullable: true
@@ -13199,7 +13199,7 @@ paths:
                           type: string
                           nullable: true
                           description: Посилання на логотип компанії
-                          example: https://test-api-transithub.kernel.ua/ords/kernel_logistic/v1/transithub/public_companies/logo/1?client_token=token
+                          example: 'https://test-api-transithub.kernel.ua/ords/kernel_logistic/v1/transithub/public_companies/logo/1?client_token=token'
                         loading:
                           type: object
                           description: Кількість доступних об'єктів на завантаження
@@ -18181,7 +18181,7 @@ components:
           description: Тип причепу
         carrier_name:
           type: string
-          example: ТОВ Кернел-Трейд
+                          example: 'ТОВ Кернел-Трейд'
           description: Назва перевізника
         carrier_edrpou:
           type: string
@@ -18189,7 +18189,7 @@ components:
           description: Код ЄДРПОУ перевізника
         cargo_owner_name:
           type: string
-          example: ТОВ Кернел-Трейд
+                    example: 'ТОВ Кернел-Трейд'
           description: Назва поклажодавця
         cargo_owner_edrpou:
           type: string
