@@ -268,6 +268,144 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /accreditations/vehicles:
+    get:
+      tags:
+        - T016 - Акредитація
+      summary: Отримання списку транспортних засобів для акредитації
+      operationId: accreditationsVehiclesGet
+      description: |
+        Точка отримання списку транспортних засобів для акредитації
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (oффсет)
+          schema:
+            type: integer
+        - in: query
+          name: accreditation
+          description: Ознака акредитованого транспортного засобу
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 0
+        - in: query
+          name: is_trailer
+          description: Ознака причепа
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 0
+        - in: query
+          name: vehicle_number
+          description: Реєстраційний номер транспортного засобу
+          schema:
+            type: string
+        - in: query
+          name: carrier_org
+          description: Унікальний ідентифікатор перевізника
+          schema:
+            type: string
+        - in: query
+          name: organisation
+          description: Унікальний ідентифікатор замовника
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Тіло відповіді
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    description: Кількість знайдених результатів
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          description: Унікальний ідентифікатор транспортного засобу
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        state_number:
+                          type: string
+                          description: Реєстраційний номер транспортного засобу
+                          example: AA1234BB
+                        tech_passport:
+                          type: string
+                          nullable: true
+                          description: Технічний паспорт транспортного засобу
+                          example: ABС123456
+                        brand:
+                          type: string
+                          nullable: true
+                          description: Марка транспортного засобу
+                          example: MAN
+                        is_trailer:
+                          type: integer
+                          description: Ознака причепа
+                          enum:
+                            - 1
+                            - 0
+                          example: 0
+                        accreditation_status:
+                          type: string
+                          description: Статус акредитації транспортного засобу
+                          example: confirmed
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/requests:
     get:
       tags:
@@ -2357,6 +2495,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+  /barcode:
+    get:
+      tags:
+        - Т038 - Рейс
+      summary: Отримання штрихкоду рейсу за гуідом
+      operationId: barcodeGet
+      description: |
+        Точка отримання штрихкоду рейсу за унікальним ідентифікатором рейсу
+      parameters:
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані штрихкоду рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  race_guid:
+                    type: string
+                    description: Унікальний ідентифікатор рейсу
+                    format: uuid
+                    example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  race_number:
+                    type: string
+                    nullable: true
+                    description: Номер рейсу
+                    example: 250407-0621
+                  barcode:
+                    type: string
+                    nullable: true
+                    description: Штрихкод рейсу
+                    example: '4820012345678'
+                  barcode_system_client:
+                    type: string
+                    nullable: true
+                    description: Штрихкод рейсу в системі клієнта
+                    example: '998877665544'
+                  barcode_system_client_link:
+                    type: string
+                    nullable: true
+                    description: Посилання на штрихкод у системі клієнта
+                    example: https://example.com/ticket/998877665544
+                  barcode_system_client_finish_date:
+                    type: string
+                    nullable: true
+                    description: Дата завершення дії штрихкоду в системі клієнта
+                    example: '08.01.2025 15:30:00'
+                  message_ua:
+                    type: string
+                    nullable: true
+                    description: Повідомлення українською мовою
+                    example: Штрихкод успішно згенеровано
+                  message_ru:
+                    type: string
+                    nullable: true
+                    description: Повідомлення російською мовою
+                    example: Штрихкод успешно сгенерирован
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /driver/races:
     get:
       tags:
