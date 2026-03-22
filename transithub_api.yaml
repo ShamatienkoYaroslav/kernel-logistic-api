@@ -12671,7 +12671,7 @@ paths:
                     example: false
                   msg:
                     type: string
-                    example: ORA-20000: unexpected error
+                    example: 'ORA-20000: unexpected error'
   /companies.simple_create:
     post:
       tags:
@@ -12837,7 +12837,7 @@ paths:
                     example: false
                   msg:
                     type: string
-                    example: ORA-20000: unexpected error
+                    example: 'ORA-20000: unexpected error'
   /public_companies:
     get:
       tags:
