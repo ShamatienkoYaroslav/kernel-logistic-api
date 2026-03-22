@@ -12838,6 +12838,190 @@ paths:
                   msg:
                     type: string
                     example: 'ORA-20000: unexpected error'
+  /companies/users.post_by_phone:
+    post:
+      tags:
+        - Компанії
+      summary: Додавання користувача до компанії за номером телефону
+      operationId: companiesUsersPostByPhonePost
+      description: |
+        Точка додавання користувача до компанії за номером телефону
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company_guid:
+                  type: string
+                  description: Унікальний ідентифікатор компанії
+                  example: '8fd36c30-7b4b-a698-d259-0272dddca8e4'
+                phone:
+                  type: string
+                  description: Номер телефону користувача
+                  example: '380671234567'
+                role:
+                  type: string
+                  description: Унікальний ідентифікатор ролі користувача
+                  example: 'owner'
+                author:
+                  type: string
+                  description: Унікальний ідентифікатор автора запрошення
+                  example: '8fd36c30-7b4b-a698-d259-0272dddca8e5'
+                firstname:
+                  type: string
+                  nullable: true
+                  description: Ім'я користувача
+                  example: 'Іван'
+                lastname:
+                  type: string
+                  nullable: true
+                  description: Прізвище користувача
+                  example: 'Іваненко'
+              required:
+                - company_guid
+                - phone
+                - role
+      responses:
+        '200':
+          description: Результат додавання користувача до компанії
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  company_guid:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор компанії
+                    example: '8fd36c30-7b4b-a698-d259-0272dddca8e4'
+                  user_guid:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор користувача
+                    example: '8fd36c30-7b4b-a698-d259-0272dddca8e6'
+                  user_is_new:
+                    type: boolean
+                    nullable: true
+                    description: Ознака, що користувача було створено під час запиту
+                    example: true
+                  role_guid:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор ролі
+                    example: 'owner'
+                  active:
+                    type: boolean
+                    nullable: true
+                    description: Ознака активності користувача в компанії
+                    example: true
+                  need_invitation:
+                    type: boolean
+                    nullable: true
+                    description: Ознака потреби у відправці запрошення
+                    example: false
+                  invitation_sent:
+                    type: boolean
+                    nullable: true
+                    description: Ознака успішної відправки запрошення
+                    example: true
+                  firstname:
+                    type: string
+                    nullable: true
+                    description: Ім'я користувача
+                    example: 'Іван'
+                  lastname:
+                    type: string
+                    nullable: true
+                    description: Прізвище користувача
+                    example: 'Іваненко'
+                  author:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор автора запрошення
+                    example: '8fd36c30-7b4b-a698-d259-0272dddca8e5'
+                  msg:
+                    type: string
+                    nullable: true
+                    description: Повідомлення про результат операції
+                    example: 'Entry with such user and company already exists!'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: 'Bad request'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: 'User is not authorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: 'Client has no rights'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: 'No data found'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /public_companies:
     get:
       tags:
