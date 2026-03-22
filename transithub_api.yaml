@@ -39,6 +39,8 @@ tags:
     description: Вузол для роботи з файлами документу/рейсу
   - name: T015 - Організації компанії
     description: Вузол для роботи з організаціями компанії
+  - name: Компанії
+    description: Вузли для роботи з публічними компаніями
   - name: T016 - Акредитація
     description: Вузол для роботи з точками АПІ підсистеми акредитації
   - name: Т017 - Контрагенти
@@ -12409,6 +12411,567 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+  /companies:
+    get:
+      tags:
+        - Компанії
+      summary: Отримання списку компаній
+      operationId: companiesGet
+      description: |
+        Точка отримання списку компаній з можливістю фільтрації за користувачем, workspace та наявністю профілів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (оффсет)
+          schema:
+            type: integer
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: workspace_name
+          description: Назва workspace компанії
+          schema:
+            type: string
+        - in: query
+          name: with_profiles
+          description: Ознака наявності профілів черги
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 0
+      responses:
+        '200':
+          description: Список компаній
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  count:
+                    type: integer
+                    description: Кількість знайдених компаній
+                    example: 2
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          format: uuid
+                          description: Унікальний ідентифікатор компанії
+                          example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                        name_ua:
+                          type: string
+                          nullable: true
+                          description: Назва компанії українською мовою
+                          example: ТОВ Кернел-Трейд
+                        name_ru:
+                          type: string
+                          nullable: true
+                          description: Назва компанії російською мовою
+                          example: ООО Кернел-Трейд
+                        fullname_ua:
+                          type: string
+                          nullable: true
+                          description: Повна назва компанії українською мовою
+                        fullname_ru:
+                          type: string
+                          nullable: true
+                          description: Повна назва компанії російською мовою
+                        shortname_ua:
+                          type: string
+                          nullable: true
+                          description: Скорочена назва компанії українською мовою
+                        shortname_ru:
+                          type: string
+                          nullable: true
+                          description: Скорочена назва компанії російською мовою
+                        workname_ua:
+                          type: string
+                          nullable: true
+                          description: Робоча назва компанії українською мовою
+                        workname_ru:
+                          type: string
+                          nullable: true
+                          description: Робоча назва компанії російською мовою
+                        workspace_name:
+                          type: string
+                          nullable: true
+                          description: Назва workspace компанії
+                          example: kernel
+                        edrpou:
+                          type: string
+                          nullable: true
+                          description: Код ЄДРПОУ компанії
+                          example: '12345678'
+                        inn:
+                          type: string
+                          nullable: true
+                          description: ІПН компанії
+                        phone:
+                          type: string
+                          nullable: true
+                          description: Телефон компанії
+                        email:
+                          type: string
+                          nullable: true
+                          description: Email компанії
+                        webpage:
+                          type: string
+                          nullable: true
+                          description: Вебсайт компанії
+                        telegram:
+                          type: string
+                          nullable: true
+                          description: Telegram компанії
+                        facebook:
+                          type: string
+                          nullable: true
+                          description: Facebook компанії
+                        info:
+                          type: string
+                          nullable: true
+                          description: Додаткова інформація про компанію
+                        description:
+                          type: string
+                          nullable: true
+                          description: Опис компанії
+                        organisation_form_guid:
+                          type: string
+                          nullable: true
+                          format: uuid
+                          description: Унікальний ідентифікатор організаційної форми
+                        organisation_form_name_ua:
+                          type: string
+                          nullable: true
+                          description: Назва організаційної форми українською мовою
+                        organisation_form_name_ru:
+                          type: string
+                          nullable: true
+                          description: Назва організаційної форми російською мовою
+                        organisation_form_abbr_ua:
+                          type: string
+                          nullable: true
+                          description: Скорочення організаційної форми українською мовою
+                        organisation_form_abbr_ru:
+                          type: string
+                          nullable: true
+                          description: Скорочення організаційної форми російською мовою
+                        organisation_form_type:
+                          type: string
+                          nullable: true
+                          description: Тип організаційної форми
+                        organisation_form_nds:
+                          type: integer
+                          nullable: true
+                          description: Ознака ПДВ організаційної форми
+                          example: 1
+                        tax_scheme_guid:
+                          type: string
+                          nullable: true
+                          format: uuid
+                          description: Унікальний ідентифікатор схеми оподаткування
+                        tax_scheme_name_ua:
+                          type: string
+                          nullable: true
+                          description: Назва схеми оподаткування українською мовою
+                        tax_scheme_name_ru:
+                          type: string
+                          nullable: true
+                          description: Назва схеми оподаткування російською мовою
+                        tax_scheme_name_nds:
+                          type: integer
+                          nullable: true
+                          description: Ознака ПДВ схеми оподаткування
+                          example: 1
+                        api_token:
+                          type: string
+                          nullable: true
+                          description: API токен компанії
+                        access_auto:
+                          type: integer
+                          nullable: true
+                          description: Ознака доступу до автологістики
+                          example: 1
+                        access_railway:
+                          type: integer
+                          nullable: true
+                          description: Ознака доступу до залізничної логістики
+                          example: 0
+                        access_queue:
+                          type: integer
+                          nullable: true
+                          description: Ознака доступу до електронної черги
+                          example: 1
+                        is_getting_autorequests:
+                          type: integer
+                          description: Ознака отримання автозапитів
+                          example: 1
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Client has no rights
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: No such data
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: ORA-20000: unexpected error
+  /companies.simple_create:
+    post:
+      tags:
+        - Компанії
+      summary: Спрощене створення компанії
+      operationId: companiesSimpleCreatePost
+      description: |
+        Точка спрощеного створення компанії
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: тіло запиту
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Назва компанії
+                  example: ТОВ Кернел-Трейд
+                org_form:
+                  type: string
+                  description: Унікальний ідентифікатор організаційної форми
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                owner_guid:
+                  type: string
+                  nullable: true
+                  description: Унікальний ідентифікатор власника компанії
+                  example: 8fd36c30-7b4b-a698-d259-0272dddca8e5
+                access_auto:
+                  type: integer
+                  description: Ознака доступу до автологістики
+                  example: 1
+                access_railway:
+                  type: integer
+                  description: Ознака доступу до залізничної логістики
+                  example: 0
+                access_queue:
+                  type: integer
+                  description: Ознака доступу до електронної черги
+                  example: 1
+              required:
+                - name
+                - org_form
+                - access_auto
+                - access_railway
+                - access_queue
+      responses:
+        '200':
+          description: Результат створення компанії
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  company_exist:
+                    type: boolean
+                    description: Ознака, що компанія з таким workspace вже існує
+                    example: false
+                  guid:
+                    type: string
+                    nullable: true
+                    format: uuid
+                    description: Унікальний ідентифікатор створеної компанії
+                    example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  name:
+                    type: string
+                    nullable: true
+                    description: Назва компанії
+                    example: ТОВ Кернел-Трейд
+                  fullname:
+                    type: string
+                    nullable: true
+                    description: Повна назва компанії
+                  shortname:
+                    type: string
+                    nullable: true
+                    description: Скорочена назва компанії
+                  workname:
+                    type: string
+                    nullable: true
+                    description: Робоча назва компанії
+                  workspace_name:
+                    type: string
+                    nullable: true
+                    description: Назва workspace компанії
+                    example: kernel_trade
+                  organisation_form:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор організаційної форми
+                    example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                  owner_guid:
+                    type: string
+                    nullable: true
+                    description: Унікальний ідентифікатор власника компанії
+                    example: 8fd36c30-7b4b-a698-d259-0272dddca8e5
+                  access_auto:
+                    type: integer
+                    nullable: true
+                    description: Ознака доступу до автологістики
+                    example: 1
+                  access_railway:
+                    type: integer
+                    nullable: true
+                    description: Ознака доступу до залізничної логістики
+                    example: 0
+                  access_queue:
+                    type: integer
+                    nullable: true
+                    description: Ознака доступу до електронної черги
+                    example: 1
+                  msg:
+                    type: string
+                    nullable: true
+                    description: Повідомлення про результат операції
+                    example: Company already exists
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Client has no rights
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: ORA-20000: unexpected error
+  /public_companies:
+    get:
+      tags:
+        - Компанії
+      summary: Отримання списку публічних компаній
+      operationId: publicCompaniesGet
+      description: |
+        Точка отримання списку публічних компаній з можливістю фільтрації за користувачем, workspace та наявністю профілів
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Пагінація (ліміт)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Пагінація (оффсет)
+          schema:
+            type: integer
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+        - in: query
+          name: workspace_name
+          description: Назва workspace компанії
+          schema:
+            type: string
+        - in: query
+          name: with_profiles
+          description: Ознака наявності профілів черги
+          schema:
+            type: integer
+            enum:
+              - 1
+              - 0
+      responses:
+        '200':
+          description: Список публічних компаній
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  count:
+                    type: integer
+                    description: Кількість знайдених компаній
+                    example: 2
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          description: Унікальний ідентифікатор компанії
+                          format: uuid
+                          example: 8fd36c30-7b4b-a698-d259-0272dddca8e4
+                        name:
+                          type: string
+                          description: Назва компанії
+                          example: ТОВ Кернел-Трейд
+                        logo:
+                          type: string
+                          nullable: true
+                          description: Посилання на логотип компанії
+                          example: https://test-api-transithub.kernel.ua/ords/kernel_logistic/v1/transithub/public_companies/logo/1?client_token=token
+                        loading:
+                          type: object
+                          description: Кількість доступних об'єктів на завантаження
+                          properties:
+                            plants_number:
+                              type: integer
+                              description: Кількість заводів
+                              example: 1
+                            terminals_number:
+                              type: integer
+                              description: Кількість терміналів
+                              example: 2
+                            elevators_number:
+                              type: integer
+                              description: Кількість елеваторів
+                              example: 3
+                        unloading:
+                          type: object
+                          description: Кількість доступних об'єктів на розвантаження
+                          properties:
+                            plants_number:
+                              type: integer
+                              description: Кількість заводів
+                              example: 0
+                            terminals_number:
+                              type: integer
+                              description: Кількість терміналів
+                              example: 1
+                            elevators_number:
+                              type: integer
+                              description: Кількість елеваторів
+                              example: 4
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /organisations:
     get:
       tags:
