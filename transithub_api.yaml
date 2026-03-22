@@ -271,91 +271,234 @@ paths:
   /accreditations/requests:
     get:
       tags:
-        - T016 - РђРєСЂРµРґРёС‚Р°С†С–СЏ
-      summary: РћС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ Р·Р°РїРёС‚С–РІ РЅР° Р°РєСЂРµРґРёС‚Р°С†С–СЋ
+        - T016 - Акредитація
+      summary: Отримання списку запитів на акредитацію
       operationId: accreditationsRequestsGet
       description: |
-        РўРѕС‡РєР° РѕС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ Р·Р°РїРёС‚С–РІ РЅР° Р°РєСЂРµРґРёС‚Р°С†С–СЋ
+        Точка отримання списку запитів на акредитацію
       parameters:
         - in: query
           name: client_token
-          description: РўРѕРєРµРЅ РєР»С–С”РЅС‚Р° API
+          description: Токен клієнта API
           required: true
           schema:
             type: string
         - in: query
           name: access_token
-          description: РўРѕРєРµРЅ РґРѕСЃС‚СѓРїСѓ (СЃРµСЃС–С—)
+          description: Токен доступу (сесії)
           required: true
           schema:
             type: string
         - in: query
           name: limit
-          description: РџР°РіС–РЅР°С†С–СЏ (Р»С–РјС–С‚)
+          description: Пагінація (ліміт)
           schema:
             type: integer
         - in: query
           name: offset
-          description: РџР°РіС–РЅР°С†С–СЏ (oС„С„СЃРµС‚)
+          description: Пагінація (oффсет)
           schema:
             type: integer
         - in: query
           name: guid
-          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р·Р°РїРёС‚Сѓ
+          description: Унікальний ідентифікатор запиту
           schema:
             type: string
         - in: query
           name: kind
-          description: РўРёРї Р·Р°РїРёС‚Сѓ
+          description: Тип запиту
           schema:
             type: string
         - in: query
           name: processing_status
-          description: РЎС‚Р°С‚СѓСЃ РѕР±СЂРѕР±РєРё Р·Р°РїРёС‚Сѓ
+          description: Статус обробки запиту
           schema:
             type: string
         - in: query
           name: status
-          description: РЎС‚Р°С‚СѓСЃ Р·Р°РїРёС‚Сѓ
+          description: Статус запиту
           schema:
             type: string
         - in: query
           name: vehicle
-          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р°Р±Рѕ СЂРµС”СЃС‚СЂР°С†С–Р№РЅРёР№ РЅРѕРјРµСЂ РўР—
+          description: Унікальний ідентифікатор або реєстраційний номер ТЗ
           schema:
             type: string
         - in: query
           name: organization
-          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р·Р°РјРѕРІРЅРёРєР°
+          description: Унікальний ідентифікатор замовника
           schema:
             type: string
         - in: query
           name: carrier_organization
-          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ РїРµСЂРµРІС–Р·РЅРёРєР°
+          description: Унікальний ідентифікатор перевізника
           schema:
             type: string
       responses:
+        '200':
+          description: Тіло відповіді
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    description: Кількість знайдених результатів
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        guid:
+                          type: string
+                          description: Унікальний ідентифікатор запиту
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                        kind:
+                          type: string
+                          description: Тип запиту
+                          example: vehicle_accreditation
+                        status:
+                          type: string
+                          description: Статус запиту
+                          example: confirmed
+                        processing_status:
+                          type: string
+                          description: Статус обробки запиту
+                          example: processed
+                        table_type:
+                          type: string
+                          description: Тип таблиці
+                          example: th_vehicles
+                        comments:
+                          type: string
+                          nullable: true
+                          description: Коментар до відповіді на запит
+                          example: Документи перевірено
+                        driver_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор водія
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf801
+                        driver_name:
+                          type: string
+                          nullable: true
+                          description: ПІБ водія
+                          example: Іваненко Іван Іванович
+                        driver_phone:
+                          type: string
+                          nullable: true
+                          description: Телефон водія
+                          example: '+380671234567'
+                        vehicle_number:
+                          type: string
+                          nullable: true
+                          description: Реєстраційний номер ТЗ
+                          example: AA1234BB
+                        vehicle_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор ТЗ
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf802
+                        company_name:
+                          type: string
+                          nullable: true
+                          description: Назва компанії
+                          example: ТОВ Кернел-Трейд
+                        company_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор компанії
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf803
+                        organization_name:
+                          type: string
+                          nullable: true
+                          description: Назва замовника
+                          example: Миронівський елеватор
+                        organization_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор замовника
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf804
+                        carrier_company_name:
+                          type: string
+                          nullable: true
+                          description: Назва компанії перевізника
+                          example: ТОВ Логістик Транс
+                        carrier_company_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор компанії перевізника
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf805
+                        carrier_organization_name:
+                          type: string
+                          nullable: true
+                          description: Назва перевізника
+                          example: Транспортний підрозділ 1
+                        carrier_organization_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор перевізника
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf806
+                        user_name:
+                          type: string
+                          nullable: true
+                          description: ПІБ користувача
+                          example: Петренко Петро
+                        user_guid:
+                          type: string
+                          nullable: true
+                          description: Унікальний ідентифікатор користувача
+                          format: uuid
+                          example: f11747b0-f51e-a10e-cceb-7c9fa1caf807
+                        created_at:
+                          type: string
+                          nullable: true
+                          description: Дата створення запиту
+                          example: '2024-08-28 10:15:00'
+                        processing_date:
+                          type: string
+                          nullable: true
+                          description: Дата обробки запиту
+                          example: '2024-08-28 11:00:00'
+                        dispatch_date:
+                          type: string
+                          nullable: true
+                          description: Дата відправлення запиту
+                          example: '2024-08-28 10:20:00'
         '400':
-          description: РџРѕРіР°РЅРёР№ Р·Р°РїРёС‚
+          description: Поганий запит
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
         '401':
-          description: РљР»С–С”РЅС‚ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРёР№
+          description: Клієнт не авторизований
           content:
             application/json:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
         '403':
-          description: РљР»С–С”РЅС‚ РЅРµ РјР°С” РїСЂР°РІ РґРѕСЃС‚СѓРїСѓ
+          description: Клієнт не має прав доступу
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '500':
-          description: РЎРµСЂРІРµСЂРЅР° РїРѕРјРёР»РєР°
+          description: Серверна помилка
           content:
             application/json:
               schema:
