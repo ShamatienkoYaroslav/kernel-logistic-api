@@ -552,7 +552,7 @@ paths:
                           type: string
                           nullable: true
                           description: Назва компанії
-                          example: ТОВ Кернел-Трейд
+                          example: 'ТОВ Кернел-Трейд'
                         company_guid:
                           type: string
                           nullable: true
@@ -12489,7 +12489,7 @@ paths:
                           type: string
                           nullable: true
                           description: Назва компанії російською мовою
-                          example: ООО Кернел-Трейд
+                          example: 'ООО Кернел-Трейд'
                         fullname_ua:
                           type: string
                           nullable: true
@@ -12518,7 +12518,7 @@ paths:
                           type: string
                           nullable: true
                           description: Назва workspace компанії
-                          example: kernel
+                          example: 'kernel'
                         edrpou:
                           type: string
                           nullable: true
@@ -12645,7 +12645,7 @@ paths:
                     example: false
                   msg:
                     type: string
-                    example: Client has no rights
+                    example: 'Client has no rights'
         '404':
           description: Дані не знайдено
           content:
@@ -12658,7 +12658,7 @@ paths:
                     example: false
                   msg:
                     type: string
-                    example: No such data
+                    example: 'No such data'
         '500':
           description: Серверна помилка
           content:
@@ -12704,7 +12704,7 @@ paths:
                 name:
                   type: string
                   description: Назва компанії
-                  example: ТОВ Кернел-Трейд
+                  example: 'ТОВ Кернел-Трейд'
                 org_form:
                   type: string
                   description: Унікальний ідентифікатор організаційної форми
@@ -12775,7 +12775,7 @@ paths:
                     type: string
                     nullable: true
                     description: Назва workspace компанії
-                    example: kernel_trade
+                  example: 'kernel_trade'
                   organisation_form:
                     type: string
                     nullable: true
@@ -12805,7 +12805,7 @@ paths:
                     type: string
                     nullable: true
                     description: Повідомлення про результат операції
-                    example: Company already exists
+                    example: 'Company already exists'
         '401':
           description: Користувач не авторизований
           content:
@@ -12824,7 +12824,7 @@ paths:
                     example: false
                   msg:
                     type: string
-                    example: Client has no rights
+                    example: 'Client has no rights'
         '500':
           description: Серверна помилка
           content:
@@ -12910,7 +12910,7 @@ paths:
                         name:
                           type: string
                           description: Назва компанії
-                          example: ТОВ Кернел-Трейд
+                          example: 'ТОВ Кернел-Трейд'
                         logo:
                           type: string
                           nullable: true
