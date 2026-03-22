@@ -268,6 +268,98 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /accreditations/requests:
+    get:
+      tags:
+        - T016 - РђРєСЂРµРґРёС‚Р°С†С–СЏ
+      summary: РћС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ Р·Р°РїРёС‚С–РІ РЅР° Р°РєСЂРµРґРёС‚Р°С†С–СЋ
+      operationId: accreditationsRequestsGet
+      description: |
+        РўРѕС‡РєР° РѕС‚СЂРёРјР°РЅРЅСЏ СЃРїРёСЃРєСѓ Р·Р°РїРёС‚С–РІ РЅР° Р°РєСЂРµРґРёС‚Р°С†С–СЋ
+      parameters:
+        - in: query
+          name: client_token
+          description: РўРѕРєРµРЅ РєР»С–С”РЅС‚Р° API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: РўРѕРєРµРЅ РґРѕСЃС‚СѓРїСѓ (СЃРµСЃС–С—)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: РџР°РіС–РЅР°С†С–СЏ (Р»С–РјС–С‚)
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: РџР°РіС–РЅР°С†С–СЏ (oС„С„СЃРµС‚)
+          schema:
+            type: integer
+        - in: query
+          name: guid
+          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р·Р°РїРёС‚Сѓ
+          schema:
+            type: string
+        - in: query
+          name: kind
+          description: РўРёРї Р·Р°РїРёС‚Сѓ
+          schema:
+            type: string
+        - in: query
+          name: processing_status
+          description: РЎС‚Р°С‚СѓСЃ РѕР±СЂРѕР±РєРё Р·Р°РїРёС‚Сѓ
+          schema:
+            type: string
+        - in: query
+          name: status
+          description: РЎС‚Р°С‚СѓСЃ Р·Р°РїРёС‚Сѓ
+          schema:
+            type: string
+        - in: query
+          name: vehicle
+          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р°Р±Рѕ СЂРµС”СЃС‚СЂР°С†С–Р№РЅРёР№ РЅРѕРјРµСЂ РўР—
+          schema:
+            type: string
+        - in: query
+          name: organization
+          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ Р·Р°РјРѕРІРЅРёРєР°
+          schema:
+            type: string
+        - in: query
+          name: carrier_organization
+          description: РЈРЅС–РєР°Р»СЊРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ РїРµСЂРµРІС–Р·РЅРёРєР°
+          schema:
+            type: string
+      responses:
+        '400':
+          description: РџРѕРіР°РЅРёР№ Р·Р°РїРёС‚
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: РљР»С–С”РЅС‚ РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅРёР№
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: РљР»С–С”РЅС‚ РЅРµ РјР°С” РїСЂР°РІ РґРѕСЃС‚СѓРїСѓ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: РЎРµСЂРІРµСЂРЅР° РїРѕРјРёР»РєР°
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /accreditations/states:
     get:
       tags:
