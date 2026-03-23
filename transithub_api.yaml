@@ -18181,7 +18181,7 @@ components:
           description: Тип причепу
         carrier_name:
           type: string
-                          example: 'ТОВ Кернел-Трейд'
+          example: 'ТОВ Кернел-Трейд'
           description: Назва перевізника
         carrier_edrpou:
           type: string
@@ -18189,7 +18189,7 @@ components:
           description: Код ЄДРПОУ перевізника
         cargo_owner_name:
           type: string
-                    example: 'ТОВ Кернел-Трейд'
+          example: 'ТОВ Кернел-Трейд'
           description: Назва поклажодавця
         cargo_owner_edrpou:
           type: string
