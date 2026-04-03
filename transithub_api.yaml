@@ -16820,7 +16820,7 @@ components:
         race_id:
           type: integer
           example: 1914593
-          description: ID рейсу. Таблиця: Рейси (races)
+          description: 'ID рейсу. Таблиця: Рейси (races)'
         auto_queue_enabled:
           type: boolean
           example: true
