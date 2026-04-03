@@ -16795,28 +16795,28 @@ components:
             description: "Назва профіля черги розвантаження. Таблиця: профілі черги(pq_queue_profile)"
     DriverRaceAutoQueueError:
       type: object
-      description: Помилка роботи з авточергою рейсу
+      description: 'Помилка роботи з авточергою рейсу'
       properties:
         status:
           type: boolean
           example: false
-          description: Статус відповіді
+          description: 'Статус відповіді'
         error_code:
           type: string
           example: BAD_REQUEST
-          description: Код помилки
+          description: 'Код помилки'
         error_message:
           type: string
           example: Parameter race_id is required
-          description: Опис помилки
+          description: 'Опис помилки'
     DriverRaceAutoQueueStateResponse:
       type: object
-      description: Поточний стан автоматичної постановки рейсу в чергу
+      description: 'Поточний стан автоматичної постановки рейсу в чергу'
       properties:
         status:
           type: boolean
           example: true
-          description: Статус відповіді
+          description: 'Статус відповіді'
         race_id:
           type: integer
           example: 1914593
@@ -16824,7 +16824,7 @@ components:
         auto_queue_enabled:
           type: boolean
           example: true
-          description: Ознака увімкнення авточерги
+          description: 'Ознака увімкнення авточерги'
         auto_queue_state:
           type: string
           enum:
@@ -16834,17 +16834,13 @@ components:
             - blocked
             - completed
           example: ready
-          description: >-
-            Поточний розрахований стан авточерги: waiting - очікування,
-            ready - можна виконувати автоматичну постановку, failed - попередня
-            спроба завершилась retryable-помилкою й очікується наступна спроба,
-            blocked - постановку заблоковано, completed - рейс уже в черзі
+          description: 'Поточний розрахований стан авточерги: waiting, ready, failed, blocked, completed'
         last_attempt_at:
           type: string
           format: date-time
           nullable: true
           example: '2026-04-03T09:15:00Z'
-          description: Час останньої спроби автоматичної постановки в чергу
+          description: 'Час останньої спроби автоматичної постановки в чергу'
         last_attempt_result:
           type: string
           enum:
@@ -16853,7 +16849,7 @@ components:
             - failed_retryable
             - failed_blocking
           example: failed_retryable
-          description: Результат останньої спроби постановки в чергу
+          description: 'Результат останньої спроби постановки в чергу'
         last_attempt_reason:
           type: string
           nullable: true
@@ -16865,38 +16861,32 @@ components:
             - zone_check_error
             - queue_registration_error
           example: out_of_zone
-          description: Причина останньої невдалої спроби
+          description: 'Причина останньої невдалої спроби'
         next_attempt_at:
           type: string
           format: date-time
           nullable: true
           example: '2026-04-03T09:30:00Z'
-          description: Час наступної автоматичної спроби постановки в чергу
+          description: 'Час наступної автоматичної спроби постановки в чергу'
         next_attempt_wait_reason:
           type: string
           nullable: true
           enum:
             - tor
           example: tor
-          description: >-
-            Причина очікування до наступної спроби. `tor` - очікування часу,
-            коли для рейсу стане доступною реєстрація в чергу розвантаження
+          description: 'Причина очікування до наступної спроби. tor - очікування доступності реєстрації в чергу'
         seconds_until_next_attempt:
           type: integer
           nullable: true
           example: 120
-          description: Кількість секунд до наступної автоматичної спроби
+          description: 'Кількість секунд до наступної автоматичної спроби'
         can_attempt_auto_queue:
           type: boolean
           example: false
-          description: Ознака того, що автоматичну постановку можна виконати зараз
+          description: 'Ознака того, що автоматичну постановку можна виконати зараз'
     DriverRaceAutoQueueUpdateRequest:
       type: object
-      description: >-
-        Тіло запиту для оновлення стану авточерги рейсу. Для помилкових
-        результатів (`failed_retryable`, `failed_blocking`) поле
-        `attempt_reason`/`last_attempt_reason` є обов'язковим. Для
-        `success` і `not_attempted_yet` причина має бути порожньою.
+      description: 'Тіло запиту для оновлення стану авточерги рейсу'
       anyOf:
         - required:
             - auto_queue_enabled
@@ -16912,15 +16902,11 @@ components:
         race_id:
           type: integer
           example: 1914593
-          description: >-
-            ID рейсу. Можна передавати в body або query. Якщо значення є в
-            обох місцях, пріоритет має query параметр
+          description: 'ID рейсу. Можна передавати в body або query. Якщо значення є в обох місцях, пріоритет має query параметр'
         auto_queue_enabled:
           type: boolean
           example: true
-          description: >-
-            Увімкнення або вимкнення авточерги. `true` вмикає авточергу й
-            скидає стан на `not_attempted_yet`, `false` вимикає її
+          description: 'Увімкнення або вимкнення авточерги'
         attempt_result:
           type: string
           enum:
@@ -16929,7 +16915,7 @@ components:
             - failed_retryable
             - failed_blocking
           example: failed_retryable
-          description: Результат останньої спроби постановки в чергу
+          description: 'Результат останньої спроби постановки в чергу'
         last_attempt_result:
           type: string
           enum:
@@ -16938,8 +16924,7 @@ components:
             - failed_retryable
             - failed_blocking
           example: failed_retryable
-          description: >-
-            Alias для `attempt_result`. Підтримується для сумісності з клієнтом
+          description: 'Alias для attempt_result. Підтримується для сумісності з клієнтом'
         attempt_reason:
           type: string
           enum:
@@ -16950,7 +16935,7 @@ components:
             - zone_check_error
             - queue_registration_error
           example: out_of_zone
-          description: Причина невдалої або відкладеної спроби
+          description: 'Причина невдалої або відкладеної спроби'
         last_attempt_reason:
           type: string
           enum:
@@ -16961,8 +16946,7 @@ components:
             - zone_check_error
             - queue_registration_error
           example: out_of_zone
-          description: >-
-            Alias для `attempt_reason`. Підтримується для сумісності з клієнтом
+          description: 'Alias для attempt_reason. Підтримується для сумісності з клієнтом'
     DriverVehicleRegister:
       type: object
       properties:
