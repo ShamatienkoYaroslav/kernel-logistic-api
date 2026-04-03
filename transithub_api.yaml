@@ -3330,6 +3330,141 @@ paths:
         '500':
           description: Помилка сервера
       x-codegen-request-body-name: body
+  /driver/races/auto-queue:
+    get:
+      tags:
+        - Т038 - Рейс
+      summary: Отримання стану авточерги рейсу водія
+      operationId: driverRacesAutoQueueGet
+      description: >-
+        Повертає поточний стан автоматичної постановки рейсу в чергу
+        розвантаження. Якщо запису стану для рейсу ще немає, він буде
+        створений автоматично з початковими значеннями.
+      parameters:
+        - in: header
+          name: Authorization
+          description: JWT токен доступу користувача
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Client-Token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_id
+          description: ID рейсу, для якого потрібно отримати стан авточерги
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Поточний стан авточерги рейсу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueStateResponse'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+    post:
+      tags:
+        - Т038 - Рейс
+      summary: Оновлення стану авточерги рейсу водія
+      operationId: driverRacesAutoQueuePost
+      description: >-
+        Оновлює стан автоматичної постановки рейсу в чергу. Можна вмикати або
+        вимикати авточергу, скидати стан спроби або передавати результат
+        останньої спроби реєстрації. Якщо `race_id` передано і в query, і в
+        body, використовується значення з query.
+      parameters:
+        - in: header
+          name: Authorization
+          description: JWT токен доступу користувача
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Client-Token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_id
+          description: >-
+            ID рейсу. Необов'язковий у query, якщо переданий у JSON body.
+            Має пріоритет над `race_id` у body.
+          required: false
+          schema:
+            type: integer
+      requestBody:
+        description: >-
+          Потрібно передати хоча б одне з полів `auto_queue_enabled`,
+          `attempt_result`, `last_attempt_result`, `attempt_reason`,
+          `last_attempt_reason`. Якщо передано лише `attempt_reason`, сервер
+          сам визначить `attempt_result`: `geolocation_denied` ->
+          `failed_blocking`, усі інші значення -> `failed_retryable`.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverRaceAutoQueueUpdateRequest'
+      responses:
+        '200':
+          description: Оновлений стан авточерги рейсу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueStateResponse'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverRaceAutoQueueError'
+      x-codegen-request-body-name: body
   /driver/waybills:
     get:
       tags:
@@ -16658,6 +16793,176 @@ components:
             type: string
             example: "Трансбалктермінал"
             description: "Назва профіля черги розвантаження. Таблиця: профілі черги(pq_queue_profile)"
+    DriverRaceAutoQueueError:
+      type: object
+      description: Помилка роботи з авточергою рейсу
+      properties:
+        status:
+          type: boolean
+          example: false
+          description: Статус відповіді
+        error_code:
+          type: string
+          example: BAD_REQUEST
+          description: Код помилки
+        error_message:
+          type: string
+          example: Parameter race_id is required
+          description: Опис помилки
+    DriverRaceAutoQueueStateResponse:
+      type: object
+      description: Поточний стан автоматичної постановки рейсу в чергу
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: Статус відповіді
+        race_id:
+          type: integer
+          example: 1914593
+          description: ID рейсу. Таблиця: Рейси (races)
+        auto_queue_enabled:
+          type: boolean
+          example: true
+          description: Ознака увімкнення авточерги
+        auto_queue_state:
+          type: string
+          enum:
+            - waiting
+            - ready
+            - failed
+            - blocked
+            - completed
+          example: ready
+          description: >-
+            Поточний розрахований стан авточерги: waiting - очікування,
+            ready - можна виконувати автоматичну постановку, failed - попередня
+            спроба завершилась retryable-помилкою й очікується наступна спроба,
+            blocked - постановку заблоковано, completed - рейс уже в черзі
+        last_attempt_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-04-03T09:15:00Z'
+          description: Час останньої спроби автоматичної постановки в чергу
+        last_attempt_result:
+          type: string
+          enum:
+            - not_attempted_yet
+            - success
+            - failed_retryable
+            - failed_blocking
+          example: failed_retryable
+          description: Результат останньої спроби постановки в чергу
+        last_attempt_reason:
+          type: string
+          nullable: true
+          enum:
+            - geolocation_denied
+            - geolocation_unavailable
+            - geolocation_check_canceled
+            - out_of_zone
+            - zone_check_error
+            - queue_registration_error
+          example: out_of_zone
+          description: Причина останньої невдалої спроби
+        next_attempt_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2026-04-03T09:30:00Z'
+          description: Час наступної автоматичної спроби постановки в чергу
+        next_attempt_wait_reason:
+          type: string
+          nullable: true
+          enum:
+            - tor
+          example: tor
+          description: >-
+            Причина очікування до наступної спроби. `tor` - очікування часу,
+            коли для рейсу стане доступною реєстрація в чергу розвантаження
+        seconds_until_next_attempt:
+          type: integer
+          nullable: true
+          example: 120
+          description: Кількість секунд до наступної автоматичної спроби
+        can_attempt_auto_queue:
+          type: boolean
+          example: false
+          description: Ознака того, що автоматичну постановку можна виконати зараз
+    DriverRaceAutoQueueUpdateRequest:
+      type: object
+      description: >-
+        Тіло запиту для оновлення стану авточерги рейсу. Для помилкових
+        результатів (`failed_retryable`, `failed_blocking`) поле
+        `attempt_reason`/`last_attempt_reason` є обов'язковим. Для
+        `success` і `not_attempted_yet` причина має бути порожньою.
+      anyOf:
+        - required:
+            - auto_queue_enabled
+        - required:
+            - attempt_result
+        - required:
+            - last_attempt_result
+        - required:
+            - attempt_reason
+        - required:
+            - last_attempt_reason
+      properties:
+        race_id:
+          type: integer
+          example: 1914593
+          description: >-
+            ID рейсу. Можна передавати в body або query. Якщо значення є в
+            обох місцях, пріоритет має query параметр
+        auto_queue_enabled:
+          type: boolean
+          example: true
+          description: >-
+            Увімкнення або вимкнення авточерги. `true` вмикає авточергу й
+            скидає стан на `not_attempted_yet`, `false` вимикає її
+        attempt_result:
+          type: string
+          enum:
+            - not_attempted_yet
+            - success
+            - failed_retryable
+            - failed_blocking
+          example: failed_retryable
+          description: Результат останньої спроби постановки в чергу
+        last_attempt_result:
+          type: string
+          enum:
+            - not_attempted_yet
+            - success
+            - failed_retryable
+            - failed_blocking
+          example: failed_retryable
+          description: >-
+            Alias для `attempt_result`. Підтримується для сумісності з клієнтом
+        attempt_reason:
+          type: string
+          enum:
+            - geolocation_denied
+            - geolocation_unavailable
+            - geolocation_check_canceled
+            - out_of_zone
+            - zone_check_error
+            - queue_registration_error
+          example: out_of_zone
+          description: Причина невдалої або відкладеної спроби
+        last_attempt_reason:
+          type: string
+          enum:
+            - geolocation_denied
+            - geolocation_unavailable
+            - geolocation_check_canceled
+            - out_of_zone
+            - zone_check_error
+            - queue_registration_error
+          example: out_of_zone
+          description: >-
+            Alias для `attempt_reason`. Підтримується для сумісності з клієнтом
     DriverVehicleRegister:
       type: object
       properties:
