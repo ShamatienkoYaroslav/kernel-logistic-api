@@ -2576,6 +2576,89 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /check_if_point_in_area:
+    get:
+      tags:
+        - Т038 - Рейс
+      summary: Перевірка входження точки в зону черги
+      operationId: checkIfPointInAreaGet
+      description: |
+        Перевірка, чи входить точка з координатами у зону реєстрації черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело виклику
+          schema:
+            type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: lat
+          description: Широта точки перевірки
+          required: true
+          schema:
+            type: number
+        - in: query
+          name: lng
+          description: Довгота точки перевірки
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Результат перевірки точки
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Ознака того, що точка входить у зону черги
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: HTTP-статус помилки
+        '500':
+          description: Серверна помилка або некоректні вхідні дані
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    description: HTTP-статус помилки
+                  msg:
+                    type: string
+                    nullable: true
+                    description: Текст помилки
   /driver/races:
     get:
       tags:
