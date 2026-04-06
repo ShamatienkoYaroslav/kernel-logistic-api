@@ -7847,6 +7847,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+  /pq_queues_profiles/rules:
+    get:
+      tags:
+        - Т037 - Профіль черги
+      summary: Правила для водія у профілі черги
+      operationId: pqQueuesProfilesRulesGet
+      description: |
+        Отримання тексту правил для водія за профілем черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор профілю черги
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані правил профілю черги
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                  driver_rules_text_ua:
+                    type: string
+                    nullable: true
+                    description: Текст правил для водія українською мовою
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /pq_queues_profiles:
     get:
       tags:
