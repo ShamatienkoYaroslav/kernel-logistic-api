@@ -107,6 +107,8 @@ tags:
     description: Вузли для роботи з документами Переадресація
   - name: T045 - Пуш-повідомлення
     description: Вузли для роботи з пуш-повідомленнями
+  - name: T046 - Автоматична реєстрація в чергу
+    description: Вузли для роботи з автоматичною реєстрацією рейсу в чергу
 paths:
   /accreditations:
     get:
@@ -3416,7 +3418,7 @@ paths:
   /driver/races/auto-queue:
     get:
       tags:
-        - Т038 - Рейс
+        - T046 - Автоматична реєстрація в чергу
       summary: Отримання стану авточерги рейсу водія
       operationId: driverRacesAutoQueueGet
       description: >-
@@ -3475,7 +3477,7 @@ paths:
                 $ref: '#/components/schemas/DriverRaceAutoQueueError'
     post:
       tags:
-        - Т038 - Рейс
+        - T046 - Автоматична реєстрація в чергу
       summary: Оновлення стану авточерги рейсу водія
       operationId: driverRacesAutoQueuePost
       description: >-
