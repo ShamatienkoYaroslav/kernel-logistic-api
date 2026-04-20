@@ -10065,6 +10065,82 @@ paths:
         '500':
           description: server error
           content: {}
+    put:
+      tags:
+        - Т035 - Журнал черг
+      summary: Оновлення виду черги
+      operationId: pqQueueRegJournalPut
+      description: >
+        Вузол для оновлення коефіцієнта вибуття виду черги в журналі черг.
+        Після оновлення повертає актуальні дані виду черги та поточні
+        розрахункові показники.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор виду черги
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 0e6972a5-dffd-2d72-0ba8-88e1bc19e12d
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача ТХ
+          required: false
+          schema:
+            type: string
+            format: uuid
+            example: bb766674-297f-e0b6-e85e-5c2cbdc876f4
+      requestBody:
+        description: Дані для оновлення виду черги
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                output_ratio:
+                  type: number
+                  example: 2
+                  description: Коефіцієнт вибуття з черги
+                date_time:
+                  type: string
+                  example: '28.04.2021 18:41:52'
+                  description: Дата та час, для яких потрібно виконати перерахунок
+      responses:
+        '200':
+          description: Вид черги оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueRegJournalUpdateResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '500':
+          description: server error
+          content: {}
   /pq_queue/reasons_to_move:
     get:
       tags:
@@ -22497,6 +22573,88 @@ components:
               Ознака реєстрації водія в системі клієнта. Таблиця:
               Зовнішня інтеграція(external_integration)
             example: 1
+    QueueRegJournalUpdateResponse:
+      type: object
+      description: Результат оновлення виду черги
+      properties:
+        status:
+          type: boolean
+          example: true
+          description: Статус обробки запиту
+        output_ratio:
+          type: number
+          example: 2
+          description: Коефіцієнт вибуття з черги
+        guid:
+          type: string
+          format: uuid
+          example: 0e6972a5-dffd-2d72-0ba8-88e1bc19e12d
+          description: Унікальний ідентифікатор виду черги
+        id:
+          type: integer
+          example: 123
+          description: Внутрішній ідентифікатор виду черги
+        name:
+          type: string
+          example: Приймання соняшнику
+          description: Назва виду черги
+        direction:
+          type: string
+          enum:
+            - loading
+            - unloading
+          example: loading
+          description: Напрямок виду черги
+        priority:
+          type: string
+          example: normal
+          description: Пріоритет виду черги
+        loading_type:
+          type: string
+          enum:
+            - mound
+            - pouring
+          example: mound
+          description: Тип навантаження
+        pq_queue_profile_id:
+          type: integer
+          example: 456
+          description: Внутрішній ідентифікатор профілю черги
+        enable_race_creation_by_dispatcher:
+          type: integer
+          enum:
+            - 0
+            - 1
+          example: 1
+          description: Ознака дозволу створення рейсу диспетчером
+        outcome_temp:
+          type: integer
+          example: 5
+          description: Темп вибуття авто з черги
+        remains:
+          type: integer
+          example: 15
+          description: Кількість авто в черзі
+        waiting_time:
+          type: number
+          example: 5
+          description: Час очікування останнього авто в черзі
+        load:
+          type: string
+          example: increase
+          description: Стан завантаження черги
+        state_ua:
+          type: string
+          example: Збільшується
+          description: Стан черги українською
+        state_ru:
+          type: string
+          example: Увеличивается
+          description: Стан черги російською
+        count:
+          type: integer
+          example: 15
+          description: Кількість авто в черзі
     QueueRegJournalPQqueue:
       type: array
       items:
