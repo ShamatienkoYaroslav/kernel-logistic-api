@@ -14810,7 +14810,7 @@ paths:
   /race/regulations:
     get:
       tags:
-        - T038 - Рейс
+        - Т038 - Рейс
       summary: Отримання регламентів рейсу
       operationId: raceRegulationsGet
       description: >
