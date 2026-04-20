@@ -10065,6 +10065,90 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_queue/reasons_to_move:
+    get:
+      tags:
+        - Т035 - Журнал черг
+      summary: Отримання причин переміщення в черзі
+      operationId: pqQueueReasonsToMoveGet
+      description: >
+        Вузол для отримання довідника причин переміщення в черзі. Якщо
+        `is_external` не дорівнює 1, для виконання запиту потрібен валідний
+        `access_token`.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: is_external
+          description: Ознака зовнішнього виклику без перевірки access token
+          required: false
+          schema:
+            type: integer
+            enum:
+              - 0
+              - 1
+            example: 1
+        - in: query
+          name: move_to
+          description: Напрямок переміщення в черзі
+          required: false
+          schema:
+            type: string
+            enum:
+              - begin
+              - end
+            example: begin
+      responses:
+        '200':
+          description: Причини переміщення в черзі
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  count:
+                    type: integer
+                    example: 2
+                    description: Кількість знайдених результатів
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PqQueueReasonToMove'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '500':
+          description: server error
+          content: {}
   /redirection:
     get:
       tags:
@@ -21665,6 +21749,29 @@ components:
             Причина переміщення в черзі + коментар російською. Таблиця: Причини
             переміщення в черзі(pq_reasons_to_move_in_queue)
           example: Не прибув вчасно
+    PqQueueReasonToMove:
+      type: object
+      description: Причина переміщення в черзі
+      properties:
+        code:
+          type: string
+          example: LATE_ARRIVAL
+          description: Код причини переміщення в черзі
+        name_ua:
+          type: string
+          example: Не прибув вчасно
+          description: Назва причини українською
+        name_ru:
+          type: string
+          example: Не прибыл вовремя
+          description: Назва причини російською
+        move_to:
+          type: string
+          enum:
+            - begin
+            - end
+          example: begin
+          description: Напрямок переміщення в черзі
     QueueRegJournalRacesPublic:
       type: array
       items:
