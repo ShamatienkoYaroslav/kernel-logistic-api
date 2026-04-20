@@ -14807,6 +14807,84 @@ paths:
         '500':
           description: server error
           content: {}
+  /race/regulations:
+    get:
+      tags:
+        - T038 - Рейс
+      summary: Отримання регламентів рейсу
+      operationId: raceRegulationsGet
+      description: >
+        Вузол для отримання регламентів рейсу за унікальним ідентифікатором
+        рейсу. Повертає поточну зону регламенту та, якщо доступно, інформацію
+        про наступну зону.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 9de597bc-d84d-3499-c5da-935f8f638e4e
+      responses:
+        '200':
+          description: Регламенти рейсу
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RaceRegulationGet'
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequest'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorized'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRights'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFound'
+        '500':
+          description: server error
+          content: {}
   /localities/regions:
     get:
       tags:
@@ -21272,6 +21350,67 @@ components:
             type: string
             example: 1a7f7162-0d91-3b7e-8b86-2fe731d36e49
             description: Унікальний ідентифікатор черги
+    RaceRegulationGet:
+      type: object
+      description: Інформація про регламент рейсу
+      properties:
+        regulation_name:
+          type: string
+          example: Регламент перебування в черзі
+          description: Назва регламенту
+        start_datetime:
+          type: string
+          example: '15.02.2023 02:01:31'
+          description: Дата та час початку дії регламенту
+        finish_datetime:
+          type: string
+          nullable: true
+          example: '15.02.2023 04:01:31'
+          description: Дата та час завершення дії регламенту
+        current_zone:
+          type: string
+          enum:
+            - green
+            - yellow
+            - red
+          example: green
+          description: Поточна зона регламенту
+        current_zone_duration_ua:
+          type: string
+          example: 1 година
+          description: Тривалість перебування у поточній зоні українською
+        current_zone_duration_ru:
+          type: string
+          example: 1 час
+          description: Тривалість перебування у поточній зоні російською
+        current_zone_start_datetime:
+          type: string
+          example: '15.02.2023 02:01:31'
+          description: Дата та час початку поточної зони
+        next_zone:
+          type: string
+          nullable: true
+          enum:
+            - green
+            - yellow
+            - red
+          example: yellow
+          description: Наступна зона регламенту
+        next_zone_duration_ua:
+          type: string
+          nullable: true
+          example: 30 хвилин
+          description: Тривалість до наступної зони українською
+        next_zone_duration_ru:
+          type: string
+          nullable: true
+          example: 30 минут
+          description: Тривалість до наступної зони російською
+        next_zone_start_datetime:
+          type: string
+          nullable: true
+          example: '15.02.2023 03:01:31'
+          description: Дата та час початку наступної зони
     RaceEventsArr:
       description: Історія подій рейсу
       type: array
