@@ -6488,6 +6488,90 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
+  /departure_permission_map_location:
+    get:
+      tags:
+        - Т026 - Направлення на в'їзд
+      summary: Отримання Карти АгроХабу з документа Направлення на в'їзд по ідентифікатору документа
+      description: >
+        Передавши ідентифікатор запису, ви отримаєте карти АгроХабу з документа Направлення на в'їзд
+      operationId: departurePermissionGetRacesID
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта-споживача API Transithub
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор направлення на в'їзд
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успіх
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  guid:
+                    type: string
+                    description: "Унікальний ідентифікатор запису. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: 6a975443-2fe3-34a3-b173-738f3f085f6d
+                  doc_number:
+                    type: string
+                    description: "Номер документа. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: N_765504
+                  comment:
+                    type: string
+                    description: "Номер документа. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: N_765504
+                  point_lat:
+                    type: string
+                    description: "Координати гео широта. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: "38.344546"
+                  point_lng:
+                    type: string
+                    description: "Координати гео довгота. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: "44.131945"
+                  point_map_link:
+                    type: string
+                    description: "Посилання з геолокацією АгроХабу. Таблиця: Направлення на в'їзд(departure_permission)"
+                    example: "https://www.google.com/maps/d/edit?mid=15Q4Vt0yEG0tm4n94Fi6d63k1zXdKUG0&usp=sharing"
+                  profile_object_map_link:
+                    type: string
+                    description: "Посилання на карту об'єкта. Таблиця: Профілі черги(pq_queue_profile)"
+                    example: "https://www.google.com/maps/d/edit?mid=15Q4Vt0yEG0tm4n94Fi6d63k1zXdKUG0&usp=sharing"
+                  profile_name:
+                    type: string
+                    description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                    example: "https:
+        '200_a':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '200_401':
+          description: Клієнт немає прав доступу
+          content:
+            application/json:
+              schema:
+                name: error
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'    
   /departure_permission/localities:
     get:
       tags:
