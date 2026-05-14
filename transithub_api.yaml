@@ -6553,13 +6553,13 @@ paths:
                     type: string
                     description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
                     example: "https:
-        '200_a':
-          description: Користувач не авторизований
+        '404':
+          description: Дані не знайдено
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
-        '200_401':
+        '401':
           description: Клієнт немає прав доступу
           content:
             application/json:
