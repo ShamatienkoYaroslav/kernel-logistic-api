@@ -6495,7 +6495,7 @@ paths:
       summary: Отримання Карти АгроХабу з документа Направлення на в'їзд по ідентифікатору документа
       description: >
         Передавши ідентифікатор запису, ви отримаєте карти АгроХабу з документа Направлення на в'їзд
-      operationId: departurePermissionGetRacesID
+      operationId: departurePermissionMapLocation
       parameters:
         - in: query
           name: client_token
