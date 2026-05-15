@@ -6523,35 +6523,35 @@ paths:
                     example: true
                   guid:
                     type: string
-                    description: "Унікальний ідентифікатор запису. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Унікальний ідентифікатор запису. Таблиця Направлення на в'їзд(departure_permission)"
                     example: 6a975443-2fe3-34a3-b173-738f3f085f6d
                   doc_number:
                     type: string
-                    description: "Номер документа. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Номер документа. Таблиця Направлення на в'їзд(departure_permission)"
                     example: N_765504
                   comment:
                     type: string
-                    description: "Номер документа. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Номер документа. Таблиця Направлення на в'їзд(departure_permission)"
                     example: N_765504
                   point_lat:
                     type: string
-                    description: "Координати гео широта. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Координати гео широта. Таблиця Направлення на в'їзд(departure_permission)"
                     example: "38.344546"
                   point_lng:
                     type: string
-                    description: "Координати гео довгота. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Координати гео довгота. Таблиця Направлення на в'їзд(departure_permission)"
                     example: "44.131945"
                   point_map_link:
                     type: string
-                    description: "Посилання з геолокацією АгроХабу. Таблиця: Направлення на в'їзд(departure_permission)"
+                    description: "Посилання з геолокацією АгроХабу. Таблиця Направлення на в'їзд(departure_permission)"
                     example: "https://www.google.com/maps/d/edit?mid=15Q4Vt0yEG0tm4n94Fi6d63k1zXdKUG0&usp=sharing"
                   profile_object_map_link:
                     type: string
-                    description: "Посилання на карту об'єкта. Таблиця: Профілі черги(pq_queue_profile)"
+                    description: "Посилання на карту об'єкта. Таблиця Профілі черги(pq_queue_profile)"
                     example: "https://www.google.com/maps/d/edit?mid=15Q4Vt0yEG0tm4n94Fi6d63k1zXdKUG0&usp=sharing"
                   profile_name:
                     type: string
-                    description: "Назва профіля черги. Таблиця: Профілі черги(pq_queue_profile)"
+                    description: "Назва профіля черги. Таблиця Профілі черги(pq_queue_profile)"
                     example: "https:
         '404':
           description: Дані не знайдено
