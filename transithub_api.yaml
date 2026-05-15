@@ -6552,7 +6552,7 @@ paths:
                   profile_name:
                     type: string
                     description: "Назва профіля черги. Таблиця Профілі черги(pq_queue_profile)"
-                    example: "https:
+                    example: "Кропивницький ХАБ"
         '404':
           description: Дані не знайдено
           content:
