@@ -2406,7 +2406,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_BadRequestNew'
-  /races:
+        '500':
+          description: 'Системна помилка'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  races:
     post:
       tags:
         - 'T002 - Рейси'
