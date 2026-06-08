@@ -2393,13 +2393,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
-        '403':
+                $ref: '#/components/schemas/_UserisNotAuthorized_OAUTH2'
+        '200 (дані не знайдено)':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '200 (невірні дані)':
           description: Клієнт не має прав доступу
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+                $ref: '#/components/schemas/_BadRequestNew'
   /races:
     post:
       tags:
@@ -4890,6 +4896,25 @@ components:
           type: string
           example: 'User is not authorized'
           description: 'Повідомлення'
+    _UserisNotAuthorized_OAUTH2:
+      type: object
+      properties:
+        code:
+          type: string
+          example: Unauthorized
+          description: 'Статус відповіді'
+        message:
+          type: string
+          example: 'Unauthorized'
+          description: 'Текст повідомлення'
+        type:
+          type: string
+          example: 'tag:oracle.com,2020:error/Unauthorized'
+          description: 'Тип ORDS помилки'
+        instance:
+          type: string
+          example: 'tag:oracle.com,2020:ecid/bd4e30e8d12d1199a763fea8c28a06d1'
+          description: 'ID інстанса бази даних'
     _ClientHasNoRights:
       type: object
       properties:
