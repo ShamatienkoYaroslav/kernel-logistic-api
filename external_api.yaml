@@ -2354,8 +2354,8 @@ paths:
   /pq_queues/statistics:
     get:
       tags:
-        - Т004 - Статистика черги(для зовнішніх клієнтів)
-      summary: Звіт по статистиці рейсів в черзі
+        - Т004 - Статистика черги
+      summary: Звіт по статистиці рейсів (для зовнішніх клієнтів)
       operationId: ext_pq_queuesStatisticsGet
       description: |
         Звіт по статистиці рейсів в профілях черги.
@@ -4850,7 +4850,7 @@ components:
         description: Категорія вантажу (Звіт статистики черги)
         properties:
           races:
-            $ref: '#/components/schemas/QueueStatisticsReportQueue'
+            $ref: '#/components/schemas/QueueStatisticsRaceGoodsCategory_race'
           goods_name:
             type: string
             example: Пшениця
