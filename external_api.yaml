@@ -4842,8 +4842,8 @@ components:
             description: 'ПІБ водія. Таблиця: Рейси(races)'
           consignor_name:
             type: string
-            example: Назва компанії відправника
-            description: 'ФЕРМЕРСЬКЕ ГОСПОДАРСТВО  \"ЧЕРВОНА КАЛИНА  777\". Таблиця: Рейси(races)'
+            example: 'ФЕРМЕРСЬКЕ ГОСПОДАРСТВО  \"ЧЕРВОНА КАЛИНА  777\"'
+            description: 'Назва компанії відправника. Таблиця: Рейси(races)'
           race_status:
             type: string
             enum:
