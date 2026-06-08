@@ -2401,7 +2401,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
         '200 (невірні дані)':
-          description: Клієнт не має прав доступу
+          description: Помилки при передачі параметрів
           content:
             application/json:
               schema:
