@@ -2351,7 +2351,55 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
-  
+  /pq_queues/statistics:
+    get:
+      tags:
+        - Т004 - Статистика черги(для зовнішніх клієнтів)
+      summary: Звіт по статистиці рейсів в черзі
+      operationId: ext_pq_queuesStatisticsGet
+      description: |
+        Звіт по статистиці рейсів в профілях черги.
+      parameters:
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          schema:
+            type: string
+        - in: query
+          name: hub_code
+          description: Код агрохабу(по цьому коду знаходимо профіль)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані вантажів рейсів по профілю черг
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    $ref: '#/components/schemas/QueueStatisticsRaceGoodsCategory'
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  count:
+                    type: integer
+                    example: 3
+                    description: Кількість записів
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
   /races:
     post:
       tags:
@@ -4765,6 +4813,72 @@ components:
           type: string
           example: 'Текст правил'
           description: 'Текст правил для водія. Таблиця: Шаблони текстів (text_template)'
+    QueueStatisticsRaceGoodsCategory_race:
+      description: Массив рейсів вантажу
+      type: array
+      items:
+        type: object
+        description: Дані рейсу
+        properties:
+          vehicle_number:
+            type: string
+            example: CE3245BM
+            description: 'Державний номер транспортного засобу(слаг). Таблиця: Рейси(races)'
+          driver_name:
+            type: string
+            example: Стеценко Володимир Ігорович
+            description: 'ПІБ водія. Таблиця: Рейси(races)'
+          consignor_name:
+            type: string
+            example: Назва компанії відправника
+            description: 'ФЕРМЕРСЬКЕ ГОСПОДАРСТВО  \"ЧЕРВОНА КАЛИНА  777\". Таблиця: Рейси(races)'
+          race_status:
+            type: string
+            enum:
+              - DONE
+              - CANCELED
+              - PAUSE
+              - REGISTERED
+              - IN_PROGRESS
+            example: IN_PROGRESS
+            description: 'Статус рейсу. Таблиця: Рейси(races)'
+    QueueStatisticsRaceGoodsCategory:
+      description: Категорія вантажу (Звіт статистики черги)
+      type: array
+      items:
+        type: object
+        description: Категорія вантажу (Звіт статистики черги)
+        properties:
+          races:
+            $ref: '#/components/schemas/QueueStatisticsReportQueue'
+          goods_name:
+            type: string
+            example: Пшениця
+            description: >-
+              Назва категорії вантажу. Таблиця: Категорії
+              вантажу(goods_category)
+          goods_guid:
+            type: string
+            example: ba287fd9-22c8-5349-65e5-4030d54f9986
+            description: >-
+              Унікальний ідентифікатор категорії вантажу. Таблиця: Категорії
+              вантажу(goods_category)
+          in_queue:
+            type: integer
+            example: 5
+            description: Кількість транспортних засобів в черзі
+          in_territory:
+            type: integer
+            example: 0
+            description: 'Кількість транспортних засобів, що знаходяться на території'
+          move_to_entry:
+            type: integer
+            example: 3
+            description: Кількість транспортних засобів направлених на в'їзд
+          waiting_for_registration:
+            type: integer
+            example: 1
+            description: 'Кількість транспортних засобів, що очікують реєстрації'
     _UserisNotAuthorized:
       type: object
       properties:
