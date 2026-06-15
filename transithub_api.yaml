@@ -14976,6 +14976,101 @@ paths:
         '500':
           description: server error
           content: {}
+  races/goods:
+    get:
+      tags:
+        - T033 - Вантаж
+      summary: >-
+        Вузол для отримання вантажів активних рейсів
+      operationId: raceGoodsGetID
+      description: >
+        Вузол для отримання вантажів активних рейсів
+      parameters:
+        - in: query
+          name: limit
+          description: 'Обмеження кількості результатів, що виводяться'
+          required: false
+          schema:
+            type: integer
+            example: 2
+        - in: query
+          name: offset
+          description: 'Величина, на яку зміщується початок виведення результатів пошуку'
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профіля черги
+          required: false
+          schema:
+            type: string
+            example: 1791cbc7-8c05-4847-6f6e-de263785a21a
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          required: false
+          schema:
+            type: string
+            example: 763d6c2d-75e5-8f88-e4bf-892d60b276cb
+        - in: query
+          name: race_statuses
+          description: Статус рейсу в черзі
+          required: false
+          schema:
+            type: string
+            example: in_queue_all
+            enum:
+              - in_queue_all
+              - all
+              - drop_all
+      responses:
+        '200':
+          description: Знайдений вантаж
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус обробки запиту
+                    example: true
+                  has_more:
+                    type: boolean
+                    description: Чи є ще невиведені об'єкти
+                    example: false
+                  count:
+                    type: integer
+                    example: 1
+                    description: Кількість знайдених результатів
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GoodsGet'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: server error
+          content: {}
+  
   /race/events:
     get:
       tags:
