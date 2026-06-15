@@ -14976,7 +14976,7 @@ paths:
         '500':
           description: server error
           content: {}
-  races/goods:
+  /races/goods:
     get:
       tags:
         - T033 - Вантаж
