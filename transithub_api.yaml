@@ -14174,6 +14174,12 @@ paths:
           required: true
           schema:
             type: string
+        - in: header
+          name: Authorization
+          description: JWT
+          required: true
+          schema:
+            type: string
         - in: query
           name: user_guid
           description: Унікальний ідентифікатор користувача TX
@@ -14227,6 +14233,196 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/UserActionItem'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T047 - Дії користувача з рейсом
+      summary: Виконання дії користувача для рейсу
+      operationId: usresActionsPost
+      description: |
+        Виконання дії користувача для рейсу черги
+      parameters:
+        - in: header
+          name: X-Client-Token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          description: JWT
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: user_action_code
+          description: Код дії користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані для виконання дії користувача
+        content:
+          '*/*':
+            schema:
+              type: object
+              properties:
+                direction:
+                  type: string
+                  enum:
+                    - loading
+                    - unloading
+                  description: >-
+                    Напрямок (навантаження/розвантаження). Таблиця: Направлення
+                    на в'їзд (departure_permission)
+                  example: unloading
+                loading_type:
+                  type: string
+                  enum:
+                    - mound
+                    - pouring
+                  description: >-
+                    Тип навантаження (насип/налив). Таблиця: Направлення на
+                    в'їзд (departure_permission)
+                  example: mound
+                comment:
+                  type: string
+                  description: >-
+                    Коментар користувача. Таблиця: Направлення на в'їзд
+                    (departure_permission)
+                  example: Коментар користувача
+                reason:
+                  type: string
+                  description: >-
+                    Код причини переміщення. Таблиця: Причини переміщення в
+                    черзі(pq_reasons_to_move_in_queue)
+                  example: PR_12
+                move_to:
+                  type: string
+                  enum:
+                    - begin
+                    - end
+                    - null
+                  description: >-
+                    Напрямок переміщення в черзі(початок, кінець). Таблиця: Запити на
+                    чергу/Історія запитів на
+                    чергу(pq_queue_request/pq_queue_request_history)
+                  example: begin
+                goods_guid:
+                  type: string
+                  description: 'Код вантажу. Таблиця: Вантажі(goods)'
+                  example: КУКУРУДЗА
+                personalized:
+                  type: integer
+                  description: 'Персоналізований(так/ні).'
+                  example: 1
+                vehicle_count:
+                  type: integer
+                  description: "Кількість авто для направлення на в'їзд."
+                  example: 3
+                pq_dep_perm_direction_code:
+                  type: string
+                  description: >
+                    Код налаштування напрямку направлення. 
+                    Налаштування напрямків направлення використовується як
+                    кастомізовані відбори по статусу в черзі, місцезнаходженню і
+                    т.д.
+                    Таблиця: Напрямки направлення
+                    (pq_departure_permission_directions)"
+                  example: 004_РОЗВ_ТБТ
+                pq_queue_profile_guid:
+                  type: string
+                  description: >-
+                    Унікальний ідентифікатор запису профіля черги. Таблиця:
+                    Профілі черги (pq_queue_profile)
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                pq_queue_guid:
+                  type: string
+                  description: >-
+                    Унікальний ідентифікатор запису черги. Таблиця: Черги
+                    (pq_queue)
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                pq_warehouse_guid:
+                  type: string
+                  description: >-
+                    Унікальний ідентифікатор cкладу черги. Таблиця: Склади черги
+                    (pq_warehouse)
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                warehouse_code:
+                  type: string
+                  description: >-
+                    Код cкладу черги. Таблиця: Склади (warehouse)
+                  example: УЧІ
+                th_user_guid:
+                  type: string
+                  description: >-
+                    Ідентифікатор записy таблиці користувачів. Таблиця: Користувачі(th_users)
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                cargo_owner_guid:
+                  type: string
+                  description: >-
+                    Ідентифікатор поклажодавця. Таблиця: Поклажодавці(pq_cargo_owner)
+                  format: uuid
+                  example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+      responses:
+        '200':
+          description: Список дій поточного користувача для рейсу і його черги(визначається за напрямком)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Статус відповіді
+                    example: true
+                  guid:
+                    type: string
+                    example: ae7b6665-c932-45cd-0061-35105d1d3874
+                    description: Унікальний ідентифікатор рейсу
+                  race_number:
+                    type: string
+                    example: ЄЛА-0001084211
+                    description: Номер рейсу
+                  barcode:
+                    type: string
+                    example: 1001084211
+                    description: Баркод
+                  error_text_ua:
+                    type: string
+                    example: Реєстрація в черзі заборонена!
+                    description: "Текст сповіщення українською мовою, який буде показаний користувачу після виконання дії. Повертається у випадку помилки при виконанні дії."
+                  error_text_ru:
+                    type: string
+                    example: Не використовується
+                    description: "Текст сповіщення російською мовою, який буде показаний користувачу після виконання дії. Повертається у випадку помилки при виконанні дії."
         '400':
           description: Поганий запит
           content:
@@ -21740,7 +21936,8 @@ components:
         operation_kind:
           type: string
           example: finish
-          description: "Якщо kind = request(запит черги) - потрібно уточнення чи це на видалення з черги або переміщення в кінець чи початок. Таблиця: Дії користувача (pq_queue_user_action)"
+          description: "Якщо kind = request(запит черги) - потрібно уточнення по виду операції, яку виконає даний 
+            запит: видалення з черги(звичайне чи диспетчерське) або переміщення в кінець чи початок. Таблиця: Дії користувача (pq_queue_user_action)"
         name_ua:
           type: string
           example: Завершити рейс
@@ -21748,7 +21945,7 @@ components:
         name_ru:
           type: string
           example: Завершить рейс
-          description: "Назва дії російською мовою. Таблиця: Дії користувача (pq_queue_user_action)"
+          description: "Не використовується"
         descr:
           type: string
           example: Завершення поточного рейсу
