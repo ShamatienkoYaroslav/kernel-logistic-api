@@ -14391,6 +14391,21 @@ paths:
                     Ідентифікатор поклажодавця. Таблиця: Поклажодавці(pq_cargo_owner)
                   format: uuid
                   example: f11747b0-f51e-a10e-cceb-7c9fa1caf800
+                races:
+                  type: array
+                  description: >-
+                    Список рейсів для виконання дії. Таблиця: Рейси (races)
+                  items:
+                    type: object
+                    properties:
+                      race_guid:
+                        type: string
+                        format: uuid
+                        description: >-
+                          Унікальний ідентифікатор рейсу. Таблиця: Рейси (races)
+                        example: cc870d13-86f7-1594-7449-60acf1a88bb0
+                  example:
+                    - race_guid: cc870d13-86f7-1594-7449-60acf1a88bb0
       responses:
         '200':
           description: Список дій поточного користувача для рейсу і його черги(визначається за напрямком)
