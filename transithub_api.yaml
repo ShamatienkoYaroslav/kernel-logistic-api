@@ -15106,6 +15106,36 @@ paths:
           schema:
             type: string
             example: a92ebf1e-14c5-cd3a-b8db-1b46da0fa01f
+        - in: query
+          name: is_kt
+          description: >-
+            Фільтр за ознакою KT. Якщо параметр не передано, фільтр за цією
+            ознакою не застосовується. Якщо передано code, фільтр is_kt не
+            застосовується.
+          required: false
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: warehouse_type
+          description: Тип складу
+          required: false
+          schema:
+            type: string
+            enum:
+              - grain
+              - plant
+              - port
+        - in: query
+          name: has_online_registration
+          description: >-
+            Фільтр за наявністю онлайн-реєстрації. За замовчуванням true. Якщо
+            передано code, фільтр has_online_registration не застосовується.
+          required: false
+          schema:
+            type: boolean
+            default: true
+            example: true
       responses:
         '200':
           description: Дані складу
@@ -21176,6 +21206,22 @@ components:
           type: string
           example: Завод
           description: Назва типу пункту
+        is_kt:
+          type: boolean
+          example: true
+          description: Ознака KT
+        has_online_registration:
+          type: boolean
+          example: true
+          description: Ознака наявності онлайн-реєстрації
+        warehouse_type:
+          type: string
+          example: plant
+          description: Тип складу, переданий у фільтрі
+        bd_on:
+          type: integer
+          example: 1
+          description: Ознака BD_ON з налаштувань складу
         country_name:
           type: string
           example: Україна
