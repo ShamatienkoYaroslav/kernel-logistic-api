@@ -4844,7 +4844,7 @@ components:
             type: string
             example: 380501234567
             description: 'Номер телефону водія. Таблиця: Рейси(races)'
-          consignor_name:
+          carrier_name:
             type: string
             example: 'ФЕРМЕРСЬКЕ ГОСПОДАРСТВО  \"ЧЕРВОНА КАЛИНА  777\"'
             description: 'Назва компанії відправника. Таблиця: Рейси(races)'
