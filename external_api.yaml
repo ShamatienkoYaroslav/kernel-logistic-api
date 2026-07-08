@@ -2412,7 +2412,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
-  races:
+  /races:
     post:
       tags:
         - 'T002 - Рейси'
@@ -4840,6 +4840,10 @@ components:
             type: string
             example: Стеценко Володимир Ігорович
             description: 'ПІБ водія. Таблиця: Рейси(races)'
+          driver_phone:
+            type: string
+            example: 380501234567
+            description: 'Номер телефону водія. Таблиця: Рейси(races)'
           consignor_name:
             type: string
             example: 'ФЕРМЕРСЬКЕ ГОСПОДАРСТВО  \"ЧЕРВОНА КАЛИНА  777\"'
@@ -4854,6 +4858,14 @@ components:
               - IN_PROGRESS
             example: IN_PROGRESS
             description: 'Статус рейсу. Таблиця: Рейси(races)'
+          point_map_link:
+            type: string
+            example: ''
+            description: 'Посилання на точку геолокації на мапі (гугл), де розмістився окоп. Таблиця: Направлення на вїзд(departure_permission)'
+          okop_id:
+            type: string
+            example: '0123456789'
+            description: 'ID окопа. Таблиця: Направлення на вїзд(departure_permission)'
     QueueStatisticsRaceGoodsCategory:
       description: Категорія вантажу (Звіт статистики черги)
       type: array
