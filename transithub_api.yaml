@@ -8897,6 +8897,134 @@ paths:
           description: server error
           content: {}
       x-codegen-request-body-name: body
+  /report_statistics/arrival_forecast:
+    get:
+      tags:
+        - Т034 - Статистика профіля/черги
+      summary: Прогноз прибуття авто в чергу або профіль черги
+      operationId: reportStatisticsArrivalForecastGet
+      servers:
+        - description: Development Server v2
+          url: 'https://test-api-transithub.kernel.ua/ords/kernel_logistic/v2/transithub'
+      description: |
+        Повертає погодинний прогноз прибуття авто в конкретну чергу або профіль черги.
+        Авто в контексті ендпоінта — це рейс.
+
+        Враховуються тільки рейси, які:
+        - мають статус запиту на чергу `waiting_for_registration`;
+        - мають статус рейсу `IN_PROGRESS`;
+        - належать до розвантаження;
+        - мають заповнену TOR / граничну дату реєстрації;
+        - відповідають переданому `pq_profile_guid` або `pq_queue_guid`.
+
+        Якщо TOR вже минув, але рейс досі очікує реєстрації, він потрапляє в перший слот прогнозу.
+        Значення `vehicle_count` рахується наростаючим підсумком.
+      parameters:
+        - in: header
+          name: Authorization
+          description: JWT access token користувача
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Client-Token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pq_profile_guid
+          description: >-
+            Унікальний ідентифікатор профілю черги. Якщо передано — прогноз
+            рахується по профілю. Має пріоритет над `pq_queue_guid`.
+          schema:
+            type: string
+            example: 0f4b49dd-5736-4c70-2098-410c4b6d0d1d
+        - in: query
+          name: pq_queue_guid
+          description: >-
+            Унікальний ідентифікатор конкретної черги. Використовується, якщо
+            `pq_profile_guid` не передано.
+          schema:
+            type: string
+            example: 46044620-6f3f-4c0d-610a-e9e43baf388e
+        - in: query
+          name: period
+          description: >-
+            Кількість майбутніх годин для прогнозу. Доступні значення: 3, 6, 12.
+            Якщо параметр не передано, використовується 3.
+          schema:
+            type: integer
+            enum:
+              - 3
+              - 6
+              - 12
+            default: 3
+            example: 6
+      responses:
+        '200':
+          description: Прогноз прибуття авто
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                    description: Статус відповіді
+                  item:
+                    type: object
+                    properties:
+                      period:
+                        type: integer
+                        example: 6
+                        description: Період прогнозу в годинах
+                      generated_at:
+                        type: string
+                        example: '16.06.2026 15:24:00'
+                        description: Дата та час формування відповіді
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date_time:
+                              type: string
+                              example: '16.06.2026 16:00:00'
+                              description: Початок годинного слота
+                            vehicle_count:
+                              type: integer
+                              example: 3
+                              description: Кількість авто наростаючим підсумком
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: pq_profile_guid or pq_queue_guid is required.
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: server error
+          content: {}
   /pq_queues/flow/history:
     get:
       tags:
