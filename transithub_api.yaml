@@ -123,6 +123,10 @@ tags:
     description: Вузли для отримання тарифів
   - name: T053 - Тендери
     description: Вузли для роботи з тендерами APS
+  - name: T054 - Логування дій користувача
+    description: Вузли для логування дій користувача
+  - name: T055 - Авторизація WEB
+    description: Вузли для авторизації користувачів у WEB-клієнті
 paths:
   /accreditations:
     get:
@@ -1405,19 +1409,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ComplexError'
+  /aps_tender/type:
+    get:
+      tags:
+        - T053 - Тендери
+      summary: Отримання типів тендерів APS
+      operationId: apsTenderTypeGet
+      description: Повертає типи тендерів APS з можливістю фільтрації за ідентифікатором і пагінації.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Максимальна кількість записів у відповіді
+          schema:
+            type: integer
+            default: 100
+        - in: query
+          name: offset
+          description: Зміщення для пагінації
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор типу тендеру
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список типів тендерів APS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApsTenderTypeResponse'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /auth/check_pincode:
     post:
-      tags: ['T028 - Аутентифікація']
+      tags: ['T055 - Авторизація WEB']
       summary: Перевірка пін-коду користувача при вході в систему
+      operationId: authCheckPincodePost
       description:
         Перевірка пін-коду користувача при вході в систему
       parameters:
-        - in: header
-          name: status
-          description: HTTP response status code
-          schema:
-            type: integer
-        - in: header
+        - in: query
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
           description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується для публічних точок АПІ і як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
@@ -1443,6 +1494,12 @@ paths:
           example: 6311
           description: 'Пін-код для перевірки'
           required: true
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело авторизації
+          required: false
           schema:
             type: string
       responses:
@@ -1481,17 +1538,13 @@ paths:
       x-codegen-request-body-name: body
   /auth/send_pincode:
     post:
-      tags: ['T028 - Аутентифікація']
+      tags: ['T055 - Авторизація WEB']
       summary: Надіслати пін-код користувача при вході в систему
+      operationId: authSendPincodePost
       description:
         Надіслати пін-код користувача при вході в систему
       parameters:
-        - in: header
-          name: status
-          description: HTTP response status code
-          schema:
-            type: integer
-        - in: header
+        - in: query
           name: client_token
           example: e0d22acfba67c35937f2e26c7b6344e6
           description: 'Токен клієнта API. Таблиця "Клієнти АРІ(api_clients)". Використовується як ключ до токена доступу, якщо функціонал заголовка Set-Cookie не задіяно'
@@ -15365,6 +15418,71 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+  /users_filters.make_notificator:
+    post:
+      tags:
+        - T010 - Фільтри користувача
+      summary: Зміна налаштування сповіщень фільтра
+      operationId: usersFiltersMakeNotificatorPost
+      description: Вмикає або вимикає надсилання сповіщень для вибраного набору фільтрів користувача.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор набору фільтрів
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: send_notifications
+          description: Ознака надсилання сповіщень
+          required: true
+          schema:
+            type: integer
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Налаштування сповіщень оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFilterNotificatorResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Набір фільтрів не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /users_filters:
     get:
       tags:
@@ -18450,6 +18568,100 @@ paths:
         '500':
           description: server error
           content: {}
+  /logs/actions:
+    post:
+      tags:
+        - T054 - Логування дій користувача
+      summary: Логування дії користувача
+      operationId: logsActionsPost
+      description: Створює запис про дію авторизованого користувача.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: action_code
+          description: Код дії
+          required: true
+          schema:
+            type: string
+            maxLength: 150
+        - in: query
+          name: action_name
+          description: Назва дії
+          schema:
+            type: string
+            maxLength: 200
+        - in: query
+          name: race_id
+          description: Внутрішній ідентифікатор рейсу
+          schema:
+            type: integer
+        - in: query
+          name: source
+          description: Джерело дії
+          required: true
+          schema:
+            type: string
+            maxLength: 20
+        - in: query
+          name: lat
+          description: Географічна широта
+          schema:
+            type: string
+            maxLength: 30
+        - in: query
+          name: lng
+          description: Географічна довгота
+          schema:
+            type: string
+            maxLength: 30
+        - in: query
+          name: comment
+          description: Коментар до дії
+          schema:
+            type: string
+            maxLength: 4000
+      responses:
+        '201':
+          description: Дію успішно залоговано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionLogCreateResponse'
+        '400':
+          description: Некоректні вхідні дані
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /messages:
     post:
       tags:
@@ -20604,6 +20816,73 @@ components:
           type: string
         tender_status_name_ru:
           type: string
+    ApsTenderTypeResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Загальна кількість типів тендерів
+          example: 3
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              guid:
+                type: string
+                format: uuid
+                description: Унікальний ідентифікатор типу тендеру
+              name_ua:
+                type: string
+                description: Назва типу тендеру українською
+              name_ru:
+                type: string
+                description: Назва типу тендеру російською
+    ActionLogCreateResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+          description: Статус створення запису журналу
+          example: true
+    UserFilterNotificatorResponse:
+      type: object
+      required:
+        - status
+        - guid
+        - send_notifications
+      properties:
+        status:
+          type: boolean
+          example: true
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор набору фільтрів
+        name:
+          type: string
+          description: Назва набору фільтрів
+        th_user_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор користувача
+        list_name:
+          type: string
+          description: Назва списку фільтрів
+        send_notifications:
+          type: integer
+          enum: [0, 1]
+          description: Ознака надсилання сповіщень
     RacesGetResponse:
       type: object
       required:
