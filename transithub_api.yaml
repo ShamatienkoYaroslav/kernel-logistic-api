@@ -115,6 +115,8 @@ tags:
     description: Вузли для роботи зі стоянками електронної черги
   - name: T049 - Черги
     description: Вузли для роботи з електронними чергами
+  - name: T050 - Документи політики TH
+    description: Вузли для отримання документів політики Transithub
 paths:
   /accreditations:
     get:
@@ -14585,6 +14587,270 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+  /privacy_policy_document:
+    get:
+      tags:
+        - T050 - Документи політики TH
+      summary: Отримання документа політики конфіденційності
+      operationId: privacyPolicyDocumentGet
+      description: Повертає посилання на актуальний документ політики конфіденційності Transithub.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Посилання на документ політики конфіденційності
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrivacyPolicyDocumentResponse'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Документ не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /race/registerevent:
+    post:
+      tags:
+        - Т038 - Рейс
+      summary: Реєстрація події рейсу
+      operationId: raceRegisterEventPost
+      description: Додає подію до рейсу та оновлює його поточний стан.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceRegisterEventRequest'
+      responses:
+        '201':
+          description: Подію рейсу зареєстровано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_StatusOnly'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Рейс або подію не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /requests/filter_numbers:
+    get:
+      tags:
+        - T007 - Заявки
+      summary: Отримання номерів заявок для фільтра
+      operationId: requestsFilterNumbersGet
+      description: Повертає унікальні клієнтські номери заявок із можливістю фільтрації за перевізниками.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: carrier
+          description: Ідентифікатори перевізників, розділені крапкою з комою
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список номерів заявок
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFilterNumbersResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /requests/filter_clients_names:
+    get:
+      tags:
+        - T007 - Заявки
+      summary: Отримання назв клієнтів заявок для фільтра
+      operationId: requestsFilterClientsNamesGet
+      description: Повертає унікальні назви клієнтів заявок із можливістю фільтрації за перевізниками.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: carrier
+          description: Ідентифікатори перевізників, розділені крапкою з комою
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список назв клієнтів заявок
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFilterClientsNamesResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /requests/filter_logists:
+    get:
+      tags:
+        - T007 - Заявки
+      summary: Отримання логістів заявок для фільтра
+      operationId: requestsFilterLogistsGet
+      description: Повертає унікальні імена логістів заявок із можливістю фільтрації за перевізниками.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: carrier
+          description: Ідентифікатори перевізників, розділені крапкою з комою
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список логістів заявок
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFilterLogistsResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /requests:
     get:
       tags:
@@ -19618,6 +19884,96 @@ components:
           enum:
             - loading
             - unloading
+    PrivacyPolicyDocumentResponse:
+      type: object
+      required:
+        - status
+        - file_link
+      properties:
+        status:
+          type: boolean
+          example: true
+        file_link:
+          type: string
+          nullable: true
+          description: Посилання на актуальний документ політики конфіденційності
+          example: https://example.com/privacy-policy.pdf
+    RaceRegisterEventRequest:
+      type: object
+      required:
+        - race_guid
+        - event
+      properties:
+        race_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор рейсу
+        event:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор події
+        lat:
+          type: number
+          format: double
+          description: Географічна широта місця реєстрації події
+        lng:
+          type: number
+          format: double
+          description: Географічна довгота місця реєстрації події
+    RequestFilterNumbersResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              client_number:
+                type: string
+                description: Клієнтський номер заявки
+                example: Z_069308
+    RequestFilterClientsNamesResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              client_name:
+                type: string
+                description: Назва клієнта заявки
+                example: Кернел-Трейд
+    RequestFilterLogistsResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              logist_name:
+                type: string
+                description: Ім'я логіста заявки
+                example: Жук М. В.
     RacesGetResponse:
       type: object
       required:
