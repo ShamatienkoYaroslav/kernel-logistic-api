@@ -111,6 +111,10 @@ tags:
     description: Вузли для роботи з автоматичною реєстрацією рейсу в чергу
   - name: T047 - Дії користувача з рейсом
     description: Вузли для роботи з діями користувача щодо рейсу в черзі
+  - name: T048 - Стоянки
+    description: Вузли для роботи зі стоянками електронної черги
+  - name: T049 - Черги
+    description: Вузли для роботи з електронними чергами
 paths:
   /accreditations:
     get:
@@ -9079,6 +9083,802 @@ paths:
         '500':
           description: server error
           content: {}
+  /pq_parkings:
+    get:
+      tags:
+        - T048 - Стоянки
+      summary: Отримання списку стоянок
+      operationId: pqParkingsGet
+      description: Отримання стоянок електронної черги з фільтрацією та пагінацією.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор стоянки
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: organisation_guid
+          description: Унікальний ідентифікатор організації
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: warehouse_guid
+          description: Унікальний ідентифікатор складу
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: offset
+          description: Зміщення від початку вибірки
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Список стоянок
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingsGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T048 - Стоянки
+      summary: Створення стоянки
+      operationId: pqParkingsPost
+      description: Створення нової стоянки електронної черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingWriteRequest'
+      responses:
+        '200':
+          description: Стоянку створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    put:
+      tags:
+        - T048 - Стоянки
+      summary: Оновлення стоянки
+      operationId: pqParkingsPut
+      description: Оновлення наявної стоянки електронної черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор стоянки
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParkingWriteRequest'
+      responses:
+        '200':
+          description: Стоянку оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParkingWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_queue_profiles/pq_parkings:
+    get:
+      tags:
+        - Т037 - Профіль черги
+      summary: Отримання стоянок профілю черги
+      operationId: pqQueueProfilesParkingsGet
+      description: Отримання зв'язків профілів черги зі стоянками.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: parking_guid
+          description: Унікальний ідентифікатор стоянки
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список стоянок профілів черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueProfileParkingsGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - Т037 - Профіль черги
+      summary: Додавання стоянки до профілю черги
+      operationId: pqQueueProfilesParkingsPost
+      description: Створення зв'язку між профілем черги та стоянкою.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueueProfileParkingLinkRequest'
+      responses:
+        '200':
+          description: Стоянку додано до профілю черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueProfileParkingWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - Т037 - Профіль черги
+      summary: Видалення стоянки з профілю черги
+      operationId: pqQueueProfilesParkingsDelete
+      description: Видалення зв'язку між профілем черги та стоянкою.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: queue_profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: parking_guid
+          description: Унікальний ідентифікатор стоянки
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Стоянку видалено з профілю черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueProfileParkingDeleteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_queue_profiles/users:
+    get:
+      tags:
+        - Т037 - Профіль черги
+      summary: Отримання користувачів профілю черги
+      operationId: pqQueueProfilesUsersGet
+      description: Отримання списку користувачів, пов'язаних із профілями черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список користувачів профілів черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueProfileUsersGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - Т037 - Профіль черги
+      summary: Додавання користувача до профілю черги
+      operationId: pqQueueProfilesUsersPost
+      description: Створення зв'язку між користувачем і профілем черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueueProfileUserLinkRequest'
+      responses:
+        '200':
+          description: Користувача додано до профілю черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueProfileUserWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - Т037 - Профіль черги
+      summary: Видалення користувача з профілю черги
+      operationId: pqQueueProfilesUsersDelete
+      description: Видалення зв'язку користувача з профілем черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор зв'язку користувача з профілем
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Користувача видалено з профілю черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuidStatusResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_queues:
+    get:
+      tags:
+        - T049 - Черги
+      summary: Отримання списку черг
+      operationId: pqQueuesGet
+      description: Отримання електронних черг компанії з фільтрацією та пагінацією.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: organisation_guid
+          description: Унікальний ідентифікатор організації
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: offset
+          description: Зміщення від початку вибірки
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Список черг
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqQueuesGetResponse'
+        '400':
+          description: Не передано обов'язкові параметри
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T049 - Черги
+      summary: Створення черги
+      operationId: pqQueuesPost
+      description: Створення нової електронної черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PqQueueWriteRequest'
+      responses:
+        '200':
+          description: Чергу створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqQueueWriteResponse'
+        '400':
+          description: Не передано обов'язкові параметри
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    put:
+      tags:
+        - T049 - Черги
+      summary: Оновлення черги
+      operationId: pqQueuesPut
+      description: Оновлення наявної електронної черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор черги
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PqQueueWriteRequest'
+      responses:
+        '200':
+          description: Чергу оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqQueueWriteResponse'
+        '400':
+          description: Не передано обов'язкові параметри
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /pq_queues/flow/history:
     get:
       tags:
@@ -15028,8 +15828,9 @@ paths:
     get:
       tags:
         - T047 - Дії користувача з рейсом
+        - Т038 - Рейс
       summary: Отримання списку дій користувача для рейсу
-      operationId: usresActionsGet
+      operationId: usersActionsGet
       description: |
         Отримання списку дій користувача для рейсу
       parameters:
@@ -15125,8 +15926,9 @@ paths:
     post:
       tags:
         - T047 - Дії користувача з рейсом
+        - Т038 - Рейс
       summary: Виконання дії користувача для рейсу
-      operationId: usresActionsPost
+      operationId: usersActionsPost
       description: |
         Виконання дії користувача для рейсу черги
       parameters:
@@ -17158,6 +17960,500 @@ paths:
 
 components:
   schemas:
+    Parking:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор стоянки
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        organisation_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор організації
+        organisation_name:
+          type: string
+          description: Назва організації
+        name:
+          type: string
+          description: Назва стоянки
+        locality_koatuu:
+          type: string
+          description: Код КОАТУУ населеного пункту
+        locality_name:
+          type: string
+          description: Назва населеного пункту
+        district_code:
+          type: string
+          description: Код району
+        district_name:
+          type: string
+          description: Назва району
+        region_code:
+          type: string
+          description: Код області
+        region_name:
+          type: string
+          description: Назва області
+        address:
+          type: string
+          description: Повна адреса стоянки
+        geo_parking_lat:
+          type: number
+          format: double
+          description: Географічна широта стоянки
+        geo_parking_lng:
+          type: number
+          format: double
+          description: Географічна довгота стоянки
+        street_name:
+          type: string
+          description: Назва вулиці
+        building_n:
+          type: string
+          description: Номер будинку
+        active:
+          type: boolean
+          description: Ознака активності стоянки
+    ParkingsGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених стоянок
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parking'
+    ParkingWriteRequest:
+      type: object
+      properties:
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        organisation_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор організації
+        name:
+          type: string
+          description: Назва стоянки
+        address:
+          type: string
+          description: Повна адреса стоянки
+        geo_parking_lat:
+          type: number
+          format: double
+          description: Географічна широта стоянки
+        geo_parking_lng:
+          type: number
+          format: double
+          description: Географічна довгота стоянки
+        locality_koatuu:
+          type: string
+          description: Код КОАТУУ населеного пункту
+        street_name:
+          type: string
+          description: Назва вулиці
+        building_n:
+          type: string
+          description: Номер будинку
+    ParkingWriteResponse:
+      allOf:
+        - $ref: '#/components/schemas/Parking'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: boolean
+              example: true
+            state:
+              type: string
+              description: Результат створення або оновлення стоянки
+    QueueProfileParking:
+      type: object
+      properties:
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        profile_name:
+          type: string
+          description: Назва профілю черги
+        profile_full_address:
+          type: string
+          description: Повна адреса профілю черги
+        profile_active:
+          type: boolean
+          description: Ознака активності профілю
+        profile_region_name:
+          type: string
+          description: Назва області профілю
+        profile_district_name:
+          type: string
+          description: Назва району профілю
+        profile_locality_name:
+          type: string
+          description: Назва населеного пункту профілю
+        profile_registration_zone_radius:
+          type: number
+          description: Радіус зони реєстрації профілю
+        parking_name:
+          type: string
+          description: Назва стоянки
+        parking_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор стоянки
+        parking_full_address:
+          type: string
+          description: Повна адреса стоянки
+        parking_active:
+          type: boolean
+          description: Ознака активності стоянки
+        parking_region_name:
+          type: string
+          description: Назва області стоянки
+        parking_district_name:
+          type: string
+          description: Назва району стоянки
+        parking_locality_name:
+          type: string
+          description: Назва населеного пункту стоянки
+    QueueProfileParkingsGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених зв'язків
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueueProfileParking'
+    QueueProfileParkingLinkRequest:
+      type: object
+      required:
+        - queue_profile_guid
+        - parking_guid
+      properties:
+        queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        parking_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор стоянки
+    QueueProfileParkingWriteResponse:
+      allOf:
+        - $ref: '#/components/schemas/QueueProfileParking'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: boolean
+              example: true
+    QueueProfileParkingDeleteResponse:
+      type: object
+      required:
+        - status
+        - queue_profile_guid
+        - parking_guid
+      properties:
+        status:
+          type: boolean
+          example: true
+        queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        parking_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор стоянки
+    QueueProfileUser:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор зв'язку
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        user_firstname:
+          type: string
+          description: Ім'я користувача
+        user_lastname:
+          type: string
+          description: Прізвище користувача
+        user_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор користувача
+    QueueProfileUsersGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених користувачів
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueueProfileUser'
+    QueueProfileUserLinkRequest:
+      type: object
+      required:
+        - company_guid
+        - profile_guid
+        - user_guid
+      properties:
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        user_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор користувача
+    QueueProfileUserWriteResponse:
+      allOf:
+        - $ref: '#/components/schemas/QueueProfileUser'
+        - type: object
+          required:
+            - status
+          properties:
+            status:
+              type: boolean
+              example: true
+    PqQueue:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор черги
+        name:
+          type: string
+          description: Назва черги
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
+        priority:
+          type: integer
+          description: Пріоритет черги
+        output_ratio:
+          type: number
+          description: Коефіцієнт випуску
+        loading_type:
+          type: string
+          description: Тип завантаження
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        profile_name:
+          type: string
+          description: Назва профілю черги
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        profile_active:
+          type: boolean
+          description: Ознака активності профілю
+        profile_multiqueue:
+          type: boolean
+          description: Ознака мультичерги профілю
+        order_in_multiqueue:
+          type: integer
+          description: Порядок у мультичерзі
+        green_way:
+          type: boolean
+          description: Ознака зеленого коридору
+        departure_permission_forbidden:
+          type: boolean
+          description: Ознака заборони дозволу на виїзд
+        allow_move_to_entry:
+          type: boolean
+          description: Дозвіл переміщення до в'їзду
+        comment:
+          type: string
+          description: Коментар
+        active:
+          type: boolean
+          description: Ознака активності черги
+    PqQueuesGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених черг
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PqQueue'
+    PqQueueWriteRequest:
+      type: object
+      properties:
+        warehouse_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор складу
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        organisation_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор організації
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        name:
+          type: string
+          description: Назва черги
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
+        priority:
+          type: integer
+          description: Пріоритет черги
+        loading_type:
+          type: string
+          description: Тип завантаження
+        output_ratio:
+          type: number
+          description: Коефіцієнт випуску
+        comment:
+          type: string
+          description: Коментар
+        order_in_multiqueue:
+          type: integer
+          description: Порядок у мультичерзі
+        green_way:
+          type: boolean
+          description: Ознака зеленого коридору
+        guid:
+          type: string
+          format: uuid
+          description: Ідентифікатор черги в тілі PUT-запиту
+    PqQueueWriteResponse:
+      type: object
+      required:
+        - status
+        - guid
+      properties:
+        warehouse_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор складу
+        warehouse_name:
+          type: string
+          description: Назва складу
+        name:
+          type: string
+          description: Назва черги
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        organisation_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор організації
+        organisation_name:
+          type: string
+          description: Назва організації
+        direction:
+          type: string
+          description: Напрямок черги
+        priority:
+          type: integer
+          description: Пріоритет черги
+        loading_type:
+          type: string
+          description: Тип завантаження
+        output_ratio:
+          type: number
+          description: Коефіцієнт випуску
+        comment:
+          type: string
+          description: Коментар
+        profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        profile_name:
+          type: string
+          description: Назва профілю черги
+        profile_active:
+          type: boolean
+          description: Ознака активності профілю
+        order_in_multiqueue:
+          type: integer
+          description: Порядок у мультичерзі
+        green_way:
+          type: boolean
+          description: Ознака зеленого коридору
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор черги
+        status:
+          type: boolean
+          example: true
+        active:
+          type: boolean
+          description: Ознака активності черги
     RacesGetResponse:
       type: object
       required:
