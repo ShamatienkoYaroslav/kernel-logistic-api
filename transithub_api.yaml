@@ -117,6 +117,12 @@ tags:
     description: Вузли для роботи з електронними чергами
   - name: T050 - Документи політики TH
     description: Вузли для отримання документів політики Transithub
+  - name: T051 - Бот-підтримка
+    description: Вузли для роботи з розділами довідки та підтримки
+  - name: T052 - Тарифи
+    description: Вузли для отримання тарифів
+  - name: T053 - Тендери
+    description: Вузли для роботи з тендерами APS
 paths:
   /accreditations:
     get:
@@ -1302,6 +1308,91 @@ paths:
               schema:
                 name: error
                 $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /aps_tender:
+    get:
+      tags:
+        - T053 - Тендери
+      summary: Отримання тендерів APS
+      operationId: apsTenderGet
+      description: Повертає актуальні тендери APS з можливістю пошуку, фільтрації та пагінації.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Максимальна кількість записів у відповіді
+          schema:
+            type: integer
+            default: 100
+        - in: query
+          name: offset
+          description: Зміщення для пагінації
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор тендеру
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: search_text
+          description: Текст для пошуку за номером та автором тендеру
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: dep_guid
+          description: Унікальний ідентифікатор підрозділу
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: industry_guid
+          description: Унікальний ідентифікатор галузі
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: goods_guid
+          description: Ідентифікатор вантажу
+          schema:
+            type: string
+        - in: query
+          name: tender_type_guid
+          description: Унікальний ідентифікатор типу тендеру
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список актуальних тендерів APS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApsTenderResponse'
         '403':
           description: Клієнт не має прав доступу
           content:
@@ -14587,6 +14678,51 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+  /price/auto:
+    get:
+      tags:
+        - T052 - Тарифи
+      summary: Отримання тарифів на автоперевезення
+      operationId: priceAutoGet
+      description: Повертає чинні тарифні документи на автоперевезення.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список тарифних документів
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceAutoResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /privacy_policy_document:
     get:
       tags:
@@ -14845,6 +14981,124 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /requests/filter_goods:
+    get:
+      tags:
+        - T007 - Заявки
+      summary: Отримання вантажів заявок для фільтра
+      operationId: requestsFilterGoodsGet
+      description: Повертає унікальні вантажі заявок із можливістю фільтрації за перевізниками.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: carrier
+          description: Ідентифікатори перевізників, розділені крапкою з комою
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список вантажів заявок
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestFilterGoodsResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /requests/quantity_history:
+    get:
+      tags:
+        - T007 - Заявки
+      summary: Отримання історії кількісних показників заявки
+      operationId: requestsQuantityHistoryGet
+      description: Повертає історію змін кількості вантажу та транспортних засобів для заявки.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Зміщення для пагінації
+          schema:
+            type: integer
+        - in: query
+          name: request_guid
+          description: Унікальний ідентифікатор заявки
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Історія кількісних показників заявки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestQuantityHistoryResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
         '500':
           description: Серверна помилка
           content:
@@ -17368,6 +17622,64 @@ paths:
         '500':
           description: server error
           content: {}
+  /help:
+    get:
+      tags:
+        - T051 - Бот-підтримка
+      summary: Отримання розділів довідки
+      operationId: helpGet
+      description: Повертає розділи довідки, питання та налаштування бота підтримки.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: help_type
+          description: Тип довідки
+          schema:
+            type: string
+            enum:
+              - faq
+              - help
+        - in: query
+          name: question_guid
+          description: Унікальний ідентифікатор питання
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: search
+          description: Текст для пошуку в питаннях та відповідях
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Дані довідки та підтримки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HelpResponse'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Питання не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка або некоректний тип довідки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /localities:
     get:
       tags:
@@ -19974,6 +20286,324 @@ components:
                 type: string
                 description: Ім'я логіста заявки
                 example: Жук М. В.
+    RequestFilterGoodsResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              goods_guid:
+                type: string
+                description: Код класифікатора вантажу
+                example: '10000000'
+              goods_name:
+                type: string
+                description: Назва вантажу
+                example: Кукурудза
+    RequestQuantityHistoryResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: Дата, для якої зафіксовані показники
+              quantity_t:
+                type: number
+                description: Кількість вантажу в тоннах
+                example: 1000
+              quantity_vehicles:
+                type: integer
+                description: Кількість транспортних засобів
+                example: 40
+              vehicles_limitation:
+                type: integer
+                description: Обмеження кількості транспортних засобів
+                example: 50
+              comment:
+                type: string
+                nullable: true
+                description: Коментар до зміни
+              created_at:
+                type: string
+                description: Дата і час створення запису
+        msg:
+          type: string
+          description: Повідомлення, якщо заявку або історію не знайдено
+        request_guid:
+          type: string
+          format: uuid
+          description: Ідентифікатор заявки, для якої немає даних
+    HelpResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+          example: true
+        themes:
+          type: array
+          description: Теми довідки з питаннями
+          items:
+            $ref: '#/components/schemas/HelpTheme'
+        question:
+          $ref: '#/components/schemas/HelpQuestion'
+        settings:
+          $ref: '#/components/schemas/HelpSettings'
+    HelpTheme:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор теми
+        code:
+          type: string
+          description: Код теми
+        name:
+          type: string
+          description: Назва теми
+        descr:
+          type: string
+          nullable: true
+          description: Короткий опис теми
+        section_id:
+          type: integer
+          description: Внутрішній ідентифікатор розділу
+        section_name:
+          type: string
+          description: Назва розділу
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HelpQuestion'
+    HelpQuestion:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор питання
+        name:
+          type: string
+          description: Назва питання
+        id_name:
+          type: string
+          description: Технічний ідентифікатор питання
+        description:
+          type: string
+          description: Текст відповіді
+        short_description:
+          type: string
+          nullable: true
+          description: Короткий опис питання
+        request_to_sd:
+          type: integer
+          enum: [0, 1]
+          description: Ознака створення запиту до Service Desk
+        use_vehicle_number:
+          type: integer
+          enum: [0, 1]
+          description: Ознака використання номера транспортного засобу
+        is_additional_info:
+          type: integer
+          enum: [0, 1]
+          description: Ознака наявності додаткової інформації
+        links:
+          type: array
+          description: Посилання на додаткові матеріали
+          items:
+            $ref: '#/components/schemas/HelpLink'
+    HelpLink:
+      type: object
+      properties:
+        link:
+          type: string
+          format: uri
+        type:
+          type: string
+          description: Тип файлу або посилання
+        name:
+          type: string
+          description: Назва матеріалу
+    HelpSettings:
+      type: object
+      description: Налаштування Service Desk для бота підтримки
+      properties:
+        project_name:
+          type: string
+        project_username:
+          type: string
+        project_password:
+          type: string
+          format: password
+        project_url_name:
+          type: string
+        project_product_name:
+          type: string
+        project_issue_type_code:
+          type: string
+        project_issue_type_name:
+          type: string
+        project_reporter:
+          type: string
+        project_labels:
+          type: array
+          items:
+            type: string
+        project_summary:
+          type: string
+    PriceAutoResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceAutoItem'
+    PriceAutoItem:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Назва тарифного документа
+        document_number:
+          type: string
+          description: Номер документа
+        document_type:
+          type: string
+          description: Тип договору
+        created_date:
+          type: string
+          description: Дата створення документа
+        note:
+          type: string
+          nullable: true
+          description: Примітка
+        loading_type:
+          type: string
+          description: Тип завантаження
+        tariff_is_valid_from:
+          type: string
+          description: Дата початку дії тарифу
+        link:
+          type: string
+          format: uri
+          description: Посилання на PDF-документ
+    ApsTenderResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Загальна кількість знайдених тендерів
+          example: 10
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApsTenderItem'
+    ApsTenderItem:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор тендеру
+        number:
+          type: integer
+          description: Номер тендеру
+        name:
+          type: string
+          description: Назва тендеру
+        author_name:
+          type: string
+          description: Ім'я автора
+        author_email:
+          type: string
+          format: email
+          description: Email автора
+        company_guid:
+          type: string
+          format: uuid
+        company_name_ua:
+          type: string
+        company_name_ru:
+          type: string
+        dep_guid:
+          type: string
+          format: uuid
+        dep_name_ua:
+          type: string
+        dep_name_ru:
+          type: string
+        industry_guid:
+          type: string
+          format: uuid
+        industry_name_ua:
+          type: string
+        industry_name_ru:
+          type: string
+        date_create:
+          type: string
+          description: Дата створення тендеру
+        date_start:
+          type: string
+          description: Дата початку тендеру
+        date_end:
+          type: string
+          description: Дата завершення тендеру
+        goods_guid:
+          type: string
+        goods_name_ua:
+          type: string
+        goods_name_ru:
+          type: string
+        tender_type_guid:
+          type: string
+          format: uuid
+        tender_type_name_ua:
+          type: string
+        tender_type_name_ru:
+          type: string
+        url:
+          type: string
+          format: uri
+        tender_kind_ua:
+          type: string
+        tender_kind_ru:
+          type: string
+        tender_status_name_ua:
+          type: string
+        tender_status_name_ru:
+          type: string
     RacesGetResponse:
       type: object
       required:
