@@ -9659,7 +9659,7 @@ paths:
   /pq_queues:
     get:
       tags:
-        - T049 - Черги
+        - Т049 - Черги
       summary: Отримання списку черг
       operationId: pqQueuesGet
       description: Отримання електронних черг компанії з фільтрацією та пагінацією.
@@ -14590,7 +14590,7 @@ paths:
   /privacy_policy_document:
     get:
       tags:
-        - T050 - Документи політики TH
+        - Т050 - Документи політики TH
       summary: Отримання документа політики конфіденційності
       operationId: privacyPolicyDocumentGet
       description: Повертає посилання на актуальний документ політики конфіденційності Transithub.
