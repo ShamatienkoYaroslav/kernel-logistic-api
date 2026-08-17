@@ -2112,6 +2112,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+    put:
+      tags:
+        - T004 - Водії
+      summary: Оновлення даних водія
+      operationId: driversPut
+      description: |
+        Оновлення персональних, контактних і паспортних даних водія.
+        Якщо передано `workspace`, запит обробляється як виклик із бота.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор водія
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Оновлені дані водія
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverUpdateRequest'
+      responses:
+        '201':
+          description: Дані водія оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverUpdateResponse'
+        '400':
+          description: Поганий запит або не знайдено workspace
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
     post:
       tags:
         - T004 - Водії
@@ -10584,6 +10638,123 @@ paths:
         '500':
           description: server error
           content: {}
+  /races:
+    get:
+      tags:
+        - Т038 - Рейс
+      summary: Отримання рейсу
+      operationId: racesGet
+      description: |
+        Отримання повної інформації про рейс за його унікальним ідентифікатором.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Інформація про рейс
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RacesGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - Т038 - Рейс
+      summary: Видалення рейсу
+      operationId: racesDelete
+      description: |
+        Скасування та деактивація рейсу за його унікальним ідентифікатором.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Рейс видалено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuidStatusResponse'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Рейс не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /races/localities:
     get:
       tags:
@@ -11183,6 +11354,301 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+  /race/documents/photo:
+    get:
+      tags:
+        - T020 - Файли (вкладення)
+      summary: Отримання вкладень документів рейсу
+      operationId: raceDocumentsPhotoGet
+      description: |
+        Отримання файлів документів рейсу з можливістю фільтрації за типом, напрямком і статусом обробки.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: document_type
+          description: Тип документа
+          schema:
+            type: string
+            enum: [la, ttn, document]
+        - in: query
+          name: direction
+          description: Напрямок рейсу
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: handle_status
+          description: Статус обробки файлу
+          schema:
+            type: string
+            enum: [draft, to_check, rejected, accepted]
+        - in: query
+          name: created_by
+          description: Джерело або тип автора файлу
+          schema:
+            type: string
+            default: user
+        - in: query
+          name: owner_guid
+          description: Унікальний ідентифікатор власника документа
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: th_vehicle_guid
+          description: Унікальний ідентифікатор транспортного засобу
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: th_organization_guid
+          description: Унікальний ідентифікатор організації
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Вкладення документів рейсу
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/VerificationFilesGetDocumentTypeLaORttn'
+                  - $ref: '#/components/schemas/VerificationFilesGetDocumentTypeEmpty'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T020 - Файли (вкладення)
+      summary: Додавання вкладення документа рейсу
+      operationId: raceDocumentsPhotoPost
+      description: |
+        Завантаження нового файла документа, пов'язаного з рейсом.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: race_guid
+          description: Унікальний ідентифікатор рейсу
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: document_type
+          description: Тип документа
+          required: true
+          schema:
+            type: string
+            enum: [la, ttn, document]
+        - in: query
+          name: type
+          description: Тип приналежності вкладення
+          required: true
+          schema:
+            type: string
+            enum: [race, accreditation]
+        - in: query
+          name: direction
+          description: Напрямок рейсу
+          required: true
+          schema:
+            type: string
+            enum: [loading, unloading]
+        - in: query
+          name: content_type
+          description: MIME-тип файла
+          schema:
+            type: string
+            example: image/jpeg
+        - in: query
+          name: file_name
+          description: Назва файла
+          schema:
+            type: string
+        - in: query
+          name: source
+          description: Джерело створення
+          schema:
+            type: string
+            default: th
+            enum: [track_check, th]
+        - in: query
+          name: order
+          description: Порядковий номер файла
+          schema:
+            type: integer
+        - in: query
+          name: owner_guid
+          description: Унікальний ідентифікатор власника документа
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: th_vehicle_guid
+          description: Унікальний ідентифікатор транспортного засобу
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: th_organization_guid
+          description: Унікальний ідентифікатор організації
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Бінарний вміст файла
+        required: true
+        content:
+          '*/*':
+            schema:
+              type: string
+              format: binary
+      responses:
+        '201':
+          description: Вкладення створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RaceDocumentPostResponse'
+        '400':
+          description: Поганий запит
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - T020 - Файли (вкладення)
+      summary: Видалення вкладення документа рейсу
+      operationId: raceDocumentsPhotoDelete
+      description: |
+        Видалення файла документа рейсу за його унікальним ідентифікатором.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор вкладення
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Вкладення видалено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_StatusOnly'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Вкладення не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /race/verification/photo:
     get:
       tags:
@@ -13414,6 +13880,129 @@ paths:
                   msg:
                     type: string
                     example: 'ORA-20000: unexpected error'
+  /companies/users:
+    get:
+      tags:
+        - Компанії
+      summary: Отримання користувачів компанії
+      operationId: companiesUsersGet
+      description: |
+        Отримання списку користувачів компанії або одного користувача за його ідентифікатором.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: compact
+          description: Ознака повернення скороченого набору даних
+          schema:
+            type: integer
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Користувачі компанії
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyUsersGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    put:
+      tags:
+        - Компанії
+      summary: Оновлення користувача в компанії
+      operationId: companiesUsersPut
+      description: |
+        Зміна ролі, активності та доступів користувача в компанії.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: Токен доступу (сесії)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані користувача в компанії
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUserUpdateRequest'
+      responses:
+        '200':
+          description: Операцію оброблено, але зміна могла бути відхилена бізнес-правилами
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyUserUpdateResponse'
+        '201':
+          description: Дані користувача в компанії оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyUserUpdateResponse'
+        '401':
+          description: Користувач або клієнт не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /companies.simple_create:
     post:
       tags:
@@ -13939,6 +14528,154 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+    post:
+      tags:
+        - T015 - Організації компанії
+      summary: Створення організації компанії
+      operationId: organisationsPost
+      description: |
+        Створення організації та прив'язування її до компанії Transithub.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Дані нової організації
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationWriteRequest'
+      responses:
+        '200':
+          description: Організацію створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationWriteResponse'
+        '401':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Компанію не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    put:
+      tags:
+        - T015 - Організації компанії
+      summary: Оновлення організації компанії
+      operationId: organisationsPut
+      description: |
+        Оновлення реквізитів існуючої організації компанії.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Оновлені дані організації
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/OrganisationWriteRequest'
+                - type: object
+                  required:
+                    - guid
+                  properties:
+                    guid:
+                      type: string
+                      format: uuid
+                      description: Унікальний ідентифікатор організації
+      responses:
+        '200':
+          description: Організацію оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationWriteResponse'
+        '401':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Компанію або організацію не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - T015 - Організації компанії
+      summary: Видалення організації компанії
+      operationId: organisationsDelete
+      description: |
+        Видалення організації з компанії за унікальним ідентифікатором.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор організації
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Організацію видалено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuidStatusResponse'
+        '404':
+          description: Компанію або організацію не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /organisation/search:
     get:
       tags:
@@ -16421,6 +17158,1023 @@ paths:
 
 components:
   schemas:
+    RacesGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          description: Статус обробки запиту
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених рейсів
+          example: 1
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RaceGetItem'
+    RaceGetItem:
+      type: object
+      additionalProperties: true
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор рейсу
+        race_id:
+          type: integer
+          description: Внутрішній ідентифікатор рейсу
+        number:
+          type: string
+          description: Номер рейсу
+        date:
+          type: string
+          description: Дата створення рейсу
+          example: '17.08.2026 10:30:00'
+        race_source:
+          type: string
+          description: Джерело створення рейсу
+        status:
+          type: string
+          description: Статус рейсу
+        has_laboratory_test:
+          type: integer
+          enum: [0, 1]
+          description: Ознака наявності лабораторного аналізу
+        race_consignor_name:
+          type: string
+          nullable: true
+          description: Назва вантажовідправника рейсу
+        race_consignor_name_reg_code:
+          type: string
+          nullable: true
+          description: Назва та реєстраційний код вантажовідправника
+        race_consignor_reg_code:
+          type: string
+          nullable: true
+          description: Реєстраційний код вантажовідправника
+        race_consignee_name:
+          type: string
+          nullable: true
+          description: Назва вантажоодержувача рейсу
+        race_consignee_name_reg_code:
+          type: string
+          nullable: true
+          description: Назва та реєстраційний код вантажоодержувача
+        race_consignee_reg_code:
+          type: string
+          nullable: true
+          description: Реєстраційний код вантажоодержувача
+        for_owner_name:
+          type: string
+          nullable: true
+          description: Назва поклажодавця
+        for_owner_code:
+          type: string
+          nullable: true
+          description: Код ЄДРПОУ поклажодавця
+        for_owner_comments:
+          type: string
+          nullable: true
+          description: Коментар поклажодавця
+        for_owner_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор поклажодавця
+        request_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор заявки
+        request_client_number:
+          type: string
+          nullable: true
+          description: Клієнтський номер заявки
+        request_schedule_date_utc:
+          type: string
+          nullable: true
+          description: Дата завантаження заявки у форматі UTC
+        request_schedule_date:
+          type: string
+          nullable: true
+          description: Дата завантаження заявки
+        vehicles_register_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор наряду
+        vehicles_register_date_from:
+          type: string
+          nullable: true
+          description: Дата початку дії наряду
+        vehicles_register_date_to:
+          type: string
+          nullable: true
+          description: Дата завершення дії наряду
+        driver_full_name:
+          type: string
+          nullable: true
+          description: ПІБ водія
+        driver_cert:
+          type: string
+          nullable: true
+          description: Серія та номер посвідчення водія
+        phone:
+          type: string
+          nullable: true
+          description: Номер телефону з рейсу
+        phone1:
+          type: string
+          nullable: true
+          description: Додатковий номер телефону з рейсу
+        driver_phone:
+          type: string
+          nullable: true
+          description: Номер телефону водія
+        driver_phone_additional:
+          type: string
+          nullable: true
+          description: Додатковий номер телефону водія
+        route:
+          type: string
+          nullable: true
+          description: Посилання на маршрут
+        vehicle_number:
+          type: string
+          nullable: true
+          description: Державний номер транспортного засобу
+        vehicle_model:
+          type: string
+          nullable: true
+          description: Модель транспортного засобу
+        vehicle_brand:
+          type: string
+          nullable: true
+          description: Марка транспортного засобу
+        trailer_number:
+          type: string
+          nullable: true
+          description: Державний номер причепа
+        trailer_model:
+          type: string
+          nullable: true
+          description: Модель причепа
+        trailer_brand:
+          type: string
+          nullable: true
+          description: Марка причепа
+        goods_name_ua:
+          type: string
+          nullable: true
+          description: Назва вантажу українською
+        goods_name_ru:
+          type: string
+          nullable: true
+          description: Назва вантажу російською
+        goods_desc:
+          type: string
+          nullable: true
+          description: Опис вантажу
+        quantity:
+          type: number
+          nullable: true
+          description: Кількість вантажу
+        distance:
+          type: number
+          nullable: true
+          description: Відстань маршруту
+        point_from_name_ua:
+          type: string
+          nullable: true
+          description: Назва пункту навантаження українською
+        point_from_name_ru:
+          type: string
+          nullable: true
+          description: Назва пункту навантаження російською
+        point_from_koatuu:
+          type: string
+          nullable: true
+          description: Код КОАТУУ пункту навантаження
+        point_from_description_ua:
+          type: string
+          nullable: true
+          description: Опис пункту навантаження українською
+        point_from_description_ru:
+          type: string
+          nullable: true
+          description: Опис пункту навантаження російською
+        point_from_region_ua:
+          type: string
+          nullable: true
+          description: Регіон пункту навантаження українською
+        point_from_region_ru:
+          type: string
+          nullable: true
+          description: Регіон пункту навантаження російською
+        point_to_name_ua:
+          type: string
+          nullable: true
+          description: Назва пункту розвантаження українською
+        point_to_name_ru:
+          type: string
+          nullable: true
+          description: Назва пункту розвантаження російською
+        point_to_koatuu:
+          type: string
+          nullable: true
+          description: Код КОАТУУ пункту розвантаження
+        point_to_description_ua:
+          type: string
+          nullable: true
+          description: Опис пункту розвантаження українською
+        point_to_description_ru:
+          type: string
+          nullable: true
+          description: Опис пункту розвантаження російською
+        point_to_region_ua:
+          type: string
+          nullable: true
+          description: Регіон пункту розвантаження українською
+        point_to_region_ru:
+          type: string
+          nullable: true
+          description: Регіон пункту розвантаження російською
+        warehouse_from_address:
+          type: string
+          nullable: true
+          description: Адреса складу навантаження
+        warehouse_from_code:
+          type: string
+          nullable: true
+          description: Код складу навантаження
+        warehouse_from_name:
+          type: string
+          nullable: true
+          description: Назва складу навантаження
+        warehouse_from_lat:
+          type: number
+          nullable: true
+          description: Широта складу навантаження
+        warehouse_from_lng:
+          type: number
+          nullable: true
+          description: Довгота складу навантаження
+        warehouse_to_address:
+          type: string
+          nullable: true
+          description: Адреса складу розвантаження
+        warehouse_to_code:
+          type: string
+          nullable: true
+          description: Код складу розвантаження
+        warehouse_to_name:
+          type: string
+          nullable: true
+          description: Назва складу розвантаження
+        warehouse_to_lat:
+          type: number
+          nullable: true
+          description: Широта складу розвантаження
+        warehouse_to_lng:
+          type: number
+          nullable: true
+          description: Довгота складу розвантаження
+        last_event_ua:
+          type: string
+          nullable: true
+          description: Остання подія українською
+        last_event_ru:
+          type: string
+          nullable: true
+          description: Остання подія російською
+        last_event_date_utc:
+          type: string
+          nullable: true
+          description: Дата останньої події у форматі UTC
+        last_event_date:
+          type: string
+          nullable: true
+          description: Дата останньої події
+        waybill_date:
+          type: string
+          nullable: true
+          description: Дата ТТН
+        waybill_netto_in:
+          type: number
+          description: Вага нетто вантажоодержувача
+        waybill_netto_out:
+          type: number
+          description: Вага нетто вантажовідправника
+        waybill_tara_in:
+          type: number
+          description: Вага тари вантажоодержувача
+        waybill_tara_out:
+          type: number
+          description: Вага тари вантажовідправника
+        waybill_gross_in:
+          type: number
+          description: Вага брутто вантажоодержувача
+        waybill_gross_out:
+          type: number
+          description: Вага брутто вантажовідправника
+        waybill_quantity:
+          type: number
+          description: Нормалізована кількість вантажу
+        waybill_number:
+          type: string
+          nullable: true
+          description: Номер ТТН
+        manager_name:
+          type: string
+          nullable: true
+          description: ПІБ менеджера
+        manager_phone:
+          type: string
+          nullable: true
+          description: Телефон менеджера
+        manager_email:
+          type: string
+          nullable: true
+          description: Email менеджера
+        carrier_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор перевізника
+        carrier_name:
+          type: string
+          nullable: true
+          description: Назва перевізника
+        consignor_name:
+          type: string
+          nullable: true
+          description: Назва вантажовідправника із заявки
+        consignee_name:
+          type: string
+          nullable: true
+          description: Назва вантажоодержувача із заявки
+        queue_from_registered:
+          type: boolean
+          description: Ознака реєстрації в черзі навантаження
+        queue_from_status:
+          type: string
+          nullable: true
+          description: Статус у черзі навантаження
+        queue_from_name:
+          type: string
+          nullable: true
+          description: Назва черги навантаження
+        queue_from_profile_name:
+          type: string
+          nullable: true
+          description: Назва профілю черги навантаження
+        queue_from_registered_date:
+          type: string
+          nullable: true
+          description: Дата реєстрації в черзі навантаження
+        queue_from_number:
+          type: integer
+          nullable: true
+          description: Номер у черзі навантаження
+        queue_from_number_multiqueue:
+          type: integer
+          nullable: true
+          description: Номер у мультичерзі навантаження
+        queue_from_wait_time:
+          type: number
+          nullable: true
+          description: Час, проведений у черзі навантаження
+        queue_from_prediction_wait_time:
+          type: number
+          nullable: true
+          description: Прогнозований залишок очікування в черзі навантаження
+        location_from_ua:
+          type: string
+          nullable: true
+          description: Місцезнаходження на навантаженні українською
+        location_from_ru:
+          type: string
+          nullable: true
+          description: Місцезнаходження на навантаженні російською
+        queue_to_registered:
+          type: boolean
+          description: Ознака реєстрації в черзі розвантаження
+        queue_to_status:
+          type: string
+          nullable: true
+          description: Статус у черзі розвантаження
+        queue_to_name:
+          type: string
+          nullable: true
+          description: Назва черги розвантаження
+        queue_to_profile_name:
+          type: string
+          nullable: true
+          description: Назва профілю черги розвантаження
+        queue_to_profile_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор профілю черги розвантаження
+        queue_to_registered_date:
+          type: string
+          nullable: true
+          description: Дата реєстрації в черзі розвантаження
+        queue_to_number:
+          type: integer
+          nullable: true
+          description: Номер у черзі розвантаження
+        queue_to_number_multiqueue:
+          type: integer
+          nullable: true
+          description: Номер у мультичерзі розвантаження
+        queue_to_wait_time:
+          type: number
+          nullable: true
+          description: Час, проведений у черзі розвантаження
+        queue_to_prediction_wait_time:
+          type: number
+          nullable: true
+          description: Прогнозований залишок очікування в черзі розвантаження
+        location_to_ua:
+          type: string
+          nullable: true
+          description: Місцезнаходження на розвантаженні українською
+        location_to_ru:
+          type: string
+          nullable: true
+          description: Місцезнаходження на розвантаженні російською
+        customer_name:
+          type: string
+          nullable: true
+          description: Назва замовника
+        customer_code:
+          type: string
+          nullable: true
+          description: Код ЄДРПОУ замовника
+        customer_kt:
+          type: integer
+          nullable: true
+          description: Ознака належності замовника до КТ
+    GuidStatusResponse:
+      type: object
+      required:
+        - status
+        - guid
+      properties:
+        status:
+          type: boolean
+          description: Статус обробки запиту
+          example: true
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор обробленого запису
+    CompanyUsersGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість користувачів компанії
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyUser'
+    CompanyUser:
+      type: object
+      properties:
+        company_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор компанії
+        user_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор користувача
+        user_email:
+          type: string
+          format: email
+          nullable: true
+          description: Email користувача
+        user_phone:
+          type: string
+          nullable: true
+          description: Номер телефону користувача
+        firstname:
+          type: string
+          nullable: true
+          description: Ім'я користувача
+        lastname:
+          type: string
+          nullable: true
+          description: Прізвище користувача
+        role_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор ролі
+        name_ua:
+          type: string
+          nullable: true
+          description: Назва ролі українською
+        name_ru:
+          type: string
+          nullable: true
+          description: Назва ролі російською
+        active:
+          type: integer
+          nullable: true
+          enum: [0, 1]
+          description: Ознака активності користувача в компанії
+        pending_key:
+          type: string
+          nullable: true
+          description: Ключ очікуваного запрошення
+        invitation_accepted:
+          type: integer
+          nullable: true
+          enum: [0, 1]
+          description: Ознака прийняття запрошення
+        access_auto:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до автологістики
+        access_agrologistic:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до агрологістики
+        access_agronomist:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до функцій агронома
+        access_queue:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до електронної черги
+    CompanyUserUpdateRequest:
+      type: object
+      required:
+        - user_guid
+        - company_guid
+        - role_guid
+        - active
+        - author
+      properties:
+        user_guid:
+          type: string
+          format: uuid
+          description: Користувач, дані якого потрібно змінити
+        company_guid:
+          type: string
+          format: uuid
+          description: Компанія користувача
+        role_guid:
+          type: string
+          format: uuid
+          description: Нова роль користувача
+        active:
+          type: integer
+          enum: [0, 1]
+          description: Ознака активності користувача
+        author:
+          type: string
+          format: uuid
+          description: Користувач, який виконує зміну
+        access_auto:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до автологістики
+        access_railway:
+          type: integer
+          enum: [0, 1]
+          deprecated: true
+          description: Застаріла ознака доступу до залізничної логістики
+        access_queue:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до електронної черги
+        access_agrologistic:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до агрологістики
+        access_agronomist:
+          type: integer
+          enum: [0, 1]
+          description: Доступ до функцій агронома
+    CompanyUserUpdateResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Статус обробки запиту
+          example: true
+        user_exist:
+          type: boolean
+          description: Ознака наявності користувача
+        user_guid:
+          type: string
+          format: uuid
+        company_guid:
+          type: string
+          format: uuid
+        role_guid:
+          type: string
+          format: uuid
+        active:
+          type: integer
+          enum: [0, 1]
+        access_auto:
+          type: integer
+          enum: [0, 1]
+        access_queue:
+          type: integer
+          enum: [0, 1]
+        access_agrologistic:
+          type: integer
+          enum: [0, 1]
+        access_agronomist:
+          type: integer
+          enum: [0, 1]
+        msg:
+          type: string
+          nullable: true
+          description: Повідомлення про результат операції
+        msg_code:
+          type: string
+          nullable: true
+          description: Машинний код повідомлення
+    DriverUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Ім'я водія
+        middle_name:
+          type: string
+          nullable: true
+          description: По батькові водія
+        last_name:
+          type: string
+          description: Прізвище водія
+        cert_serial_number:
+          type: string
+          description: Серія та номер посвідчення водія
+        phone:
+          type: string
+          description: Основний номер телефону
+        phone_1:
+          type: string
+          nullable: true
+          description: Додатковий номер телефону
+        phone_2:
+          type: string
+          nullable: true
+          description: Додатковий номер телефону
+        email:
+          type: string
+          format: email
+          nullable: true
+        company_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор компанії
+        user_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Пов'язаний користувач Transithub
+        person_docs_type:
+          type: string
+          nullable: true
+          enum: [passport, id_card, foreign_passport]
+          description: Тип документа, що посвідчує особу
+        pass_serial:
+          type: string
+          nullable: true
+          description: Серія паспорта
+        pass_number:
+          type: string
+          nullable: true
+          description: Номер паспорта
+        pass_issued:
+          type: string
+          nullable: true
+          description: Ким видано паспорт
+        pass_date:
+          type: string
+          nullable: true
+          description: Дата видачі паспорта
+        id_card_number:
+          type: string
+          nullable: true
+          description: Номер ID-картки
+        id_card_date:
+          type: string
+          nullable: true
+          description: Дата видачі ID-картки
+        id_card_issued:
+          type: string
+          nullable: true
+          description: Ким видано ID-картку
+        date_of_birth:
+          type: string
+          nullable: true
+          description: Дата народження
+        number_id:
+          type: string
+          nullable: true
+          description: Ідентифікаційний номер
+        workspace:
+          type: string
+          nullable: true
+          description: Workspace для виклику з бота
+        citizenship_type:
+          type: string
+          default: UA
+          description: Тип громадянства
+        foreign_pass_serial:
+          type: string
+          nullable: true
+          description: Серія закордонного паспорта
+        foreign_pass_number:
+          type: string
+          nullable: true
+          description: Номер закордонного паспорта
+        foreign_pass_issued:
+          type: string
+          nullable: true
+          description: Ким видано закордонний паспорт
+        foreign_pass_date_utc:
+          type: string
+          nullable: true
+          description: Дата видачі закордонного паспорта
+        foreign_pass_last_name:
+          type: string
+          nullable: true
+          description: Прізвище латиницею у закордонному паспорті
+        foreign_pass_first_name:
+          type: string
+          nullable: true
+          description: Ім'я латиницею у закордонному паспорті
+    DriverUpdateResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        guid:
+          type: string
+          format: uuid
+        first_name:
+          type: string
+        middle_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+        name:
+          type: string
+          description: Скорочене ПІБ водія
+        full_name:
+          type: string
+          description: Повне ПІБ водія
+        cert_serial_number:
+          type: string
+        phone:
+          type: string
+        phone_1:
+          type: string
+          nullable: true
+        phone_2:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        company_guid:
+          type: string
+          format: uuid
+          nullable: true
+        person_docs_type:
+          type: string
+          nullable: true
+        pass_serial:
+          type: string
+          nullable: true
+        pass_number:
+          type: string
+          nullable: true
+        pass_date_utc:
+          type: string
+          nullable: true
+        pass_issued:
+          type: string
+          nullable: true
+        id_card_number:
+          type: string
+          nullable: true
+        id_card_date_utc:
+          type: string
+          nullable: true
+        id_card_issued:
+          type: string
+          nullable: true
+        date_of_birth_utc:
+          type: string
+          nullable: true
+        number_id:
+          type: string
+          nullable: true
+        driver_status:
+          type: string
+          nullable: true
+        is_favorite:
+          type: integer
+          enum: [0, 1]
+        is_in_blacklist:
+          type: integer
+          enum: [0, 1]
+        is_trackcheckbot:
+          type: integer
+          enum: [0, 1]
+        citizenship_type:
+          type: string
+        foreign_pass_serial:
+          type: string
+          nullable: true
+        foreign_pass_number:
+          type: string
+          nullable: true
+        foreign_pass_issued:
+          type: string
+          nullable: true
+        foreign_pass_date_utc:
+          type: string
+          nullable: true
+        foreign_pass_last_name:
+          type: string
+          nullable: true
+        foreign_pass_first_name:
+          type: string
+          nullable: true
+    OrganisationWriteRequest:
+      type: object
+      required:
+        - company_guid
+        - name
+      properties:
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        name:
+          type: string
+          description: Назва організації
+        edrpou:
+          type: string
+          nullable: true
+          description: Код ЄДРПОУ
+        inn:
+          type: string
+          nullable: true
+          description: ІПН
+        email:
+          type: string
+          format: email
+          nullable: true
+        facebook:
+          type: string
+          nullable: true
+        telegram:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        webpage:
+          type: string
+          nullable: true
+        organisation_form_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор організаційної форми
+        tax_scheme_guid:
+          type: string
+          format: uuid
+          nullable: true
+          description: Унікальний ідентифікатор схеми оподаткування
+    OrganisationWriteResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        guid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        fullname:
+          type: string
+          nullable: true
+        workname:
+          type: string
+          nullable: true
+        shortname:
+          type: string
+          nullable: true
+        edrpou:
+          type: string
+          nullable: true
+        inn:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        facebook:
+          type: string
+          nullable: true
+        telegram:
+          type: string
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        webpage:
+          type: string
+          nullable: true
+        organisation_form_guid:
+          type: string
+          format: uuid
+          nullable: true
+        organisation_form_name:
+          type: string
+          nullable: true
+        organisation_form_abbreviation:
+          type: string
+          nullable: true
+        tax_scheme_guid:
+          type: string
+          format: uuid
+          nullable: true
+        tax_scheme_name:
+          type: string
+          nullable: true
+        tax_scheme_nds:
+          type: integer
+          nullable: true
+        company_guid:
+          type: string
+          format: uuid
+          nullable: true
+        client_token:
+          type: string
+          nullable: true
+    RaceDocumentPostResponse:
+      type: object
+      properties:
+        guid:
+          type: string
+          format: uuid
+          description: Ідентифікатор файлу
+        status:
+          type: boolean
+          description: Статус обробки запиту
+          example: true
+        handle_status:
+          type: string
+          enum: [draft, to_check, rejected, accepted]
+          description: Статус обробки файлу
+        file_name:
+          type: string
+          description: Назва файлу
+        source:
+          type: string
+          enum: [track_check, th]
+          description: Джерело створення
+        created_at:
+          type: string
+          description: Дата створення
+        link:
+          type: string
+          description: Посилання для перегляду файлу
     _StatusOnly:
       type: object
       properties:
