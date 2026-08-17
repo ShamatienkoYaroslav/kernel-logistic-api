@@ -14021,6 +14021,165 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRights'
+  /waybills:
+    get:
+      tags:
+        - Т040 - ТТН
+      summary: Отримання товарно-транспортних накладних
+      operationId: waybillsGet
+      description: Повертає одну ТТН за `guid` або список ТТН з фільтрацією та пагінацією.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор ТТН; якщо вказано, повертається один запис
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          description: Зміщення для пагінації
+          schema:
+            type: integer
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: waybill_number
+          description: Номер ТТН
+          schema:
+            type: string
+        - in: query
+          name: waybill_type
+          description: Тип ТТН
+          schema:
+            type: string
+        - in: query
+          name: race_number
+          description: Номер рейсу
+          schema:
+            type: string
+        - in: query
+          name: race_status
+          description: Статус рейсу
+          schema:
+            type: string
+        - in: query
+          name: consignor
+          description: Назва або код вантажовідправника
+          schema:
+            type: string
+        - in: query
+          name: consignee
+          description: Назва або код вантажоодержувача
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          description: Початкова дата періоду
+          schema:
+            type: string
+        - in: query
+          name: date_to
+          description: Кінцева дата періоду
+          schema:
+            type: string
+        - in: query
+          name: document_status
+          description: Статус обміну пакету документів
+          schema:
+            type: string
+        - in: query
+          name: request_number
+          description: Номер заявки
+          schema:
+            type: string
+        - in: query
+          name: point_from
+          description: Код пункту відправлення
+          schema:
+            type: string
+        - in: query
+          name: point_to
+          description: Код пункту призначення
+          schema:
+            type: string
+        - in: query
+          name: goods_guid
+          description: Код класифікатора вантажу
+          schema:
+            type: string
+        - in: query
+          name: vehicle_number
+          description: Державний номер автомобіля
+          schema:
+            type: string
+        - in: query
+          name: driver_name
+          description: Ім'я водія
+          schema:
+            type: string
+        - in: query
+          name: driver_phone
+          description: Номер телефону водія
+          schema:
+            type: string
+        - in: query
+          name: is_electronic_waybill
+          description: Ознака електронної ТТН
+          schema:
+            type: integer
+            enum: [0, 1]
+      responses:
+        '200':
+          description: Список ТТН або одна ТТН
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WaybillsGetResponse'
+        '400':
+          description: Некоректні вхідні дані
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /waybills/history:
     get:
       tags:
@@ -14532,6 +14691,76 @@ paths:
           description: server error
           content: {}
         x-codegen-request-body-name: body
+  /vehicles_registers.update:
+    post:
+      tags:
+        - T002 - Наряди
+      summary: Масове оновлення даних нарядів
+      operationId: vehiclesRegistersUpdatePost
+      description: Оновлює водія, автомобіль та/або причіп у вказаних нарядах.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: driver_guid
+          description: Унікальний ідентифікатор водія
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: truck_guid
+          description: Унікальний ідентифікатор автомобіля
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: trailer_guid
+          description: Унікальний ідентифікатор причепа
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Список нарядів для оновлення
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleRegistersUpdateRequest'
+      responses:
+        '201':
+          description: Наряди успішно оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleRegistersUpdateResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав на запис
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /vehicles:
     get:
       tags:
@@ -14605,6 +14834,171 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/_ClientHasNoRightsNew'
+    post:
+      tags:
+        - T003 - Транспортні засоби
+      summary: Створення або оновлення транспортного засобу
+      operationId: vehiclesPost
+      description: Створює новий транспортний засіб або оновлює наявний, якщо передано `guid`.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор ТЗ для оновлення
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: user_guid
+          description: Унікальний ідентифікатор користувача-автора зміни
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Дані транспортного засобу
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleUpsertRequest'
+      responses:
+        '200':
+          description: Транспортний засіб створено або оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleUpsertResponse'
+        '400':
+          description: Компанію не знайдено або передано некоректні дані
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '403':
+          description: Клієнт не має прав на запис
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /vehicles_brands:
+    get:
+      tags:
+        - T003 - Транспортні засоби
+      summary: Отримання марок транспортних засобів
+      operationId: vehiclesBrandsGet
+      description: Повертає марки транспортних засобів з можливістю текстового пошуку.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: search
+          description: Фрагмент назви марки
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Список марок транспортних засобів
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleBrandsResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /vehicles_types:
+    get:
+      tags:
+        - T003 - Транспортні засоби
+      summary: Отримання типів транспортних засобів
+      operationId: vehiclesTypesGet
+      description: Повертає типи транспортних засобів із підтипами для заданого виду.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: kind
+          description: Вид транспортного засобу
+          schema:
+            type: string
+            default: AUTOMOBILE
+      responses:
+        '200':
+          description: Список типів і підтипів транспортних засобів
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleTypesResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /vehicles.change_status:
     put:
       tags:
@@ -20883,6 +21277,259 @@ components:
           type: integer
           enum: [0, 1]
           description: Ознака надсилання сповіщень
+    VehicleUpsertRequest:
+      type: object
+      properties:
+        v_number:
+          type: string
+          maxLength: 50
+          description: Державний номер транспортного засобу
+          example: AA1234BB
+        model:
+          type: string
+          maxLength: 100
+          description: Модель
+        brand:
+          type: string
+          maxLength: 100
+          description: Марка
+        tech_passport:
+          type: string
+          maxLength: 30
+          description: Серія та номер технічного паспорта
+        kind:
+          type: string
+          maxLength: 20
+          description: Вид транспортного засобу
+          example: AUTOMOBILE
+        type:
+          type: integer
+          description: Ідентифікатор типу ТЗ
+        subtype:
+          type: integer
+          description: Ідентифікатор підтипу ТЗ
+        gross:
+          type: integer
+          description: Повна маса, кг
+        tara:
+          type: integer
+          description: Маса без навантаження, кг
+        net:
+          type: integer
+          description: Маса нетто, кг
+        cargo_capacity:
+          type: integer
+          description: Вантажопідйомність, кг
+        color:
+          type: string
+          maxLength: 20
+          description: Колір
+        year:
+          type: string
+          maxLength: 10
+          description: Рік випуску
+        width:
+          type: number
+          format: double
+          description: Ширина, м
+        height:
+          type: number
+          format: double
+          description: Висота, м
+        length:
+          type: number
+          format: double
+          description: Довжина, м
+        c_width:
+          type: number
+          format: double
+          description: Корисна ширина, м
+        c_height:
+          type: number
+          format: double
+          description: Корисна висота, м
+        c_length:
+          type: number
+          format: double
+          description: Корисна довжина, м
+        has_gps:
+          type: integer
+          enum: [0, 1]
+          description: Ознака наявності GPS
+        suitable_for_sealing:
+          type: integer
+          enum: [0, 1]
+          description: Придатність до пломбування
+        axles_number:
+          type: integer
+          description: Кількість осей
+        registration_date:
+          type: string
+          description: Дата реєстрації
+          example: '17.08.2026'
+        first_registration_date:
+          type: string
+          description: Дата першої реєстрації
+          example: '17.08.2020'
+        coupler:
+          type: integer
+          enum: [0, 1]
+          description: Ознака наявності зчіпного пристрою
+        dump_truck:
+          type: integer
+          enum: [0, 1]
+          description: Ознака самоскида
+        registration_country_type:
+          type: string
+          maxLength: 20
+          default: UA
+          description: Код країни реєстрації
+    VehicleUpsertResponse:
+      allOf:
+        - $ref: '#/components/schemas/VehicleUpsertRequest'
+        - type: object
+          required:
+            - status
+            - guid
+          properties:
+            status:
+              type: boolean
+              example: true
+            guid:
+              type: string
+              format: uuid
+              description: Унікальний ідентифікатор ТЗ
+            type_name:
+              type: string
+              description: Назва типу ТЗ
+            is_trailer:
+              type: integer
+              enum: [0, 1]
+            no_useful_sizes:
+              type: integer
+              enum: [0, 1]
+            subtype_name:
+              type: string
+              description: Назва підтипу ТЗ
+            is_favorite:
+              type: integer
+              enum: [0, 1]
+            _err:
+              type: string
+              description: Текст помилки, якщо `status` дорівнює `false`
+    VehicleBrandsResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Назва марки транспортного засобу
+    VehicleTypesResponse:
+      type: object
+      required:
+        - status
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleTypeItem'
+    VehicleTypeItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Ідентифікатор типу
+        name:
+          type: string
+          description: Назва типу
+        trailer:
+          type: integer
+          enum: [0, 1]
+          description: Ознака типу причепа
+        no_useful_sizes:
+          type: integer
+          enum: [0, 1]
+          description: Ознака відсутності корисних розмірів
+        coupler:
+          type: integer
+          enum: [0, 1]
+          description: Ознака зчіпного пристрою
+        subtypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleSubtypeItem'
+    VehicleSubtypeItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        no_useful_sizes:
+          type: integer
+          enum: [0, 1]
+        dump_truck:
+          type: integer
+          enum: [0, 1]
+        change_dump_truck:
+          type: integer
+          enum: [0, 1]
+    VehicleRegistersUpdateRequest:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required:
+              - vehicle_register_guid
+            properties:
+              vehicle_register_guid:
+                type: string
+                format: uuid
+                description: Унікальний ідентифікатор наряду
+    VehicleRegistersUpdateResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+          example: true
+    WaybillsGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Загальна кількість знайдених ТТН
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Waybill'
     RacesGetResponse:
       type: object
       required:
