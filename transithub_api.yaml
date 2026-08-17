@@ -10342,6 +10342,593 @@ paths:
                 name: error
                 $ref: '#/components/schemas/_NoDataFoundNew'
       x-codegen-request-body-name: payload
+  /pq_queue.get_wait_time_and_date:
+    get:
+      tags:
+        - T049 - Черги
+      summary: Отримання очікуваного часу та дати очікування в черзі
+      operationId: pqQueueGetWaitTimeAndDateGet
+      description: Повертає розрахований час очікування та очікувану дату для заданої черги.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: pq_queue_guid
+          description: Унікальний ідентифікатор черги
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Розрахований час і дата очікування
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueWaitTimeResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_technical_downtime:
+    parameters:
+      - in: query
+        name: client_token
+        description: Токен клієнта API
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: access_token
+        description: JWT користувача
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Т036 - Технічний простій
+      summary: Отримання технічних простоїв
+      operationId: pqTechnicalDowntimeGet
+      description: Отримання списку технічних простоїв із фільтрацією та пагінацією.
+      parameters:
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: offset
+          description: Зміщення від початку вибірки
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: queue_guid
+          description: Унікальний ідентифікатор черги
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор технічного простою
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: doc_status
+          description: Статуси простою, розділені крапкою з комою
+          schema:
+            type: string
+            example: actual;done
+        - in: query
+          name: loading_type
+          description: Типи завантаження, розділені крапкою з комою
+          schema:
+            type: string
+        - in: query
+          name: direction
+          description: Напрямки черги, розділені крапкою з комою
+          schema:
+            type: string
+        - in: query
+          name: profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список технічних простоїв
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechnicalDowntimesGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - Т036 - Технічний простій
+      summary: Створення технічного простою
+      operationId: pqTechnicalDowntimePost
+      description: Створення нового технічного простою для профілю черги.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TechnicalDowntimeCreateRequest'
+      responses:
+        '201':
+          description: Технічний простій створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechnicalDowntimeCreateResponse'
+        '200':
+          description: Вантаж або профіль черги не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_technical_downtime.change_status:
+    put:
+      tags:
+        - Т036 - Технічний простій
+      summary: Завершення технічних простоїв
+      operationId: pqTechnicalDowntimeChangeStatusPut
+      description: Встановлює фактичну дату завершення для переданих технічних простоїв.
+      parameters:
+        - in: query
+          name: client_token
+          description: Токен клієнта API
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: access_token
+          description: JWT користувача
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TechnicalDowntimeChangeStatusRequest'
+      responses:
+        '200':
+          description: Технічні простої завершено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_StatusOnly'
+        '400':
+          description: Не передано тіло запиту
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BadRequestNew'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_warehouses:
+    parameters:
+      - in: query
+        name: client_token
+        description: Токен клієнта API
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: access_token
+        description: JWT користувача
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - T032 - Склади
+      summary: Отримання складів електронної черги
+      operationId: pqWarehousesGet
+      description: Отримання списку складів із фільтрацією та пагінацією.
+      parameters:
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор складу
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: company_guid
+          description: Унікальний ідентифікатор компанії
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: organisation_guid
+          description: Унікальний ідентифікатор організації
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: parking_guid
+          description: Унікальний ідентифікатор стоянки
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: queue_profile_guid
+          description: Унікальний ідентифікатор профілю черги
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: limit
+          description: Максимальна кількість записів
+          schema:
+            type: integer
+            minimum: 1
+        - in: query
+          name: offset
+          description: Зміщення від початку вибірки
+          schema:
+            type: integer
+            minimum: 0
+      responses:
+        '200':
+          description: Список складів електронної черги
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqWarehousesGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T032 - Склади
+      summary: Створення складу електронної черги
+      operationId: pqWarehousesPost
+      description: Створення нового складу електронної черги.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PqWarehouseWriteRequest'
+      responses:
+        '200':
+          description: Склад створено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqWarehouseWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    put:
+      tags:
+        - T032 - Склади
+      summary: Оновлення складу електронної черги
+      operationId: pqWarehousesPut
+      description: Оновлення наявного складу електронної черги.
+      parameters:
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор складу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PqWarehouseWriteRequest'
+      responses:
+        '200':
+          description: Склад оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqWarehouseWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+  /pq_warehouse/goods:
+    parameters:
+      - in: query
+        name: client_token
+        description: Токен клієнта API
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: access_token
+        description: JWT користувача
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - T032 - Склади
+      summary: Отримання налаштувань товарів складу
+      operationId: pqWarehouseGoodsGet
+      description: Отримання товарів і напрямків, налаштованих для складу.
+      parameters:
+        - in: query
+          name: warehouse_guid
+          description: Унікальний ідентифікатор складу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список налаштувань товарів складу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqWarehouseGoodsGetResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Дані не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    post:
+      tags:
+        - T032 - Склади
+      summary: Додавання товару до складу
+      operationId: pqWarehouseGoodsPost
+      description: Створення або оновлення налаштування товару та напрямку для складу.
+      parameters:
+        - in: query
+          name: warehouse_guid
+          description: Унікальний ідентифікатор складу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PqWarehouseGoodsWriteRequest'
+      responses:
+        '200':
+          description: Налаштування товару створено або оновлено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PqWarehouseGoodsWriteResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '404':
+          description: Склад або товар не знайдено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_NoDataFoundNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
+    delete:
+      tags:
+        - T032 - Склади
+      summary: Видалення налаштування товару складу
+      operationId: pqWarehouseGoodsDelete
+      description: Видалення зв'язку товару зі складом за його унікальним ідентифікатором.
+      parameters:
+        - in: query
+          name: guid
+          description: Унікальний ідентифікатор налаштування товару складу
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Налаштування товару видалено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuidStatusResponse'
+        '401':
+          description: Користувач не авторизований
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_UserisNotAuthorizedNew'
+        '403':
+          description: Клієнт не має прав доступу
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ClientHasNoRightsNew'
+        '500':
+          description: Серверна помилка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ComplexError'
   /pq_technical_downtime.last_actual:
     get:
       tags:
@@ -18454,6 +19041,583 @@ components:
         active:
           type: boolean
           description: Ознака активності черги
+    QueueWaitTimeResponse:
+      type: object
+      required:
+        - status
+        - waiting_time_ua
+        - waiting_time_ru
+        - waiting_date_ua
+        - waiting_date_ru
+      properties:
+        status:
+          type: boolean
+          example: true
+        waiting_time_ua:
+          type: string
+          description: Відформатований час очікування українською
+          example: 2 години 30 хвилин
+        waiting_time_ru:
+          type: string
+          description: Відформатований час очікування російською
+          example: 2 часа 30 минут
+        waiting_date_ua:
+          type: string
+          description: Відформатована очікувана дата українською
+        waiting_date_ru:
+          type: string
+          description: Відформатована очікувана дата російською
+    TechnicalDowntime:
+      type: object
+      properties:
+        i:
+          type: integer
+          description: Номер запису у вибірці
+        client_guid:
+          type: string
+          format: uuid
+          description: Клієнтський ідентифікатор технічного простою
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор технічного простою
+        doc_date:
+          type: string
+          description: Дата документа
+        doc_number:
+          type: integer
+          description: Номер документа
+        beginning_date:
+          type: string
+          description: Дата й час початку простою
+        ending_date:
+          type: string
+          description: Планова дата й час завершення простою
+        ending_date_fact:
+          type: string
+          nullable: true
+          description: Фактична дата й час завершення простою
+        duration:
+          type: number
+          description: Планова тривалість простою в годинах
+        duration_fact:
+          type: number
+          description: Поточна або фактична тривалість простою в годинах
+        duration_fact_ua:
+          type: string
+          description: Відформатована фактична тривалість українською
+        duration_fact_ru:
+          type: string
+          description: Відформатована фактична тривалість російською
+        source:
+          type: string
+          description: Джерело документа
+        status:
+          type: string
+          description: Статус технічного простою
+          enum:
+            - actual
+            - done
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
+        loading_type:
+          type: string
+          description: Тип завантаження
+        downtime_cause:
+          type: string
+          description: Причина технічного простою
+        bandwidth:
+          type: number
+          description: Пропускна здатність
+        goods_classifier_code:
+          type: string
+          description: Код товару за класифікатором
+        goods_name:
+          type: string
+          description: Назва товару українською
+        goods_name_ru:
+          type: string
+          description: Назва товару російською
+        pq_queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        pq_queue_profile_name:
+          type: string
+          description: Назва профілю черги
+        queues:
+          $ref: '#/components/schemas/QueuesTechnicalDowntime'
+    TechnicalDowntimesGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених технічних простоїв
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TechnicalDowntime'
+    TechnicalDowntimeCreateRequest:
+      type: object
+      required:
+        - beginning_date
+        - ending_date
+        - pq_queue_profile_guid
+      properties:
+        beginning_date:
+          type: string
+          description: Дата й час початку у форматі сервера
+        ending_date:
+          type: string
+          description: Планова дата й час завершення у форматі сервера
+        ending_date_fact:
+          type: string
+          nullable: true
+          description: Фактична дата й час завершення
+        source:
+          type: string
+          description: Джерело документа; сервер встановлює джерело TH
+        pq_queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        goods_guid:
+          type: string
+          description: Код товару за класифікатором
+        acceptance_rate:
+          type: number
+          description: Пропускна здатність
+        downtime_cause:
+          type: string
+          description: Причина технічного простою
+    TechnicalDowntimeCreateResponse:
+      type: object
+      required:
+        - status
+        - guid
+        - client_guid
+      properties:
+        status:
+          type: boolean
+          example: true
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор технічного простою
+        client_guid:
+          type: string
+          format: uuid
+          description: Клієнтський ідентифікатор технічного простою
+        doc_number:
+          type: integer
+          description: Номер документа
+        doc_date:
+          type: string
+          description: Дата документа
+        doc_status:
+          type: string
+          example: actual
+          description: Статус документа
+        source:
+          type: string
+          example: TH
+          description: Джерело документа
+        loading_type:
+          type: string
+          description: Тип завантаження профілю черги
+        direction:
+          type: string
+          description: Напрямок профілю черги
+        pq_queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        pq_queue_profile_name:
+          type: string
+          description: Назва профілю черги
+        goods_classifier_code:
+          type: string
+          description: Код товару за класифікатором
+        goods_name:
+          type: string
+          description: Назва товару українською
+        goods_name_ru:
+          type: string
+          description: Назва товару російською
+        beginning_date:
+          type: string
+          description: Дата й час початку простою
+        ending_date:
+          type: string
+          description: Планова дата й час завершення простою
+        ending_date_fact:
+          type: string
+          nullable: true
+          description: Фактична дата й час завершення простою
+        acceptance_rate:
+          type: number
+          description: Пропускна здатність
+        downtime_cause:
+          type: string
+          description: Причина технічного простою
+        duration:
+          type: number
+          description: Тривалість простою
+    TechnicalDowntimeChangeStatusRequest:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required:
+              - client_guid
+            properties:
+              client_guid:
+                type: string
+                format: uuid
+                description: Клієнтський ідентифікатор технічного простою
+    PqWarehouse:
+      type: object
+      properties:
+        i:
+          type: integer
+          description: Номер запису у вибірці
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор складу
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        queue_profile_name:
+          type: string
+          description: Назва профілю черги
+        profile_active:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака активності профілю черги
+        name:
+          type: string
+          description: Назва складу
+        lat:
+          type: number
+          format: double
+          description: Географічна широта складу
+        lng:
+          type: number
+          format: double
+          description: Географічна довгота складу
+        full_address:
+          type: string
+          description: Повна адреса складу
+        street_type:
+          type: string
+          description: Тип вулиці
+        street_name:
+          type: string
+          description: Назва вулиці
+        building_n:
+          type: string
+          description: Номер будинку
+        kt:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака приналежності до КТ
+        location_type_code:
+          type: string
+          description: Код типу місцезнаходження
+        location_type:
+          type: string
+          description: Тип місцезнаходження
+        locality_koatuu:
+          type: string
+          description: Код КОАТУУ населеного пункту
+        locality_name:
+          type: string
+          description: Назва населеного пункту
+        district_code:
+          type: string
+          description: Код району
+        district_name:
+          type: string
+          description: Назва району
+        region_code:
+          type: string
+          description: Код області
+        region_name:
+          type: string
+          description: Назва області
+        geo_status:
+          type: string
+          description: Статус геокодування
+        geo_registration_lat:
+          type: number
+          format: double
+          description: Широта точки реєстрації
+        geo_registration_lng:
+          type: number
+          format: double
+          description: Довгота точки реєстрації
+        registration_zone_radius:
+          type: number
+          description: Радіус зони реєстрації
+        organisation:
+          type: string
+          description: Назва організації
+        kind:
+          type: string
+          description: Вид складу
+        active:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака активності складу
+        is_used:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака використання складу
+        code_ad:
+          type: string
+          description: Код складу в суміжній системі
+        classificator_code:
+          type: string
+          description: Код складу за класифікатором
+    PqWarehousesGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених складів
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PqWarehouse'
+    PqWarehouseWriteRequest:
+      type: object
+      required:
+        - company_guid
+        - queue_profile_guid
+        - name
+      properties:
+        company_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор компанії
+        queue_profile_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор профілю черги
+        name:
+          type: string
+          description: Назва складу
+        lat:
+          type: number
+          format: double
+          description: Географічна широта складу
+        lng:
+          type: number
+          format: double
+          description: Географічна довгота складу
+        full_address:
+          type: string
+          description: Повна адреса складу
+        street_type:
+          type: string
+          description: Тип вулиці
+        street_name:
+          type: string
+          description: Назва вулиці
+        building_n:
+          type: string
+          description: Номер будинку
+        kt:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака приналежності до КТ
+        location_type_code:
+          type: string
+          description: Код типу місцезнаходження
+        location_type:
+          type: string
+          description: Тип місцезнаходження
+        geo_status:
+          type: string
+          description: Статус геокодування
+        organisation:
+          type: string
+          description: Назва організації
+        kind:
+          type: string
+          description: Вид складу
+        is_used:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: Ознака використання складу
+        code_ad:
+          type: string
+          description: Код складу в суміжній системі
+        geo_registration_lat:
+          type: number
+          format: double
+          description: Широта точки реєстрації
+        geo_registration_lng:
+          type: number
+          format: double
+          description: Довгота точки реєстрації
+        locality_koatuu:
+          type: string
+          description: Код КОАТУУ населеного пункту
+        registration_zone_radius:
+          type: number
+          description: Радіус зони реєстрації
+    PqWarehouseWriteResponse:
+      allOf:
+        - $ref: '#/components/schemas/PqWarehouse'
+        - type: object
+          required:
+            - state
+            - guid
+          properties:
+            state:
+              type: string
+              description: Результат операції
+              enum:
+                - created
+                - changed
+    PqWarehouseGoodsSetting:
+      type: object
+      properties:
+        i:
+          type: integer
+          description: Номер запису у вибірці
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор налаштування
+        goods_code:
+          type: string
+          description: Код товару за класифікатором
+        goods_name_ua:
+          type: string
+          description: Назва товару українською
+        goods_name_ru:
+          type: string
+          description: Назва товару російською
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
+    PqWarehouseGoodsGetResponse:
+      type: object
+      required:
+        - status
+        - count
+        - items
+      properties:
+        status:
+          type: boolean
+          example: true
+        count:
+          type: integer
+          description: Кількість знайдених налаштувань
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PqWarehouseGoodsSetting'
+    PqWarehouseGoodsWriteRequest:
+      type: object
+      required:
+        - goods_guid
+        - direction
+      properties:
+        goods_guid:
+          type: string
+          description: Код товару за класифікатором
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
+    PqWarehouseGoodsWriteResponse:
+      type: object
+      required:
+        - status
+        - state
+        - guid
+        - warehouse_guid
+        - goods_code
+        - direction
+      properties:
+        status:
+          type: boolean
+          example: true
+        state:
+          type: string
+          description: Результат операції
+          enum:
+            - created
+            - updated
+        guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор налаштування
+        warehouse_guid:
+          type: string
+          format: uuid
+          description: Унікальний ідентифікатор складу
+        goods_code:
+          type: string
+          description: Код товару за класифікатором
+        goods_name_ua:
+          type: string
+          description: Назва товару українською
+        direction:
+          type: string
+          description: Напрямок черги
+          enum:
+            - loading
+            - unloading
     RacesGetResponse:
       type: object
       required:
