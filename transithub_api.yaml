@@ -113,9 +113,9 @@ tags:
     description: Вузли для роботи з діями користувача щодо рейсу в черзі
   - name: T048 - Стоянки
     description: Вузли для роботи зі стоянками електронної черги
-  - name: Т049 - Черги
+  - name: T049 - Черги
     description: Вузли для роботи з електронними чергами
-  - name: Т050 - Документи політики TH
+  - name: T050 - Документи політики TH
     description: Вузли для отримання документів політики Transithub
 paths:
   /accreditations:
@@ -9659,7 +9659,7 @@ paths:
   /pq_queues:
     get:
       tags:
-        - Т049 - Черги
+        - T049 - Черги
       summary: Отримання списку черг
       operationId: pqQueuesGet
       description: Отримання електронних черг компанії з фільтрацією та пагінацією.
@@ -14590,7 +14590,7 @@ paths:
   /privacy_policy_document:
     get:
       tags:
-        - Т050 - Документи політики TH
+        - T050 - Документи політики TH
       summary: Отримання документа політики конфіденційності
       operationId: privacyPolicyDocumentGet
       description: Повертає посилання на актуальний документ політики конфіденційності Transithub.
